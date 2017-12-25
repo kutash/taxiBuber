@@ -1,0 +1,193 @@
+package com.kutash.taxibuber.dao;
+
+import com.kutash.taxibuber.entity.User;
+import com.kutash.taxibuber.entity.UserRole;
+import com.kutash.taxibuber.exception.DAOException;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class UserDAO extends AbstractDAO<User> {
+
+    private static final Logger LOGGER = LogManager.getLogger();
+    private static final String FIND_ALL_USERS = "SELECT id_user,role,email,password,rating,`name`,surname,patronymic,birthday,photo_path,phone FROM user";
+    private static final String FIND_USER_BY_ID = "SELECT id_user,role,email,password,rating,`name`,surname,patronymic,birthday,photo_path,phone FROM user WHERE id_user = ?";
+    private static final String DELETE_USER_BY_ID = "DELETE FROM user WHERE id_user = ?";
+    private static final String CREATE_USER = "INSERT INTO user(name,surname,patronymic,birthday,email,role,password,rating,photo_path,phone) VALUES (?,?,?,?,?,?,?,?,?,?)";
+    private static final String UPDATE_USER = "UPDATE user  SET name=?,surname=?,patronymic=?,birthday=?,email=?,role=?,password=?,rating=?,photo_path=?,phone=? WHERE id_user=?";
+    private static final String FIND_USER_BY_EMAIL = "SELECT id_user,role,email,password,rating,`name`,surname,patronymic,birthday,photo_path,phone FROM user WHERE email = ?";
+    private static final String IS_EMAIL_EXISTS = "SELECT email FROM user WHERE email = ?";
+
+    @Override
+    public List<User> findAll() throws DAOException {
+        LOGGER.log(Level.INFO,"Finding all users");
+        PreparedStatement statement = null;
+        List<User> users = new ArrayList<>();
+        try {
+            statement = getPreparedStatement(FIND_ALL_USERS);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                User user = getUser(resultSet);
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Exception while finding all users",e);
+        }finally {
+            close(statement);
+        }
+        return users;
+    }
+
+    @Override
+    public User findEntityById(int id) throws DAOException {
+        LOGGER.log(Level.INFO,"find user by id {}",id);
+        User user = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = getPreparedStatement(FIND_USER_BY_ID);
+            preparedStatement.setInt(1,id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                user = getUser(resultSet);
+            }
+        }catch (SQLException e){
+            throw new DAOException("Exception while finding user by id",e);
+        }finally {
+            close(preparedStatement);
+        }
+        return user;
+    }
+
+    @Override
+    public int delete(int id) throws DAOException {
+        LOGGER.log(Level.INFO,"deleting user with id {}",id);
+        int result = 0;
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = getPreparedStatement(DELETE_USER_BY_ID);
+            preparedStatement.setInt(1,id);
+            result = preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            throw new DAOException("Exception while deleting user by id",e);
+        }finally {
+            close(preparedStatement);
+        }
+        return result;
+    }
+
+    @Override
+    public int create(User entity) throws DAOException {
+        LOGGER.log(Level.INFO,"creating user");
+        int result;
+        PreparedStatement preparedStatement = null;
+        ResultSet generatedKeys;
+        try {
+            preparedStatement = getPreparedStatement(CREATE_USER,1);
+            preparedStatement = setValues(preparedStatement,entity);
+            preparedStatement.executeUpdate();
+            generatedKeys = preparedStatement.getGeneratedKeys();
+            generatedKeys.next();
+            result = generatedKeys.getInt(1);
+        }catch (SQLException e){
+            throw new DAOException("Exception while creating user",e);
+        }finally {
+            close(preparedStatement);
+        }
+        return result;
+    }
+
+    @Override
+    public User update(User entity) throws DAOException {
+        LOGGER.log(Level.INFO,"updating user");
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = getPreparedStatement(UPDATE_USER);
+            preparedStatement = setValues(preparedStatement,entity);
+            preparedStatement.setInt(11,entity.getId());
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            throw new DAOException("Exception while updating user",e);
+        }finally {
+            close(preparedStatement);
+        }
+        return findEntityById(entity.getId());
+    }
+
+    public User findEntityByEmail(String email) throws DAOException {
+        LOGGER.log(Level.INFO,"find user by email {}",email);
+        PreparedStatement preparedStatement = null;
+        User user = null;
+        try {
+            preparedStatement = getPreparedStatement(FIND_USER_BY_EMAIL);
+            preparedStatement.setString(1,email);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                user = getUser(resultSet);
+            }
+        }catch (SQLException e){
+            throw new DAOException("Exception while finding user by email",e);
+        }finally {
+            close(preparedStatement);
+        }
+        return user;
+    }
+
+    public boolean isEmailExists(String email) throws DAOException {
+        LOGGER.log(Level.INFO,"finding is email exists {}",email);
+        PreparedStatement preparedStatement = null;
+        boolean result;
+        try {
+            preparedStatement = getPreparedStatement(IS_EMAIL_EXISTS);
+            preparedStatement.setString(1,email);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            result = resultSet.next();
+        }catch (SQLException e){
+            throw new DAOException("Exception while finding user by email {}",e);
+        }finally {
+            close(preparedStatement);
+        }
+        return result;
+    }
+
+    private User getUser(ResultSet resultSet) throws DAOException {
+        User user;
+        try {
+            int idUser = resultSet.getInt("id_user");
+            String firstName = resultSet.getString("name");
+            String lastName = resultSet.getString("surname");
+            String middleName = resultSet.getString("patronymic");
+            Date birthday = resultSet.getDate("birthday");
+            UserRole role = UserRole.valueOf(resultSet.getString("role"));
+            String email = resultSet.getString("email");
+            String password = resultSet.getString("password");
+            String photoPath = resultSet.getString("photo_path");
+            String phone = resultSet.getString("phone");
+            float rating = resultSet.getFloat("rating");
+            user = new User(idUser, rating, firstName, lastName, middleName, email, password, role, birthday, photoPath,phone);
+        }catch (SQLException e){
+            throw new DAOException("Exception while getting user from resultSet",e);
+        }
+        return user;
+    }
+
+    private PreparedStatement setValues(PreparedStatement preparedStatement, User entity) throws DAOException {
+        try {
+            preparedStatement.setString(1, entity.getName());
+            preparedStatement.setString(2, entity.getSurname());
+            preparedStatement.setString(3, entity.getPatronymic());
+            preparedStatement.setDate(4, (java.sql.Date) entity.getBirthday());
+            preparedStatement.setString(5, entity.getEmail());
+            preparedStatement.setString(6, String.valueOf(entity.getRole()));
+            preparedStatement.setString(7, entity.getPassword());
+            preparedStatement.setFloat(8, entity.getRating());
+            preparedStatement.setString(9, entity.getPhotoPath());
+            preparedStatement.setString(10, entity.getPhone());
+        }catch (SQLException e){
+            throw new DAOException("Exception while set values to prepareStatement",e);
+        }
+        return preparedStatement;
+    }
+}
