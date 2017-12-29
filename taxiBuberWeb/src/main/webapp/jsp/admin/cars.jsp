@@ -17,7 +17,10 @@
     </head>
     <body>
         <jsp:include page="header.jsp"/>
-        <form action="controller?command=show_cars" method="post" id="l"></form>
+        <c:url var="switchLanguage" value="controller" scope="page">
+            <c:param name="command" value="show_cars"/>
+        </c:url>
+        <form action="${switchLanguage}" method="post" id="l"></form>
         <div class="container">
             <div class="cars-content" id="googleMap"></div>
         </div>

@@ -3,7 +3,7 @@ package com.kutash.taxibuber.entity;
 public class Car extends AbstractEntity {
 
     private String registrationNumber;
-    private BodyType bodyType;
+    private Capacity capacity;
     private String model;
     private String photoPath;
     private boolean isAvailable;
@@ -12,9 +12,9 @@ public class Car extends AbstractEntity {
     private CarBrand brand;
     private int userId;
 
-    public Car(String registrationNumber, BodyType bodyType, String model, String photoPath, boolean isAvailable, String latitude, String longitude, CarBrand brand, int userId) {
+    public Car(String registrationNumber, Capacity capacity, String model, String photoPath, boolean isAvailable, String latitude, String longitude, CarBrand brand, int userId) {
         this.registrationNumber = registrationNumber;
-        this.bodyType = bodyType;
+        this.capacity = capacity;
         this.model = model;
         this.photoPath = photoPath;
         this.isAvailable = isAvailable;
@@ -24,10 +24,10 @@ public class Car extends AbstractEntity {
         this.userId = userId;
     }
 
-    public Car(int id, String registrationNumber, BodyType bodyType, String model, String photoPath, boolean isAvailable, String latitude, String longitude, CarBrand brand, int userId) {
+    public Car(int id, String registrationNumber, Capacity capacity, String model, String photoPath, boolean isAvailable, String latitude, String longitude, CarBrand brand, int userId) {
         super(id);
         this.registrationNumber = registrationNumber;
-        this.bodyType = bodyType;
+        this.capacity = capacity;
         this.model = model;
         this.photoPath = photoPath;
         this.isAvailable = isAvailable;
@@ -45,12 +45,12 @@ public class Car extends AbstractEntity {
         this.registrationNumber = registrationNumber;
     }
 
-    public BodyType getBodyType() {
-        return bodyType;
+    public Capacity getBodyType() {
+        return capacity;
     }
 
-    public void setBodyType(BodyType bodyType) {
-        this.bodyType = bodyType;
+    public void setBodyType(Capacity bodyType) {
+        this.capacity = bodyType;
     }
 
     public String getModel() {
@@ -121,7 +121,7 @@ public class Car extends AbstractEntity {
         if (userId != car.userId) return false;
         if (registrationNumber != null ? !registrationNumber.equals(car.registrationNumber) : car.registrationNumber != null)
             return false;
-        if (bodyType != car.bodyType) return false;
+        if (capacity != car.capacity) return false;
         if (model != null ? !model.equals(car.model) : car.model != null) return false;
         if (photoPath != null ? !photoPath.equals(car.photoPath) : car.photoPath != null) return false;
         if (latitude != null ? !latitude.equals(car.latitude) : car.latitude != null) return false;
@@ -133,7 +133,7 @@ public class Car extends AbstractEntity {
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (registrationNumber != null ? registrationNumber.hashCode() : 0);
-        result = 31 * result + (bodyType != null ? bodyType.hashCode() : 0);
+        result = 31 * result + (capacity != null ? capacity.hashCode() : 0);
         result = 31 * result + (model != null ? model.hashCode() : 0);
         result = 31 * result + (photoPath != null ? photoPath.hashCode() : 0);
         result = 31 * result + (isAvailable ? 1 : 0);
@@ -148,7 +148,7 @@ public class Car extends AbstractEntity {
     public String toString() {
         return "Car{" +
                 "registrationNumber='" + registrationNumber + '\'' +
-                ", bodyType=" + bodyType +
+                ", capacity=" + capacity +
                 ", model='" + model + '\'' +
                 ", photoPath='" + photoPath + '\'' +
                 ", isAvailable=" + isAvailable +

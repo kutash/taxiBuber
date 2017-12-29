@@ -18,10 +18,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
 </head>
 <body>
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse" style="position: inherit">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="${pageContext.request.contextPath}/index.jsp"><span class="glyphicon glyphicon-home"></span> <fmt:message key="label.title"/></a>
+            <c:url var="home" value="/index.jsp" scope="application">
+            </c:url>
+            <a class="navbar-brand" href="${home}"><span class="glyphicon glyphicon-home"></span> <fmt:message key="label.title"/></a>
         </div>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="#"><span class="glyphicon glyphicon-user"></span> <fmt:message key="label.signup"/></a></li>
@@ -42,7 +44,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close cancel" data-dismiss="modal" style="color:white;">X</button>
-                        <h4 style="font-size: 35px;"><span class="glyphicon glyphicon-lock" style="font-size: 35px;"></span><fmt:message key="label.login"/></h4>
+                        <h4 style="font-size: 35px;"><span class="glyphicon glyphicon-lock" style="font-size: 35px;"></span><fmt:message key="label.enter"/></h4>
                     </div>
                     <div class="modal-body" style="padding:40px 50px;">
                         <form role="form" id="jform" action="controller" method="post">
@@ -51,10 +53,16 @@
                             <div class="form-group">
                                 <label for="username"><span class="glyphicon glyphicon-user"></span><fmt:message key="label.email"/>:</label>
                                 <input type="email" name="email" class="form-control" id="username" placeholder="Enter email">
+                                <div style="display: none" id="max-email" class="err"><fmt:message key="label.maxemail"/></div>
+                                <div style="display: none" id="blank-email" class="err"><fmt:message key="label.blank"/></div>
+                                <div style="display: none" id="invalid-email" class="err"><fmt:message key="label.invalidemail"/></div>
                             </div>
                             <div class="form-group">
                                 <label for="psw"><span class="glyphicon glyphicon-eye-open"></span><fmt:message key="label.password"/>:</label>
                                 <input type="password" name="password" class="form-control" id="psw" placeholder="Enter password">
+                                <div style="display: none" id="max-psw" class="err"><fmt:message key="label.maxpsw"/></div>
+                                <div style="display: none" id="blank-psw" class="err"><fmt:message key="label.blank"/></div>
+                                <div style="display: none" id="invalid-psw" class="err"><fmt:message key="label.invalidpsw"/></div>
                             </div>
                             <button type="submit" class="btn btn-success btn-block" id="submit-button" disabled><span class="glyphicon glyphicon-off"></span><fmt:message key="label.login"/></button>
                         </form>
@@ -71,7 +79,7 @@
 </nav>
 <div id="login-content" class="background-login"></div>
 <div class="footer">
-    <p class="footer-content">&copy; 2017.EPAM Systems Taxi Buber</p>
+    <div class="footer-content">&copy; 2017.EPAM Systems Taxi Buber</div>
 </div>
 </body>
 </html>

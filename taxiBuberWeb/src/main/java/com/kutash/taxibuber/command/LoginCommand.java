@@ -10,11 +10,8 @@ import com.kutash.taxibuber.service.LoginService;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Locale;
-
 
 public class LoginCommand implements Command {
 

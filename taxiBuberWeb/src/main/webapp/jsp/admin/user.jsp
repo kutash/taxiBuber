@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="ctg" uri="/WEB-INF/tld/custom.tld" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale.toString()}" scope="session" />
 <fmt:setLocale value="${language}" />
@@ -18,7 +19,11 @@
     </head>
     <body>
     <jsp:include page="header.jsp"/>
-    <form action="controller?command=edit&userId=${user.id}" method="post" id="l"></form>
+    <c:url var="switchLanguage" value="controller" scope="page">
+        <c:param name="command" value="edit"/>
+        <c:param name="userId" value="${user.id}"/>
+    </c:url>
+    <form action="${switchLanguage}" method="post" id="l"></form>
         <div class="container">
             <div class="row">
                 <div class="before-form">${currentUser.role}</div>
@@ -127,7 +132,7 @@
                                 <td class="col-md-6 comment-text"><c:out value="${comment.text}"/><br>
                                     <h4><fmt:message key="label.valuation"/>:</h4>
                                     <div class="productRate" id="mark-div">
-                                        <div class="productRate-div" id="mark-str" style="width:<c:out value="${comment.mark*20}%"/>"></div>
+                                        <div class="productRate-div" id="mark-str" style="width:<ctg:rating mark="${comment.mark}"/>%"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -138,7 +143,7 @@
             </div>
         </div>
         <div class="footer">
-            <p class="footer-content">&copy; 2017.EPAM Systems Taxi Buber</p>
+            <div class="footer-content">&copy; 2017.EPAM Systems Taxi Buber</div>
         </div>
     </body>
 </html>

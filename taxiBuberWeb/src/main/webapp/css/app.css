@@ -3,6 +3,9 @@
     margin-bottom: 0;
     padding: 13px;
     font-size: 18px;
+    background-color: black;
+    position: fixed;
+    width: 100%;
 }
 
 .navbar-brand {
@@ -12,7 +15,7 @@
 
 #login-content {
     width: 100%;
-    height: 85%;
+    height: 75%;
     background-position: 100%;
     background-repeat: no-repeat;
     background-size: cover;
@@ -20,22 +23,23 @@
 
 .container {
     width: 100%;
+    min-height: 60.5%;
     margin-top: 100px;
     margin-bottom: 100px;
 }
 
 .footer {
-    position: fixed;
+    margin: 0;
     left: 0;
     bottom: 0;
     width: 100%;
-    background-color: black;
+    background-color: #222222;
     color: #9d9d9d;
     text-align: center;
 }
 
 .footer-content{
-    padding: 20px;
+    padding: 38px;
     font-size: 17px;
 }
 
@@ -166,17 +170,11 @@ h4 {
     margin-bottom: 0;
 }
 
-.order-map {
-    width: 400px;
-    height: 400px;
-}
-
 #header-photo {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 48px;
     border-radius: 50%;
-    border: 1px solid #9d9d9d;
-    margin: 5px;
+    border: 2px solid #9d9d9d;
 }
 
 .user-name {

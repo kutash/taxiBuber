@@ -11,18 +11,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../css/app.css">
-    <script type="text/javascript" src="../../js/order.js"></script>
     <script src="../../js/jquery.js"></script>
+    <script type="text/javascript" src="../../js/welcome.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
     <jsp:include page="header.jsp"/>
     <form action="controller?command=show_cars" method="post" id="l"></form>
 
-    <div id = "data">
-        <input type="hidden" id="latitude" name="lat">
-        <input type="hidden" id="longitude" name="long">
+    <div class="order-map" id="map" style="width:800px;height:500px;background:gray"></div>
+    <div>
+        <input type="text" id="start">
+        <input type="text" id="end">
+        <input type="submit" id="submit" value="show">
     </div>
-    <div id="somediv"></div>
+    <div id="right-panel"></div>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWwujQHc9yN2BSlbT_L0-L7VLlQAYnUUg&callback&libraries=places&callback=initMap"></script>
 </body>
 </html>

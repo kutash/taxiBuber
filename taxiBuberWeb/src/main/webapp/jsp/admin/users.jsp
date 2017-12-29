@@ -17,7 +17,10 @@
     </head>
     <body>
     <jsp:include page="header.jsp"/>
-    <form action="controller?command=show_users" method="post" id="l"></form>
+    <c:url var="switchLanguage" value="controller" scope="page">
+        <c:param name="command" value="show_users"/>
+    </c:url>
+    <form action=${switchLanguage} method="post" id="l"></form>
         <div class="container">
             <div class="table-hover">
                 <table class="table" id="users-table">
@@ -54,7 +57,7 @@
             </div>
         </div>
         <div class="footer">
-            <p class="footer-content">&copy; 2017.EPAM Systems Taxi Buber</p>
+            <div class="footer-content">&copy; 2017.EPAM Systems Taxi Buber</div>
         </div>
     </body>
     <script>

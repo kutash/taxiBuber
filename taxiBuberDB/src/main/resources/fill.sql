@@ -73,11 +73,11 @@ INSERT INTO car_brand (`name`) VALUES ('﻿ACURA'),('ALFA_ROMEO'),('ARO'),('ASIA
 
 
 INSERT INTO car (registration_number, body_type, model, latitude, longitude, is_available, id_brand, id_user)
-VALUES ('3214MA-5', 'SEDAN', 'Fabia', '147895623', '235987415', 1, 125, 2),
-  ('3315HJ-7', 'COUPE', 'E46', '147895623', '235987415', 1, 11, 3),
-  ('3416YA-7', 'HATCHBACK', 'Corola', '147895623', '235987415', 1, 138, 4),
-  ('3517OU-7', 'COUPE', 'Polo', '147895623', '235987415', 1, 19, 9),
-  ('3618PO-7', 'SEDAN', 'C200', '147895623', '235987415', 1, 88, 10),
+VALUES ('3214MA-5', 'CAR', 'Fabia', '147895623', '235987415', 1, 125, 2),
+  ('3315HJ-7', 'CAR', 'E46', '147895623', '235987415', 1, 11, 3),
+  ('3416YA-7', 'CAR', 'Corola', '147895623', '235987415', 1, 138, 4),
+  ('3517OU-7', 'MINIVAN', 'Polo', '147895623', '235987415', 1, 19, 9),
+  ('3618PO-7', 'MINIVAN', 'C200', '147895623', '235987415', 1, 88, 10),
   ('3719MA-5', 'MINIBUS', 'Boxer', '147895623', '235987415', 1, 107, 11);
 
 

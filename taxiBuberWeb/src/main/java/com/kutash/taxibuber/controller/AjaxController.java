@@ -1,37 +1,49 @@
 package com.kutash.taxibuber.controller;
 
-import com.google.gson.Gson;
-import com.kutash.taxibuber.entity.Car;
-import com.kutash.taxibuber.service.CarService;
+import com.kutash.taxibuber.command.Command;
+import com.kutash.taxibuber.command.CommandFactory;
+import com.kutash.taxibuber.resource.MessageManager;
+import com.kutash.taxibuber.resource.PageManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+
 
 @WebServlet(value = "/buber")
 public class AjaxController extends HttpServlet {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String LATITUDE = "latitude";
-    private static final String LONGITUDE = "longitude";
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOGGER.log(Level.INFO,"getting cars");
-        String latitude = request.getParameter(LATITUDE);
-        String longitude = request.getParameter(LONGITUDE);
-        List<Car> cars = new CarService().findAllAvailable(latitude,longitude);
-        String json = new Gson().toJson(cars);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        processRequest(request,response);
+    }
 
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(json);
+    @Override
+    protected void doGet(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
+        processRequest(request,response);
+    }
+
+    private void processRequest(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
+        LOGGER.log(Level.INFO,"processRequest method");
+        CommandFactory client = new CommandFactory();
+        Command command = client.defineCommand(request);
+        Router router = command.execute(request,response);
+        if (router != null) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(router.getPage());
+        }else {
+            String page = PageManager.getProperty("path.page.error");
+            String language = (String) request.getSession().getAttribute("language");
+            request.getSession().setAttribute("nullPage", new MessageManager(language).getProperty("message.nullpage"));
+            response.sendRedirect(request.getContextPath() + page);
+        }
     }
 }

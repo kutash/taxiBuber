@@ -5,6 +5,7 @@ import com.kutash.taxibuber.dao.DAOFactory;
 import com.kutash.taxibuber.dao.TransactionManager;
 import com.kutash.taxibuber.entity.Car;
 import com.kutash.taxibuber.exception.DAOException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,13 +42,17 @@ public class CarService {
         return cars;
     }
 
-    public List<Car> findAllAvailable(String latitude,String longitude) {
+    public List<Car> findAllAvailable(String latitude,String longitude,String bodyType) {
         LOGGER.log(Level.INFO,"Finding all available cars");
         CarDAO carDAO = new DAOFactory().getCarDAO();
         List<Car> cars = null;
         try {
             transactionManager.beginTransaction(carDAO);
-            cars = carDAO.findAllAvailable();
+            if (bodyType == null || StringUtils.isEmpty(bodyType)) {
+                cars = carDAO.findAllAvailable();
+            }else {
+                cars = carDAO.findAllAvailableByBodyType(bodyType);
+            }
             transactionManager.commit();
         } catch (DAOException e) {
             transactionManager.rollback();
@@ -57,7 +62,7 @@ public class CarService {
         List<Car> nearestCars = new ArrayList<>();
         if (cars != null) {
             for (Car car : cars) {
-                if (defineDistance(Double.parseDouble(latitude), Double.parseDouble(longitude), car) <= 2) {
+                if (defineDistance(Double.parseDouble(latitude), Double.parseDouble(longitude), car) < 40.0) {
                     nearestCars.add(car);
                 }
             }
@@ -66,7 +71,7 @@ public class CarService {
     }
 
     private double defineDistance(double latitude,double longitude, Car car){
-        LOGGER.log(Level.INFO,"calculating distance between taxi and client {}");
+        LOGGER.log(Level.INFO,"calculating distance between taxi and client");
         double latitudeClient = Math.toRadians(latitude);
         double latitudeTaxi = Math.toRadians(Double.parseDouble(car.getLatitude()));
         double longitudeClient = Math.toRadians(longitude);

@@ -12,7 +12,9 @@ public enum CommandEnum {
     LOGOUT(new LogoutCommand()),
     PHOTO(new PhotoCommand()),
     ORDER(new OrderCommand(new OrderService())),
-    SHOW_CARS(new ShowCarsCommand(new CarService()));
+    SHOW_CARS(new ShowCarsCommand(new CarService())),
+    FREE_CARS(new FreeCarsCommand(new CarService())),
+    PRICE(new PriceCommand());
 
     Command command;
 

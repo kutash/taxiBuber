@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `taxi_buber`.`car_brand` (
 CREATE TABLE IF NOT EXISTS `taxi_buber`.`car` (
   `id_car` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'car id',
   `registration_number` CHAR(8) NOT NULL COMMENT 'car state registration number, 8 characters',
-  `body_type` ENUM('SEDAN', 'HATCHBACK', 'COUPE', 'SUV', 'WAGON', 'CABRIOLET', 'MINIVAN', 'MINIBUS') NOT NULL COMMENT 'car body type, must be one of 8 values',
+  `capacity` ENUM('CAR', 'MINIVAN', 'MINIBUS') NOT NULL COMMENT 'car body type, must be one of 3 values',
   `model` VARCHAR(45) NOT NULL COMMENT 'car model',
   `photo_path` VARCHAR(255) NULL DEFAULT NULL COMMENT 'path to the car\'s photo  if there is one',
   `is_available` BIT(1) NOT NULL COMMENT 'current status of the car, must be true or false',

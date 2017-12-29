@@ -50,47 +50,57 @@ $(document).ready(function() {
                 if (val.length > 90) {
                     $('#submit-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
-                    $('#errorEmail').remove();
-                    $(this).after('<div class="err" id="errorEmail">Maximum 90 characters.<br></div>');
+                    $('#invalid-email').css('display', 'none');
+                    $('#blank-email').css('display', 'none');
+                    $('#max-email').css('display', 'block');
                 } else if (val === '') {
                     $('#submit-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
-                    $('#errorEmail').remove();
-                    $(this).after('<div class="err" id="errorEmail">This field cannot be blank.<br></div>');
+                    $('#invalid-email').css('display', 'none');
+                    $('#blank-email').css('display', 'block');
+                    $('#max-email').css('display', 'none');
                 } else if (!rv_email.test(val)) {
                     $('#submit-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
-                    $('#errorEmail').remove();
-                    $(this).after('<div class="err" id="errorEmail">Invalid email!<br></div>');
+                    $('#invalid-email').css('display', 'block');
+                    $('#blank-email').css('display', 'none');
+                    $('#max-email').css('display', 'none');
                 } else {
                     $(this).removeClass('error-input').addClass('not-error');
-                    $('#errorEmail').remove();
-                    if ($('.err').length === 0 && $('#psw').val() !==''){
+                    $('#invalid-email').css('display', 'none');
+                    $('#blank-email').css('display', 'none');
+                    $('#max-email').css('display', 'none');
+                    if ($('.error-input').length === 0 && $('#psw').val() !==''){
                         $('#submit-button').removeAttr('disabled');
                     }
                 }
                 break;
 
             case 'psw':
-                if (val.length > 50 || val.length < 4) {
+                if (val === '') {
                     $('#submit-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
-                    $('#errorMiddname').remove();
-                    $(this).after('<div class="err" id="errorMiddname">Maximum 50 minimum 8 characters characters.<br></div>');
+                    $('#invalid-psw').css('display', 'none');
+                    $('#blank-psw').css('display', 'block');
+                    $('#max-psw').css('display', 'none');
                 } else if (!rv_name.test(val)) {
                     $('#submit-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
-                    $('#errorMiddname').remove();
-                    $(this).after('<div class="err" id="errorMiddname">Invalid password!<br></div>');
-                } else if (val === '') {
+                    $('#invalid-psw').css('display', 'block');
+                    $('#blank-psw').css('display', 'none');
+                    $('#max-psw').css('display', 'none');
+                } else if (val.length > 50 || val.length < 4) {
                     $('#submit-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
-                    $('#errorMiddname').remove();
-                    $(this).after('<div class="err" id="errorMiddname">This field cannot be blank.<br></div>');
+                    $('#invalid-psw').css('display', 'none');
+                    $('#blank-psw').css('display', 'none');
+                    $('#max-psw').css('display', 'block');
                 } else {
                     $(this).removeClass('error-input').addClass('not-error');
-                    $('#errorMiddname').remove();
-                    if ($('.err').length === 0 && $('#username').val() !==''){
+                    $('#invalid-psw').css('display', 'none');
+                    $('#blank-psw').css('display', 'none');
+                    $('#max-psw').css('display', 'none');
+                    if ($('.error-input').length === 0 && $('#username').val() !==''){
                         $('#submit-button').removeAttr('disabled');
                     }
                 }
@@ -100,8 +110,12 @@ $(document).ready(function() {
     
     $('.cancel').on('click',function () {
         $('#jform').trigger( 'reset' );
-        $('#errorMiddname').remove();
-        $('#errorEmail').remove();
+        $('#invalid-email').css('display', 'none');
+        $('#blank-email').css('display', 'none');
+        $('#max-email').css('display', 'none');
+        $('#invalid-psw').css('display', 'none');
+        $('#blank-psw').css('display', 'none');
+        $('#max-psw').css('display', 'none');
         $('#username').removeClass('error-input not-error');
         $('#psw').removeClass('error-input not-error');
         $('#submit-button').attr('disabled', 'disabled');
