@@ -12,9 +12,14 @@ import java.sql.SQLException;
 public class TransactionManager {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+    private ProxyConnection connection;
 
-    public TransactionManager() throws DAOException {
+    public TransactionManager() {
+        try {
+            connection = ConnectionPool.getInstance().getConnection();
+        } catch (DAOException e) {
+            LOGGER.log(Level.ERROR,"Exception while taking connection from the pool",e);
+        }
     }
 
     public void beginTransaction(AbstractDAO abstractDAO, AbstractDAO ... daos) throws DAOException {
@@ -48,12 +53,12 @@ public class TransactionManager {
         }
     }
 
-    public void rollback() {
+    public void rollback() throws DAOException {
         LOGGER.log(Level.INFO,"Making rollback");
         try {
             connection.rollback();
         } catch (SQLException e) {
-            LOGGER.log(Level.ERROR,"Exception while making rollback {}",e);//????????????????????????????
+            throw new DAOException("Exception while making rollback {}",e);//????????????????????????????
         }
     }
 }

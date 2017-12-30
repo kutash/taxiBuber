@@ -14,29 +14,6 @@ import java.util.List;
 public class OrderService {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private TransactionManager transactionManager;
 
-    public OrderService() {
-        try {
-            transactionManager = new TransactionManager();
-        } catch (DAOException e) {
-            LOGGER.log(Level.ERROR,"Exception while creating TransactionManager {}",e);
-        }
-    }
 
-    public List<Car> findAllAvailable() {
-        LOGGER.log(Level.INFO,"Finding all available cars");
-        CarDAO carDAO = new DAOFactory().getCarDAO();
-        List<Car> cars = null;
-        try {
-            transactionManager.beginTransaction(carDAO);
-            cars = carDAO.findAllAvailable();
-            transactionManager.commit();
-        } catch (DAOException e) {
-            transactionManager.rollback();
-            LOGGER.log(Level.ERROR,"Exception while finding all cars {}",e);
-        }
-        transactionManager.endTransaction();
-        return cars;
-    }
 }

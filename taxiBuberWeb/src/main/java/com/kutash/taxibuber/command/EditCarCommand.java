@@ -1,32 +1,34 @@
 package com.kutash.taxibuber.command;
 
 import com.kutash.taxibuber.controller.Router;
-import com.kutash.taxibuber.entity.User;
-import com.kutash.taxibuber.exception.DAOException;
+import com.kutash.taxibuber.entity.Car;
 import com.kutash.taxibuber.resource.PageManager;
-import com.kutash.taxibuber.service.UserService;
+import com.kutash.taxibuber.service.CarService;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
-public class ShowUsersCommand implements Command {
+public class EditCarCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private UserService service;
+    private static final String CAR_ID = "carId";
+    private CarService service;
 
-    ShowUsersCommand(UserService service){this.service=service;}
+    EditCarCommand(CarService service) {
+        this.service = service;
+    }
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        LOGGER.log(Level.INFO,"show users command");
+        LOGGER.log(Level.INFO, "edit car command");
         Router router = new Router();
-        List<User> userList = service.findAll();
-        request.setAttribute("users",userList);
-        router.setPage(PageManager.getProperty("path.page.users"));
+        int id = Integer.parseInt(request.getParameter(CAR_ID));
+        Car car = service.findById(id);
+        request.setAttribute("car", car);
+        router.setPage(PageManager.getProperty("path.page.car"));
         return router;
     }
 }

@@ -3,6 +3,7 @@ package com.kutash.taxibuber.command;
 import com.google.gson.Gson;
 import com.kutash.taxibuber.controller.Router;
 import com.kutash.taxibuber.entity.Car;
+import com.kutash.taxibuber.exception.DAOException;
 import com.kutash.taxibuber.service.CarService;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

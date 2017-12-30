@@ -1,37 +1,40 @@
 package com.kutash.taxibuber.command;
 
+import com.google.gson.Gson;
 import com.kutash.taxibuber.controller.Router;
 import com.kutash.taxibuber.entity.Comment;
 import com.kutash.taxibuber.entity.User;
-import com.kutash.taxibuber.entity.UserRole;
-import com.kutash.taxibuber.exception.DAOException;
-import com.kutash.taxibuber.resource.PageManager;
+import com.kutash.taxibuber.service.OrderService;
 import com.kutash.taxibuber.service.UserService;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-public class EditUserCommand implements Command {
+public class UserInfoCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String USER_ID = "userId";
     private UserService service;
 
-    EditUserCommand(UserService service){this.service=service;}
+    UserInfoCommand(UserService orderService) {
+        this.service=orderService;
+    }
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        LOGGER.log(Level.INFO,"edit user command");
         Router router = new Router();
-        int id = Integer.parseInt(request.getParameter(USER_ID));
+        LOGGER.log(Level.INFO,"getting user info");
+        String userId = request.getParameter(USER_ID);
+        int id = Integer.parseInt(userId);
         User user = service.findById(id);
         List<Comment> comments = service.findComments(id);
-        request.setAttribute("comments",comments);
-        request.setAttribute("user",user);
-        router.setPage(PageManager.getProperty("path.page.user"));
+        user.setComments(comments);
+        String json = new Gson().toJson(user);
+        router.setPage(json);
         return router;
     }
 }

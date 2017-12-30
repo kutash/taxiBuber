@@ -16,18 +16,31 @@ import java.util.List;
 public class CarService {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private TransactionManager transactionManager;
 
-    public CarService() {
+    public Car findById(int id) {
+        LOGGER.log(Level.INFO,"Finding car id={}",id);
+        TransactionManager transactionManager = new TransactionManager();
+        CarDAO carDAO = new DAOFactory().getCarDAO();
+        Car car = null;
         try {
-            transactionManager = new TransactionManager();
+            transactionManager.beginTransaction(carDAO);
+            car = carDAO.findEntityById(id);
+            transactionManager.commit();
         } catch (DAOException e) {
-            LOGGER.log(Level.ERROR,"Exception while creating TransactionManager {}",e);
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+            }
+            LOGGER.log(Level.ERROR,"Exception while finding car by id {}",e);
         }
+        transactionManager.endTransaction();
+        return car;
     }
 
     public List<Car> findAll() {
         LOGGER.log(Level.INFO,"Finding all cars");
+        TransactionManager transactionManager = new TransactionManager();
         CarDAO carDAO = new DAOFactory().getCarDAO();
         List<Car> cars = null;
         try {
@@ -35,7 +48,11 @@ public class CarService {
             cars = carDAO.findAll();
             transactionManager.commit();
         } catch (DAOException e) {
-            transactionManager.rollback();
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+            }
             LOGGER.log(Level.ERROR,"Exception while finding all cars {}",e);
         }
         transactionManager.endTransaction();
@@ -44,6 +61,7 @@ public class CarService {
 
     public List<Car> findAllAvailable(String latitude,String longitude,String bodyType) {
         LOGGER.log(Level.INFO,"Finding all available cars");
+        TransactionManager transactionManager = new TransactionManager();
         CarDAO carDAO = new DAOFactory().getCarDAO();
         List<Car> cars = null;
         try {
@@ -55,7 +73,11 @@ public class CarService {
             }
             transactionManager.commit();
         } catch (DAOException e) {
-            transactionManager.rollback();
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+            }
             LOGGER.log(Level.ERROR,"Exception while finding all available cars {}",e);
         }
         transactionManager.endTransaction();

@@ -19,6 +19,7 @@ public class CarDAO extends AbstractDAO<Car> {
     private static final String FIND_ALL_CARS = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,cb.id_brand,cb.`name` FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand";
     private static final String FIND_ALL_AVAILABLE = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,cb.id_brand,cb.`name` FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand WHERE is_available=TRUE";
     private static final String FIND_AVAILABLE_BY_BODY_TYPE = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,cb.id_brand,cb.`name` FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand WHERE is_available=TRUE AND capacity=?";
+    private static final String FIND_CAR_BY_ID = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,cb.id_brand,cb.`name` FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand WHERE id_car = ?";
 
     @Override
     public List<Car> findAll() throws DAOException {
@@ -81,7 +82,22 @@ public class CarDAO extends AbstractDAO<Car> {
 
     @Override
     public Car findEntityById(int id) throws DAOException {
-        return null;
+        LOGGER.log(Level.INFO,"finding car by id {}",id);
+        Car car = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = getPreparedStatement(FIND_CAR_BY_ID);
+            preparedStatement.setInt(1,id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                car = getCar(resultSet);
+            }
+        }catch (SQLException e){
+            throw new DAOException("Exception while finding car by id",e);
+        }finally {
+            close(preparedStatement);
+        }
+        return car;
     }
 
     @Override

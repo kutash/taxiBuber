@@ -5,7 +5,6 @@ import com.kutash.taxibuber.dao.DAOFactory;
 import com.kutash.taxibuber.dao.TransactionManager;
 import com.kutash.taxibuber.dao.UserDAO;
 import com.kutash.taxibuber.entity.User;
-import com.kutash.taxibuber.entity.UserRole;
 import com.kutash.taxibuber.exception.DAOException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -15,18 +14,9 @@ public class LoginService {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private TransactionManager transactionManager;
-
-    public LoginService() {
-        try {
-            transactionManager = new TransactionManager();
-        } catch (DAOException e) {
-            LOGGER.log(Level.ERROR,"Exception while creating TransactionManager {}",e);
-        }
-    }
-
-    public User logIn(String password, String email) throws DAOException {
+    public User logIn(String password, String email) {
         LOGGER.log(Level.INFO,"log in user password {} email {}",password,email);
+        TransactionManager transactionManager = new TransactionManager();
         User user = null;
         UserDAO userDAO = new DAOFactory().getUserDAO();
         try {
@@ -34,7 +24,11 @@ public class LoginService {
             user = userDAO.findEntityByEmail(email);
             transactionManager.commit();
         }catch (DAOException e){
-            transactionManager.rollback();
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+            }
             LOGGER.log(Level.ERROR,"Exception while finding user by email",e);
         }
         if (user == null){

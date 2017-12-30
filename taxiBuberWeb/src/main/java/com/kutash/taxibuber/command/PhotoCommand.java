@@ -27,7 +27,7 @@ public class PhotoCommand implements Command {
             LOGGER.log(Level.ERROR,"Exception while loading properties {}",e);
         }
         String photoPath = request.getParameter(PHOTO);
-        String path = "";
+        String path;
         if (StringUtils.isEmpty(photoPath)) {
             String appPath = request.getServletContext().getRealPath("");
             path = appPath + properties.getProperty("AVATAR");

@@ -14,7 +14,9 @@ public enum CommandEnum {
     ORDER(new OrderCommand(new OrderService())),
     SHOW_CARS(new ShowCarsCommand(new CarService())),
     FREE_CARS(new FreeCarsCommand(new CarService())),
-    PRICE(new PriceCommand());
+    PRICE(new PriceCommand()),
+    CAR(new EditCarCommand(new CarService())),
+    USER_INFO(new UserInfoCommand(new UserService()));
 
     Command command;
 

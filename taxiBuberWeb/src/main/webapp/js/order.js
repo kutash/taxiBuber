@@ -158,6 +158,8 @@ function setMarkers(result) {
     var long = result.longitude;
     var brand = result.brand.name;
     var model = result.model;
+    var photo = result.photoPath;
+    var id = result.userId;
     var latLng = new google.maps.LatLng(lat, long);
     var latLngClient = new google.maps.LatLng(latitude, longitude);
     var service = new google.maps.DistanceMatrixService();
@@ -176,26 +178,31 @@ function setMarkers(result) {
             var res = dist[0].replace(',','.');
             distances.push(parseFloat(res));
             var duration = response.rows[0].elements[0].duration.text;
-            contentString = '<div>Расстояние:'+distance+'<br/> Время подачи машины:'+duration+'</div><div>'+brand+' '+model+'</div><div><a href="#">Подробнее</a></div>';
+            contentString = '<div>'+brand+' '+model+'<br/>Расстояние:'+distance+'<br/> Время подачи машины:'+duration+'</div><div><img src="controller?command=photo&amp;photo='+photo+'" width="60px" height="60px"/></div><div><a data-toggle="modal" data-target="#myModal" href="" onclick="show('+id+')">Driver</a></div>';
         } else {
-            contentString = '<div>Can not define distance</div><div>'+brand+' '+model+'</div><div><a href="javascript{}" onclick="chooseCar()">Выбрать</a></div>';
+            contentString = '<div>Can not define distance</div><div>'+brand+' '+model+'</div><div><a href="#">Выбрать</a></div>';
         }
         var marker = new google.maps.Marker({
             position: latLng,
             icon: "/images/car48x48.png",
             map: map
         });
-        attachSecretMessage(marker, contentString);
+        attachSecretMessage(marker, contentString,result);
     });
 }
 
-function attachSecretMessage(marker, content) {
+function attachSecretMessage(marker, content, result) {
     var infowindow = new google.maps.InfoWindow({
         content: content
     });
 
     marker.addListener('click', function() {
         infowindow.open(marker.get('map'), marker);
+    });
+
+    marker.addListener('dblclick', function() {
+        document.getElementById('car').value = result.brand.name+' '+result.model;
+        document.getElementById('carId').value = result.id;
     });
     markers.push(marker);
 }
@@ -207,7 +214,26 @@ function deleteMarkers() {
     markers = [];
 }
 
-function chooseCar() {
-
+function show(id) {
+    $.ajax({
+        type:"GET",
+        url: "buber?command=user_info&userId="+id,
+        contentType: 'application/json'
+    }).done(function(result){
+        document.getElementById('name').value = result.name;
+        document.getElementById('surname').value = result.surname;
+        document.getElementById('rating').innerHTML = result.rating;
+        var per = 100*result.rating/5;
+        document.getElementById('str').style.width = per+'%';
+        var photoPath;
+        console.log(result.photoPath);
+        if (result.photoPath === undefined){
+            photoPath = '';
+        }  else {
+            photoPath = result.photoPath;
+        }
+        document.getElementById('blah').src ='controller?command=photo&photo='+photoPath;
+    })
 }
+
 

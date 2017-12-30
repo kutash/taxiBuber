@@ -11,25 +11,15 @@ import com.kutash.taxibuber.exception.DAOException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.sql.SQLException;
 import java.util.List;
 
 public class UserService {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private TransactionManager transactionManager;
-
-    public UserService() {
-        try {
-            transactionManager = new TransactionManager();
-        } catch (DAOException e) {
-            LOGGER.log(Level.ERROR,"Exception while creating TransactionManager {}",e);
-        }
-    }
 
     public List<User> findAll() {
         LOGGER.log(Level.INFO,"Finding all users");
+        TransactionManager transactionManager = new TransactionManager();
         UserDAO userDAO = new DAOFactory().getUserDAO();
         List<User> users = null;
         try {
@@ -37,14 +27,19 @@ public class UserService {
             users = userDAO.findAll();
             transactionManager.commit();
         } catch (DAOException e) {
-            transactionManager.rollback();
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+            }
             LOGGER.log(Level.ERROR,"Exception while finding all users {}",e);
         }
         transactionManager.endTransaction();
         return users;
     }
 
-    public User findById(int id){
+    public User findById(int id) {
+        TransactionManager transactionManager = new TransactionManager();
         UserDAO userDAO = new DAOFactory().getUserDAO();
         User user = null;
         try {
@@ -52,15 +47,20 @@ public class UserService {
             user = userDAO.findEntityById(id);
             transactionManager.commit();
         } catch (DAOException e) {
-            transactionManager.rollback();
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+            }
             LOGGER.log(Level.ERROR,"Exception while finding user by id {}",e);
         }
         transactionManager.endTransaction();
         return user;
     }
 
-    public int deleteUsers(int ... ids) throws SQLException, DAOException {
+    public int deleteUsers(int ... ids) {
         LOGGER.log(Level.INFO,"deleting users");
+        TransactionManager transactionManager = new TransactionManager();
         int res = 0;
         UserDAO userDAO = new DAOFactory().getUserDAO();
         try {
@@ -70,14 +70,19 @@ public class UserService {
             }
             transactionManager.commit();
         }catch (DAOException e){
-            transactionManager.rollback();
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+            }
             LOGGER.log(Level.ERROR,"Exception while deleting user {}",e);
         }
         transactionManager.endTransaction();
         return res;
     }
 
-    public int create(User user){
+    public int create(User user) {
+        TransactionManager transactionManager = new TransactionManager();
         int result = 0;
         if (isUniqueEmail(user.getEmail())) {
             user.setPassword(Encryptor.ecnryptPassword(user.getPassword(),user.getEmail()));
@@ -89,7 +94,11 @@ public class UserService {
                 result = userDAO.create(user);
                 transactionManager.commit();
             } catch (DAOException e) {
-                transactionManager.rollback();
+                try {
+                    transactionManager.rollback();
+                } catch (DAOException e1) {
+                    LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                }
                 LOGGER.log(Level.ERROR,"Exception while creating user {}",e);
             }
             transactionManager.endTransaction();
@@ -98,7 +107,8 @@ public class UserService {
         return result;
     }
 
-    private boolean isUniqueEmail(String email){
+    private boolean isUniqueEmail(String email) {
+        TransactionManager transactionManager = new TransactionManager();
         boolean result = false;
         UserDAO userDAO = new DAOFactory().getUserDAO();
         try {
@@ -106,15 +116,20 @@ public class UserService {
             result = userDAO.isEmailExists(email);
             transactionManager.commit();
         } catch (DAOException e) {
-            transactionManager.rollback();
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+            }
             LOGGER.log(Level.ERROR,"Exception while checking email {}",e);
         }
         transactionManager.endTransaction();
         return result;
     }
 
-    public List<Comment> findComments(int userId){
+    public List<Comment> findComments(int userId) {
         LOGGER.log(Level.INFO,"Finding comments by user id");
+        TransactionManager transactionManager = new TransactionManager();
         CommentDAO commentDAO = new DAOFactory().getCommentDAO();
         List<Comment> comments = null;
         try {
@@ -122,7 +137,11 @@ public class UserService {
             comments = commentDAO.findEntityByUserId(userId);
             transactionManager.commit();
         } catch (DAOException e) {
-            transactionManager.rollback();
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+            }
             LOGGER.log(Level.ERROR,"Exception while finding comments {}",e);
         }
         transactionManager.endTransaction();

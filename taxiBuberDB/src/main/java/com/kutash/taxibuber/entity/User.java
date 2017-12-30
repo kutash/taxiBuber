@@ -1,6 +1,7 @@
 package com.kutash.taxibuber.entity;
 
 import java.util.Date;
+import java.util.List;
 
 public class User extends AbstractEntity {
 
@@ -14,8 +15,9 @@ public class User extends AbstractEntity {
     private Date birthday;
     private String photoPath;
     private String phone;
+    private List<Comment> comments;
 
-    public User(float rating, String name, String surname, String patronymic, String email, String password, UserRole role, Date birthday, String photoPath, String phone) {
+    public User(float rating, String name, String surname, String patronymic, String email, String password, UserRole role, Date birthday, String photoPath, String phone, List<Comment> comments) {
         this.rating = rating;
         this.name = name;
         this.surname = surname;
@@ -26,6 +28,22 @@ public class User extends AbstractEntity {
         this.birthday = birthday;
         this.photoPath = photoPath;
         this.phone = phone;
+        this.comments = comments;
+    }
+
+    public User(int id, float rating, String name, String surname, String patronymic, String email, String password, UserRole role, Date birthday, String photoPath, String phone, List<Comment> comments) {
+        super(id);
+        this.rating = rating;
+        this.name = name;
+        this.surname = surname;
+        this.patronymic = patronymic;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.birthday = birthday;
+        this.photoPath = photoPath;
+        this.phone = phone;
+        this.comments = comments;
     }
 
     public User(int id, float rating, String name, String surname, String patronymic, String email, String password, UserRole role, Date birthday, String photoPath, String phone) {
@@ -126,55 +144,11 @@ public class User extends AbstractEntity {
         return surname+" "+name+" "+patronymic;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        User user = (User) o;
-
-        if (Float.compare(user.rating, rating) != 0) return false;
-        if (name != null ? !name.equals(user.name) : user.name != null) return false;
-        if (surname != null ? !surname.equals(user.surname) : user.surname != null) return false;
-        if (patronymic != null ? !patronymic.equals(user.patronymic) : user.patronymic != null) return false;
-        if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        if (password != null ? !password.equals(user.password) : user.password != null) return false;
-        if (role != user.role) return false;
-        if (birthday != null ? !birthday.equals(user.birthday) : user.birthday != null) return false;
-        if (photoPath != null ? !photoPath.equals(user.photoPath) : user.photoPath != null) return false;
-        return phone != null ? phone.equals(user.phone) : user.phone == null;
+    public List<Comment> getComments() {
+        return comments;
     }
 
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (rating != +0.0f ? Float.floatToIntBits(rating) : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (surname != null ? surname.hashCode() : 0);
-        result = 31 * result + (patronymic != null ? patronymic.hashCode() : 0);
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (role != null ? role.hashCode() : 0);
-        result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
-        result = 31 * result + (photoPath != null ? photoPath.hashCode() : 0);
-        result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "rating=" + rating +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", patronymic='" + patronymic + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", role=" + role +
-                ", birthday=" + birthday +
-                ", photoPath='" + photoPath + '\'' +
-                ", phone='" + phone + '\'' +
-                "} " + super.toString();
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

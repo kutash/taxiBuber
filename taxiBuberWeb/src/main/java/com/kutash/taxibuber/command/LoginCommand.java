@@ -30,11 +30,7 @@ public class LoginCommand implements Command {
         String password = request.getParameter(PASSWORD);
         User user = null;
         UserRole userRole;
-        try {
-            user = service.logIn(password,email);
-        } catch (DAOException e) {
-            LOGGER.log(Level.ERROR,"Exception in logIn method {}",e);
-        }
+        user = service.logIn(password,email);
         if (user == null){
             userRole = UserRole.UNKNOWN;
         }else {
