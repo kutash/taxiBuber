@@ -157,4 +157,8 @@ public class Address extends AbstractEntity {
                 ", userId=" + userId +
                 "} " + super.toString();
     }
+
+    public String getFullAddress(){
+        return street+" "+house+", "+city+", "+country.getName();
+    }
 }

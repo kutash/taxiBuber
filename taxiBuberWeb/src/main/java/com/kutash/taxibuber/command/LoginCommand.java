@@ -3,7 +3,6 @@ package com.kutash.taxibuber.command;
 import com.kutash.taxibuber.controller.Router;
 import com.kutash.taxibuber.entity.User;
 import com.kutash.taxibuber.entity.UserRole;
-import com.kutash.taxibuber.exception.DAOException;
 import com.kutash.taxibuber.resource.MessageManager;
 import com.kutash.taxibuber.resource.PageManager;
 import com.kutash.taxibuber.service.LoginService;
@@ -28,7 +27,7 @@ public class LoginCommand implements Command {
         Router router = new Router();
         String email = request.getParameter(EMAIL);
         String password = request.getParameter(PASSWORD);
-        User user = null;
+        User user;
         UserRole userRole;
         user = service.logIn(password,email);
         if (user == null){
@@ -48,7 +47,7 @@ public class LoginCommand implements Command {
                 break;
             case CLIENT:
                 request.getSession().setAttribute("currentUser",user);
-                router.setPage(PageManager.getProperty("path.page.welcome"));
+                router.setPage("/controller?command=order");
                 break;
         }
         return router;

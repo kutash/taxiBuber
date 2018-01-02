@@ -24,11 +24,11 @@ public class UserDAO extends AbstractDAO<User> {
     @Override
     public List<User> findAll() throws DAOException {
         LOGGER.log(Level.INFO,"Finding all users");
-        PreparedStatement statement = null;
+        Statement statement = null;
         List<User> users = new ArrayList<>();
         try {
-            statement = getPreparedStatement(FIND_ALL_USERS);
-            ResultSet resultSet = statement.executeQuery();
+            statement = getStatement();
+            ResultSet resultSet = statement.executeQuery(FIND_ALL_USERS);
             while (resultSet.next()) {
                 User user = getUser(resultSet);
                 users.add(user);

@@ -4,7 +4,6 @@ import com.kutash.taxibuber.resource.DBConfigurationManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -19,9 +18,8 @@ class ConnectionCreator {
     private String url;
 
     ConnectionCreator(){
-        DBConfigurationManager dbConfigurationManager = new DBConfigurationManager();
-        properties = dbConfigurationManager.getProperties();
-        url = dbConfigurationManager.getProperty("url");
+        properties = DBConfigurationManager.getInstance().getProperties();
+        url = DBConfigurationManager.getInstance().getProperty("url");
         try {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
         } catch (SQLException e) {
@@ -29,23 +27,6 @@ class ConnectionCreator {
             throw new RuntimeException(e);
         }
     }
-
-    /*{
-        properties  = new Properties();
-        try {
-            properties.load(ConnectionCreator.class.getResourceAsStream("/dataBase.properties"));
-        } catch (IOException e) {
-            LOGGER.log(Level.FATAL,"Exception during loading properties {}",e);
-            throw new RuntimeException(e);
-        }
-        url = properties.getProperty("url");
-        try {
-            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-        } catch (SQLException e) {
-            LOGGER.log(Level.FATAL,"Can not register driver {}",e);
-            throw new RuntimeException(e);
-        }
-    }*/
 
     Connection getConnection() {
         Connection connection ;

@@ -14,8 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
-@WebServlet(value = "/buber")
+@WebServlet(value = "/ajaxController")
 public class AjaxController extends HttpServlet {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -37,7 +36,6 @@ public class AjaxController extends HttpServlet {
         Router router = command.execute(request,response);
         if (router != null) {
             response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
             response.getWriter().write(router.getPage());
         }else {
             String page = PageManager.getProperty("path.page.error");

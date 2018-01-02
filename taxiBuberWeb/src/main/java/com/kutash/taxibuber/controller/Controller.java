@@ -7,7 +7,6 @@ import com.kutash.taxibuber.resource.PageManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,7 +30,6 @@ public class Controller extends HttpServlet {
 
     private void processRequest(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
         LOGGER.log(Level.INFO,"processRequest method");
-        request.setCharacterEncoding("UTF-8");
         CommandFactory client = new CommandFactory();
         Command command = client.defineCommand(request);
         Router router = command.execute(request,response);

@@ -152,6 +152,7 @@ a.pager-link-selected {
     border-radius: 5px;
     width: 300px;
     display: inline-flex;
+    place-content: center;
 }
 
 h1{
@@ -179,4 +180,51 @@ h4 {
 
 .user-name {
     color: #9d9d9d;
+}
+
+.info-span {
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.label-span {
+    font-size: x-large;
+    font-family: verdana, serif;
+}
+
+.comment-mark {
+    margin-bottom: -10px;
+    margin-top: 20px;
+    font-size: 22px;
+}
+
+#driver {
+    font-family: "Baskerville Old Face";
+    font-size: xx-large;
+    padding: 25%;
+}
+
+#date-span {
+    padding-top: 21px;
+    float: right;
+    font-size: 14px;
+}
+
+#rating-order {
+    font-size: 27px;
+    padding-top: 5px;
+}
+
+.productRate-order {
+    background: url(/images/w24h241386955448starempty8.png) repeat-x;
+    width: 120px;
+    height: 24px;
+    margin-top: 10px;
+    margin-left: 6px;
+    margin-bottom: 12px;
+}
+
+#rating-div {
+    margin-top: 20px;
+    margin-bottom: -3px
 }

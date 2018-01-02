@@ -1,3 +1,23 @@
+window.onload = function () {
+    var addresses = document.querySelectorAll('.address-link');
+    for (var i = 0; i < addresses.length; i++) {
+        addresses[i].addEventListener('click', function (event) {
+            event.preventDefault();
+            document.getElementById('end').value = this.innerHTML;
+            var ev = new KeyboardEvent('keyup', {
+                key: 'Enter'
+            });
+            document.getElementById('end').dispatchEvent(ev);
+        })
+    }
+
+    document.getElementById('order-button').addEventListener('click', function (event) {
+        event.preventDefault();
+        document.getElementById('order-form').submit();
+    })
+};
+
+
 setInterval(getAvailableCars, 10000);
 
 var latitude;
@@ -11,24 +31,34 @@ var changeZoom = true;
 function initMap() {
     var directionsService = new google.maps.DirectionsService();
     var directionsDisplay = new google.maps.DirectionsRenderer({ 'draggable': false });
-    google.maps.event.addDomListener(window, 'load', function () {
-        new google.maps.places.SearchBox(document.getElementById('start'));
-        new google.maps.places.SearchBox(document.getElementById('end'));
 
+    google.maps.event.addDomListener(window, 'load', function () {
+        var start = new google.maps.places.SearchBox(document.getElementById('start'));
+        start.addListener('places_changed', function() {
+            var places = start.getPlaces();
+            if (places.length == 0) {
+                return;
+            }
+            calculateAndDisplayRoute(directionsService, directionsDisplay);
+        });
+
+        var end = new google.maps.places.SearchBox(document.getElementById('end'));
+        end.addListener('places_changed', function() {
+            var places = end.getPlaces();
+            if (places.length == 0) {
+                return;
+            }
+            calculateAndDisplayRoute(directionsService, directionsDisplay);
+        });
     });
+
+
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: -34.397, lng: 150.644},
         zoom: 15
     });
-    var infoWindow = new google.maps.InfoWindow({map: map});
-
     directionsDisplay.setMap(map);
-    directionsDisplay.setPanel(document.getElementById('right-panel'));
-
-    document.getElementById('submit').addEventListener('click', function() {
-        calculateAndDisplayRoute(directionsService, directionsDisplay);
-    });
-
+    var infoWindow = new google.maps.InfoWindow();
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
             var pos = {
@@ -38,10 +68,10 @@ function initMap() {
             latitude = position.coords.latitude;
             longitude = position.coords.longitude;
 
-            document.getElementById('start').value = latitude+','+longitude;
+            var geocoder = new google.maps.Geocoder;
+            var latLng = new google.maps.LatLng(latitude,longitude);
 
-            infoWindow.setPosition(pos);
-            infoWindow.setContent('Location found.');
+            geocodeLatLng(geocoder,map,infoWindow,latLng);
             map.setCenter(pos);
         }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
@@ -49,6 +79,26 @@ function initMap() {
     } else {
         handleLocationError(false, infoWindow, map.getCenter());
     }
+}
+
+function geocodeLatLng(geocoder, map, infowindow, latLng) {
+    geocoder.geocode({'location': latLng}, function(results, status) {
+        if (status === 'OK') {
+            if (results[1]) {
+                var marker = new google.maps.Marker({
+                    position: latLng,
+                    map: map
+                });
+                infowindow.setContent(results[0].formatted_address);
+                infowindow.open(map, marker);
+                document.getElementById('start').value = results[0].formatted_address;
+            } else {
+                window.alert('No results found');
+            }
+        } else {
+            window.alert('Geocoder failed due to: ' + status);
+        }
+    });
 }
 
 function calculateAndDisplayRoute(directionsService, directionsDisplay) {
@@ -83,20 +133,17 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
 
             $.ajax({
                 type:"GET",
-                url: "buber?command=price&bodyType="+bodyType+"&distance="+distance,
+                url: "ajaxController?command=price&bodyType="+bodyType+"&distance="+distance,
                 contentType: 'application/json'
             }).done(function(result){
-                /*var dvDistance = document.getElementById("dvDistance");
+                var dvDistance = document.getElementById("dvDistance");
                 dvDistance.style.display='block';
                 var distanceSpan = document.getElementById('distance');
                 distanceSpan.innerHTML = distance + '<br />';
                 var durationSpan = document.getElementById('duration');
-                durationSpan.innerHTML = duration + '<br />';*/
-                document.getElementById('distance').value = distance;
-                document.getElementById('duration').value = duration;
-                document.getElementById('price').value = result;
-                /*var costSpan = document.getElementById('cost');
-                costSpan.innerHTML = ''+result ;*/
+                durationSpan.innerHTML = duration + '<br />';
+                var costSpan = document.getElementById('cost');
+                costSpan.innerHTML = ''+result ;
             }).fail(function(xhr, textStatus, error){
                 console.log(xhr);
             });
@@ -117,7 +164,7 @@ function getAvailableCars() {
     var bodyType = document.getElementById('body-type').value;
     $.ajax({
         type:"GET",
-        url: "buber?command=free_cars&latitude="+latitude+"&longitude="+longitude+"&bodyType="+bodyType,
+        url: "ajaxController?command=free_cars&latitude="+latitude+"&longitude="+longitude+"&bodyType="+bodyType,
         contentType: 'application/json'
     }).done(function(results){
         if (results.length === 0){
@@ -160,6 +207,7 @@ function setMarkers(result) {
     var model = result.model;
     var photo = result.photoPath;
     var id = result.userId;
+    var driver = result.driverFullName;
     var latLng = new google.maps.LatLng(lat, long);
     var latLngClient = new google.maps.LatLng(latitude, longitude);
     var service = new google.maps.DistanceMatrixService();
@@ -178,7 +226,7 @@ function setMarkers(result) {
             var res = dist[0].replace(',','.');
             distances.push(parseFloat(res));
             var duration = response.rows[0].elements[0].duration.text;
-            contentString = '<div>'+brand+' '+model+'<br/>Расстояние:'+distance+'<br/> Время подачи машины:'+duration+'</div><div><img src="controller?command=photo&amp;photo='+photo+'" width="60px" height="60px"/></div><div><a data-toggle="modal" data-target="#myModal" href="" onclick="show('+id+')">Driver</a></div>';
+            contentString = '<div>'+brand+' '+model+'</div><div><img src="controller?command=photo&amp;photo='+photo+'" width="70px" height="70px"/></div><div>Driver:<a data-toggle="modal" data-target="#myModal" href="" onclick="show('+id+')">'+driver+'</a><br/>Расстояние:'+distance+'<br/>Время подачи машины:'+duration+'</div>';
         } else {
             contentString = '<div>Can not define distance</div><div>'+brand+' '+model+'</div><div><a href="#">Выбрать</a></div>';
         }
@@ -196,11 +244,12 @@ function attachSecretMessage(marker, content, result) {
         content: content
     });
 
-    marker.addListener('click', function() {
+    marker.addListener('mouseover', function() {
         infowindow.open(marker.get('map'), marker);
     });
 
-    marker.addListener('dblclick', function() {
+    marker.addListener('click', function() {
+        infowindow.close(marker.get('map'), marker);
         document.getElementById('car').value = result.brand.name+' '+result.model;
         document.getElementById('carId').value = result.id;
     });
@@ -217,22 +266,31 @@ function deleteMarkers() {
 function show(id) {
     $.ajax({
         type:"GET",
-        url: "buber?command=user_info&userId="+id,
+        url: "ajaxController?command=user_info&userId="+id,
         contentType: 'application/json'
     }).done(function(result){
-        document.getElementById('name').value = result.name;
-        document.getElementById('surname').value = result.surname;
-        document.getElementById('rating').innerHTML = result.rating;
+        document.getElementById('tbody').innerHTML='';
+        console.log(result);
+        document.getElementById('driver').innerHTML = result.surname+' '+result.name+' '+result.patronymic;
+        document.getElementById('rating-order').innerHTML = result.rating;
         var per = 100*result.rating/5;
         document.getElementById('str').style.width = per+'%';
         var photoPath;
-        console.log(result.photoPath);
         if (result.photoPath === undefined){
             photoPath = '';
         }  else {
             photoPath = result.photoPath;
         }
         document.getElementById('blah').src ='controller?command=photo&photo='+photoPath;
+
+        var comments = result.comments;
+        if(comments.length === 0){
+            document.getElementById('tbody').innerHTML='У водителя пока нету комментариев';
+        }
+        for (var i=0;i<comments.length;i++){
+            var mark = comments[i].mark*20;
+            document.getElementById('tbody').innerHTML+='<tr><td class="col-md-2"><img src="/controller?command=photo&photo='+comments[i].reviewerPhoto+'" width="50" height="50" class="comment-photo"/><br/>'+comments[i].reviewerName+'</td><td class="col-md-10">'+comments[i].text+'<br><div style="display: inline-flex"><span class="comment-mark">Оценка:</span><div class="productRate-order" id="rating-div"><div class="productRate-div" style="width:'+mark+'%"></div></div></div><span id="date-span">'+comments[i].date+'</span></td></tr>';
+        }
     })
 }
 

@@ -26,7 +26,7 @@
             <a class="navbar-brand" href="${home}"><span class="glyphicon glyphicon-home"></span> <fmt:message key="label.title"/></a>
         </div>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span> <fmt:message key="label.signup"/></a></li>
+            <li><a href="../jsp/signup.jsp"><span class="glyphicon glyphicon-user"></span> <fmt:message key="label.signup"/></a></li>
             <li><a href="#" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-log-in"></span> <fmt:message key="label.login"/></a></li>
             <li class="lang">
                 <form action="../index.jsp" method="post">

@@ -10,25 +10,34 @@ import org.apache.logging.log4j.Logger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CarDAO extends AbstractDAO<Car> {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String FIND_ALL_CARS = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,cb.id_brand,cb.`name` FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand";
-    private static final String FIND_ALL_AVAILABLE = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,cb.id_brand,cb.`name` FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand WHERE is_available=TRUE";
-    private static final String FIND_AVAILABLE_BY_BODY_TYPE = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,cb.id_brand,cb.`name` FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand WHERE is_available=TRUE AND capacity=?";
-    private static final String FIND_CAR_BY_ID = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,cb.id_brand,cb.`name` FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand WHERE id_car = ?";
+    private static final String FIND_ALL_CARS = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,\n" +
+            "cb.id_brand,cb.`name`,concat(u.name,' ',u.surname) AS driver_name FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand\n" +
+            "INNER JOIN user AS u ON c.id_user = u.id_user";
+    private static final String FIND_ALL_AVAILABLE = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,\n" +
+            "cb.id_brand,cb.`name`,concat(u.name,' ',u.surname) AS driver_name FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand\n" +
+            "INNER JOIN user AS u ON c.id_user = u.id_user WHERE is_available=TRUE";
+    private static final String FIND_AVAILABLE_BY_BODY_TYPE = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,\n" +
+            "cb.id_brand,cb.`name`,concat(u.name,' ',u.surname) AS driver_name FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand\n" +
+            "INNER JOIN user AS u ON c.id_user = u.id_user WHERE is_available=TRUE AND capacity=?";
+    private static final String FIND_CAR_BY_ID = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,\n" +
+            "cb.id_brand,cb.`name`,concat(u.name,' ',u.surname) AS driver_name FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand\n" +
+            "INNER JOIN user AS u ON c.id_user = u.id_user WHERE id_car = ?";
 
     @Override
     public List<Car> findAll() throws DAOException {
         LOGGER.log(Level.INFO,"Finding all cars");
-        PreparedStatement statement = null;
+        Statement statement = null;
         List<Car> cars = new ArrayList<>();
         try {
-            statement = getPreparedStatement(FIND_ALL_CARS);
-            ResultSet resultSet = statement.executeQuery();
+            statement = getStatement();
+            ResultSet resultSet = statement.executeQuery(FIND_ALL_CARS);
             while (resultSet.next()) {
                 Car car = getCar(resultSet);
                 cars.add(car);
@@ -43,11 +52,11 @@ public class CarDAO extends AbstractDAO<Car> {
 
     public List<Car> findAllAvailable() throws DAOException {
         LOGGER.log(Level.INFO,"Finding all available cars");
-        PreparedStatement statement = null;
+        Statement statement = null;
         List<Car> cars = new ArrayList<>();
         try {
-            statement = getPreparedStatement(FIND_ALL_AVAILABLE);
-            ResultSet resultSet = statement.executeQuery();
+            statement = getStatement();
+            ResultSet resultSet = statement.executeQuery(FIND_ALL_AVAILABLE);
             while (resultSet.next()) {
                 Car car = getCar(resultSet);
                 cars.add(car);
@@ -127,8 +136,9 @@ public class CarDAO extends AbstractDAO<Car> {
             String latitude = resultSet.getString("latitude");
             String longitude = resultSet.getString("longitude");
             int idUser = resultSet.getInt("id_user");
+            String driverName = resultSet.getString("driver_name");
             CarBrand carBrand = new CarBrand(resultSet.getInt("id_brand"),resultSet.getString("name"));
-            car = new Car(idCar,number,capacity,model,photo,isAvailable,latitude,longitude,carBrand,idUser);
+            car = new Car(idCar,number,capacity,model,photo,isAvailable,latitude,longitude,carBrand,idUser,driverName);
         }catch (SQLException e){
             throw new DAOException("Exception while getting user from resultSet",e);
         }

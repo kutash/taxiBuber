@@ -61,6 +61,21 @@ public abstract class AbstractDAO<T extends AbstractEntity> {
         throw new DAOException("connection or statement is null");
     }
 
+    Statement getStatement() throws DAOException {
+        if (connection != null) {
+            Statement statement;
+            try {
+                statement = connection.createStatement();
+            } catch (SQLException e) {
+                throw new DAOException("Exception while creating Statement");
+            }
+            if (statement != null) {
+                return statement;
+            }
+        }
+        throw new DAOException("connection or statement is null");
+    }
+
     void close(Statement statement) {
         if(statement != null) {
             try {

@@ -17,7 +17,7 @@ public class ConnectionPool {
     private static final Logger LOGGER = LogManager.getLogger();
     private final static ReentrantLock lock = new ReentrantLock();
     private static AtomicBoolean instanceCreated = new AtomicBoolean();
-    private final int  POOL_SIZE = Integer.parseInt(new DBConfigurationManager().getProperty("poolSize"));
+    private final int  POOL_SIZE = Integer.parseInt(DBConfigurationManager.getInstance().getProperty("poolSize"));
     private static ConnectionPool instance;
     private BlockingQueue<ProxyConnection> connectionQueue;
 

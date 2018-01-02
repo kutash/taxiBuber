@@ -10,18 +10,11 @@ import java.util.ResourceBundle;
 
 public class DBConfigurationManager {
 
-    /*private final static ResourceBundle resourceBundle = ResourceBundle.getBundle("dataBase");
-
-    private DBConfigurationManager(){}
-
-    public static String getProperty(String key) {
-        return resourceBundle.getString(key);
-    }*/
-
     private static final Logger LOGGER = LogManager.getLogger();
+    private static DBConfigurationManager instance;
     private Properties properties;
 
-    {
+    private DBConfigurationManager(){
         properties = new Properties();
         try {
             properties.load(DBConfigurationManager.class.getResourceAsStream("/dataBase.properties"));
@@ -30,8 +23,13 @@ public class DBConfigurationManager {
             LOGGER.log(Level.FATAL,"Exception during loading properties {}",e);
         }
     }
-
-    public DBConfigurationManager(){}
+    
+    public static DBConfigurationManager getInstance(){
+        if (instance == null) {
+            instance = new DBConfigurationManager();
+        }
+        return instance;
+    }
 
     public String getProperty(String key){
         return properties.getProperty(key);
