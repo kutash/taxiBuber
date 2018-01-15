@@ -24,6 +24,8 @@ function setNewBackground() {
 }
 setInterval(setNewBackground, 4000);
 
+
+
 $(document).ready(function () {
     var error_login = $('#error-login');
     var message = error_login.text();

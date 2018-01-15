@@ -29,17 +29,18 @@
                 <div class="col-sm-4 text-center">
                     <form class="form-horizontal" id="order-form" action="controller" method="post" onsubmit="return false">
                         <input type="hidden" name="command" value="make_order">
-                        <div class="form-group">
+                        <div class="form-group required">
                             <label class="control-label col-sm-3" for="start"><fmt:message key="label.source"/>:</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="start"/>
+                                <input type="text" class="form-control" id="start" name="start" required="required"/>
                             </div>
+                            <div style="display: none" id="source-error" class="err"><fmt:message key="label.sourceerror"/></div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group required">
                             <label class="control-label col-sm-3" for="end"><fmt:message key="label.destination"/>:</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
-                                    <input type="text" id="end" class="form-control" aria-label="...">
+                                    <input type="text" id="end" name="end" class="form-control" aria-label="..." required="required">
                                     <div class="input-group-btn">
                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Address <span class="caret"></span></button>
                                         <ul class="dropdown-menu dropdown-menu-right">
@@ -49,19 +50,20 @@
                                         </ul>
                                     </div><!-- /btn-group -->
                                 </div>
-                            </div><!-- /input-group -->
+                            </div>
+                            <div style="display: none" id="dest-error" class="err"><fmt:message key="label.desterror"/></div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-3" for="car"><fmt:message key="label.car"/>:</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="car" placeholder="<fmt:message key="label.choosecar"/> "/>
-                                <input type="hidden" id="carId">
+                                <input type="text" class="form-control" id="car" placeholder="<fmt:message key="label.choosecar"/> " readonly/>
+                                <input type="hidden" id="carId" name="carId">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-3" for="body-type"><fmt:message key="label.capacity"/>:</label>
                             <div class="col-sm-9">
-                                <select class="form-control selectpicker show-tick" id="body-type">
+                                <select class="form-control selectpicker show-tick" id="body-type" name="capacity">
                                     <option value="" selected>Not chosen</option>
                                     <option value="CAR"><fmt:message key="label.sedan"/></option>
                                     <option value="MINIVAN"><fmt:message key="label.minivan"/></option>

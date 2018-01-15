@@ -47,19 +47,19 @@
                         <h4 style="font-size: 35px;"><span class="glyphicon glyphicon-lock" style="font-size: 35px;"></span><fmt:message key="label.enter"/></h4>
                     </div>
                     <div class="modal-body" style="padding:40px 50px;">
-                        <form role="form" id="jform" action="controller" method="post">
+                        <form role="form" id="jform" action="controller" method="post" data-toggle="validator">
                             <input type="hidden" name="command"  value="login">
                             <div class="error" id="error-login">${errorLoginPassMessage}</div>
                             <div class="form-group">
                                 <label for="username"><span class="glyphicon glyphicon-user"></span><fmt:message key="label.email"/>:</label>
-                                <input type="email" name="email" class="form-control" id="username" placeholder="Enter email">
+                                <input type="email" name="email" class="form-control" id="username" placeholder="Enter email" required="required">
                                 <div style="display: none" id="max-email" class="err"><fmt:message key="label.maxemail"/></div>
                                 <div style="display: none" id="blank-email" class="err"><fmt:message key="label.blank"/></div>
                                 <div style="display: none" id="invalid-email" class="err"><fmt:message key="label.invalidemail"/></div>
                             </div>
                             <div class="form-group">
                                 <label for="psw"><span class="glyphicon glyphicon-eye-open"></span><fmt:message key="label.password"/>:</label>
-                                <input type="password" name="password" class="form-control" id="psw" placeholder="Enter password">
+                                <input type="password" name="password" class="form-control" id="psw" placeholder="Enter password" required="required">
                                 <div style="display: none" id="max-psw" class="err"><fmt:message key="label.maxpsw"/></div>
                                 <div style="display: none" id="blank-psw" class="err"><fmt:message key="label.blank"/></div>
                                 <div style="display: none" id="invalid-psw" class="err"><fmt:message key="label.invalidpsw"/></div>

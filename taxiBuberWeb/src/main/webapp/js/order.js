@@ -4,19 +4,15 @@ window.onload = function () {
         addresses[i].addEventListener('click', function (event) {
             event.preventDefault();
             document.getElementById('end').value = this.innerHTML;
-            var ev = new KeyboardEvent('keyup', {
-                key: 'Enter'
-            });
-            document.getElementById('end').dispatchEvent(ev);
+            document.getElementById("end").focus();
         })
     }
 
     document.getElementById('order-button').addEventListener('click', function (event) {
         event.preventDefault();
         document.getElementById('order-form').submit();
-    })
+    });
 };
-
 
 setInterval(getAvailableCars, 10000);
 
@@ -51,7 +47,10 @@ function initMap() {
             calculateAndDisplayRoute(directionsService, directionsDisplay);
         });
     });
-
+    var onChangeHandler = function() {
+        calculateAndDisplayRoute(directionsService, directionsDisplay);
+    };
+    document.getElementById('body-type').addEventListener('change',onChangeHandler);
 
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: -34.397, lng: 150.644},
@@ -105,52 +104,62 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
     changeZoom = false;
     source = document.getElementById("start").value;
     destination = document.getElementById("end").value;
+    if (source === undefined || source === null || source === ''){
+        document.getElementById('source-error').style.display = 'block';
+    }else if(destination === undefined || destination === null || destination === '') {
+        document.getElementById('dest-error').style.display = 'block';
+    } else {
+        document.getElementById('dest-error').style.display = 'none';
+        document.getElementById('source-error').style.display = 'none';
+        var request = {
+            origin: source,
+            destination: destination,
+            travelMode: google.maps.TravelMode.DRIVING
+        };
+        directionsService.route(request, function (response, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+                directionsDisplay.setDirections(response);
+            }
+        });
 
-    var request = {
-        origin: source,
-        destination: destination,
-        travelMode: google.maps.TravelMode.DRIVING
-    };
-    directionsService.route(request, function (response, status) {
-        if (status == google.maps.DirectionsStatus.OK) {
-            directionsDisplay.setDirections(response);
-        }
-    });
+        var service = new google.maps.DistanceMatrixService();
+        service.getDistanceMatrix({
+            origins: [source],
+            destinations: [destination],
+            travelMode: google.maps.TravelMode.DRIVING,
+            unitSystem: google.maps.UnitSystem.METRIC,
+            avoidHighways: false,
+            avoidTolls: false
+        }, function (response, status) {
+            if (status == google.maps.DistanceMatrixStatus.OK && response.rows[0].elements[0].status != "ZERO_RESULTS") {
+                var distance = response.rows[0].elements[0].distance.text;
+                var duration = response.rows[0].elements[0].duration.text;
+                var distanceVal = response.rows[0].elements[0].distance.value;
+                var durationVal = response.rows[0].elements[0].duration.value;
+                var capacity = document.getElementById('body-type').value;
+                var carId = document.getElementById('carId').value;
 
-    var service = new google.maps.DistanceMatrixService();
-    service.getDistanceMatrix({
-        origins: [source],
-        destinations: [destination],
-        travelMode: google.maps.TravelMode.DRIVING,
-        unitSystem: google.maps.UnitSystem.METRIC,
-        avoidHighways: false,
-        avoidTolls: false
-    }, function (response, status) {
-        if (status == google.maps.DistanceMatrixStatus.OK && response.rows[0].elements[0].status != "ZERO_RESULTS") {
-            var distance = response.rows[0].elements[0].distance.text;
-            var duration = response.rows[0].elements[0].duration.text;
-            var bodyType = document.getElementById('body-type').value;
-
-            $.ajax({
-                type:"GET",
-                url: "ajaxController?command=price&bodyType="+bodyType+"&distance="+distance,
-                contentType: 'application/json'
-            }).done(function(result){
-                var dvDistance = document.getElementById("dvDistance");
-                dvDistance.style.display='block';
-                var distanceSpan = document.getElementById('distance');
-                distanceSpan.innerHTML = distance + '<br />';
-                var durationSpan = document.getElementById('duration');
-                durationSpan.innerHTML = duration + '<br />';
-                var costSpan = document.getElementById('cost');
-                costSpan.innerHTML = ''+result ;
-            }).fail(function(xhr, textStatus, error){
-                console.log(xhr);
-            });
-        } else {
-            alert("Unable to find the distance via road.");
-        }
-    });
+                $.ajax({
+                    type: "GET",
+                    url: "ajaxController?command=price&capacity=" + capacity + "&distance=" + distanceVal + "&duration=" + durationVal + "&carId=" + carId,
+                    contentType: 'application/json'
+                }).done(function (result) {
+                    var dvDistance = document.getElementById("dvDistance");
+                    dvDistance.style.display = 'block';
+                    var distanceSpan = document.getElementById('distance');
+                    distanceSpan.innerHTML = distance + '<br />';
+                    var durationSpan = document.getElementById('duration');
+                    durationSpan.innerHTML = duration + '<br />';
+                    var costSpan = document.getElementById('cost');
+                    costSpan.innerHTML = '' + result;
+                }).fail(function (xhr, textStatus, error) {
+                    console.log(xhr);
+                });
+            } else {
+                alert("Unable to find the distance via road.");
+            }
+        });
+    }
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -252,6 +261,9 @@ function attachSecretMessage(marker, content, result) {
         infowindow.close(marker.get('map'), marker);
         document.getElementById('car').value = result.brand.name+' '+result.model;
         document.getElementById('carId').value = result.id;
+        var directionsService = new google.maps.DirectionsService();
+        var directionsDisplay = new google.maps.DirectionsRenderer({ 'draggable': false });
+        calculateAndDisplayRoute(directionsService,directionsDisplay);
     });
     markers.push(marker);
 }
@@ -270,7 +282,6 @@ function show(id) {
         contentType: 'application/json'
     }).done(function(result){
         document.getElementById('tbody').innerHTML='';
-        console.log(result);
         document.getElementById('driver').innerHTML = result.surname+' '+result.name+' '+result.patronymic;
         document.getElementById('rating-order').innerHTML = result.rating;
         var per = 100*result.rating/5;

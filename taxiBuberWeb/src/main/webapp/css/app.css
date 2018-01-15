@@ -228,3 +228,9 @@ h4 {
     margin-top: 20px;
     margin-bottom: -3px
 }
+
+.form-group.required .control-label:after {
+    content:"*";
+    font-size: larger;
+    color:red;
+}
