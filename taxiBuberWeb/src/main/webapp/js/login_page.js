@@ -29,7 +29,6 @@ setInterval(setNewBackground, 4000);
 $(document).ready(function () {
     var error_login = $('#error-login');
     var message = error_login.text();
-    console.log(message);
     if (message === 'Incorrect email or password!') {
         error_login.css("margin-left", "120px");
         $('#myModal').modal('show');

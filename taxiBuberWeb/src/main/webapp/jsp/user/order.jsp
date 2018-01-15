@@ -45,7 +45,7 @@
                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Address <span class="caret"></span></button>
                                         <ul class="dropdown-menu dropdown-menu-right">
                                             <c:forEach var="address" items="${addresses}">
-                                                <li><a href="#" class="address-link"><c:out value="${address.getFullAddress()}"/></a></li>
+                                                <li><a href="#" class="address-link"><c:out value="${address.address}"/></a></li>
                                             </c:forEach>
                                         </ul>
                                     </div><!-- /btn-group -->
@@ -71,6 +71,9 @@
                                 </select>
                             </div>
                         </div>
+                        <input type="hidden" name="distance" id="distance-input">
+                        <input type="hidden" name="duration" id="duration-input">
+                        <input type="hidden" name="cost" id="cost-input">
                     </form>
                     <br/>
                     <div id="dvDistance" style="display: none; margin-top: 45px">
@@ -92,7 +95,7 @@
         <div class="footer">
             <div class="footer-content">&copy; 2017.EPAM Systems Taxi Buber</div>
         </div>
-        <!-- Modal -->
+        <!-- Modal driver-->
         <div id="myModal" class="modal fade" role="dialog">
             <div class="modal-dialog modal-lg">
                 <!-- Modal content-->
@@ -127,6 +130,16 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal message-->
+        <div class="modal fade" id="modal-message" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content modal-message">
+                    <div class="modal-body modal-message-body">
+                        <div id="order-message">${orderMessage}</div>
                     </div>
                 </div>
             </div>

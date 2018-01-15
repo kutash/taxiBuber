@@ -103,7 +103,6 @@ public class UserService {
             }
             transactionManager.endTransaction();
         }
-
         return result;
     }
 

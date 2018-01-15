@@ -3,7 +3,6 @@ package com.kutash.test.dao;
 import com.kutash.taxibuber.dao.AddressDAO;
 import com.kutash.taxibuber.dao.DAOFactory;
 import com.kutash.taxibuber.entity.Address;
-import com.kutash.taxibuber.entity.Country;
 import com.kutash.taxibuber.exception.DAOException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -20,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 
 public class AddressDAOTest {
 
-    private Connection connection;
+    /*private Connection connection;
     private AddressDAO addressDAO;
 
     @BeforeClass
@@ -85,5 +84,5 @@ public class AddressDAOTest {
     @AfterClass
     public void closeConnection() throws SQLException {
         connection.close();
-    }
+    }*/
 }

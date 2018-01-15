@@ -12,6 +12,15 @@ window.onload = function () {
         event.preventDefault();
         document.getElementById('order-form').submit();
     });
+
+    var message = document.getElementById('order-message').innerHTML;
+    if (message !== '' && message !== undefined) {
+        var modalMessage = $('#modal-message');
+        modalMessage.modal('show');
+        setTimeout(function(){
+            modalMessage.modal("hide");
+        }, 2000);
+    }
 };
 
 setInterval(getAvailableCars, 10000);
@@ -148,10 +157,13 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
                     dvDistance.style.display = 'block';
                     var distanceSpan = document.getElementById('distance');
                     distanceSpan.innerHTML = distance + '<br />';
+                    document.getElementById('distance-input').value = distanceVal;
                     var durationSpan = document.getElementById('duration');
                     durationSpan.innerHTML = duration + '<br />';
+                    document.getElementById('duration-input').value = durationVal;
                     var costSpan = document.getElementById('cost');
                     costSpan.innerHTML = '' + result;
+                    document.getElementById('cost-input').value = result;
                 }).fail(function (xhr, textStatus, error) {
                     console.log(xhr);
                 });

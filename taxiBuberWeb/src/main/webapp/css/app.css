@@ -234,3 +234,18 @@ h4 {
     font-size: larger;
     color:red;
 }
+
+.modal-message-body {
+    text-align: center;
+    padding: 74px;
+    font-size: large;
+    font-family: cursive;
+    color: white;
+}
+
+.modal-message {
+    background-color: green;
+    width: 300px;
+    height: 206px;
+    border-radius: 50px;
+}

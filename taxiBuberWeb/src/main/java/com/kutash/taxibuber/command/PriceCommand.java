@@ -2,10 +2,8 @@ package com.kutash.taxibuber.command;
 
 import com.google.gson.Gson;
 import com.kutash.taxibuber.controller.Router;
-import com.kutash.taxibuber.entity.Capacity;
-import com.kutash.taxibuber.entity.Car;
 import com.kutash.taxibuber.resource.MessageManager;
-import com.kutash.taxibuber.service.CarService;
+import com.kutash.taxibuber.service.OrderService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -22,9 +20,9 @@ public class PriceCommand implements Command {
     private static final String DURATION = "duration";
     private static final String CAR_ID = "carId";
     private static final String LANGUAGE = "language";
-    private CarService service;
+    private OrderService service;
 
-    PriceCommand(CarService service){
+    PriceCommand(OrderService service){
         this.service=service;
     }
 
@@ -36,23 +34,9 @@ public class PriceCommand implements Command {
         String duration = request.getParameter(DURATION);
         String carId = request.getParameter(CAR_ID);
         String capacity = request.getParameter(CAPACITY);
-        Capacity carCapacity = null;
-        if (StringUtils.isNotEmpty(carId)){
-            Car car = service.findById(Integer.parseInt(carId));
-            carCapacity = car.getCapacity();
-        } else if (StringUtils.isNotEmpty(capacity)){
-            try {
-                carCapacity = Capacity.valueOf(capacity);
-            }catch (IllegalArgumentException e){
-                LOGGER.log(Level.ERROR,"Wrong type of argument capacity",e);
-                carCapacity = Capacity.CAR;
-            }
-        }else {
-            carCapacity = Capacity.CAR;
-        }
         String result;
         if (StringUtils.isNotEmpty(distance) && StringUtils.isNotEmpty(duration)){
-            result = service.defineCost(distance,duration,carCapacity);
+            result = service.defineCost(distance,duration,capacity,carId);
         }else {
             String language = (String) request.getSession().getAttribute(LANGUAGE);
             result = new MessageManager(language).getProperty("message.wrongdata");
