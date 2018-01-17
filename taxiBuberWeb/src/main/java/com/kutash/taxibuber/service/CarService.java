@@ -3,16 +3,12 @@ package com.kutash.taxibuber.service;
 import com.kutash.taxibuber.dao.CarDAO;
 import com.kutash.taxibuber.dao.DAOFactory;
 import com.kutash.taxibuber.dao.TransactionManager;
-import com.kutash.taxibuber.entity.Capacity;
 import com.kutash.taxibuber.entity.Car;
 import com.kutash.taxibuber.exception.DAOException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,8 +84,7 @@ public class CarService {
         if (cars != null) {
             for (Car car : cars) {
                 double distance = defineDistance(Double.parseDouble(latitude), Double.parseDouble(longitude), car);
-                ///???????????????????????????????????????????????????????
-                if ( distance < 40.0) {
+                if ( distance < 10.0) {
                     nearestCars.add(car);
                 }
             }

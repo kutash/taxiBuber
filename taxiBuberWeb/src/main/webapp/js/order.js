@@ -21,6 +21,14 @@ window.onload = function () {
             modalMessage.modal("hide");
         }, 2000);
     }
+
+    var dvDistance = document.getElementById("dvDistance");
+    var distanceSpan = document.getElementById('distance').innerHTML;
+    var durationSpan = document.getElementById('duration').innerHTML;
+    var costSpan = document.getElementById('cost').innerHTML;
+    if(distanceSpan !== '' || durationSpan !== '' || costSpan !==''){
+        dvDistance.style.display = 'block';
+    }
 };
 
 setInterval(getAvailableCars, 10000);
@@ -32,6 +40,7 @@ var source, destination;
 var markers = [];
 var distances = [];
 var changeZoom = true;
+var minDistance = 0;
 
 function initMap() {
     var directionsService = new google.maps.DirectionsService();
@@ -60,6 +69,9 @@ function initMap() {
     });
     var onChangeHandler = function() {
         calculateAndDisplayRoute(directionsService, directionsDisplay);
+        document.getElementById('car').value = '';
+        getAvailableCars();
+
     };
     document.getElementById('body-type').addEventListener('change',onChangeHandler);
 
@@ -77,9 +89,6 @@ function initMap() {
             };
             latitude = position.coords.latitude;
             longitude = position.coords.longitude;
-            document.getElementById('latitude').value = latitude;
-            document.getElementById('longitude').value = longitude;
-
             var geocoder = new google.maps.Geocoder;
             var latLng = new google.maps.LatLng(latitude,longitude);
 
@@ -99,8 +108,7 @@ function geocodeAddress(geocoder) {
         if (status === 'OK') {
             latitude = results[0].geometry.location.lat();
             longitude = results[0].geometry.location.lng();
-            document.getElementById('latitude').value = latitude;
-            document.getElementById('longitude').value = longitude;
+            map.setCenter({lat: latitude, lng: longitude});
         } else {
             alert('Geocode was not successful for the following reason: ' + status);
         }
@@ -117,10 +125,10 @@ function geocodeLatLng(geocoder, map, infowindow, latLng) {
                 });
                 infowindow.setContent(results[0].formatted_address);
                 infowindow.open(map, marker);
-                document.getElementById('start').value = results[0].formatted_address;
-
-
-
+                console.log(document.getElementById('start').value);
+                if (document.getElementById('start').value === '') {
+                    document.getElementById('start').value = results[0].formatted_address;
+                }
             } else {
                 window.alert('No results found');
             }
@@ -131,7 +139,7 @@ function geocodeLatLng(geocoder, map, infowindow, latLng) {
 }
 
 function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-    changeZoom = false;
+
     source = document.getElementById("start").value;
     destination = document.getElementById("end").value;
     if (source === undefined || source === null || source === ''){
@@ -139,6 +147,7 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
     }else if(destination === undefined || destination === null || destination === '') {
         document.getElementById('dest-error').style.display = 'block';
     } else {
+        changeZoom = false;
         document.getElementById('dest-error').style.display = 'none';
         document.getElementById('source-error').style.display = 'none';
         var request = {
@@ -177,11 +186,12 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
                     var dvDistance = document.getElementById("dvDistance");
                     dvDistance.style.display = 'block';
                     var distanceSpan = document.getElementById('distance');
-                    distanceSpan.innerHTML = distance + '<br />';
+                    distanceSpan.innerHTML = ''+(distanceVal/1000);
                     document.getElementById('distance-input').value = distanceVal;
                     var durationSpan = document.getElementById('duration');
-                    durationSpan.innerHTML = duration + '<br />';
+                    durationSpan.innerHTML = duration;
                     document.getElementById('duration-input').value = durationVal;
+                    document.getElementById('duration-text').value = duration;
                     var costSpan = document.getElementById('cost');
                     costSpan.innerHTML = '' + result;
                     document.getElementById('cost-input').value = result;
@@ -209,7 +219,6 @@ function getAvailableCars() {
         url: "ajaxController?command=free_cars&latitude="+latitude+"&longitude="+longitude+"&bodyType="+bodyType,
         contentType: 'application/json'
     }).done(function(results){
-        /*cars = results;*/
         if (results.length === 0){
             deleteMarkers();
             var infoWindow = new google.maps.InfoWindow({map: map});
@@ -220,6 +229,7 @@ function getAvailableCars() {
             infoWindow.setPosition(pos);
             infoWindow.setContent('В данный момент нет машин по вашему запросу. Попробуйте изменить запрос или повторите его через несколько минут');
         }
+        minDistance = 0;
 
         for (var i = 0; i < results.length; i++) {
             deleteMarkers();
@@ -228,7 +238,6 @@ function getAvailableCars() {
         distances.sort(function compareNumeric(a, b) {
             return a - b;
         });
-        console.log(distances);
         if (changeZoom) {
             if (distances[0] > 5000) {
                 map.setZoom(12);
@@ -253,6 +262,8 @@ function setMarkers(result) {
     var model = result.model;
     var photo = result.photoPath;
     var id = result.userId;
+    var carId = result.id;
+    var capacity = result.capacity;
     var driver = result.driverFullName;
     var latLng = new google.maps.LatLng(lat, long);
     var latLngClient = new google.maps.LatLng(latitude, longitude);
@@ -269,6 +280,15 @@ function setMarkers(result) {
         if (status == google.maps.DistanceMatrixStatus.OK && response.rows[0].elements[0].status != "ZERO_RESULTS") {
             var distance = response.rows[0].elements[0].distance.text;
             var distanceVal = response.rows[0].elements[0].distance.value;
+            var capacity2 = document.getElementById('body-type').value;
+            if(document.getElementById('car').value === '') {
+                if (minDistance === 0 || distanceVal < minDistance) {
+                    if (capacity2 === '' || capacity === capacity2) {
+                        minDistance = distanceVal;
+                        document.getElementById('carId').value = carId;
+                    }
+                }
+            }
             distances.push(distanceVal);
             var duration = response.rows[0].elements[0].duration.text;
             contentString = '<div>'+brand+' '+model+'</div><div><img src="controller?command=photo&amp;photo='+photo+'" width="70px" height="70px"/></div><div>Driver:<a data-toggle="modal" data-target="#myModal" href="" onclick="show('+id+')">'+driver+'</a><br/>Расстояние:'+distance+'<br/>Время подачи машины:'+duration+'</div>';
@@ -341,35 +361,5 @@ function show(id) {
     })
 }
 
-/*function findNearestCar() {
-    for (var i=0;i<cars.length;i++) {
-        var lat = cars[i].latitude;
-        var long = cars[i].longitude;
-        var capacity = cars[i].capacity;
-        var id = cars[i].userId;
-        var latLng = new google.maps.LatLng(lat, long);
-        var latLngClient = new google.maps.LatLng(latitude, longitude);
-        var service = new google.maps.DistanceMatrixService();
-        service.getDistanceMatrix({
-            origins: [latLngClient],
-            destinations: [latLng],
-            travelMode: google.maps.TravelMode.DRIVING,
-            unitSystem: google.maps.UnitSystem.METRIC,
-            avoidHighways: false,
-            avoidTolls: false
-        }, function (response, status) {
-            if (status == google.maps.DistanceMatrixStatus.OK && response.rows[0].elements[0].status != "ZERO_RESULTS") {
-                var distance = response.rows[0].elements[0].distance.value;
-                var car = {
-                    carId: id,
-                    distance: distance,
-                    capacity: capacity
-                };
-                cars.push(car);
-            }
-        })
-    }
-    console.log(cars);
-}*/
 
 

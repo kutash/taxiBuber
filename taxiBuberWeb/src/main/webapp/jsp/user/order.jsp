@@ -29,20 +29,18 @@
                 <div class="col-sm-4 text-center">
                     <form class="form-horizontal" id="order-form" action="controller" method="post" onsubmit="return false">
                         <input type="hidden" name="command" value="make_order">
-                        <input type="hidden" name="latitude" id="latitude">
-                        <input type="hidden" name="longitude" id="longitude">
                         <div class="form-group required">
                             <label class="control-label col-sm-3" for="start"><fmt:message key="label.source"/>:</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="start" name="start" required="required"/>
+                                <input type="text" class="form-control" id="start" name="start" required="required" value="<c:out value="${source}"/>"/>
                             </div>
-                            <div style="display: none" id="source-error" class="err"><fmt:message key="label.sourceerror"/></div>
+                            <div style="display: none; margin-left: -44px" id="source-error" class="err"><fmt:message key="label.sourceerror"/></div>
                         </div>
                         <div class="form-group required">
                             <label class="control-label col-sm-3" for="end"><fmt:message key="label.destination"/>:</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
-                                    <input type="text" id="end" name="end" class="form-control" aria-label="..." required="required">
+                                    <input type="text" id="end" name="end" class="form-control" aria-label="..." required="required" value="<c:out value="${destination}"/>">
                                     <div class="input-group-btn">
                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Address <span class="caret"></span></button>
                                         <ul class="dropdown-menu dropdown-menu-right">
@@ -53,13 +51,13 @@
                                     </div><!-- /btn-group -->
                                 </div>
                             </div>
-                            <div style="display: none" id="dest-error" class="err"><fmt:message key="label.desterror"/></div>
+                            <div style="display: none; margin-left: -44px" id="dest-error" class="err"><fmt:message key="label.desterror"/></div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-3" for="car"><fmt:message key="label.car"/>:</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="car" placeholder="<fmt:message key="label.choosecar"/> " readonly/>
-                                <input type="hidden" id="carId" name="carId">
+                                <input type="text" class="form-control" id="car" placeholder="<fmt:message key="label.choosecar"/>" readonly value="<c:out value="${car}"/>"/>
+                                <input type="hidden" id="carId" name="carId" value="${carId}">
                             </div>
                         </div>
                         <div class="form-group">
@@ -75,13 +73,14 @@
                         </div>
                         <input type="hidden" name="distance" id="distance-input">
                         <input type="hidden" name="duration" id="duration-input">
+                        <input type="hidden" name="durationText" id="duration-text">
                         <input type="hidden" name="cost" id="cost-input">
                     </form>
                     <br/>
                     <div id="dvDistance" style="display: none; margin-top: 45px">
-                        <span class="label-span" style="margin-left: -45px"><fmt:message key="label.distance"/>:</span><span class="info-span" id="distance"></span>
-                        <span class="label-span"><fmt:message key="label.duration"/>:</span><span id="duration" class="info-span"></span>
-                        <span class="label-span" style="margin-left: -75px"><fmt:message key="label.cost"/>:</span><span id="cost" class="info-span"></span><span class="label-span"><fmt:message key="label.currency"/></span>
+                        <span class="label-span" style="margin-left: -26px"><fmt:message key="label.distance"/>:</span><span class="info-span" id="distance"><c:out value="${distance}"/></span> <span class="label-span"><fmt:message key="label.kilometers"/></span><br>
+                        <span class="label-span"><fmt:message key="label.duration"/>:</span><span id="duration" class="info-span"><c:out value="${duration}"/></span><span class="label-span"></span><br>
+                        <span class="label-span" style="margin-left: -42px"><fmt:message key="label.cost"/>:</span><span id="cost" class="info-span"><c:out value="${cost}"/></span> <span class="label-span"><fmt:message key="label.currency"/></span>
                     </div>
                     <div class="form-group" id="order">
                         <div class="col-sm-offset-3 col-sm-6" style="margin-top: 20px">
@@ -90,7 +89,7 @@
                     </div>
                 </div>
                 <div class="col-sm-8 text-center">
-                    <div id="map" style="width:960px;height:620px;background:gray"></div>
+                    <div id="map" style="width:1070px;height:650px;background:gray"></div>
                 </div>
             </div>
         </div>
