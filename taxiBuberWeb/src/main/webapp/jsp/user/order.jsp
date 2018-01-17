@@ -29,6 +29,8 @@
                 <div class="col-sm-4 text-center">
                     <form class="form-horizontal" id="order-form" action="controller" method="post" onsubmit="return false">
                         <input type="hidden" name="command" value="make_order">
+                        <input type="hidden" name="latitude" id="latitude">
+                        <input type="hidden" name="longitude" id="longitude">
                         <div class="form-group required">
                             <label class="control-label col-sm-3" for="start"><fmt:message key="label.source"/>:</label>
                             <div class="col-sm-9">

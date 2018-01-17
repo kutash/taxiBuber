@@ -29,6 +29,7 @@ public class CarDAO extends AbstractDAO<Car> {
     private static final String FIND_CAR_BY_ID = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,\n" +
             "cb.id_brand,cb.`name`,concat(u.name,' ',u.surname) AS driver_name FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand\n" +
             "INNER JOIN user AS u ON c.id_user = u.id_user WHERE id_car = ?";
+    private static final String UPDATE_CAR = "UPDATE car SET registration_number=?,model=?,photo_path=?,is_available=?,latitude=?,longitude=?,id_brand=?,id_user=?,capacity=? WHERE id_car=?";
 
     @Override
     public List<Car> findAll() throws DAOException {
@@ -121,7 +122,36 @@ public class CarDAO extends AbstractDAO<Car> {
 
     @Override
     public Car update(Car entity) throws DAOException {
-        return null;
+        LOGGER.log(Level.INFO,"updating car");
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = getPreparedStatement(UPDATE_CAR);
+            preparedStatement = setValues(preparedStatement,entity);
+            preparedStatement.setInt(10,entity.getId());
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            throw new DAOException("Exception while updating car",e);
+        }finally {
+            close(preparedStatement);
+        }
+        return findEntityById(entity.getId());
+    }
+
+    private PreparedStatement setValues(PreparedStatement preparedStatement, Car entity) throws DAOException {
+        try {
+            preparedStatement.setString(1, entity.getRegistrationNumber());
+            preparedStatement.setString(2, entity.getModel());
+            preparedStatement.setString(3, entity.getPhotoPath());
+            preparedStatement.setBoolean(4, entity.isAvailable());
+            preparedStatement.setString(5, entity.getLatitude());
+            preparedStatement.setString(6, entity.getLongitude());
+            preparedStatement.setInt(7, entity.getBrand().getId());
+            preparedStatement.setInt(8, entity.getUserId());
+            preparedStatement.setString(9, String.valueOf(entity.getCapacity()));
+        }catch (SQLException e){
+            throw new DAOException("Exception while set values to prepareStatement",e);
+        }
+        return preparedStatement;
     }
 
     private Car getCar(ResultSet resultSet) throws DAOException {

@@ -1,5 +1,7 @@
 package com.kutash.taxibuber.dao;
 
+import com.kutash.taxibuber.entity.Trip;
+
 public class DAOFactory {
 
     public UserDAO getUserDAO() {
@@ -17,4 +19,6 @@ public class DAOFactory {
     public CarDAO getCarDAO(){
         return new CarDAO();
     }
+
+    public TripDAO getTripDAO() { return new TripDAO(); }
 }

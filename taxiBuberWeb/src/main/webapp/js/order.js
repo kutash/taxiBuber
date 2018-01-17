@@ -44,6 +44,8 @@ function initMap() {
             if (places.length == 0) {
                 return;
             }
+            var geocoder = new google.maps.Geocoder();
+            geocodeAddress(geocoder);
             calculateAndDisplayRoute(directionsService, directionsDisplay);
         });
 
@@ -75,6 +77,8 @@ function initMap() {
             };
             latitude = position.coords.latitude;
             longitude = position.coords.longitude;
+            document.getElementById('latitude').value = latitude;
+            document.getElementById('longitude').value = longitude;
 
             var geocoder = new google.maps.Geocoder;
             var latLng = new google.maps.LatLng(latitude,longitude);
@@ -89,6 +93,20 @@ function initMap() {
     }
 }
 
+function geocodeAddress(geocoder) {
+    var address = document.getElementById('start').value;
+    geocoder.geocode({'address': address}, function(results, status) {
+        if (status === 'OK') {
+            latitude = results[0].geometry.location.lat();
+            longitude = results[0].geometry.location.lng();
+            document.getElementById('latitude').value = latitude;
+            document.getElementById('longitude').value = longitude;
+        } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+        }
+    });
+}
+
 function geocodeLatLng(geocoder, map, infowindow, latLng) {
     geocoder.geocode({'location': latLng}, function(results, status) {
         if (status === 'OK') {
@@ -100,6 +118,9 @@ function geocodeLatLng(geocoder, map, infowindow, latLng) {
                 infowindow.setContent(results[0].formatted_address);
                 infowindow.open(map, marker);
                 document.getElementById('start').value = results[0].formatted_address;
+
+
+
             } else {
                 window.alert('No results found');
             }
@@ -188,6 +209,7 @@ function getAvailableCars() {
         url: "ajaxController?command=free_cars&latitude="+latitude+"&longitude="+longitude+"&bodyType="+bodyType,
         contentType: 'application/json'
     }).done(function(results){
+        /*cars = results;*/
         if (results.length === 0){
             deleteMarkers();
             var infoWindow = new google.maps.InfoWindow({map: map});
@@ -206,13 +228,16 @@ function getAvailableCars() {
         distances.sort(function compareNumeric(a, b) {
             return a - b;
         });
+        console.log(distances);
         if (changeZoom) {
-            if (distances[0] > 5.0) {
-                map.setZoom(13);
-            } else if (distances[0] > 7.0) {
+            if (distances[0] > 5000) {
                 map.setZoom(12);
-            } else if (distances[0] > 10.0) {
+            } else if (distances[0] > 7000) {
                 map.setZoom(11);
+            } else if (distances[0] > 10000) {
+                map.setZoom(10);
+            }else if (distances[0] > 20000) {
+                map.setZoom(8);
             }
         }
         distances = [];
@@ -243,9 +268,8 @@ function setMarkers(result) {
     }, function (response, status) {
         if (status == google.maps.DistanceMatrixStatus.OK && response.rows[0].elements[0].status != "ZERO_RESULTS") {
             var distance = response.rows[0].elements[0].distance.text;
-            var dist = distance.split(' ',1);
-            var res = dist[0].replace(',','.');
-            distances.push(parseFloat(res));
+            var distanceVal = response.rows[0].elements[0].distance.value;
+            distances.push(distanceVal);
             var duration = response.rows[0].elements[0].duration.text;
             contentString = '<div>'+brand+' '+model+'</div><div><img src="controller?command=photo&amp;photo='+photo+'" width="70px" height="70px"/></div><div>Driver:<a data-toggle="modal" data-target="#myModal" href="" onclick="show('+id+')">'+driver+'</a><br/>Расстояние:'+distance+'<br/>Время подачи машины:'+duration+'</div>';
         } else {
@@ -256,7 +280,7 @@ function setMarkers(result) {
             icon: "/images/car48x48.png",
             map: map
         });
-        attachSecretMessage(marker, contentString,result);
+        attachSecretMessage(marker,contentString,result);
     });
 }
 
@@ -316,5 +340,36 @@ function show(id) {
         }
     })
 }
+
+/*function findNearestCar() {
+    for (var i=0;i<cars.length;i++) {
+        var lat = cars[i].latitude;
+        var long = cars[i].longitude;
+        var capacity = cars[i].capacity;
+        var id = cars[i].userId;
+        var latLng = new google.maps.LatLng(lat, long);
+        var latLngClient = new google.maps.LatLng(latitude, longitude);
+        var service = new google.maps.DistanceMatrixService();
+        service.getDistanceMatrix({
+            origins: [latLngClient],
+            destinations: [latLng],
+            travelMode: google.maps.TravelMode.DRIVING,
+            unitSystem: google.maps.UnitSystem.METRIC,
+            avoidHighways: false,
+            avoidTolls: false
+        }, function (response, status) {
+            if (status == google.maps.DistanceMatrixStatus.OK && response.rows[0].elements[0].status != "ZERO_RESULTS") {
+                var distance = response.rows[0].elements[0].distance.value;
+                var car = {
+                    carId: id,
+                    distance: distance,
+                    capacity: capacity
+                };
+                cars.push(car);
+            }
+        })
+    }
+    console.log(cars);
+}*/
 
 

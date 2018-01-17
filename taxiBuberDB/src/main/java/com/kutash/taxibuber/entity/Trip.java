@@ -11,17 +11,19 @@ public class Trip extends AbstractEntity {
     private int idCar;
     private int departureAddress;
     private int destinationAddress;
+    private TripStatus status;
 
-    public Trip(BigDecimal price, Date date, float distance, int idCar, int departureAddress, int destinationAddress) {
+    public Trip(BigDecimal price, Date date, float distance, int idCar, int departureAddress, int destinationAddress, TripStatus status) {
         this.price = price;
         this.date = date;
         this.distance = distance;
         this.idCar = idCar;
         this.departureAddress = departureAddress;
         this.destinationAddress = destinationAddress;
+        this.status = status;
     }
 
-    public Trip(int id, BigDecimal price, Date date, float distance, int idCar, int departureAddress, int destinationAddress) {
+    public Trip(int id, BigDecimal price, Date date, float distance, int idCar, int departureAddress, int destinationAddress, TripStatus status) {
         super(id);
         this.price = price;
         this.date = date;
@@ -29,6 +31,7 @@ public class Trip extends AbstractEntity {
         this.idCar = idCar;
         this.departureAddress = departureAddress;
         this.destinationAddress = destinationAddress;
+        this.status = status;
     }
 
     public BigDecimal getPrice() {
@@ -77,5 +80,13 @@ public class Trip extends AbstractEntity {
 
     public void setDestinationAddress(int destinationAddress) {
         this.destinationAddress = destinationAddress;
+    }
+
+    public TripStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TripStatus status) {
+        this.status = status;
     }
 }

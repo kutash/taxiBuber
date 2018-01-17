@@ -3,7 +3,9 @@ package com.kutash.taxibuber.command;
 import com.google.gson.Gson;
 import com.kutash.taxibuber.controller.Router;
 import com.kutash.taxibuber.resource.MessageManager;
+import com.kutash.taxibuber.service.CarService;
 import com.kutash.taxibuber.service.OrderService;
+import com.kutash.taxibuber.util.CostCalculator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -20,9 +22,9 @@ public class PriceCommand implements Command {
     private static final String DURATION = "duration";
     private static final String CAR_ID = "carId";
     private static final String LANGUAGE = "language";
-    private OrderService service;
+    private CarService service;
 
-    PriceCommand(OrderService service){
+    PriceCommand(CarService service){
         this.service=service;
     }
 
@@ -36,7 +38,7 @@ public class PriceCommand implements Command {
         String capacity = request.getParameter(CAPACITY);
         String result;
         if (StringUtils.isNotEmpty(distance) && StringUtils.isNotEmpty(duration)){
-            result = service.defineCost(distance,duration,capacity,carId);
+            result = new CostCalculator(service).defineCost(distance,duration,capacity,carId);
         }else {
             String language = (String) request.getSession().getAttribute(LANGUAGE);
             result = new MessageManager(language).getProperty("message.wrongdata");

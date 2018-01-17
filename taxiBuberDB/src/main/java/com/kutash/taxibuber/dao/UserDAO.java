@@ -64,7 +64,7 @@ public class UserDAO extends AbstractDAO<User> {
     @Override
     public int delete(int id) throws DAOException {
         LOGGER.log(Level.INFO,"deleting user with id {}",id);
-        int result = 0;
+        int result;
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = getPreparedStatement(DELETE_USER_BY_ID);
@@ -82,15 +82,15 @@ public class UserDAO extends AbstractDAO<User> {
     public int create(User entity) throws DAOException {
         LOGGER.log(Level.INFO,"creating user");
         int result;
+        ResultSet generatedKey;
         PreparedStatement preparedStatement = null;
-        ResultSet generatedKeys;
         try {
             preparedStatement = getPreparedStatement(CREATE_USER,1);
-            preparedStatement = setValues(preparedStatement,entity);
+            preparedStatement = setUserValues(preparedStatement,entity);
             preparedStatement.executeUpdate();
-            generatedKeys = preparedStatement.getGeneratedKeys();
-            generatedKeys.next();
-            result = generatedKeys.getInt(1);
+            generatedKey = preparedStatement.getGeneratedKeys();
+            generatedKey.next();
+            result = generatedKey.getInt(1);
         }catch (SQLException e){
             throw new DAOException("Exception while creating user",e);
         }finally {
@@ -105,7 +105,7 @@ public class UserDAO extends AbstractDAO<User> {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = getPreparedStatement(UPDATE_USER);
-            preparedStatement = setValues(preparedStatement,entity);
+            preparedStatement = setUserValues(preparedStatement,entity);
             preparedStatement.setInt(11,entity.getId());
             preparedStatement.executeUpdate();
         }catch (SQLException e){
@@ -159,7 +159,7 @@ public class UserDAO extends AbstractDAO<User> {
             String firstName = resultSet.getString("name");
             String lastName = resultSet.getString("surname");
             String middleName = resultSet.getString("patronymic");
-            Date birthday = resultSet.getDate("birthday");
+            java.util.Date birthday = resultSet.getDate("birthday");
             UserRole role = UserRole.valueOf(resultSet.getString("role"));
             String email = resultSet.getString("email");
             String password = resultSet.getString("password");
@@ -173,7 +173,7 @@ public class UserDAO extends AbstractDAO<User> {
         return user;
     }
 
-    private PreparedStatement setValues(PreparedStatement preparedStatement, User entity) throws DAOException {
+    private PreparedStatement setUserValues(PreparedStatement preparedStatement, User entity) throws DAOException {
         try {
             preparedStatement.setString(1, entity.getName());
             preparedStatement.setString(2, entity.getSurname());

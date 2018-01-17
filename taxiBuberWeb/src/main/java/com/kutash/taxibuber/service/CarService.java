@@ -87,12 +87,55 @@ public class CarService {
         List<Car> nearestCars = new ArrayList<>();
         if (cars != null) {
             for (Car car : cars) {
-                if (defineDistance(Double.parseDouble(latitude), Double.parseDouble(longitude), car) < 40.0) {
+                double distance = defineDistance(Double.parseDouble(latitude), Double.parseDouble(longitude), car);
+                ///???????????????????????????????????????????????????????
+                if ( distance < 40.0) {
                     nearestCars.add(car);
                 }
             }
         }
         return nearestCars;
+    }
+
+    public List<Car> findAllAvailable() {
+        LOGGER.log(Level.INFO,"Finding all available cars");
+        TransactionManager transactionManager = new TransactionManager();
+        CarDAO carDAO = new DAOFactory().getCarDAO();
+        List<Car> cars = null;
+        try {
+            transactionManager.beginTransaction(carDAO);
+            cars = carDAO.findAllAvailable();
+            transactionManager.commit();
+        } catch (DAOException e) {
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+            }
+            LOGGER.log(Level.ERROR,"Exception while finding all available cars {}",e);
+        }
+        return cars;
+    }
+
+    public Car updateCar(Car newCar){
+        LOGGER.log(Level.INFO,"Updating car");
+        Car car = null;
+        TransactionManager transactionManager = new TransactionManager();
+        CarDAO carDAO = new DAOFactory().getCarDAO();
+        try {
+            transactionManager.beginTransaction(carDAO);
+            car = carDAO.update(newCar);
+            transactionManager.commit();
+        } catch (DAOException e) {
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+            }
+            LOGGER.log(Level.ERROR,"Exception while updating car {}",e);
+        }
+        transactionManager.endTransaction();
+        return car;
     }
 
     private double defineDistance(double latitude,double longitude, Car car){
