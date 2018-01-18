@@ -19,6 +19,7 @@ public class TripDAO extends AbstractDAO<Trip> {
     private static final String DELETE_TRIP_BY_ID = "DELETE FROM trip WHERE id_trip = ?";
     private static final String CREATE_TRIP = "INSERT INTO trip(price,date,distance,id_car,departure_address,destination_address,status) VALUES (?,?,?,?,?,?,?)";
     private static final String UPDATE_TRIP = "UPDATE trip  SET price=?,date=?,distance=?,id_car=?,departure_address=?,destination_address=?, status=? WHERE id_trip=?";
+    private static final String FIND_ORDERED_TRIP = "SELECT price,date,distance,id_car,departure_address,destination_address,status FROM trip as t INNER JOIN car as c ON t.id_car = c.id_car WHERE c.id_user = ? AND status='ORDERED'";
 
     @Override
     public List<Trip> findAll() throws DAOException {
@@ -54,6 +55,25 @@ public class TripDAO extends AbstractDAO<Trip> {
             }
         }catch (SQLException e){
             throw new DAOException("Exception while finding trip by id",e);
+        }finally {
+            close(preparedStatement);
+        }
+        return trip;
+    }
+
+    public Trip findOrdered(int userId) throws DAOException {
+        LOGGER.log(Level.INFO,"find trip where status=ORDERED by user id {}",userId);
+        Trip trip = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = getPreparedStatement(FIND_ORDERED_TRIP);
+            preparedStatement.setInt(1,userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                trip = getTrip(resultSet);
+            }
+        }catch (SQLException e){
+            throw new DAOException("Exception while finding ORDERED trip by userId",e);
         }finally {
             close(preparedStatement);
         }

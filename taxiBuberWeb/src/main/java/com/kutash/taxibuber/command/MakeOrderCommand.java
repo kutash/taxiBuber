@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -42,68 +43,83 @@ public class MakeOrderCommand implements Command {
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"making order");
         Router router = new Router();
+        HttpSession session = request.getSession();
         String distance = request.getParameter(DISTANCE);
+        LOGGER.log(Level.INFO,"distance");
         String duration = request.getParameter(DURATION);
+        LOGGER.log(Level.INFO,"duration");
         String capacity = request.getParameter(CAPACITY);
+        LOGGER.log(Level.INFO,"capacity");
         String carId = request.getParameter(CAR_ID);
         String cost = request.getParameter(COST);
+        LOGGER.log(Level.INFO,"cost");
         String language = (String) request.getSession().getAttribute(LANGUAGE);
         String source = null;
         String destination = null;
         String durationText = null;
         try {
             source = new String(request.getParameter(SOURCE).getBytes("ISO-8859-1"),"UTF-8");
+            System.out.println("==============================="+source);
             destination = new String(request.getParameter(DESTINATION).getBytes("ISO-8859-1"),"UTF-8");
             durationText = new String(request.getParameter(DURATION_TEXT).getBytes("ISO-8859-1"),"UTF-8");
         } catch (UnsupportedEncodingException e) {
             LOGGER.log(Level.ERROR,"Exception while decoding parameters",e);
         }
-        float distanceNumber = Float.parseFloat(distance) / 1000;
         User user = (User) request.getSession().getAttribute("currentUser");
-        int sourceId = orderService.createAddress(source,user.getId());
-        int destinationId = orderService.createAddress(destination,user.getId());
         Car car;
+        float distanceNumber = Float.parseFloat(distance) / 1000;
         if (StringUtils.isNotEmpty(carId)) {
+            System.out.println("not empty carId");
             car = carService.findById(Integer.parseInt(carId));
-            if (StringUtils.isNotEmpty(distance) && StringUtils.isNotEmpty(duration)) {
+            if (StringUtils.isNotEmpty(source) && StringUtils.isNotEmpty(destination)) {
+                System.out.println("not empty source");
                 String result = new CostCalculator(carService).defineCost(distance, duration, capacity, carId);
                 if (result.equals(cost)) {
+                    System.out.println("equals cost");
+                    int sourceId = orderService.createAddress(source,user.getId());
+                    int destinationId = orderService.createAddress(destination,user.getId());
                     car.setAvailable(false);
                     carService.updateCar(car);
                     Trip trip = new Trip(new BigDecimal(cost), new Date(), distanceNumber, Integer.parseInt(carId), sourceId, destinationId, TripStatus.ORDERED);
                     orderService.createTrip(trip);
-                    request.getSession().setAttribute("orderMessage", new MessageManager(language).getProperty("message.ordersuccess"));
+                    session.setAttribute("orderMessage", new MessageManager(language).getProperty("message.ordersuccess"));
                 } else {
+                    System.out.println("not equals cost");
                     request.getSession().setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
-                    request.getSession().setAttribute("cost", cost);
-                    request.getSession().setAttribute("duration", durationText);
-                    request.getSession().setAttribute("distance", distanceNumber);
-                    request.getSession().setAttribute("source", source);
-                    request.getSession().setAttribute("destination", destination);
-                    request.getSession().setAttribute("car", car.getBrand().getName()+" "+car.getModel());
-                    request.getSession().setAttribute("carId", car.getId());
+                    session.setAttribute("car", car.getBrand().getName() + " " + car.getModel());
+                    session.setAttribute("carId", car.getId());
+                    session.setAttribute("cost", cost);
+                    session.setAttribute("durationText", durationText);
+                    session.setAttribute("duration", duration);
+                    session.setAttribute("distanceNumber", distanceNumber);
+                    session.setAttribute("distance", distance);
+                    session.setAttribute("source", source);
+                    session.setAttribute("destination", destination);
                 }
             } else {
-                request.getSession().setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
-                request.getSession().setAttribute("cost", cost);
-                request.getSession().setAttribute("duration", durationText);
-                request.getSession().setAttribute("distance", distanceNumber);
-                request.getSession().setAttribute("source", source);
-                request.getSession().setAttribute("destination", destination);
-                request.getSession().setAttribute("car", car.getModel() + " " + car.getBrand());
-                request.getSession().setAttribute("carId", car.getId());
+                System.out.println("empty source");
+                session.setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
+                session.setAttribute("car", car.getBrand().getName() + " " + car.getModel());
+                session.setAttribute("carId", car.getId());
+                session.setAttribute("cost", cost);
+                session.setAttribute("durationText", durationText);
+                session.setAttribute("duration", duration);
+                session.setAttribute("distanceNumber", distanceNumber);
+                session.setAttribute("distance", distance);
             }
         }else {
-            request.getSession().setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
-            request.getSession().setAttribute("cost", cost);
-            request.getSession().setAttribute("duration", durationText);
-            request.getSession().setAttribute("distance", distanceNumber);
-            request.getSession().setAttribute("source", source);
-            request.getSession().setAttribute("destination", destination);
+            System.out.println("empty carId");
+            session.setAttribute("orderMessage", new MessageManager(language).getProperty("label.carerror"));
+            session.setAttribute("cost", cost);
+            session.setAttribute("durationText", durationText);
+            session.setAttribute("duration", duration);
+            session.setAttribute("distanceNumber", distanceNumber);
+            session.setAttribute("distance", distance);
+            session.setAttribute("source", source);
+            session.setAttribute("destination", destination);
         }
         router.setPage("?command=order");
         router.setRoute(Router.RouteType.REDIRECT);
         return router;
     }
-
 }

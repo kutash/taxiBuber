@@ -1,9 +1,6 @@
 package com.kutash.taxibuber.command;
 
-import com.kutash.taxibuber.service.CarService;
-import com.kutash.taxibuber.service.LoginService;
-import com.kutash.taxibuber.service.OrderService;
-import com.kutash.taxibuber.service.UserService;
+import com.kutash.taxibuber.service.*;
 
 public enum CommandEnum {
     LOGIN(new LoginCommand(new LoginService())),
@@ -17,7 +14,8 @@ public enum CommandEnum {
     FREE_CARS(new FreeCarsCommand(new CarService())),
     PRICE(new PriceCommand(new CarService())),
     CAR(new EditCarCommand(new CarService())),
-    USER_INFO(new UserInfoCommand(new UserService()));
+    USER_INFO(new UserInfoCommand(new UserService())),
+    NEW_ORDER(new NewOrderCommand(new TripService()));
 
     Command command;
 

@@ -84,7 +84,7 @@ public class CarService {
         if (cars != null) {
             for (Car car : cars) {
                 double distance = defineDistance(Double.parseDouble(latitude), Double.parseDouble(longitude), car);
-                if ( distance < 10.0) {
+                if ( distance < 15.0) {
                     nearestCars.add(car);
                 }
             }

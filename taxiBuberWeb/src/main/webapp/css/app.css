@@ -237,7 +237,7 @@ h4 {
 
 .modal-message-body {
     text-align: center;
-    padding: 74px;
+    padding: 50px;
     font-size: large;
     font-family: cursive;
     color: white;
@@ -248,4 +248,14 @@ h4 {
     width: 300px;
     height: 206px;
     border-radius: 50px;
+}
+
+.input-driver {
+    width: 300px !important;
+    height: 40px;
+    margin-left: -20px;
+}
+
+.label-driver {
+    font-size: 22px;
 }

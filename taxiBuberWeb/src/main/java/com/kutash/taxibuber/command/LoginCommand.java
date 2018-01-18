@@ -49,6 +49,10 @@ public class LoginCommand implements Command {
                 request.getSession().setAttribute("currentUser",user);
                 router.setPage("/controller?command=order");
                 break;
+            case DRIVER:
+                request.getSession().setAttribute("currentUser",user);
+                router.setPage(PageManager.getProperty("path.page.driver"));
+                break;
         }
         return router;
     }

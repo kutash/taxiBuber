@@ -71,16 +71,16 @@
                                 </select>
                             </div>
                         </div>
-                        <input type="hidden" name="distance" id="distance-input">
-                        <input type="hidden" name="duration" id="duration-input">
-                        <input type="hidden" name="durationText" id="duration-text">
-                        <input type="hidden" name="cost" id="cost-input">
+                        <input type="hidden" name="distance" id="distance-input" value="<c:out value="${distance}"/>">
+                        <input type="hidden" name="duration" id="duration-input" value="<c:out value="${duration}"/>">
+                        <input type="hidden" name="durationText" id="duration-text" value="<c:out value="${durationText}"/>">
+                        <input type="hidden" name="cost" id="cost-input" value="<c:out value="${cost}"/>">
                     </form>
                     <br/>
                     <div id="dvDistance" style="display: none; margin-top: 45px">
-                        <span class="label-span" style="margin-left: -26px"><fmt:message key="label.distance"/>:</span><span class="info-span" id="distance"><c:out value="${distance}"/></span> <span class="label-span"><fmt:message key="label.kilometers"/></span><br>
-                        <span class="label-span"><fmt:message key="label.duration"/>:</span><span id="duration" class="info-span"><c:out value="${duration}"/></span><span class="label-span"></span><br>
-                        <span class="label-span" style="margin-left: -42px"><fmt:message key="label.cost"/>:</span><span id="cost" class="info-span"><c:out value="${cost}"/></span> <span class="label-span"><fmt:message key="label.currency"/></span>
+                        <span class="label-span" style="margin-left: -26px"><fmt:message key="label.distance"/>:</span><span class="info-span" id="distance"><c:out value="${distanceNumber}"/></span> <span class="label-span"><fmt:message key="label.kilometers"/></span><br>
+                        <span class="label-span"><fmt:message key="label.duration"/>:</span><span id="duration" class="info-span"><c:out value="${durationText}"/></span><span class="label-span"></span><br>
+                        <span class="label-span" style="margin-left: -29px"><fmt:message key="label.cost"/>:</span><span id="cost" class="info-span"><c:out value="${cost}"/></span> <span class="label-span"><fmt:message key="label.currency"/></span>
                     </div>
                     <div class="form-group" id="order">
                         <div class="col-sm-offset-3 col-sm-6" style="margin-top: 20px">
@@ -141,6 +141,9 @@
                 <div class="modal-content modal-message">
                     <div class="modal-body modal-message-body">
                         <div id="order-message">${orderMessage}</div>
+                        <div id="message-source" style="display: none"><fmt:message key="label.sourceerror"/></div>
+                        <div id="message-destination" style="display: none"><fmt:message key="label.desterror"/></div>
+                        <div id="message-car" style="display: none"><fmt:message key="label.carerror"/></div>
                     </div>
                 </div>
             </div>

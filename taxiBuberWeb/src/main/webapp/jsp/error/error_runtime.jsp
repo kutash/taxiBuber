@@ -7,5 +7,6 @@
 <body>
 Status Code:${pageContext.errorData.statusCode}
 Message:${pageContext.exception.message}
+${pageContext.exception.printStackTrace()}
 </body>
 </html>

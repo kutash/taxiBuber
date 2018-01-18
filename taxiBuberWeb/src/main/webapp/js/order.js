@@ -10,7 +10,31 @@ window.onload = function () {
 
     document.getElementById('order-button').addEventListener('click', function (event) {
         event.preventDefault();
-        document.getElementById('order-form').submit();
+        var start = document.getElementById('start').value;
+        var end = document.getElementById('end').value;
+        var carId = document.getElementById('carId').value;
+        if (start === '' || end === ''  || carId === ''){
+            var modalMessage = $('#modal-message');
+            if(start === ''){
+                document.getElementById('message-source').style.display = 'block';
+            }
+            if(end === ''){
+                document.getElementById('message-destination').style.display = 'block';
+            }
+            if(carId === ''){
+                document.getElementById('message-car').style.display = 'block';
+            }
+            modalMessage.modal('show');
+            setTimeout(function(){
+                modalMessage.modal("hide");
+                document.getElementById('message-source').style.display = 'none';
+                document.getElementById('message-destination').style.display = 'none';
+                document.getElementById('message-car').style.display = 'none';
+            }, 2000);
+
+        }else {
+            document.getElementById('order-form').submit();
+        }
     });
 
     var message = document.getElementById('order-message').innerHTML;
@@ -19,6 +43,7 @@ window.onload = function () {
         modalMessage.modal('show');
         setTimeout(function(){
             modalMessage.modal("hide");
+            document.getElementById('order-message').innerHTML = '';
         }, 2000);
     }
 
@@ -186,6 +211,7 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
                     var dvDistance = document.getElementById("dvDistance");
                     dvDistance.style.display = 'block';
                     var distanceSpan = document.getElementById('distance');
+                    console.log(distance);
                     distanceSpan.innerHTML = ''+(distanceVal/1000);
                     document.getElementById('distance-input').value = distanceVal;
                     var durationSpan = document.getElementById('duration');
