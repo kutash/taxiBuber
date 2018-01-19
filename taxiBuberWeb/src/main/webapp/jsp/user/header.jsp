@@ -18,7 +18,13 @@
         </div>
         <ul class="nav navbar-nav">
             <li class="active"><a href="controller?command=order"><fmt:message key="label.order"/></a></li>
-            <li><a href="#"><fmt:message key="label.profile"/></a></li>
+            <li>
+                <c:url var="edit" value="controller">
+                    <c:param name="command" value="edit"/>
+                    <c:param name="userId" value="${currentUser.id}"/>
+                </c:url>
+                <a href="${edit}"><fmt:message key="label.profile"/></a>
+            </li>
             <li><a href="#"><fmt:message key="label.trips"/></a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">

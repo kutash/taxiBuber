@@ -2,7 +2,7 @@ $(document).ready(function () {
     var userRole = $('.before-form').text();
     if (userRole == 'ADMIN') {
         $('input#name, input#surname, input#patronymic, input#email, input#birthday, input#phone, select#role').attr('disabled', true);
-        $('div#div-pwd, div#div-pwd-repeat, div#submit-button').css('display','none');
+        $('div#submit-button').css('display','none');
     }
 
 });

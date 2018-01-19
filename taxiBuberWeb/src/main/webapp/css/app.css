@@ -252,10 +252,20 @@ h4 {
 
 .input-driver {
     width: 300px !important;
-    height: 40px;
+    height: 37px;
     margin-left: -20px;
 }
 
 .label-driver {
     font-size: 22px;
+}
+
+#complete-div {
+    margin-top: 15px;
+    margin-left: 17%;
+}
+
+#divDistance-driver{
+    margin-top: 0;
+    margin-left: 31%;
 }

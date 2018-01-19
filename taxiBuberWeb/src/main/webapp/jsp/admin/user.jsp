@@ -27,7 +27,7 @@
         <div class="container">
             <div class="row">
                 <div class="before-form">${currentUser.role}</div>
-                <div class="col-sm-5 text-center">
+                <div class="col-sm-4 text-center">
                     <div>
                         <input type='file' id="imgInp" style="display: none"/>
                         <a href="javascript:{}" id="img">
@@ -78,18 +78,6 @@
                             <label class="control-label col-sm-3" for="email"><fmt:message key="label.email"/>:</label>
                             <div class="col-sm-6">
                                 <input type="email" class="form-control" id="email" name="email" value="${user.email}" placeholder="Enter email">
-                            </div>
-                        </div>
-                        <div class="form-group" id="div-pwd">
-                            <label class="control-label col-sm-3" for="pwd"><fmt:message key="label.password"/>:</label>
-                            <div class="col-sm-6">
-                                <input type="password" class="form-control" id="pwd" name="password" placeholder="Enter password">
-                            </div>
-                        </div>
-                        <div class="form-group" id="div-pwd-repeat">
-                            <label class="control-label col-sm-3" for="repeat">Confirm Password:</label>
-                            <div class="col-sm-6">
-                                <input type="password" class="form-control" id="repeat" name="repeat" placeholder="Confirm password">
                             </div>
                         </div>
                         <div class="form-group">

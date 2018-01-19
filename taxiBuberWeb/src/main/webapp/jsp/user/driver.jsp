@@ -12,7 +12,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="../../css/app.css">
-        <script type="text/javascript" src="../../js/order.js"></script>
+        <script type="text/javascript" src="../../js/driver.js"></script>
         <script src="../../js/jquery.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
@@ -27,23 +27,34 @@
         <div class="container">
             <div class="row">
                 <div style="margin-left: 400px">
-                    <form class="form-inline" >
+                    <form class="form-inline" id="complete-form" action="controller">
+                        <input type="hidden" name="command" value="complete_trip">
+                        <input type="hidden" id="tripId" name="tripId">
                         <div class="form-group">
                             <label class="control-label col-sm-3 label-driver" for="start"><fmt:message key="label.source"/>:</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control input-driver" id="start" name="start" value="<c:out value="${source}"/>"/>
+                                <input type="text" class="form-control input-driver" id="start" readonly/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-3 label-driver" for="end"><fmt:message key="label.destination"/>:</label>
                             <div class="col-sm-9">
-                                <input type="text" style="margin-left: -33px;" class="form-control input-driver" id="end" name="start" value="<c:out value="${destination}"/>"/>
+                                <input type="text" style="margin-left: -33px;" class="form-control input-driver" id="end" readonly/>
                             </div>
                         </div>
                     </form>
                 </div>
-                    <div id="map" style="width:1150px;height:650px;background:gray;margin-left: 284px;"></div>
+                    <div id="map" style="width:1100px;height:600px;background:gray;margin-left: 284px;"></div>
                 <%--</div>--%>
+            </div>
+            <div id="divDistance-driver" style="display: none">
+                <span class="label-span"><fmt:message key="label.distance"/>:</span><span class="info-span" id="distance"></span> <span class="label-span"><fmt:message key="label.kilometers"/></span>
+                <span class="label-span" style="margin-left: 30px"><fmt:message key="label.duration"/>:</span><span id="duration" class="info-span"></span><span class="label-span"></span><br>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-6" id="complete-div">
+                        <input type="submit" form="complete-form" id="complete" class="btn btn-danger" value="<fmt:message key="label.complete"/>"/>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="footer">
@@ -54,7 +65,12 @@
             <div class="modal-dialog modal-sm">
                 <div class="modal-content modal-message">
                     <div class="modal-body modal-message-body">
-                        <div id="order-message">${orderMessage}</div>
+                        <div id="order-message"><fmt:message key="message.neworder"/></div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-6" style="margin-top: 20px">
+                                <input type="button" id="begin" class="btn btn-danger" value="<fmt:message key="label.begin"/>"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
