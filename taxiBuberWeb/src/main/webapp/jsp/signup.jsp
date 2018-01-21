@@ -38,72 +38,82 @@
     <div class="container">
         <div class="row">
             <div class="before-form"></div>
-            <div class="col-sm-4 text-center">
+            <div class="col-sm-5 text-center">
                 <div>
-                    <input type='file' id="imgInp" style="display: none"/>
+                    <input type='file' id="imgInp" style="display: none" name="photo" form="saveUserForm"/>
                     <a href="javascript:{}" id="img">
                         <img id="blah" src="${pageContext.request.contextPath}/controller?command=photo&amp;photo=${user.photoPath}" alt="your image" width="300" height="300"  />
                     </a>
                 </div>
             </div>
-            <div class="col-sm-7 text-center">
+            <div class="col-sm-6 text-center">
                 <form class="form-horizontal" action="controller" method="post" enctype="multipart/form-data" id="saveUserForm">
                     <input type="hidden" name="command" value="save_user">
                     <div class="form-group">
                         <label class="control-label col-sm-3" for="name"><fmt:message key="label.name"/>:</label>
-                        <div class="col-sm-6">
+                        <div class="col-sm-7">
                             <input type="text" class="form-control" id="name" name="name" value="${user.name}" placeholder="Enter name"/>
                         </div>
                         <div style="display: none" id="error-name" class="err"><fmt:message key="label.errorname"/></div>
-                        <div class="err">${errorName}</div>
+                        <div class="err">${errors.name}</div>
+                        <div class="err">${errors.name}</div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-3" for="surname"><fmt:message key="label.surname"/>:</label>
-                        <div class="col-sm-6">
+                        <div class="col-sm-7">
                             <input type="text" class="form-control" id="surname" name="surname" value="${user.surname}" placeholder="Enter surname"/>
                         </div>
                         <div style="display: none" id="error-surname" class="err"><fmt:message key="label.errorname"/></div>
-                        <div class="err">${errorSurname}</div>
+                        <div class="err">${errors.surname}</div>
+                        <div class="err">${errors.surnameBlank}</div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-3" for="patronymic"><fmt:message key="label.patronymic"/>:</label>
-                        <div class="col-sm-6">
+                        <div class="col-sm-7">
                             <input type="text" class="form-control" id="patronymic" name="patronymic" value="${user.patronymic}" placeholder="Enter patronymic"/>
+                            <div class="err">${errors.patronymic}</div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-3" for="birthday"><fmt:message key="label.birthday"/>:</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" id="birthday" name="birthday" value="${user.birthday}" placeholder="yyyy-mm-dd"/>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="birthday" name="birthday" value="${birthday}" placeholder="yyyy-mm-dd"/>
+                            <div class="err">${errors.date}</div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-3" for="phone"><fmt:message key="label.phone"/>:</label>
-                        <div class="col-sm-6">
+                        <div class="col-sm-7">
                             <input type="text" class="form-control" id="phone" name="phone" value="${user.phone}" placeholder="X(XXX)XXX-XX-XX">
+                            <div class="err">${errors.phone}</div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-3" for="email"><fmt:message key="label.email"/>:</label>
-                        <div class="col-sm-6">
+                        <div class="col-sm-7">
                             <input type="email" class="form-control" id="email" name="email" value="${user.email}" placeholder="Enter email">
+                            <div class="err">${errors.email}</div>
+                            <div class="err">${errors.emailSize}</div>
+                            <div class="err">${errors.emailBlank}</div>
                         </div>
                     </div>
                     <div class="form-group" id="div-pwd">
                         <label class="control-label col-sm-3" for="pwd"><fmt:message key="label.password"/>:</label>
-                        <div class="col-sm-6">
+                        <div class="col-sm-7">
                             <input type="password" class="form-control" id="pwd" name="password" placeholder="Enter password">
+                            <div class="err">${errors.password}</div>
                         </div>
                     </div>
                     <div class="form-group" id="div-pwd-repeat">
                         <label class="control-label col-sm-3" for="repeat">Confirm Password:</label>
-                        <div class="col-sm-6">
+                        <div class="col-sm-7">
                             <input type="password" class="form-control" id="repeat" name="repeat" placeholder="Confirm password">
+                            <div class="err">${errors.passwordConfirm}</div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-3" for="role"><fmt:message key="label.role"/>:</label>
-                        <div class="col-sm-6">
+                        <div class="col-sm-7">
                             <select class="form-control" id="role" name="role">
                                 <c:if test="${user.role == 'DRIVER'}">
                                     <option value="">not chosen</option>
@@ -115,12 +125,18 @@
                                     <option value="DRIVER">DRIVER</option>
                                     <option selected="selected" value="CLIENT">CLIENT</option>
                                 </c:if>
+                                <c:if test="${user.role == null}">
+                                    <option value="" selected="selected">not chosen</option>
+                                    <option value="DRIVER">DRIVER</option>
+                                    <option value="CLIENT">CLIENT</option>
+                                </c:if>
                             </select>
                         </div>
+                        <div class="err">${errors.role}</div>
                     </div>
                     <div class="form-group" id="submit-button">
                         <div class="col-sm-offset-2 col-sm-6">
-                            <button type="submit" class="btn btn-default">Submit</button>
+                            <input type="submit" class="btn btn-default" value="save" form="saveUserForm">
                         </div>
                     </div>
                 </form>

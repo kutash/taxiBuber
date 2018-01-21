@@ -97,13 +97,13 @@
             <div class="footer-content">&copy; 2017.EPAM Systems Taxi Buber</div>
         </div>
         <!-- Modal driver-->
-        <div id="myModal" class="modal fade" role="dialog">
+        <div id="myModal" class="modal fade hide" role="dialog">
             <div class="modal-dialog modal-lg">
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 style="font-size: 35px;"><span class="glyphicon glyphicon-user" style="font-size: 35px;"></span><fmt:message key="label.driver"/></h4>
-                        <button type="button" class="close" data-dismiss="modal">X</button>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
                         <span id="driver"></span>

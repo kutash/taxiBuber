@@ -30,7 +30,7 @@
         <ul class="nav navbar-nav navbar-right">
             <li>
                 <span class="user-name">${currentUser.name}</span>
-                <img src="${pageContext.request.contextPath}/controller?command=photo&amp;photo=${currentUser.photoPath}"  id="header-photo" width="30px" height="30px"/>
+                <img src="${pageContext.request.contextPath}/controller?command=photo&amp;photo=${currentUser.photoPath}&amp;userId=${currentUser.id}"  id="header-photo" width="30px" height="30px"/>
             </li>
             <li>
                 <c:url var="logout" value="controller">

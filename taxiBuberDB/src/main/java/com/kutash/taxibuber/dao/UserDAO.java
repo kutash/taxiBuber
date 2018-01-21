@@ -143,13 +143,14 @@ public class UserDAO extends AbstractDAO<User> {
             preparedStatement = getPreparedStatement(IS_EMAIL_EXISTS);
             preparedStatement.setString(1,email);
             ResultSet resultSet = preparedStatement.executeQuery();
+            //System.out.println(resultSet.next());
             result = resultSet.next();
         }catch (SQLException e){
             throw new DAOException("Exception while finding user by email {}",e);
         }finally {
             close(preparedStatement);
         }
-        return result;
+        return !result;
     }
 
     private User getUser(ResultSet resultSet) throws DAOException {
@@ -178,7 +179,11 @@ public class UserDAO extends AbstractDAO<User> {
             preparedStatement.setString(1, entity.getName());
             preparedStatement.setString(2, entity.getSurname());
             preparedStatement.setString(3, entity.getPatronymic());
-            preparedStatement.setDate(4, (java.sql.Date) entity.getBirthday());
+            if (entity.getBirthday() == null){
+                preparedStatement.setDate(4,null);
+            }else {
+                preparedStatement.setDate(4, new java.sql.Date(entity.getBirthday().getTime()));
+            }
             preparedStatement.setString(5, entity.getEmail());
             preparedStatement.setString(6, String.valueOf(entity.getRole()));
             preparedStatement.setString(7, entity.getPassword());

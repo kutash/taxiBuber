@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.kutash.taxibuber.controller.Router;
 import com.kutash.taxibuber.resource.MessageManager;
 import com.kutash.taxibuber.service.CarService;
-import com.kutash.taxibuber.service.OrderService;
 import com.kutash.taxibuber.util.CostCalculator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;

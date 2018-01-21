@@ -17,7 +17,8 @@ public enum CommandEnum {
     USER_INFO(new UserInfoCommand(new UserService())),
     NEW_ORDER(new NewOrderCommand(new TripService())),
     START_TRIP(new StartTripCommand(new TripService())),
-    COMPLETE_TRIP(new CompleteTripCommand(new TripService(),new CarService()));
+    COMPLETE_TRIP(new CompleteTripCommand(new TripService(),new CarService())),
+    SAVE_USER(new SaveUserCommand(new UserService()));
 
     Command command;
 

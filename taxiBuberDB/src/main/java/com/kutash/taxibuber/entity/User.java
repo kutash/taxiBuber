@@ -17,8 +17,7 @@ public class User extends AbstractEntity {
     private String phone;
     private List<Comment> comments;
 
-    public User(float rating, String name, String surname, String patronymic, String email, String password, UserRole role, Date birthday, String photoPath, String phone, List<Comment> comments) {
-        this.rating = rating;
+    public User(String name, String surname, String patronymic, String email, String password, UserRole role, Date birthday, String phone) {
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
@@ -26,24 +25,16 @@ public class User extends AbstractEntity {
         this.password = password;
         this.role = role;
         this.birthday = birthday;
-        this.photoPath = photoPath;
         this.phone = phone;
-        this.comments = comments;
     }
 
-    public User(int id, float rating, String name, String surname, String patronymic, String email, String password, UserRole role, Date birthday, String photoPath, String phone, List<Comment> comments) {
-        super(id);
-        this.rating = rating;
+    public User(String name, String surname, String patronymic, String email, String password,String phone) {
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
         this.email = email;
         this.password = password;
-        this.role = role;
-        this.birthday = birthday;
-        this.photoPath = photoPath;
         this.phone = phone;
-        this.comments = comments;
     }
 
     public User(int id, float rating, String name, String surname, String patronymic, String email, String password, UserRole role, Date birthday, String photoPath, String phone) {

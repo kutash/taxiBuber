@@ -1,7 +1,7 @@
 package com.kutash.taxibuber.command;
 
 import com.kutash.taxibuber.controller.Router;
-import com.kutash.taxibuber.main.FileManager;
+import com.kutash.taxibuber.util.FileManager;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -17,6 +17,7 @@ public class PhotoCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String PHOTO = "photo";
+    private static final String USER_ID = "userId";
 
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"getting photo for contact");
@@ -27,12 +28,15 @@ public class PhotoCommand implements Command {
             LOGGER.log(Level.ERROR,"Exception while loading properties {}",e);
         }
         String photoPath = request.getParameter(PHOTO);
+        System.out.println(photoPath);
+        String userId = request.getParameter(USER_ID);
+        System.out.println(userId);
         String path;
         if (StringUtils.isEmpty(photoPath)) {
             String appPath = request.getServletContext().getRealPath("");
             path = appPath + properties.getProperty("AVATAR");
         } else {
-            path = properties.getProperty("AVATARS_PATH")+photoPath;
+            path = properties.getProperty("AVATARS_PATH")+userId+File.separator+photoPath;
         }
         File file = new File(path);
         int buffSize = Integer.parseInt(properties.getProperty("BUFFER_SIZE"));

@@ -8,10 +8,12 @@ import com.kutash.taxibuber.dao.UserDAO;
 import com.kutash.taxibuber.entity.Comment;
 import com.kutash.taxibuber.entity.User;
 import com.kutash.taxibuber.exception.DAOException;
+import com.kutash.taxibuber.util.Validator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.List;
+import java.util.Map;
 
 public class UserService {
 
@@ -81,14 +83,16 @@ public class UserService {
         return res;
     }
 
+    public Map<String,String> validateUser(Map<String,String> data,String language){
+        return new Validator().validateUser(data,language);
+    }
+
     public int create(User user) {
         TransactionManager transactionManager = new TransactionManager();
         int result = 0;
         if (isUniqueEmail(user.getEmail())) {
             user.setPassword(Encryptor.ecnryptPassword(user.getPassword(),user.getEmail()));
             UserDAO userDAO = new DAOFactory().getUserDAO();
-            //AddressDAO
-
             try {
                 transactionManager.beginTransaction(userDAO);
                 result = userDAO.create(user);
@@ -106,7 +110,28 @@ public class UserService {
         return result;
     }
 
-    private boolean isUniqueEmail(String email) {
+    public User updateUser(User newUser){
+        LOGGER.log(Level.INFO,"Updatin user id={}",newUser.getId());
+        UserDAO userDAO = new DAOFactory().getUserDAO();
+        TransactionManager transactionManager = new TransactionManager();
+        User user = null;
+        try {
+            transactionManager.beginTransaction(userDAO);
+            user = userDAO.update(newUser);
+            transactionManager.commit();
+        } catch (DAOException e) {
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+            }
+            LOGGER.log(Level.ERROR,"Exception while updating user {}",e);
+        }
+        transactionManager.endTransaction();
+        return user;
+    }
+
+    public boolean isUniqueEmail(String email) {
         TransactionManager transactionManager = new TransactionManager();
         boolean result = false;
         UserDAO userDAO = new DAOFactory().getUserDAO();

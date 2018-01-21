@@ -22,9 +22,8 @@ function setNewBackground() {
         $(this).css('background-image', 'url(' + urls[num] + ')');
     }).fadeTo('slow', 1);
 }
+
 setInterval(setNewBackground, 4000);
-
-
 
 $(document).ready(function () {
     var error_login = $('#error-login');
@@ -36,7 +35,37 @@ $(document).ready(function () {
         error_login.css("margin-left", "28px");
         $('#myModal').modal('show');
     }
+
+    if ($('#is-errors').val() === 'true'){
+        $('#modal-signup').modal('show');
+    }
 });
+
+$(document).ready(function () {
+    $("#blah").click(function() {
+        $("#imgInp").click();
+    });
+
+    $('#imgInp').change(function () {
+        previewFile(this);
+    })
+});
+
+function previewFile(input) {
+    var preview = $('#blah');
+    var file    = input.files[0];
+    var reader  = new FileReader();
+
+    reader.onload = function (e) {
+        preview.attr('src', e.target.result);
+    };
+
+    if (file) {
+        reader.readAsDataURL(file);
+    } else {
+        preview.attr('src','${pageContext.request.contextPath}/my-servlet?command=photo');
+    }
+}
 
 $(document).ready(function() {
 
@@ -44,10 +73,10 @@ $(document).ready(function() {
         var id = $(this).attr('id');
         var val = $(this).val();
         var rv_name = /^[a-zA-Z0-9_-]*$/;
+        var rv_email = /^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
 
         switch(id) {
             case 'username':
-                var rv_email = /^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
                 if (val.length > 90) {
                     $('#submit-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
@@ -120,6 +149,172 @@ $(document).ready(function() {
         $('#username').removeClass('error-input not-error');
         $('#psw').removeClass('error-input not-error');
         $('#submit-button').attr('disabled', 'disabled');
+    });
+
+
+    $('input#name, input#surname, input#email, input#patronymic, input#phone, input#birthday').on("keyup", function(){
+        var id = $(this).attr('id');
+        var val = $(this).val();
+        var rv_name = /^[a-zA-Zа-яА-Я]*[a-zA-Zа-яА-Я-\s]{3,44}$/;
+        var rv_email = /^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
+        var rv_phone = /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/;
+        var rv_date = /(19|20)\d\d-((0[1-9]|1[012])-(0[1-9]|[12]\d)|(0[13-9]|1[012])-30|(0[13578]|1[02])-31)/;
+        var rv_psw = /^[а-яА-Яa-zA-Z0-9_-]{6,40}$/;
+
+        switch(id) {
+            case 'name':
+                if (val === '') {
+                    $('#save-button').attr('disabled', 'disabled');
+                    $(this).removeClass('not-error').addClass('error-input');
+                    $('#error-name').css('display', 'none');
+                    $('#blank-name').css('display', 'block');
+                } else if (!rv_name.test(val)) {
+                    $('#save-button').attr('disabled', 'disabled');
+                    $(this).removeClass('not-error').addClass('error-input');
+                    $('#error-name').css('display', 'block');
+                    $('#blank-name').css('display', 'none');
+                } else {
+                    $(this).removeClass('error-input').addClass('not-error');
+                    $('#error-name').css('display', 'none');
+                    $('#blank-name').css('display', 'none');
+                    /*if ($('.error-input').length === 0 && $('#psw').val() !==''){
+                        $('#submit-button').removeAttr('disabled');
+                    }*/
+                }
+                break;
+
+            case 'surname':
+                if (val === '') {
+                    $('#save-button').attr('disabled', 'disabled');
+                    $(this).removeClass('not-error').addClass('error-input');
+                    $('#error-surname').css('display', 'none');
+                    $('#blank-surname').css('display', 'block');
+                } else if (!rv_name.test(val)) {
+                    $('#save-button').attr('disabled', 'disabled');
+                    $(this).removeClass('not-error').addClass('error-input');
+                    $('#error-surname').css('display', 'block');
+                    $('#blank-surname').css('display', 'none');
+                } else {
+                    $(this).removeClass('error-input').addClass('not-error');
+                    $('#error-surname').css('display', 'none');
+                    $('#blank-surname').css('display', 'none');
+                    /*if ($('.error-input').length === 0 && $('#psw').val() !==''){
+                        $('#submit-button').removeAttr('disabled');
+                    }*/
+                }
+                break;
+
+            case 'patronymic':
+                if (!rv_name.test(val)) {
+                    $('#save-button').attr('disabled', 'disabled');
+                    $(this).removeClass('not-error').addClass('error-input');
+                    $('#error-patronymic').css('display', 'block');
+                } else {
+                    $(this).removeClass('error-input').addClass('not-error');
+                    $('#error-patronymic').css('display', 'none');
+                    /*if ($('.error-input').length === 0 && $('#psw').val() !==''){
+                     $('#submit-button').removeAttr('disabled');
+                     }*/
+                }
+                break;
+
+            case 'email':
+                if (val === '') {
+                    $('#save-button').attr('disabled', 'disabled');
+                    $(this).removeClass('not-error').addClass('error-input');
+                    $('#error-email').css('display', 'none');
+                    $('#email-blank').css('display', 'block');
+                    $('#email-size').css('display', 'none');
+                }else if (val.length > 90) {
+                    $('#save-button').attr('disabled', 'disabled');
+                    $(this).removeClass('not-error').addClass('error-input');
+                    $('#error-email').css('display', 'none');
+                    $('#email-blank').css('display', 'none');
+                    $('#email-size').css('display', 'block');
+                } else if (!rv_email.test(val)) {
+                    $('#save-button').attr('disabled', 'disabled');
+                    $(this).removeClass('not-error').addClass('error-input');
+                    $('#error-email').css('display', 'block');
+                    $('#email-blank').css('display', 'none');
+                    $('#email-size').css('display', 'none');
+                } else {
+                    $(this).removeClass('error-input').addClass('not-error');
+                    $('#error-email').css('display', 'none');
+                    $('#email-size').css('display', 'none');
+                    $('#email-blank').css('display', 'none');
+                    /*if ($('.error-input').length === 0 && $('#psw').val() !==''){
+                        $('#submit-button').removeAttr('disabled');
+                    }*/
+                }
+                break;
+
+            case 'phone':
+                if (!rv_phone.test(val)) {
+                    $('#save-button').attr('disabled', 'disabled');
+                    $(this).removeClass('not-error').addClass('error-input');
+                    $('#error-phone').css('display', 'block');
+                } else {
+                    $(this).removeClass('error-input').addClass('not-error');
+                    $('#error-phone').css('display', 'none');
+                    /*if ($('.error-input').length === 0 && $('#psw').val() !==''){
+                     $('#submit-button').removeAttr('disabled');
+                     }*/
+                }
+                break;
+
+            case 'birthday':
+                if (!rv_date.test(val)) {
+                    $('#save-button').attr('disabled', 'disabled');
+                    $(this).removeClass('not-error').addClass('error-input');
+                    $('#error-birthday').css('display', 'block');
+                } else {
+                    $(this).removeClass('error-input').addClass('not-error');
+                    $('#error-birthday').css('display', 'none');
+                    /*if ($('.error-input').length === 0 && $('#psw').val() !==''){
+                     $('#submit-button').removeAttr('disabled');
+                     }*/
+                }
+                break;
+
+            case 'pwd':
+                if (val === '') {
+                    $('#save-button').attr('disabled', 'disabled');
+                    $(this).removeClass('not-error').addClass('error-input');
+                    $('#error-password').css('display', 'none');
+                    $('#blank-password').css('display', 'block');
+                } else if (!rv_psw.test(val)) {
+                    $('#save-button').attr('disabled', 'disabled');
+                    $(this).removeClass('not-error').addClass('error-input');
+                    $('#error-password').css('display', 'block');
+                    $('#blank-password').css('display', 'none');
+                } else {
+                    $(this).removeClass('error-input').addClass('not-error');
+                    $('#error-password').css('display', 'none');
+                    $('#blank-password').css('display', 'none');
+                    /*if ($('.error-input').length === 0 && $('#psw').val() !==''){
+                     $('#submit-button').removeAttr('disabled');
+                     }*/
+                }
+                break;
+
+            case 'repeat':
+                if (val !== $('#psw').val()) {
+                    $('#save-button').attr('disabled', 'disabled');
+                    $(this).removeClass('not-error').addClass('error-input');
+                    $('#repeat-password').css('display', 'block');
+                } else {
+                    $(this).removeClass('error-input').addClass('not-error');
+                    $('#repeat-password').css('display', 'none');
+                    /*if ($('.error-input').length === 0 && $('#psw').val() !==''){
+                     $('#submit-button').removeAttr('disabled');
+                     }*/
+                }
+                break;
+        }
+
+        if ($('.error-input').length === 0 && $('input#name').val() !=='' && $('input#surname').val() !==''){
+            $('#submit-button').removeAttr('disabled');
+        }
     });
 
 });

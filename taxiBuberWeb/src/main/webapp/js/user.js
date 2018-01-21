@@ -14,7 +14,7 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-    $("#img").click(function() {
+    $("#blah").click(function() {
         $("#imgInp").click();
     });
 
