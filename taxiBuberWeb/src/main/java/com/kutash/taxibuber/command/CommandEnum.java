@@ -8,17 +8,19 @@ public enum CommandEnum {
     EDIT(new EditUserCommand(new UserService())),
     LOGOUT(new LogoutCommand()),
     PHOTO(new PhotoCommand()),
-    ORDER(new OrderCommand(new OrderService())),
-    MAKE_ORDER(new MakeOrderCommand(new OrderService(),new CarService())),
+    MAIN(new MainCommand(new AddressService(),new CarService())),
+    MAKE_ORDER(new MakeOrderCommand(new TripService(),new CarService(),new AddressService())),
     SHOW_CARS(new ShowCarsCommand(new CarService())),
     FREE_CARS(new FreeCarsCommand(new CarService())),
     PRICE(new PriceCommand(new CarService())),
     CAR(new EditCarCommand(new CarService())),
     USER_INFO(new UserInfoCommand(new UserService())),
-    NEW_ORDER(new NewOrderCommand(new TripService())),
+    NEW_ORDER(new NewOrderCommand(new TripService(),new AddressService())),
     START_TRIP(new StartTripCommand(new TripService())),
     COMPLETE_TRIP(new CompleteTripCommand(new TripService(),new CarService())),
-    SAVE_USER(new SaveUserCommand(new UserService()));
+    SAVE_USER(new SaveUserCommand(new UserService())),
+    SET_COORDINATES(new SetCoordinatesCommand(new CarService())),
+    SAVE_CAR(new SaveCarCommand(new CarService()));
 
     Command command;
 

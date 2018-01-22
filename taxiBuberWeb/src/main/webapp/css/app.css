@@ -44,7 +44,7 @@
 }
 
 .modal-header{
-    height: 120px;
+    height: 110px;
     background-color: #5cb85c;
     text-align: center;
     color: white;
@@ -77,6 +77,7 @@ button.close {
 
 .error-input:focus{
     border-color: red;
+    box-shadow: 0 0 5px rgba(255,0,0,0.3);
 }
 
 .not-error{
@@ -85,6 +86,7 @@ button.close {
 
 .not-error:focus{
     border-color: green;
+    box-shadow: 0 0 5px rgb(51, 238, 56);
 }
 
 .error {

@@ -18,6 +18,8 @@ public class CompleteTripCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String TRIP_ID = "tripId";
+    private static final String LATITUDE = "latitude";
+    private static final String LONGITUDE = "longitude";
     private TripService tripService;
     private CarService carService;
 
@@ -31,12 +33,17 @@ public class CompleteTripCommand implements Command {
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"Completing trip");
         Router router = new Router();
+        String latitude = request.getParameter(LATITUDE);
+        String longitude = request.getParameter(LONGITUDE);
         Trip trip = tripService.findTripById(Integer.parseInt(request.getParameter(TRIP_ID)));
         trip.setStatus(TripStatus.COMPLETED);
         tripService.updateTrip(trip);
         Car car = carService.findById(trip.getIdCar());
         car.setAvailable(true);
+        car.setLatitude(latitude);
+        car.setLongitude(longitude);
         carService.updateCar(car);
+        router.setRoute(Router.RouteType.REDIRECT);
         router.setPage(PageManager.getProperty("path.page.driver"));
         return router;
     }

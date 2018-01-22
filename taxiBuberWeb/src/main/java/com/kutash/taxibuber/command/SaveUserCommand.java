@@ -56,7 +56,6 @@ public class SaveUserCommand implements Command {
         String birthday = request.getParameter(BIRTHDAY);
         String phone = request.getParameter(PHONE);
         String language = (String) request.getSession().getAttribute(LANGUAGE);
-        System.out.println(language);
         User user;
         Map<String,String> userData = new HashMap<>();
         userData.put("name",name);
@@ -69,7 +68,7 @@ public class SaveUserCommand implements Command {
         userData.put("birthday",birthday);
         userData.put("phone",phone);
         Map<String,String> errors = userService.validateUser(userData,language);
-        if (errors.size()!= 0){
+        if (!errors.isEmpty()){
             user = new User(name,surname,patronymic,email,password,phone);
             request.setAttribute("birthday",birthday);
             request.setAttribute("user", user);
@@ -87,12 +86,10 @@ public class SaveUserCommand implements Command {
                 user = userService.updateUser(user);
             }
             request.getSession().setAttribute("currentUser",user);
+            request.getSession().setAttribute("isCar",true);
             router.setRoute(Router.RouteType.REDIRECT);
-            if (user.getRole().equals(UserRole.CLIENT)){
-                router.setPage("/controller?command=order");
-            }else if (user.getRole().equals(UserRole.DRIVER)){
-                router.setPage(PageManager.getProperty("path.page.car"));
-            }
+            router.setPage("/controller?command=main");
+
         }
         return router;
     }

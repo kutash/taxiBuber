@@ -17,7 +17,7 @@
             <a class="navbar-brand" href="${home}"><span class="glyphicon glyphicon-home"></span> <fmt:message key="label.title"/></a>
         </div>
         <ul class="nav navbar-nav">
-            <li class="active"><a href="controller?command=order"><fmt:message key="label.order"/></a></li>
+            <li class="active"><a href="controller?command=main"><fmt:message key="label.order"/></a></li>
             <li>
                 <c:url var="edit" value="controller">
                     <c:param name="command" value="edit"/>

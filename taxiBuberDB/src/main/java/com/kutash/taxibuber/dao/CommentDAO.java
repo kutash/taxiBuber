@@ -149,7 +149,7 @@ public class CommentDAO extends AbstractDAO<Comment> {
             String reviewerPhoto = resultSet.getString("photo_path");
             comment = new Comment(idComment,text,userId,reviewerId,date,mark,reviewerName,reviewerPhoto);
         }catch (SQLException e){
-            throw new DAOException("Exception while getting address from resultSet",e);
+            throw new DAOException("Exception while getting comment from resultSet",e);
         }
         return comment;
     }

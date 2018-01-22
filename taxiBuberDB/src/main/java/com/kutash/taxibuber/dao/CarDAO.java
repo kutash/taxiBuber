@@ -30,6 +30,12 @@ public class CarDAO extends AbstractDAO<Car> {
             "cb.id_brand,cb.`name`,concat(u.name,' ',u.surname) AS driver_name FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand\n" +
             "INNER JOIN user AS u ON c.id_user = u.id_user WHERE id_car = ?";
     private static final String UPDATE_CAR = "UPDATE car SET registration_number=?,model=?,photo_path=?,is_available=?,latitude=?,longitude=?,id_brand=?,id_user=?,capacity=? WHERE id_car=?";
+    private static final String FIND_CAR_BY_USER_ID = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,\n" +
+            "cb.id_brand,cb.`name`,concat(u.name,' ',u.surname) AS driver_name FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand\n" +
+            "INNER JOIN user AS u ON c.id_user = u.id_user WHERE c.id_user = ?";
+    private static final String CREATE_CAR = "INSERT INTO car(registration_number,model,photo_path,is_available,latitude,longitude,id_brand,id_user,capacity) VALUES (?,?,?,?,?,?,?,?,?)";
+    private static final String FIND_ALL_BRANDS = "SELECT id_brand,name FROM car_brand";
+    private static final String FIND_BRAND_BY_ID = "SELECT id_brand,name FROM car_brand WHERE id_brand = ?";
 
     @Override
     public List<Car> findAll() throws DAOException {
@@ -117,7 +123,23 @@ public class CarDAO extends AbstractDAO<Car> {
 
     @Override
     public int create(Car entity) throws DAOException {
-        return 0;
+        LOGGER.log(Level.INFO,"creating car");
+        int result;
+        ResultSet generatedKey;
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = getPreparedStatement(CREATE_CAR,1);
+            preparedStatement = setCarValues(preparedStatement,entity);
+            preparedStatement.executeUpdate();
+            generatedKey = preparedStatement.getGeneratedKeys();
+            generatedKey.next();
+            result = generatedKey.getInt(1);
+        }catch (SQLException e){
+            throw new DAOException("Exception while creating car",e);
+        }finally {
+            close(preparedStatement);
+        }
+        return result;
     }
 
     @Override
@@ -126,7 +148,7 @@ public class CarDAO extends AbstractDAO<Car> {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = getPreparedStatement(UPDATE_CAR);
-            preparedStatement = setValues(preparedStatement,entity);
+            preparedStatement = setCarValues(preparedStatement,entity);
             preparedStatement.setInt(10,entity.getId());
             preparedStatement.executeUpdate();
         }catch (SQLException e){
@@ -137,7 +159,64 @@ public class CarDAO extends AbstractDAO<Car> {
         return findEntityById(entity.getId());
     }
 
-    private PreparedStatement setValues(PreparedStatement preparedStatement, Car entity) throws DAOException {
+    public Car findEntityByUserId(int userId) throws DAOException {
+        LOGGER.log(Level.INFO,"finding car by user id {}",userId);
+        Car car = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = getPreparedStatement(FIND_CAR_BY_USER_ID);
+            preparedStatement.setInt(1,userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                car = getCar(resultSet);
+            }
+        }catch (SQLException e){
+            throw new DAOException("Exception while finding car by user id",e);
+        }finally {
+            close(preparedStatement);
+        }
+        return car;
+    }
+
+    public List<CarBrand> findAllBrands() throws DAOException {
+        LOGGER.log(Level.INFO,"Finding all car brands");
+        Statement statement = null;
+        List<CarBrand> brands = new ArrayList<>();
+        try {
+            statement = getStatement();
+            ResultSet resultSet = statement.executeQuery(FIND_ALL_BRANDS);
+            while (resultSet.next()) {
+                CarBrand carBrand = getCarBrand(resultSet);
+                brands.add(carBrand);
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Exception while finding all brands",e);
+        }finally {
+            close(statement);
+        }
+        return brands;
+    }
+
+    public CarBrand findBrandById(int id) throws DAOException {
+        LOGGER.log(Level.INFO,"finding car brand by id {}",id);
+        CarBrand carBrand = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = getPreparedStatement(FIND_BRAND_BY_ID);
+            preparedStatement.setInt(1,id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                carBrand = getCarBrand(resultSet);
+            }
+        }catch (SQLException e){
+            throw new DAOException("Exception while finding car brand by id",e);
+        }finally {
+            close(preparedStatement);
+        }
+        return carBrand;
+    }
+
+    private PreparedStatement setCarValues(PreparedStatement preparedStatement, Car entity) throws DAOException {
         try {
             preparedStatement.setString(1, entity.getRegistrationNumber());
             preparedStatement.setString(2, entity.getModel());
@@ -170,8 +249,21 @@ public class CarDAO extends AbstractDAO<Car> {
             CarBrand carBrand = new CarBrand(resultSet.getInt("id_brand"),resultSet.getString("name"));
             car = new Car(idCar,number,capacity,model,photo,isAvailable,latitude,longitude,carBrand,idUser,driverName);
         }catch (SQLException e){
-            throw new DAOException("Exception while getting user from resultSet",e);
+            throw new DAOException("Exception while getting car from resultSet",e);
         }
         return car;
     }
+
+    private CarBrand getCarBrand(ResultSet resultSet) throws DAOException {
+        CarBrand carBrand;
+        try {
+            int brandId = resultSet.getInt("id_brand");
+            String name = resultSet.getString("name");
+            carBrand = new CarBrand(brandId,name);
+        }catch (SQLException e){
+            throw new DAOException("Exception while getting car brand from resultSet",e);
+        }
+        return carBrand;
+    }
+
 }

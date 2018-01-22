@@ -3,8 +3,9 @@ package com.kutash.taxibuber.command;
 import com.kutash.taxibuber.controller.Router;
 import com.kutash.taxibuber.entity.*;
 import com.kutash.taxibuber.resource.MessageManager;
+import com.kutash.taxibuber.service.AddressService;
 import com.kutash.taxibuber.service.CarService;
-import com.kutash.taxibuber.service.OrderService;
+import com.kutash.taxibuber.service.TripService;
 import com.kutash.taxibuber.util.CostCalculator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
@@ -30,13 +31,15 @@ public class MakeOrderCommand implements Command {
     private static final String SOURCE = "start";
     private static final String DESTINATION = "end";
     private static final String DURATION_TEXT = "durationText";
-    private OrderService orderService;
+    private TripService tripService;
     private CarService carService;
+    private AddressService addressService;
 
-    MakeOrderCommand(OrderService orderService,CarService carService){
+    MakeOrderCommand(TripService tripService,CarService carService,AddressService addressService){
 
         this.carService=carService;
-        this.orderService=orderService;
+        this.tripService=tripService;
+        this.addressService=addressService;
     }
 
     @Override
@@ -76,12 +79,12 @@ public class MakeOrderCommand implements Command {
                 String result = new CostCalculator(carService).defineCost(distance, duration, capacity, carId);
                 if (result.equals(cost)) {
                     System.out.println("equals cost");
-                    int sourceId = orderService.createAddress(source,user.getId());
-                    int destinationId = orderService.createAddress(destination,user.getId());
+                    int sourceId = addressService.createAddress(source,user.getId());
+                    int destinationId = addressService.createAddress(destination,user.getId());
                     car.setAvailable(false);
                     carService.updateCar(car);
                     Trip trip = new Trip(new BigDecimal(cost), new Date(), distanceNumber, Integer.parseInt(carId), sourceId, destinationId, TripStatus.ORDERED);
-                    orderService.createTrip(trip);
+                    tripService.createTrip(trip);
                     session.setAttribute("orderMessage", new MessageManager(language).getProperty("message.ordersuccess"));
                 } else {
                     System.out.println("not equals cost");

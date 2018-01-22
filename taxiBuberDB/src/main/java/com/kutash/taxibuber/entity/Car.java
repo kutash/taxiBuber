@@ -13,17 +13,16 @@ public class Car extends AbstractEntity {
     private int userId;
     private String driverFullName;
 
-    public Car(String registrationNumber, Capacity capacity, String model, String photoPath, boolean isAvailable, String latitude, String longitude, CarBrand brand, int userId, String driverFullName) {
+    public Car(String registrationNumber, Capacity capacity, String model,CarBrand brand) {
         this.registrationNumber = registrationNumber;
         this.capacity = capacity;
         this.model = model;
-        this.photoPath = photoPath;
-        this.isAvailable = isAvailable;
-        this.latitude = latitude;
-        this.longitude = longitude;
         this.brand = brand;
-        this.userId = userId;
-        this.driverFullName = driverFullName;
+    }
+
+    public Car(String registrationNumber,String model) {
+        this.registrationNumber = registrationNumber;
+        this.model = model;
     }
 
     public Car(int id, String registrationNumber, Capacity capacity, String model, String photoPath, boolean isAvailable, String latitude, String longitude, CarBrand brand, int userId, String driverFullName) {
@@ -40,20 +39,22 @@ public class Car extends AbstractEntity {
         this.driverFullName = driverFullName;
     }
 
+    public Car(String registrationNumber, Capacity capacity, String model, String photoPath, boolean isAvailable, CarBrand brand, int userId) {
+        this.registrationNumber = registrationNumber;
+        this.capacity = capacity;
+        this.model = model;
+        this.photoPath = photoPath;
+        this.isAvailable = isAvailable;
+        this.brand = brand;
+        this.userId = userId;
+    }
+
     public String getRegistrationNumber() {
         return registrationNumber;
     }
 
     public void setRegistrationNumber(String registrationNumber) {
         this.registrationNumber = registrationNumber;
-    }
-
-    public Capacity getBodyType() {
-        return capacity;
-    }
-
-    public void setBodyType(Capacity bodyType) {
-        this.capacity = bodyType;
     }
 
     public String getModel() {

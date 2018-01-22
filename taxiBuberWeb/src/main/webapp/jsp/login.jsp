@@ -82,12 +82,12 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <button type="button" class="close cancel-signup" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title" style="font-size: 35px;"><span class="glyphicon glyphicon-user" style="font-size: 35px;"></span><fmt:message key="label.signup"/></h4>
                     </div>
                     <div class="modal-body">
-                        <div class="container">
-                            <div class="row" style="margin-top: -87px;">
+                        <div class="container" style="margin-bottom: -20px;">
+                            <div class="row" style="margin-top: -95px;">
                                 <input id="is-errors" type="hidden" value="${isErrors}">
                                 <div class="col-sm-3 text-center">
                                     <div>
@@ -181,9 +181,9 @@
                                             </div>
                                         </div>
                                         <div class="form-group required" id="div-pwd">
-                                            <label class="control-label col-sm-4" for="pwd"><fmt:message key="label.password"/>:</label>
+                                            <label class="control-label col-sm-4" for="password"><fmt:message key="label.password"/>:</label>
                                             <div class="col-sm-8">
-                                                <input type="password" class="form-control" id="pwd" name="password" placeholder="Enter password">
+                                                <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
                                                 <div style="display: none" id="error-password" class="err"><fmt:message key="label.invalidpsw"/></div>
                                                 <div style="display: none" id="blank-password" class="err"><fmt:message key="label.blank"/></div>
                                                 <div class="err">${errors.password}</div>
@@ -194,7 +194,7 @@
                                             <label class="control-label col-sm-4" for="repeat"><fmt:message key="label.passwordconfirm"/>:</label>
                                             <div class="col-sm-8">
                                                 <input type="password" class="form-control" id="repeat" name="repeat" placeholder="Confirm password">
-                                                <div style="display: none" id="repeat-password" class="err"><fmt:message key="label.passwordconfirm"/></div>
+                                                <div style="display: none" id="repeat-password" class="err"><fmt:message key="label.notmatch"/></div>
                                                 <div class="err">${errors.passwordConfirm}</div>
                                             </div>
                                         </div>
@@ -206,9 +206,10 @@
                                     </form>
                                 </div>
                             </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default cancel-signup" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>

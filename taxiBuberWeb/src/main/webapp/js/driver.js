@@ -1,3 +1,9 @@
+var latitude;
+var longitude;
+var map;
+
+setInterval(getNewOrder, 3000);
+
 window.onload = function () {
     var begin = document.getElementById("begin");
     begin.addEventListener('click',function () {
@@ -31,6 +37,28 @@ window.onload = function () {
             handleLocationError(false, infoWindow, map.getCenter());
         }
     });
+
+    var complete = document.getElementById("complete");
+    complete.addEventListener('click',function () {
+        var infoWindow = new google.maps.InfoWindow();
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                latitude = position.coords.latitude;
+                longitude = position.coords.longitude;
+                document.getElementById("latitude").value = latitude;
+                document.getElementById("longitude").value = longitude;
+            }, function () {
+                handleLocationError(true, infoWindow, map.getCenter());
+            });
+        } else {
+            handleLocationError(false, infoWindow, map.getCenter());
+        }
+        document.getElementById("complete-form").submit();
+    });
 };
 
 
@@ -51,11 +79,15 @@ function getNewOrder() {
     });
 }
 
-setInterval(getNewOrder, 3000);
-
-var latitude;
-var longitude;
-var map;
+function setCarCoordinates(latitude,longitude) {
+    $.ajax({
+        type:"GET",
+        url: "ajaxController?command=set_coordinates&latitude="+latitude+"&longitude="+longitude,
+        contentType: 'application/json'
+    }).done(function(result){
+        console.log(result);
+    });
+}
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -71,6 +103,7 @@ function initMap() {
             };
             latitude = position.coords.latitude;
             longitude = position.coords.longitude;
+            setCarCoordinates(latitude,longitude);
             var geocoder = new google.maps.Geocoder;
             var latLng = new google.maps.LatLng(latitude,longitude);
 

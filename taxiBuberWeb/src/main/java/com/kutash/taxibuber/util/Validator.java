@@ -1,18 +1,19 @@
 package com.kutash.taxibuber.util;
 
+import com.kutash.taxibuber.entity.Capacity;
+import com.kutash.taxibuber.entity.CarBrand;
 import com.kutash.taxibuber.entity.UserRole;
 import com.kutash.taxibuber.resource.MessageManager;
+import com.kutash.taxibuber.service.CarService;
 import com.kutash.taxibuber.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Date;
+import java.util.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,6 +25,10 @@ public class Validator {
     private static final String EMAIL = "^([-._'a-z0-9])+(\\+)?([-._'a-z0-9])+@(?:[a-z0-9][-a-z0-9]+\\.)+[a-z]{2,6}$";
     private static final String PHONE = "^(\\s*)?(\\+)?([- _():=+]?\\d[- _():=+]?){10,14}(\\s*)?$";
     private static final String DATE = "(19|20)\\d\\d-((0[1-9]|1[012])-(0[1-9]|[12]\\d)|(0[13-9]|1[012])-30|(0[13578]|1[02])-31)";
+    private static final String NUMBER = "\\d{4}[A-Z]{2}-\\d{1}";
+    private static final String MODEL = "^[а-яА-Яa-zA-Z0-9-\\s]{3,40}$";
+    private static final String SPACE = "\\s";
+    private static final String DIGIT = "\\d+";
 
     public Map<String,String> validateUser(Map<String,String> data,String language){
         LOGGER.log(Level.INFO,"validating user");
@@ -110,6 +115,73 @@ public class Validator {
             map.put("role", messageManager.getProperty("label.roleerror"));
         }
         return map;
+    }
+
+    public Map<String,String> validateCar(Map<String,String> data ,String language) {
+        LOGGER.log(Level.INFO, "validating car");
+        MessageManager messageManager = new MessageManager(language);
+        Pattern patternNumber = Pattern.compile(NUMBER);
+        Pattern patternModel = Pattern.compile(MODEL);
+
+        String number = data.get("number");
+        String model = data.get("model");
+        String brand = data.get("brand");
+        String capacity = data.get("capacity");
+        Map<String, String> map = new HashMap<>();
+
+        if (StringUtils.isNotEmpty(number)){
+            Matcher numberMatcher = patternNumber.matcher(number);
+            if (!numberMatcher.matches()){
+                map.put("number", messageManager.getProperty("label.errornumber"));
+            }
+        }else {
+            map.put("numberBlank", messageManager.getProperty("label.blank"));
+        }
+        if (StringUtils.isNotEmpty(model)){
+            Matcher modelMatcher = patternModel.matcher(model);
+            if (!modelMatcher.matches()){
+                map.put("model", messageManager.getProperty("label.errormodel"));
+            }
+        }else {
+            map.put("modelBlank", messageManager.getProperty("label.blank"));
+        }
+        if (!checkBrand(brand)){
+            map.put("brand", messageManager.getProperty("label.errorbrand"));
+        }
+        if(!checkCapacity(capacity)){
+            map.put("capacity", messageManager.getProperty("label.errorcapacity"));
+        }
+        return map;
+    }
+
+    private boolean checkCapacity(String capacity) {
+        boolean result = false;
+        if (StringUtils.isNotEmpty(capacity)) {
+            Set<String> names = new HashSet<>();
+            names.add(Capacity.CAR.name());
+            names.add(Capacity.MINIBUS.name());
+            names.add(Capacity.MINIVAN.name());
+            result = names.contains(capacity);
+        }
+        return result;
+    }
+
+    private boolean checkBrand(String brand){
+        boolean result = false;
+        Pattern patternDigit = Pattern.compile(DIGIT);
+        if (StringUtils.isNotEmpty(brand)) {
+            System.out.println(brand+"++++++++++++++++++++++");
+            String[] entity = brand.split(SPACE);
+            Matcher digitMatcher = patternDigit.matcher(entity[0]);
+            if (digitMatcher.matches()) {
+                CarBrand carBrand = new CarService().findBrandById(Integer.parseInt(entity[0]));
+                System.out.println(carBrand.getName());
+                if (carBrand.getName().equals(entity[1])) {
+                    result = true;
+                }
+            }
+        }
+        return result;
     }
 
     private boolean checkBirthday(String birthday) {

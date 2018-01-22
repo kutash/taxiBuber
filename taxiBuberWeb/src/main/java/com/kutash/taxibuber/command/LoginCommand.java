@@ -19,7 +19,9 @@ public class LoginCommand implements Command {
     private static final String PASSWORD = "password";
     private LoginService service;
 
-    LoginCommand(LoginService service){this.service=service;}
+    LoginCommand(LoginService service){
+        this.service=service;
+    }
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
@@ -47,11 +49,11 @@ public class LoginCommand implements Command {
                 break;
             case CLIENT:
                 request.getSession().setAttribute("currentUser",user);
-                router.setPage("/controller?command=order");
+                router.setPage("/controller?command=main");
                 break;
             case DRIVER:
                 request.getSession().setAttribute("currentUser",user);
-                router.setPage(PageManager.getProperty("path.page.driver"));
+                router.setPage("/controller?command=main");
                 break;
         }
         return router;

@@ -17,7 +17,7 @@
             <a class="navbar-brand" href="${home}"><span class="glyphicon glyphicon-home"></span> <fmt:message key="label.title"/></a>
         </div>
         <ul class="nav navbar-nav">
-            <li class="active"><a href="#"><fmt:message key="label.users"/></a></li>
+            <li class="active"><a href="controller?command=show_users"><fmt:message key="label.users"/></a></li>
             <li><a href="controller?command=show_cars"><fmt:message key="label.cars"/></a></li>
             <li><a href="#"><fmt:message key="label.trips"/></a></li>
             <li><a href="#"><fmt:message key="label.email"/></a></li>
