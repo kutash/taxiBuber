@@ -143,7 +143,6 @@ public class UserDAO extends AbstractDAO<User> {
             preparedStatement = getPreparedStatement(IS_EMAIL_EXISTS);
             preparedStatement.setString(1,email);
             ResultSet resultSet = preparedStatement.executeQuery();
-            //System.out.println(resultSet.next());
             result = resultSet.next();
         }catch (SQLException e){
             throw new DAOException("Exception while finding user by email {}",e);

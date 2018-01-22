@@ -10,7 +10,9 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Properties;
 
 public class PhotoCommand implements Command {
@@ -28,9 +30,7 @@ public class PhotoCommand implements Command {
             LOGGER.log(Level.ERROR,"Exception while loading properties {}",e);
         }
         String photoPath = request.getParameter(PHOTO);
-        System.out.println(photoPath);
         String userId = request.getParameter(USER_ID);
-        System.out.println(userId);
         String path;
         if (StringUtils.isEmpty(photoPath)) {
             String appPath = request.getServletContext().getRealPath("");
@@ -46,7 +46,33 @@ public class PhotoCommand implements Command {
         response.setContentType(properties.getProperty("CONTENT_TYPE"));
         response.setHeader("Content-Length", String.valueOf(file.length()));
         response.setHeader("Content-Disposition", "avatar; filename=\"" + file.getName() + "\"");
-        new FileManager().unloadFile(file, response, buffSize);
+        unloadFile(file, response, buffSize);
         return null;
+    }
+
+    private void unloadFile(File file, HttpServletResponse response, int buffSize){
+        OutputStream out = null;
+        FileInputStream in = null;
+        try{
+            out = response.getOutputStream();
+            in = new FileInputStream(file);
+            byte[] buffer = new byte[buffSize];
+            int length;
+            while ((length = in.read(buffer)) > 0) {
+                out.write(buffer, 0, length);
+            }
+        } catch (IOException e) {
+            LOGGER.log(Level.ERROR, "Exception while unloading photo {}",e);
+        }
+        finally {
+            try {
+                if (out != null && in != null) {
+                    out.close();
+                    in.close();
+                }
+            } catch (IOException e) {
+                LOGGER.log(Level.ERROR, "Error in closing streams");
+            }
+        }
     }
 }

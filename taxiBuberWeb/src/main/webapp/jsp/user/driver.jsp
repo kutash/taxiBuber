@@ -12,11 +12,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="../../css/app.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}css/fontawesome-free-5.0.4/web-fonts-with-css/css/fontawesome-all.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
         <script src="../../js/jquery.js"></script>
         <script type="text/javascript" src="../../js/driver.js"></script>
         <script type="text/javascript" src="../../js/car.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
     </head>
     <body>
@@ -40,7 +41,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                         <span class="user-name">${currentUser.name}</span>
-                        <img src="${pageContext.request.contextPath}/controller?command=photo&amp;photo=${currentUser.photoPath}&amp;userId=${currentUser.id}"  id="header-photo" width="30px" height="30px"/>
+                        <img src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${currentUser.photoPath}&amp;userId=${currentUser.id}"  id="header-photo" width="30px" height="30px"/>
                     </li>
                     <li>
                         <c:url var="logout" value="controller">
@@ -135,23 +136,25 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close cancel-car" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" style="font-size: 35px;"><span class="glyphicon glyphicon-user" style="font-size: 35px;"></span><fmt:message key="label.car"/></h4>
+                        <h4 class="modal-title" style="font-size: 35px;"><i class="fa fa-car" aria-hidden="true"></i><fmt:message key="label.car"/></h4>
                     </div>
                     <div class="modal-body">
                             <div class="row">
                                 <input id="is-car" type="hidden" value="${isCar}">
-                                <input type="hidden" value="${car.id}" name="carId">
                                 <div class="col-sm-3 text-center">
                                     <div>
+                                        <input type="hidden" id="car-photo" value="${car.photoPath}">
+                                        <input type="hidden" id="user-id" value="${currentUser.id}">
                                         <input type='file' id="imgInp" style="display: none" name="photo" form="saveCarForm"/>
                                         <a href="javascript:{}" id="img">
-                                            <img id="blah" src="${pageContext.request.contextPath}/controller?command=photo&amp;photo=${car.photoPath}&amp;userId=${currentUser.id}" alt="your image" width="270" height="270"  />
+                                            <img id="blah" src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${car.photoPath}&amp;userId=${currentUser.id}" alt="your image" width="270" height="270"  />
                                         </a>
                                     </div>
                                 </div>
                                 <div class="col-sm-9 text-center">
                                     <form class="form-horizontal" action="controller" method="post" enctype="multipart/form-data" id="saveCarForm">
                                         <input type="hidden" name="command" value="save_car">
+                                        <input type="hidden" value="${car.id}" name="carId">
                                         <div class="form-group required">
                                             <label class="control-label col-sm-5" for="number"><fmt:message key="label.number"/>:</label>
                                             <div class="col-sm-7">
@@ -160,6 +163,7 @@
                                                 <div style="display: none" id="blank-number" class="err"><fmt:message key="label.blank"/></div>
                                                 <div class="err">${errors.number}</div>
                                                 <div class="err">${errors.numberBlank}</div>
+                                                <div class="err">${errors.notuniquenumber}</div>
                                             </div>
                                         </div>
                                         <div class="form-group required">
@@ -226,7 +230,7 @@
                             </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default cancel-signup" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-default cancel-car" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>

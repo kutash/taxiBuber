@@ -71,7 +71,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-danger btn-default pull-left cancel" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span><fmt:message key="button.cancel" /></button>
-                        <p><fmt:message key="label.member"/> <a href="#"><fmt:message key="label.signup"/></a></p>
+                        <p><fmt:message key="label.member"/> <a href="#" class="cancel" data-dismiss="modal" data-toggle="modal" data-target="#modal-signup"><fmt:message key="label.signup"/></a></p>
                         <p><fmt:message key="label.forgot"/><a href="#"><fmt:message key="label.password"/></a></p>
                     </div>
                 </div>
@@ -93,7 +93,7 @@
                                     <div>
                                         <input type='file' id="imgInp" style="display: none" name="photo" form="saveUserForm"/>
                                         <a href="javascript:{}" id="img">
-                                            <img id="blah" src="${pageContext.request.contextPath}/controller?command=photo&amp;photo=${user.photoPath}" alt="your image" width="280" height="280"  />
+                                            <img id="blah" src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${user.photoPath}" alt="your image" width="280" height="280"  />
                                         </a>
                                     </div>
                                 </div>

@@ -4,15 +4,26 @@ $(document).ready(function () {
         $('#modal-car').modal('show');
     }
 
+    var modalMessage = $('#modal-message2');
     var update = $('#message-update');
-    if (update.val() !== ''){
-        $('#modal-message2').modal('show');
+    console.log(update.text());
+    if (update.text() !== ''){
+        modalMessage.modal('show');
         update.css('display', 'block');
+        setTimeout(function(){
+            modalMessage.modal("hide");
+            update.css('display', 'none');
+        }, 2000);
     }
     var create = $('#message-create');
-    if (create.val() !== ''){
-        $('#modal-message2').modal('show');
+    console.log(create.text());
+    if (create.text() !== ''){
+        modalMessage.modal('show');
         create.css('display', 'block');
+        setTimeout(function(){
+            modalMessage.modal("hide");
+            create.css('display', 'none');
+        }, 2000);
     }
 
     $("#blah").click(function() {
@@ -22,145 +33,47 @@ $(document).ready(function () {
         previewFile(this);
     });
 
-    $('input#name, input#surname, input#email, input#patronymic, input#phone, input#birthday, input#password, input#repeat').on("keyup", function(){
+    $('input#number, input#model').on("keyup", function(){
         var id = $(this).attr('id');
         var val = $(this).val();
-        var rv_name = /^[a-zA-Zа-яА-Я]*[a-zA-Zа-яА-Я-\s]{3,44}$/;
-        var rv_email = /^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
-        var rv_phone = /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/;
-        var rv_date = /(19|20)\d\d-((0[1-9]|1[012])-(0[1-9]|[12]\d)|(0[13-9]|1[012])-30|(0[13578]|1[02])-31)/;
-        var rv_psw = /^[а-яА-Яa-zA-Z0-9_-]{6,40}$/;
+        var rv_number = /\d{4}[A-Z]{2}-\d/;
+        var rv_model = /^[а-яА-Яa-zA-Z0-9-\s]{4,40}$/;
 
         switch(id) {
-            case 'name':
+            case 'number':
                 if (val === '') {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
-                    $('#error-name').css('display', 'none');
-                    $('#blank-name').css('display', 'block');
-                } else if (!rv_name.test(val)) {
+                    $('#error-number').css('display', 'none');
+                    $('#blank-number').css('display', 'block');
+                } else if (!rv_number.test(val)) {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
-                    $('#error-name').css('display', 'block');
-                    $('#blank-name').css('display', 'none');
+                    $('#error-number').css('display', 'block');
+                    $('#blank-number').css('display', 'none');
                 } else {
                     $(this).removeClass('error-input').addClass('not-error');
-                    $('#error-name').css('display', 'none');
-                    $('#blank-name').css('display', 'none');
+                    $('#error-number').css('display', 'none');
+                    $('#blank-number').css('display', 'none');
                     removeDisabled();
                 }
                 break;
 
-            case 'surname':
+            case 'model':
                 if (val === '') {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
-                    $('#error-surname').css('display', 'none');
-                    $('#blank-surname').css('display', 'block');
-                } else if (!rv_name.test(val)) {
+                    $('#error-model').css('display', 'none');
+                    $('#blank-model').css('display', 'block');
+                } else if (!rv_model.test(val)) {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
-                    $('#error-surname').css('display', 'block');
-                    $('#blank-surname').css('display', 'none');
+                    $('#error-model').css('display', 'block');
+                    $('#blank-model').css('display', 'none');
                 } else {
                     $(this).removeClass('error-input').addClass('not-error');
-                    $('#error-surname').css('display', 'none');
-                    $('#blank-surname').css('display', 'none');
-                    removeDisabled();
-                }
-                break;
-
-            case 'patronymic':
-                if(val === '' || rv_name.test(val)) {
-                    $(this).removeClass('error-input').addClass('not-error');
-                    $('#error-patronymic').css('display', 'none');
-                    removeDisabled();
-                } else {
-                    $('#save-button').attr('disabled', 'disabled');
-                    $(this).removeClass('not-error').addClass('error-input');
-                    $('#error-patronymic').css('display', 'block');
-                }
-                break;
-
-            case 'email':
-                if (val === '') {
-                    $('#save-button').attr('disabled', 'disabled');
-                    $(this).removeClass('not-error').addClass('error-input');
-                    $('#error-email').css('display', 'none');
-                    $('#email-blank').css('display', 'block');
-                    $('#email-size').css('display', 'none');
-                }else if (val.length > 90) {
-                    $('#save-button').attr('disabled', 'disabled');
-                    $(this).removeClass('not-error').addClass('error-input');
-                    $('#error-email').css('display', 'none');
-                    $('#email-blank').css('display', 'none');
-                    $('#email-size').css('display', 'block');
-                } else if (!rv_email.test(val)) {
-                    $('#save-button').attr('disabled', 'disabled');
-                    $(this).removeClass('not-error').addClass('error-input');
-                    $('#error-email').css('display', 'block');
-                    $('#email-blank').css('display', 'none');
-                    $('#email-size').css('display', 'none');
-                } else {
-                    $(this).removeClass('error-input').addClass('not-error');
-                    $('#error-email').css('display', 'none');
-                    $('#email-size').css('display', 'none');
-                    $('#email-blank').css('display', 'none');
-                    removeDisabled();
-                }
-                break;
-
-            case 'phone':
-                if(val === '' || rv_phone.test(val)) {
-                    $(this).removeClass('error-input').addClass('not-error');
-                    $('#error-phone').css('display', 'none');
-                    removeDisabled();
-                } else {
-                    $('#save-button').attr('disabled', 'disabled');
-                    $(this).removeClass('not-error').addClass('error-input');
-                    $('#error-phone').css('display', 'block');
-                }
-                break;
-
-            case 'birthday':
-                if(val === '' || rv_date.test(val)) {
-                    $(this).removeClass('error-input').addClass('not-error');
-                    $('#error-birthday').css('display', 'none');
-                    removeDisabled();
-                } else {
-                    $('#save-button').attr('disabled', 'disabled');
-                    $(this).removeClass('not-error').addClass('error-input');
-                    $('#error-birthday').css('display', 'block');
-                }
-                break;
-
-            case 'password':
-                if (val === '') {
-                    $('#save-button').attr('disabled', 'disabled');
-                    $(this).removeClass('not-error').addClass('error-input');
-                    $('#error-password').css('display', 'none');
-                    $('#blank-password').css('display', 'block');
-                } else if (!rv_psw.test(val)) {
-                    $('#save-button').attr('disabled', 'disabled');
-                    $(this).removeClass('not-error').addClass('error-input');
-                    $('#error-password').css('display', 'block');
-                    $('#blank-password').css('display', 'none');
-                } else {
-                    $(this).removeClass('error-input').addClass('not-error');
-                    $('#error-password').css('display', 'none');
-                    $('#blank-password').css('display', 'none');
-                    removeDisabled();
-                }
-                break;
-
-            case 'repeat':
-                if (val !== $('#password').val()) {
-                    $('#save-button').attr('disabled', 'disabled');
-                    $(this).removeClass('not-error').addClass('error-input');
-                    $('#repeat-password').css('display', 'block');
-                } else {
-                    $(this).removeClass('error-input').addClass('not-error');
-                    $('#repeat-password').css('display', 'none');
+                    $('#error-model').css('display', 'none');
+                    $('#blank-model').css('display', 'none');
                     removeDisabled();
                 }
                 break;
@@ -168,11 +81,30 @@ $(document).ready(function () {
 
     });
 
-    $('.cancel-signup').on('click',function () {
-        $('#saveUserForm').trigger( 'reset' );
+    $('#brand').on('change',function () {
+        if ($('#brand').val() === ''){
+            $('#save-button').attr('disabled', 'disabled');
+        }else {
+            removeDisabled();
+        }
+    });
+
+    $('#capacity').on('change',function () {
+        if ($('#capacity').val() === ''){
+            $('#save-button').attr('disabled', 'disabled');
+        }else {
+            removeDisabled();
+        }
+    });
+
+    $('.cancel-car').on('click',function () {
+        $('#saveCarForm').trigger( 'reset' );
         $('.err').css('display', 'none');
-        $('input[type=text], input[type=email], input[type=password]').removeClass('error-input not-error');
-        $('#submit-button').attr('disabled', 'disabled');
+        $('input[type=text]').removeClass('error-input not-error');
+        $('#save-button').attr('disabled', 'disabled');
+        var photoPath = $('#car-photo').val();
+        var id = $('#user-id').val();
+        $('#blah').attr('src','/controller?command=photo&photo='+photoPath+'&userId='+id);
     });
 
 });
@@ -194,7 +126,7 @@ function previewFile(input) {
 }
 
 function removeDisabled() {
-    if ($('.error-input').length === 0 && $('input#name').val() !=='' && $('input#surname').val() !=='' && $('input#email').val() !=='' && $('#role').val() !=='' && $('input#password').val() !=='' && $('input#repeat').val() !==''){
+    if ($('.error-input').length === 0 && $('input#number').val() !=='' && $('input#model').val() !=='' && $('#brand').val() !=='' && $('#capacity').val()){
         $('#save-button').removeAttr('disabled');
     }
 }

@@ -17,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ public class SaveCarCommand implements Command {
     private static final String CAR_ID = "carId";
     private static final String CAPACITY = "capacity";
     private static final String LANGUAGE = "language";
+    private static final String CURRENT_USER = "currentUser";
     private CarService carService;
 
     SaveCarCommand(CarService carService){
@@ -42,44 +44,49 @@ public class SaveCarCommand implements Command {
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"saving car");
         Router router = new Router();
-        Car car = null;
+        HttpSession session = request.getSession();
+        Car car;
         String number = request.getParameter(NUMBER);
         String model = request.getParameter(MODEL);
         String brand = request.getParameter(BRAND);
         String capacity = request.getParameter(CAPACITY);
-        System.out.println(brand);
-        String language = (String) request.getSession().getAttribute(LANGUAGE);
-        User user = (User) request.getSession().getAttribute("currentUser");
+        String carId = request.getParameter(CAR_ID);
+        String language = (String) session.getAttribute(LANGUAGE);
+        User user = (User) session.getAttribute(CURRENT_USER);
         Map<String,String> carData = new HashMap<>();
         carData.put("number",number);
         carData.put("model",model);
         carData.put("brand",brand);
         carData.put("capacity",capacity);
-        Map<String,String> errors = carService.validateCar(carData,language);
-        String carId = request.getParameter(CAR_ID);
+        Map<String,String> errors;
         if (StringUtils.isNotEmpty(carId)){
+            carData.put("carId",carId);
+            errors = carService.validateCar(carData,language);
             int id = Integer.parseInt(carId);
             Car carOld = carService.findById(id);
             if(carOld != null) {
                 if (!errors.isEmpty()) {
                     System.out.println("1");
-                    car = new Car(number, carOld.getCapacity(), model, carOld.getBrand());
+                    carOld.setModel(model);
+                    carOld.setRegistrationNumber(number);
                     List<CarBrand> brands = carService.findAllBrands();
                     request.setAttribute("brands",brands);
                     request.setAttribute("errors",errors);
-                    request.setAttribute("car",car);
+                    request.setAttribute("car",carOld);
                     request.setAttribute("isCar", true);
                     router.setPage(PageManager.getProperty("path.page.driver"));
                 } else {
                     System.out.println("2");
-                    String photoPath = savePhoto(user.getId(),request);
                     String[] entityBrand = brand.split("\\s");
                     CarBrand carBrand = new CarBrand(Integer.parseInt(entityBrand[0]), entityBrand[1]);
                     carOld.setBrand(carBrand);
                     carOld.setCapacity(Capacity.valueOf(capacity));
                     carOld.setRegistrationNumber(number);
                     carOld.setModel(model);
-                    carOld.setPhotoPath(photoPath);
+                    String photoPath = savePhoto(user.getId(),request);
+                    if (StringUtils.isNotEmpty(photoPath)) {
+                        carOld.setPhotoPath(photoPath);
+                    }
                     car = carService.updateCar(carOld);
                     request.getSession().setAttribute("updateMessage",new MessageManager(language).getProperty("message.updatedcar"));
                     router.setPage("/controller?command=main");
@@ -90,6 +97,7 @@ public class SaveCarCommand implements Command {
                 router.setPage("path.page.error");
             }
         }else {
+            errors = carService.validateCar(carData,language);
             if (!errors.isEmpty()) {
                 System.out.println("3");
                 car = new Car(number,model);
@@ -111,8 +119,6 @@ public class SaveCarCommand implements Command {
                 router.setRoute(Router.RouteType.REDIRECT);
             }
         }
-        //request.setAttribute("car",car);
-        //router.setPage("/controller?command=main");
         return router;
     }
 
@@ -124,6 +130,6 @@ public class SaveCarCommand implements Command {
         } catch (IOException | ServletException e) {
             LOGGER.log(Level.ERROR,"Exception while getting part",e);
         }
-        return new FileManager().savePhoto(photoPart,id);
+        return new FileManager().savePhoto(photoPart,id,true);
     }
 }

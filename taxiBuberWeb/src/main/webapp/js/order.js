@@ -317,7 +317,7 @@ function setMarkers(result) {
             }
             distances.push(distanceVal);
             var duration = response.rows[0].elements[0].duration.text;
-            contentString = '<div>'+brand+' '+model+'</div><div><img src="controller?command=photo&amp;photo='+photo+'&amp;userId='+id+'" width="70px" height="70px"/></div><div>Driver:<a data-toggle="modal" data-target="#myModal" href="" onclick="show('+id+')">'+driver+'</a><br/>Расстояние:'+distance+'<br/>Время подачи машины:'+duration+'</div>';
+            contentString = '<div>'+brand+' '+model+'</div><div><img src="ajaxController?command=photo&amp;photo='+photo+'&amp;userId='+id+'" width="70px" height="70px"/></div><div>Driver:<a data-toggle="modal" data-target="#myModal" href="" onclick="show('+id+')">'+driver+'</a><br/>Расстояние:'+distance+'<br/>Время подачи машины:'+duration+'</div>';
         } else {
             contentString = '<div>Can not define distance</div><div>'+brand+' '+model+'</div><div><a href="#">Выбрать</a></div>';
         }
@@ -374,7 +374,7 @@ function show(id) {
         }  else {
             photoPath = result.photoPath;
         }
-        document.getElementById('blah').src ='controller?command=photo&photo='+photoPath+'&userId='+id;
+        document.getElementById('blah').src ='ajaxController?command=photo&photo='+photoPath+'&userId='+id;
 
         var comments = result.comments;
         if(comments.length === 0){
@@ -382,7 +382,7 @@ function show(id) {
         }
         for (var i=0;i<comments.length;i++){
             var mark = comments[i].mark*20;
-            document.getElementById('tbody').innerHTML+='<tr><td class="col-md-2"><img src="/controller?command=photo&photo='+comments[i].reviewerPhoto+'&amp;userId='+comments[i].reviewerId+'" width="50" height="50" class="comment-photo"/><br/>'+comments[i].reviewerName+'</td><td class="col-md-10">'+comments[i].text+'<br><div style="display: inline-flex"><span class="comment-mark">Оценка:</span><div class="productRate-order" id="rating-div"><div class="productRate-div" style="width:'+mark+'%"></div></div></div><span id="date-span">'+comments[i].date+'</span></td></tr>';
+            document.getElementById('tbody').innerHTML+='<tr><td class="col-md-2"><img src="ajaxController?command=photo&photo='+comments[i].reviewerPhoto+'&amp;userId='+comments[i].reviewerId+'" width="50" height="50" class="comment-photo"/><br/>'+comments[i].reviewerName+'</td><td class="col-md-10">'+comments[i].text+'<br><div style="display: inline-flex"><span class="comment-mark">Оценка:</span><div class="productRate-order" id="rating-div"><div class="productRate-div" style="width:'+mark+'%"></div></div></div><span id="date-span">'+comments[i].date+'</span></td></tr>';
         }
     })
 }

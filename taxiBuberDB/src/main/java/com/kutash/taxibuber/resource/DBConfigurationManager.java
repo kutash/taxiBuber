@@ -18,7 +18,6 @@ public class DBConfigurationManager {
         properties = new Properties();
         try {
             properties.load(DBConfigurationManager.class.getResourceAsStream("/dataBase.properties"));
-            System.out.println(properties.toString());
         } catch (IOException e) {
             LOGGER.log(Level.FATAL,"Exception during loading properties {}",e);
         }

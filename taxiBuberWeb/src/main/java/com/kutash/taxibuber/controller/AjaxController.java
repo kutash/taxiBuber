@@ -37,11 +37,11 @@ public class AjaxController extends HttpServlet {
         if (router != null) {
             response.setContentType("application/json");
             response.getWriter().write(router.getPage());
-        }else {
+        }/*else {
             String page = PageManager.getProperty("path.page.error");
             String language = (String) request.getSession().getAttribute("language");
             request.getSession().setAttribute("nullPage", new MessageManager(language).getProperty("message.nullpage"));
             response.sendRedirect(request.getContextPath() + page);
-        }
+        }*/
     }
 }

@@ -40,8 +40,13 @@ $(document).ready(function () {
         $('#modal-signup').modal('show');
     }
 
-    $('#jform').trigger( 'reset' );
-    $('#saveUserForm').trigger( 'reset' );
+    setTimeout(function(){
+        $('#jform').trigger( 'reset' );
+        $('#saveUserForm').trigger( 'reset' );
+        $('.err').css('display', 'none');
+        $('input[type=text], input[type=email], input[type=password]').removeClass('error-input not-error');
+    }, 2000);
+
 });
 
 $(document).ready(function () {
@@ -308,7 +313,7 @@ $(document).ready(function() {
         $('#saveUserForm').trigger( 'reset' );
         $('.err').css('display', 'none');
         $('input[type=text], input[type=email], input[type=password]').removeClass('error-input not-error');
-        $('#submit-button').attr('disabled', 'disabled');
+        $('#save-button').attr('disabled', 'disabled');
         $('#blah').attr('src','/controller?command=photo');
     });
 

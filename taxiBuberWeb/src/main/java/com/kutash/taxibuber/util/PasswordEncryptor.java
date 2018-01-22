@@ -1,6 +1,5 @@
-package com.kutash.taxibuber.crypter;
+package com.kutash.taxibuber.util;
 
-import java.io.IOException;
 import org.apache.commons.codec.binary.Base64;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
@@ -23,7 +22,10 @@ public class PasswordEncryptor {
      * DESSecretKey (алгоритм шифрования DES) со значением key.
      * Ключ key должен иметь длину 8 байт
      */
-    public PasswordEncryptor(byte[] key) {
+    
+    public PasswordEncryptor(String keyString) {
+        keyString = keyString.substring(0,8);
+        byte[] key = keyString.getBytes();
         try {
             updateSecretKey(new DESSecretKey(key));
         } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException ex) {
@@ -33,7 +35,7 @@ public class PasswordEncryptor {
 
     private void updateSecretKey(SecretKey key) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException {
         ecipher = Cipher.getInstance(key.getAlgorithm());
-        dcipher = Cipher.getInstance(key.getAlgorithm());
+        Cipher dcipher = Cipher.getInstance(key.getAlgorithm());
         ecipher.init(Cipher.ENCRYPT_MODE, key);
         dcipher.init(Cipher.DECRYPT_MODE, key);
     }
@@ -41,11 +43,10 @@ public class PasswordEncryptor {
     public static class DESSecretKey implements SecretKey {
 
         private final byte[] key;
-
         /**
          * ключ должен иметь длину 8 байт
          */
-        public DESSecretKey(byte[] key) {
+        private DESSecretKey(byte[] key) {
             this.key = key;
         }
 
@@ -66,7 +67,6 @@ public class PasswordEncryptor {
     }
 
     private Cipher ecipher;
-    private Cipher dcipher;
 
     /**
      * Функция шифрования
@@ -85,20 +85,4 @@ public class PasswordEncryptor {
         return null;
     }
 
-    /**
-     * Функция дешифрования
-     *
-     * @param str зашифрованная строка в формате Base64
-     * @return расшифрованная строка
-     */
-    public String decrypt(String str) {
-        try {
-            byte[] dec = Base64.decodeBase64(str);
-            byte[] utf8 = dcipher.doFinal(dec);
-            return new String(utf8, "UTF8");
-        } catch (IllegalBlockSizeException | BadPaddingException | IOException ex) {
-            Logger.getLogger(PasswordEncryptor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
 }

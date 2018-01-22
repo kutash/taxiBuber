@@ -28,17 +28,17 @@ public class NewOrderCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         Router router = new Router();
-        String json;
+        String json = "Error";
         User user = (User) request.getSession().getAttribute("currentUser");
-        Trip trip = tripService.findOrdered(user.getId());
-        if (trip == null){
-            json = new Gson().toJson("no trips");
-        }else {
-            Address departureAddress = addressService.findAddressById(trip.getDepartureAddress());
-            Address destinationAddress = addressService.findAddressById(trip.getDestinationAddress());
-            trip.setDeparture(departureAddress);
-            trip.setDestination(destinationAddress);
-            json = new Gson().toJson(trip);
+        if (user != null) {
+            Trip trip = tripService.findOrdered(user.getId());
+            if (trip != null) {
+                Address departureAddress = addressService.findAddressById(trip.getDepartureAddress());
+                Address destinationAddress = addressService.findAddressById(trip.getDestinationAddress());
+                trip.setDeparture(departureAddress);
+                trip.setDestination(destinationAddress);
+                json = new Gson().toJson(trip);
+            }
         }
         router.setPage(json);
         return router;

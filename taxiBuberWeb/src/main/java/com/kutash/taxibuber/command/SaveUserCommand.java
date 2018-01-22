@@ -14,14 +14,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 public class SaveUserCommand implements Command {
 
@@ -81,10 +79,8 @@ public class SaveUserCommand implements Command {
             int id = userService.create(user);
             user.setId(id);
             String photoPath = savePhoto(id,request);
-            if (photoPath != null) {
-                user.setPhotoPath(photoPath);
-                user = userService.updateUser(user);
-            }
+            user.setPhotoPath(photoPath);
+            user = userService.updateUser(user);
             request.getSession().setAttribute("currentUser",user);
             request.getSession().setAttribute("isCar",true);
             router.setRoute(Router.RouteType.REDIRECT);
@@ -109,14 +105,14 @@ public class SaveUserCommand implements Command {
     }
 
     private String savePhoto(int id,HttpServletRequest request) {
-        LOGGER.log(Level.INFO,"saving photo");
+        LOGGER.log(Level.INFO,"saving photo for the user");
         Part photoPart = null;
         try {
             photoPart = request.getPart("photo");
         } catch (IOException | ServletException e) {
             LOGGER.log(Level.ERROR,"Exception while getting part",e);
         }
-        return new FileManager().savePhoto(photoPart,id);
+        return new FileManager().savePhoto(photoPart,id,false);
     }
 
 }

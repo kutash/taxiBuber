@@ -16,9 +16,9 @@ public class FileManager {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public String savePhoto(Part part,int id){
+    public String savePhoto(Part part,int id, boolean isCar){
         LOGGER.log(Level.INFO,"saving photo");
-        String fileName = null;
+        String fileName = "";
         Properties properties = new Properties();
         try {
             properties.load(FileManager.class.getResourceAsStream("/photo.properties"));
@@ -35,15 +35,13 @@ public class FileManager {
                     LOGGER.log(Level.ERROR,"Directory wasn't created");
                 }
             }
-            deleteAllFilesFolder(photoPath);
             String contentDisp = part.getHeader("Content-Disposition");
-            String[] items = contentDisp.split(";");
-            for (String s : items) {
-                if (s.trim().startsWith("filename")) {
-                    fileName = s.substring(s.indexOf("=") + 2, s.length() - 1);
-                }
+            String expansion = getExpansion(contentDisp);
+            if (isCar){
+                fileName = id + "car" + expansion;
+            }else {
+                fileName = id + expansion;
             }
-            fileName = id + fileName.substring(fileName.indexOf("."));
             photoPath += File.separator + fileName;
             try {
                 part.write(photoPath);
@@ -54,33 +52,19 @@ public class FileManager {
         return fileName;
     }
 
-    public void unloadFile(File file, HttpServletResponse response, int buffSize){
-        OutputStream out = null;
-        FileInputStream in = null;
-        try{
-            out = response.getOutputStream();
-            in = new FileInputStream(file);
-            byte[] buffer = new byte[buffSize];
-            int length;
-            while ((length = in.read(buffer)) > 0) {
-                out.write(buffer, 0, length);
-            }
-        } catch (IOException e) {
-            LOGGER.log(Level.ERROR, "Exception while unloading photo {}",e);
-        }
-        finally {
-            try {
-                if (out != null && in != null) {
-                    out.close();
-                    in.close();
-                }
-            } catch (IOException e) {
-                LOGGER.log(Level.ERROR, "Error in closing streams");
+    private String getExpansion(String contentDisp){
+        String expansion = "";
+        String[] items = contentDisp.split(";");
+        for (String s : items) {
+            if (s.trim().startsWith("filename")) {
+                expansion = s.substring(s.indexOf("=") + 2, s.length() - 1);
             }
         }
+        expansion = expansion.substring(expansion.indexOf("."));
+        return expansion;
     }
 
-    public void deleteFile(String path) {
+    private void deleteFile(String path) {
         File file = new File(path);
         if (file.canWrite() && file.exists()) {
             boolean deleted = file.delete();

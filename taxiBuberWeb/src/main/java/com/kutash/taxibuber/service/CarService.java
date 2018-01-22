@@ -107,9 +107,11 @@ public class CarService {
         List<Car> nearestCars = new ArrayList<>();
         if (cars != null) {
             for (Car car : cars) {
-                double distance = defineDistance(Double.parseDouble(latitude), Double.parseDouble(longitude), car);
-                if ( distance < 15.0) {
-                    nearestCars.add(car);
+                if (car.getLatitude() != null && car.getLongitude() != null) {
+                    double distance = defineDistance(Double.parseDouble(latitude), Double.parseDouble(longitude), car);
+                    if (distance < 15.0) {
+                        nearestCars.add(car);
+                    }
                 }
             }
         }
@@ -178,8 +180,6 @@ public class CarService {
         return brands;
     }
 
-
-
     public Map<String,String> validateCar(Map<String,String> data, String language){
         return new Validator().validateCar(data,language);
     }
@@ -230,6 +230,46 @@ public class CarService {
                 LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
             }
             LOGGER.log(Level.ERROR,"Exception while creating car {}",e);
+        }
+        transactionManager.endTransaction();
+        return result;
+    }
+
+    public boolean isUniqueNumber(String number) {
+        TransactionManager transactionManager = new TransactionManager();
+        boolean result = false;
+        CarDAO carDAO = new DAOFactory().getCarDAO();
+        try {
+            transactionManager.beginTransaction(carDAO);
+            result = carDAO.isNumberExists(number);
+            transactionManager.commit();
+        } catch (DAOException e) {
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+            }
+            LOGGER.log(Level.ERROR,"Exception while checking car number {}",e);
+        }
+        transactionManager.endTransaction();
+        return result;
+    }
+
+    public boolean isUniqueNumberForUpdare(String number, int id) {
+        TransactionManager transactionManager = new TransactionManager();
+        boolean result = false;
+        CarDAO carDAO = new DAOFactory().getCarDAO();
+        try {
+            transactionManager.beginTransaction(carDAO);
+            result = carDAO.isNumberExistsForUpdate(number,id);
+            transactionManager.commit();
+        } catch (DAOException e) {
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+            }
+            LOGGER.log(Level.ERROR,"Exception while checking car number for update {}",e);
         }
         transactionManager.endTransaction();
         return result;

@@ -1,6 +1,6 @@
 package com.kutash.taxibuber.service;
 
-import com.kutash.taxibuber.crypter.Encryptor;
+import com.kutash.taxibuber.util.PasswordEncryptor;
 import com.kutash.taxibuber.dao.CommentDAO;
 import com.kutash.taxibuber.dao.DAOFactory;
 import com.kutash.taxibuber.dao.TransactionManager;
@@ -91,7 +91,7 @@ public class UserService {
         TransactionManager transactionManager = new TransactionManager();
         int result = 0;
         if (isUniqueEmail(user.getEmail())) {
-            user.setPassword(Encryptor.ecnryptPassword(user.getPassword(),user.getEmail()));
+            user.setPassword(new PasswordEncryptor(user.getEmail()).encrypt(user.getPassword()));
             UserDAO userDAO = new DAOFactory().getUserDAO();
             try {
                 transactionManager.beginTransaction(userDAO);

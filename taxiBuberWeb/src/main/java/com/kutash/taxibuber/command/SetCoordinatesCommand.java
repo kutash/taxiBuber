@@ -9,6 +9,8 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class SetCoordinatesCommand implements Command {
 
@@ -27,9 +29,11 @@ public class SetCoordinatesCommand implements Command {
         Router router = new Router();
         User user = (User) request.getSession().getAttribute("currentUser");
         Car car = carService.findByUserId(user.getId());
+        String latitude = new BigDecimal(request.getParameter(LATITUDE)).setScale(6, RoundingMode.UP).toString();
+        String longitude = new BigDecimal(request.getParameter(LONGITUDE)).setScale(6, RoundingMode.UP).toString();
         if (car != null) {
-            car.setLatitude(request.getParameter(LATITUDE));
-            car.setLongitude(request.getParameter(LONGITUDE));
+            car.setLatitude(latitude);
+            car.setLongitude(longitude);
             carService.updateCar(car);
         }
         router.setPage("Ok");

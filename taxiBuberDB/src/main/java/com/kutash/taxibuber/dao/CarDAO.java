@@ -36,6 +36,8 @@ public class CarDAO extends AbstractDAO<Car> {
     private static final String CREATE_CAR = "INSERT INTO car(registration_number,model,photo_path,is_available,latitude,longitude,id_brand,id_user,capacity) VALUES (?,?,?,?,?,?,?,?,?)";
     private static final String FIND_ALL_BRANDS = "SELECT id_brand,name FROM car_brand";
     private static final String FIND_BRAND_BY_ID = "SELECT id_brand,name FROM car_brand WHERE id_brand = ?";
+    private static final String IS_NUMBER_EXISTS = "SELECT registration_number FROM car WHERE registration_number = ?";
+    private static final String IS_NUMBER_EXISTS_FOR_UPDATE = "SELECT registration_number FROM car WHERE registration_number = ? AND id_car !=?";
 
     @Override
     public List<Car> findAll() throws DAOException {
@@ -176,6 +178,41 @@ public class CarDAO extends AbstractDAO<Car> {
             close(preparedStatement);
         }
         return car;
+    }
+
+    public boolean isNumberExists(String number) throws DAOException {
+        LOGGER.log(Level.INFO,"finding is number exists {}",number);
+        PreparedStatement preparedStatement = null;
+        boolean result;
+        try {
+            preparedStatement = getPreparedStatement(IS_NUMBER_EXISTS);
+            preparedStatement.setString(1,number);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            result = resultSet.next();
+        }catch (SQLException e){
+            throw new DAOException("Exception while finding is number unique {}",e);
+        }finally {
+            close(preparedStatement);
+        }
+        return !result;
+    }
+
+    public boolean isNumberExistsForUpdate(String number, int id) throws DAOException {
+        LOGGER.log(Level.INFO,"finding is number exists for updating car {} car id {}",number,id);
+        PreparedStatement preparedStatement = null;
+        boolean result;
+        try {
+            preparedStatement = getPreparedStatement(IS_NUMBER_EXISTS_FOR_UPDATE);
+            preparedStatement.setString(1,number);
+            preparedStatement.setInt(2,id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            result = resultSet.next();
+        }catch (SQLException e){
+            throw new DAOException("Exception while finding is number unique by car id {}",e);
+        }finally {
+            close(preparedStatement);
+        }
+        return !result;
     }
 
     public List<CarBrand> findAllBrands() throws DAOException {

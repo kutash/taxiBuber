@@ -6,9 +6,13 @@ import java.util.ResourceBundle;
 public class MessageManager {
 
     private ResourceBundle resourceBundle;
+    private String locale = "en_US";
 
     public MessageManager(String locale) {
-        String[] country = locale.split("_");
+        if (locale != null && !locale.isEmpty()){
+            this.locale = locale;
+        }
+        String[] country = this.locale.split("_");
         resourceBundle = ResourceBundle.getBundle("messages",new Locale(country[0],country[1]));
     }
 

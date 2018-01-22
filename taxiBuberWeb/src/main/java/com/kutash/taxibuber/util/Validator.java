@@ -25,7 +25,7 @@ public class Validator {
     private static final String EMAIL = "^([-._'a-z0-9])+(\\+)?([-._'a-z0-9])+@(?:[a-z0-9][-a-z0-9]+\\.)+[a-z]{2,6}$";
     private static final String PHONE = "^(\\s*)?(\\+)?([- _():=+]?\\d[- _():=+]?){10,14}(\\s*)?$";
     private static final String DATE = "(19|20)\\d\\d-((0[1-9]|1[012])-(0[1-9]|[12]\\d)|(0[13-9]|1[012])-30|(0[13578]|1[02])-31)";
-    private static final String NUMBER = "\\d{4}[A-Z]{2}-\\d{1}";
+    private static final String NUMBER = "\\d{4}[A-Z]{2}-\\d";
     private static final String MODEL = "^[а-яА-Яa-zA-Z0-9-\\s]{3,40}$";
     private static final String SPACE = "\\s";
     private static final String DIGIT = "\\d+";
@@ -128,15 +128,27 @@ public class Validator {
         String brand = data.get("brand");
         String capacity = data.get("capacity");
         Map<String, String> map = new HashMap<>();
+        CarService service = new CarService();
 
-        if (StringUtils.isNotEmpty(number)){
+        if (StringUtils.isNotEmpty(number)) {
             Matcher numberMatcher = patternNumber.matcher(number);
-            if (!numberMatcher.matches()){
+            if (!numberMatcher.matches()) {
                 map.put("number", messageManager.getProperty("label.errornumber"));
+            }else {
+                if(data.get("carId") != null){
+                    if (!service.isUniqueNumberForUpdare(number,Integer.parseInt(data.get("carId")))) {
+                        map.put("number", messageManager.getProperty("label.notuniquenumber"));
+                    }
+                }else {
+                    if (!service.isUniqueNumber(number)) {
+                        map.put("number", messageManager.getProperty("label.notuniquenumber"));
+                    }
+                }
             }
-        }else {
+        } else {
             map.put("numberBlank", messageManager.getProperty("label.blank"));
         }
+
         if (StringUtils.isNotEmpty(model)){
             Matcher modelMatcher = patternModel.matcher(model);
             if (!modelMatcher.matches()){
@@ -170,12 +182,10 @@ public class Validator {
         boolean result = false;
         Pattern patternDigit = Pattern.compile(DIGIT);
         if (StringUtils.isNotEmpty(brand)) {
-            System.out.println(brand+"++++++++++++++++++++++");
             String[] entity = brand.split(SPACE);
             Matcher digitMatcher = patternDigit.matcher(entity[0]);
-            if (digitMatcher.matches()) {
+            if (digitMatcher.matches() && entity.length == 2) {
                 CarBrand carBrand = new CarService().findBrandById(Integer.parseInt(entity[0]));
-                System.out.println(carBrand.getName());
                 if (carBrand.getName().equals(entity[1])) {
                     result = true;
                 }
