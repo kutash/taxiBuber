@@ -43,39 +43,20 @@ public class SaveUserCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"saving user");
-        Router router = new Router();
-        String name = request.getParameter(NAME);
-        String surname = request.getParameter(SURNAME);
-        String patronymic = request.getParameter(PATRONYMIC);
-        String role = request.getParameter(ROLE);
-        String email = request.getParameter(EMAIL);
-        String password = request.getParameter(PASSWORD);
-        String passwordConfirm = request.getParameter(PASSWORD_CONFIRM);
-        String birthday = request.getParameter(BIRTHDAY);
-        String phone = request.getParameter(PHONE);
         String language = (String) request.getSession().getAttribute(LANGUAGE);
+        Router router = new Router();
         User user;
-        Map<String,String> userData = new HashMap<>();
-        userData.put("name",name);
-        userData.put("surname",surname);
-        userData.put("patronymic",patronymic);
-        userData.put("role",role);
-        userData.put("email",email);
-        userData.put("password",password);
-        userData.put("passwordConfirm",passwordConfirm);
-        userData.put("birthday",birthday);
-        userData.put("phone",phone);
+        Map<String,String> userData = getData(request);
         Map<String,String> errors = userService.validateUser(userData,language);
         if (!errors.isEmpty()){
-            user = new User(name,surname,patronymic,email,password,phone);
-            request.setAttribute("birthday",birthday);
+            user = new User(userData.get("name"),userData.get("surname"),userData.get("patronymic"),userData.get("email"),userData.get("password"),userData.get("phone"));
+            request.setAttribute("birthday",userData.get("birthday"));
             request.setAttribute("user", user);
             request.setAttribute("errors", errors);
-            request.setAttribute("isErrors","true");
-            request.setAttribute("role",role);
+            request.setAttribute("isErrors",true);
             router.setPage(PageManager.getProperty("path.page.login"));
         }else {
-            user = new User(name,surname,patronymic,email,password,UserRole.valueOf(role),parseDate(birthday),phone);
+            user = new User(userData.get("name"),userData.get("surname"),userData.get("patronymic"),userData.get("email"),userData.get("password"),UserRole.valueOf(userData.get("role")),parseDate(userData.get("birthday")),userData.get("phone"));
             int id = userService.create(user);
             user.setId(id);
             String photoPath = savePhoto(id,request);
@@ -88,6 +69,20 @@ public class SaveUserCommand implements Command {
 
         }
         return router;
+    }
+
+    private HashMap<String,String> getData(HttpServletRequest request){
+        HashMap<String,String> userData = new HashMap<>();
+        userData.put("name",request.getParameter(NAME));
+        userData.put("surname",request.getParameter(SURNAME));
+        userData.put("patronymic",request.getParameter(PATRONYMIC));
+        userData.put("role",request.getParameter(ROLE));
+        userData.put("email",request.getParameter(EMAIL));
+        userData.put("password",request.getParameter(PASSWORD));
+        userData.put("passwordConfirm",request.getParameter(PASSWORD_CONFIRM));
+        userData.put("birthday",request.getParameter(BIRTHDAY));
+        userData.put("phone",request.getParameter(PHONE));
+        return userData;
     }
 
     private Date parseDate(String date){

@@ -6,18 +6,16 @@ import com.kutash.taxibuber.resource.MessageManager;
 import com.kutash.taxibuber.service.AddressService;
 import com.kutash.taxibuber.service.CarService;
 import com.kutash.taxibuber.service.TripService;
-import com.kutash.taxibuber.util.CostCalculator;
-import org.apache.commons.lang3.StringUtils;
+import com.kutash.taxibuber.util.Validator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 
 public class MakeOrderCommand implements Command {
 
@@ -46,83 +44,61 @@ public class MakeOrderCommand implements Command {
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"making order");
         Router router = new Router();
-        HttpSession session = request.getSession();
-        String distance = request.getParameter(DISTANCE);
-        LOGGER.log(Level.INFO,"distance");
-        String duration = request.getParameter(DURATION);
-        LOGGER.log(Level.INFO,"duration");
-        String capacity = request.getParameter(CAPACITY);
-        LOGGER.log(Level.INFO,"capacity");
-        String carId = request.getParameter(CAR_ID);
-        String cost = request.getParameter(COST);
-        LOGGER.log(Level.INFO,"cost");
         String language = (String) request.getSession().getAttribute(LANGUAGE);
-        String source = null;
-        String destination = null;
-        String durationText = null;
-        try {
-            source = new String(request.getParameter(SOURCE).getBytes("ISO-8859-1"),"UTF-8");
-            System.out.println("==============================="+source);
-            destination = new String(request.getParameter(DESTINATION).getBytes("ISO-8859-1"),"UTF-8");
-            durationText = new String(request.getParameter(DURATION_TEXT).getBytes("ISO-8859-1"),"UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            LOGGER.log(Level.ERROR,"Exception while decoding parameters",e);
-        }
         User user = (User) request.getSession().getAttribute("currentUser");
-        Car car;
-        float distanceNumber = Float.parseFloat(distance) / 1000;
-        if (StringUtils.isNotEmpty(carId)) {
-            System.out.println("not empty carId");
-            car = carService.findById(Integer.parseInt(carId));
-            if (StringUtils.isNotEmpty(source) && StringUtils.isNotEmpty(destination)) {
-                System.out.println("not empty source");
-                String result = new CostCalculator(carService).defineCost(distance, duration, capacity, carId);
-                if (result.equals(cost)) {
-                    System.out.println("equals cost");
-                    int sourceId = addressService.createAddress(source,user.getId());
-                    int destinationId = addressService.createAddress(destination,user.getId());
-                    car.setAvailable(false);
-                    carService.updateCar(car);
-                    Trip trip = new Trip(new BigDecimal(cost), new Date(), distanceNumber, Integer.parseInt(carId), sourceId, destinationId, TripStatus.ORDERED);
-                    tripService.createTrip(trip);
-                    session.setAttribute("orderMessage", new MessageManager(language).getProperty("message.ordersuccess"));
-                } else {
-                    System.out.println("not equals cost");
-                    request.getSession().setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
-                    session.setAttribute("car", car.getBrand().getName() + " " + car.getModel());
-                    session.setAttribute("carId", car.getId());
-                    session.setAttribute("cost", cost);
-                    session.setAttribute("durationText", durationText);
-                    session.setAttribute("duration", duration);
-                    session.setAttribute("distanceNumber", distanceNumber);
-                    session.setAttribute("distance", distance);
-                    session.setAttribute("source", source);
-                    session.setAttribute("destination", destination);
-                }
-            } else {
-                System.out.println("empty source");
-                session.setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
+        HttpSession session = request.getSession();
+        HashMap<String,String> data = getData(request);
+        float distanceNumber = Float.parseFloat(data.get("distance")) / 1000;
+        HashMap<String,String> errors = new Validator().validateOrder(data,language);
+        if (errors.isEmpty()){
+            int carId = Integer.parseInt(data.get("carId"));
+            Car car = carService.findById(carId);
+            int sourceId = addressService.createAddress(data.get("source"),user.getId());
+            int destinationId = addressService.createAddress(data.get("destination"),user.getId());
+            car.setAvailable(false);
+            carService.updateCar(car);
+            Trip trip = new Trip(new BigDecimal(data.get("cost")), new Date(), distanceNumber, carId, sourceId, destinationId, TripStatus.ORDERED);
+            tripService.createTrip(trip);
+            session.setAttribute("orderMessage", new MessageManager(language).getProperty("message.ordersuccess"));
+        }else {
+            if (!errors.containsKey("emptyCar")){
+                int carId = Integer.parseInt(data.get("carId"));
+                Car car = carService.findById(carId);
                 session.setAttribute("car", car.getBrand().getName() + " " + car.getModel());
                 session.setAttribute("carId", car.getId());
-                session.setAttribute("cost", cost);
-                session.setAttribute("durationText", durationText);
-                session.setAttribute("duration", duration);
-                session.setAttribute("distanceNumber", distanceNumber);
-                session.setAttribute("distance", distance);
             }
-        }else {
-            System.out.println("empty carId");
-            session.setAttribute("orderMessage", new MessageManager(language).getProperty("label.carerror"));
-            session.setAttribute("cost", cost);
-            session.setAttribute("durationText", durationText);
-            session.setAttribute("duration", duration);
+            request.getSession().setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
+            session.setAttribute("cost", data.get("cost"));
+            session.setAttribute("durationText", data.get("durationText"));
+            session.setAttribute("duration", data.get("duration"));
             session.setAttribute("distanceNumber", distanceNumber);
-            session.setAttribute("distance", distance);
-            session.setAttribute("source", source);
-            session.setAttribute("destination", destination);
+            session.setAttribute("distance", data.get("distance"));
+            session.setAttribute("source", data.get("source"));
+            session.setAttribute("destination", data.get("destination"));
         }
-        router.setPage("?command=order");
+        router.setPage("path.page.welcome");
         router.setRoute(Router.RouteType.REDIRECT);
         return router;
+    }
+
+    private HashMap<String,String> getData(HttpServletRequest request){
+        HashMap<String,String> data = new HashMap<>();
+        String distance = request.getParameter(DISTANCE);
+        String duration = request.getParameter(DURATION);
+        String capacity = request.getParameter(CAPACITY);
+        String carId = request.getParameter(CAR_ID);
+        String cost = request.getParameter(COST);
+        String source = request.getParameter(SOURCE);
+        String destination = request.getParameter(DESTINATION);
+        String durationText = request.getParameter(DURATION_TEXT);
+        data.put("distance",distance);
+        data.put("duration",duration);
+        data.put("capacity",capacity);
+        data.put("carId",carId);
+        data.put("cost",cost);
+        data.put("source",source);
+        data.put("destination",destination);
+        data.put("durationText",durationText);
+        return data;
     }
 }

@@ -7,7 +7,7 @@
 <html>
 <head>
     <title><fmt:message key="label.title"/></title>
-    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/app.css">
@@ -106,8 +106,8 @@
                                                 <input type="text" class="form-control" id="name" name="name" value="${user.name}" placeholder="Enter name"/>
                                                 <div style="display: none" id="error-name" class="err"><fmt:message key="label.errorname"/></div>
                                                 <div style="display: none" id="blank-name" class="err"><fmt:message key="label.blank"/></div>
-                                                <div class="err">${errors.name}</div>
-                                                <div class="err">${errors.nameBlank}</div>
+                                                <div class="err2">${errors.name}</div>
+                                                <div class="err2">${errors.nameBlank}</div>
                                             </div>
                                         </div>
                                         <div class="form-group required">
@@ -116,8 +116,8 @@
                                                 <input type="text" class="form-control" id="surname" name="surname" value="${user.surname}" placeholder="Enter surname"/>
                                                 <div style="display: none" id="error-surname" class="err"><fmt:message key="label.errorname"/></div>
                                                 <div style="display: none" id="blank-surname" class="err"><fmt:message key="label.blank"/></div>
-                                                <div class="err">${errors.surname}</div>
-                                                <div class="err">${errors.surnameBlank}</div>
+                                                <div class="err2">${errors.surname}</div>
+                                                <div class="err2">${errors.surnameBlank}</div>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -125,7 +125,7 @@
                                             <div class="col-sm-8">
                                                 <input type="text" class="form-control" id="patronymic" name="patronymic" value="${user.patronymic}" placeholder="Enter patronymic"/>
                                                 <div style="display: none" id="error-patronymic" class="err"><fmt:message key="label.errorname"/></div>
-                                                <div class="err">${errors.patronymic}</div>
+                                                <div class="err2">${errors.patronymic}</div>
                                             </div>
                                         </div>
                                         <div class="form-group required">
@@ -135,10 +135,10 @@
                                                 <div style="display: none" id="error-email" class="err"><fmt:message key="label.invalidemail"/></div>
                                                 <div style="display: none" id="email-blank" class="err"><fmt:message key="label.blank"/></div>
                                                 <div style="display: none" id="email-size" class="err"><fmt:message key="label.maxemail"/></div>
-                                                <div class="err">${errors.email}</div>
-                                                <div class="err">${errors.emailSize}</div>
-                                                <div class="err">${errors.emailBlank}</div>
-                                                <div class="err">${errors.notunique}</div>
+                                                <div class="err2">${errors.email}</div>
+                                                <div class="err2">${errors.emailSize}</div>
+                                                <div class="err2">${errors.emailBlank}</div>
+                                                <div class="err2">${errors.notunique}</div>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -146,30 +146,30 @@
                                             <div class="col-sm-8">
                                                 <input type="text" class="form-control" id="phone" name="phone" value="${user.phone}" placeholder="X(XXX)XXX-XX-XX">
                                                 <div style="display: none" id="error-phone" class="err"><fmt:message key="label.invalidphone"/></div>
-                                                <div class="err">${errors.phone}</div>
+                                                <div class="err2">${errors.phone}</div>
                                             </div>
                                         </div>
                                         <div class="form-group required">
                                             <label class="control-label col-sm-4" for="role"><fmt:message key="label.role"/>:</label>
                                             <div class="col-sm-8">
                                                 <select class="form-control" id="role" name="role">
-                                                    <c:if test="${role == 'DRIVER'}">
+                                                    <c:if test="${user.role == 'DRIVER'}">
                                                         <option value="">not chosen</option>
                                                         <option selected="selected" value="DRIVER">DRIVER</option>
                                                         <option value="CLIENT">CLIENT</option>
                                                     </c:if>
-                                                    <c:if test="${role == 'CLIENT'}">
+                                                    <c:if test="${user.role == 'CLIENT'}">
                                                         <option value="">not chosen</option>
                                                         <option value="DRIVER">DRIVER</option>
                                                         <option selected="selected" value="CLIENT">CLIENT</option>
                                                     </c:if>
-                                                    <c:if test="${role == null}">
+                                                    <c:if test="${user.role == null}">
                                                         <option value="" selected="selected">not chosen</option>
                                                         <option value="DRIVER">DRIVER</option>
                                                         <option value="CLIENT">CLIENT</option>
                                                     </c:if>
                                                 </select>
-                                                <div class="err">${errors.role}</div>
+                                                <div class="err2">${errors.role}</div>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -177,7 +177,7 @@
                                             <div class="col-sm-8">
                                                 <input type="text" class="form-control" id="birthday" name="birthday" value="${birthday}" placeholder="yyyy-mm-dd"/>
                                                 <div style="display: none" id="error-birthday" class="err"><fmt:message key="label.wrongdate"/></div>
-                                                <div class="err">${errors.date}</div>
+                                                <div class="err2">${errors.date}</div>
                                             </div>
                                         </div>
                                         <div class="form-group required" id="div-pwd">
@@ -186,8 +186,8 @@
                                                 <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
                                                 <div style="display: none" id="error-password" class="err"><fmt:message key="label.invalidpsw"/></div>
                                                 <div style="display: none" id="blank-password" class="err"><fmt:message key="label.blank"/></div>
-                                                <div class="err">${errors.password}</div>
-                                                <div class="err">${errors.passwordBlank}</div>
+                                                <div class="err2">${errors.password}</div>
+                                                <div class="err2">${errors.passwordBlank}</div>
                                             </div>
                                         </div>
                                         <div class="form-group required" id="div-pwd-repeat">
@@ -195,7 +195,7 @@
                                             <div class="col-sm-8">
                                                 <input type="password" class="form-control" id="repeat" name="repeat" placeholder="Confirm password">
                                                 <div style="display: none" id="repeat-password" class="err"><fmt:message key="label.notmatch"/></div>
-                                                <div class="err">${errors.passwordConfirm}</div>
+                                                <div class="err2">${errors.passwordConfirm}</div>
                                             </div>
                                         </div>
                                         <div class="form-group" id="save">

@@ -71,6 +71,12 @@ button.close {
     font-size: medium;
 }
 
+.err2 {
+    color: red;
+    margin-left: 0;
+    font-size: medium;
+}
+
 .error-input{
     border-color: red;
 }

@@ -1,11 +1,11 @@
 package com.kutash.taxibuber.service;
 
-import com.kutash.taxibuber.crypter.Encryptor;
 import com.kutash.taxibuber.dao.DAOFactory;
 import com.kutash.taxibuber.dao.TransactionManager;
 import com.kutash.taxibuber.dao.UserDAO;
 import com.kutash.taxibuber.entity.User;
 import com.kutash.taxibuber.exception.DAOException;
+import com.kutash.taxibuber.util.PasswordEncryptor;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +34,7 @@ public class LoginService {
         if (user == null){
             return user;
         }else {
-            String encryptedPassword = Encryptor.ecnryptPassword(password, email);
+            String encryptedPassword = new PasswordEncryptor(email).encrypt(password);
             LOGGER.log(Level.DEBUG,"password {}",encryptedPassword);
             if (encryptedPassword.equals(user.getPassword())) {
                 return user;

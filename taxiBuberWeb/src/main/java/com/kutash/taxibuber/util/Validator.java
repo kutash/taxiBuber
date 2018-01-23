@@ -166,6 +166,25 @@ public class Validator {
         return map;
     }
 
+    public HashMap<String,String> validateOrder(HashMap<String,String> data,String language){
+        HashMap<String, String> map = new HashMap<>();
+        MessageManager messageManager = new MessageManager(language);
+        if (StringUtils.isEmpty(data.get("carId"))){
+            map.put("emptyCar",messageManager.getProperty("label.emptyCar"));
+        }
+        if (StringUtils.isEmpty(data.get("source"))){
+            map.put("sourceError",messageManager.getProperty("label.sourceerror"));
+        }
+        if (StringUtils.isEmpty(data.get("destination"))){
+            map.put("destError",messageManager.getProperty("label.desterror"));
+        }
+        String result = new CostCalculator(new CarService()).defineCost(data.get("distance"), data.get("duration"), data.get("capacity"), data.get("carId"));
+        if (!result.equals(data.get("cost"))){
+            map.put("costError",messageManager.getProperty("label.costerror"));
+        }
+        return map;
+    }
+
     private boolean checkCapacity(String capacity) {
         boolean result = false;
         if (StringUtils.isNotEmpty(capacity)) {

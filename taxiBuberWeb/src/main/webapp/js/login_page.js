@@ -155,7 +155,7 @@ $(document).ready(function() {
     });
 
 
-    $('input#name, input#surname, input#email, input#patronymic, input#phone, input#birthday, input#password, input#repeat').on("keyup", function(){
+    /*$('input#name, input#surname, input#email, input#patronymic, input#phone, input#birthday, input#password, input#repeat').on("keyup", function(){
         var id = $(this).attr('id');
         var val = $(this).val();
         var rv_name = /^[a-zA-Zа-яА-Я]*[a-zA-Zа-яА-Я-\s]{3,44}$/;
@@ -316,7 +316,7 @@ $(document).ready(function() {
         $('#save-button').attr('disabled', 'disabled');
         $('#blah').attr('src','/controller?command=photo');
     });
-
+*/
 });
 
 function removeDisabled() {

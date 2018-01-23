@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.EnumSet;
 
-@WebFilter(urlPatterns = { "/controller" }, servletNames = { "Controller" })
+@WebFilter(filterName="filter4",urlPatterns = { "/controller" }, servletNames = { "Controller" })
 public class AdminSecurityFilter implements Filter {
 
     private static final Logger LOGGER = LogManager.getLogger();

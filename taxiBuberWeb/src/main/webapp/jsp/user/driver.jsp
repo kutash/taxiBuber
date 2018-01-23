@@ -222,7 +222,7 @@
                                         </div>
                                         <div class="form-group" id="save">
                                             <div class="col-sm-offset-2 col-sm-6">
-                                                <input type="submit" id="save-button" class="btn btn-primary" value="save" form="saveCarForm">
+                                                <button type="submit" id="save-button" class="btn btn-primary" form="saveCarForm"><i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button>
                                             </div>
                                         </div>
                                     </form>

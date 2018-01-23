@@ -43,86 +43,99 @@ public class SaveCarCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"saving car");
-        Router router = new Router();
-        HttpSession session = request.getSession();
-        Car car;
+        Router router;
+        String language = (String) request.getSession().getAttribute(LANGUAGE);
+        HashMap<String,String> carData = getData(request);
+        Map<String,String> errors = carService.validateCar(carData,language);
+        if (carData.containsKey("carId")){
+            router = updateCar(request,carData,errors,language);
+        }else {
+            router = createCar(request,carData,errors,language);
+        }
+        return router;
+    }
+
+    private HashMap<String,String> getData(HttpServletRequest request){
+        HashMap<String,String> carData = new HashMap<>();
         String number = request.getParameter(NUMBER);
         String model = request.getParameter(MODEL);
         String brand = request.getParameter(BRAND);
         String capacity = request.getParameter(CAPACITY);
         String carId = request.getParameter(CAR_ID);
-        String language = (String) session.getAttribute(LANGUAGE);
-        User user = (User) session.getAttribute(CURRENT_USER);
-        Map<String,String> carData = new HashMap<>();
+        if (StringUtils.isNotEmpty(carId) && Integer.parseInt(carId) != 0){
+            carData.put("carId",carId);
+        }
         carData.put("number",number);
         carData.put("model",model);
         carData.put("brand",brand);
         carData.put("capacity",capacity);
-        Map<String,String> errors;
-        if (StringUtils.isNotEmpty(carId)){
-            carData.put("carId",carId);
-            errors = carService.validateCar(carData,language);
-            int id = Integer.parseInt(carId);
-            Car carOld = carService.findById(id);
-            if(carOld != null) {
-                if (!errors.isEmpty()) {
-                    System.out.println("1");
-                    carOld.setModel(model);
-                    carOld.setRegistrationNumber(number);
-                    List<CarBrand> brands = carService.findAllBrands();
-                    request.setAttribute("brands",brands);
-                    request.setAttribute("errors",errors);
-                    request.setAttribute("car",carOld);
-                    request.setAttribute("isCar", true);
-                    router.setPage(PageManager.getProperty("path.page.driver"));
-                } else {
-                    System.out.println("2");
-                    String[] entityBrand = brand.split("\\s");
-                    CarBrand carBrand = new CarBrand(Integer.parseInt(entityBrand[0]), entityBrand[1]);
-                    carOld.setBrand(carBrand);
-                    carOld.setCapacity(Capacity.valueOf(capacity));
-                    carOld.setRegistrationNumber(number);
-                    carOld.setModel(model);
-                    String photoPath = savePhoto(user.getId(),request);
-                    if (StringUtils.isNotEmpty(photoPath)) {
-                        carOld.setPhotoPath(photoPath);
-                    }
-                    car = carService.updateCar(carOld);
-                    request.getSession().setAttribute("updateMessage",new MessageManager(language).getProperty("message.updatedcar"));
-                    router.setPage("/controller?command=main");
-                    router.setRoute(Router.RouteType.REDIRECT);
-                }
-            }else {
-                request.setAttribute("wrongAction",new MessageManager(language).getProperty("message.wrongid"));
-                router.setPage("path.page.error");
-            }
-        }else {
-            errors = carService.validateCar(carData,language);
-            if (!errors.isEmpty()) {
-                System.out.println("3");
-                car = new Car(number,model);
-                List<CarBrand> brands = carService.findAllBrands();
-                request.setAttribute("brands",brands);
-                request.setAttribute("errors",errors);
-                request.setAttribute("car", car);
-                request.setAttribute("isCar", true);
-                router.setPage(PageManager.getProperty("path.page.driver"));
-            } else {
-                System.out.println("4");
-                String photoPath = savePhoto(user.getId(),request);
-                String[] entityBrand = brand.split("\\s");
-                CarBrand carBrand = new CarBrand(Integer.parseInt(entityBrand[0]), entityBrand[1]);
-                car = new Car(number,Capacity.valueOf(capacity),model,photoPath,true,carBrand,user.getId());
-                carService.createCar(car);
-                request.getSession().setAttribute("createMessage",new MessageManager(language).getProperty("message.createdcar"));
-                router.setPage("/controller?command=main");
-                router.setRoute(Router.RouteType.REDIRECT);
-            }
+        return carData;
+    }
+
+    private Router createCar(HttpServletRequest request,Map<String,String> carData,Map<String,String> errors,String language) {
+        Car car;
+        Router router = new Router();
+        User user = (User) request.getSession().getAttribute(CURRENT_USER);
+        if (!errors.isEmpty()) {
+            car = new Car(carData.get("number"),carData.get("model"));
+            List<CarBrand> brands = carService.findAllBrands();
+            request.setAttribute("brands",brands);
+            request.setAttribute("errors",errors);
+            request.setAttribute("car", car);
+            request.setAttribute("isCar", true);
+            router.setPage(PageManager.getProperty("path.page.driver"));
+        } else {
+            String photoPath = savePhoto(request,user.getId());
+            String[] entityBrand = carData.get("brand").split("\\s");
+            CarBrand carBrand = new CarBrand(Integer.parseInt(entityBrand[0]), entityBrand[1]);
+            car = new Car(carData.get("number"),Capacity.valueOf(carData.get("capacity")),carData.get("model"),photoPath,true,carBrand,user.getId());
+            carService.createCar(car);
+            request.getSession().setAttribute("createMessage",new MessageManager(language).getProperty("message.createdcar"));
+            router.setPage("/controller?command=main");
+            router.setRoute(Router.RouteType.REDIRECT);
         }
         return router;
     }
 
-    private String savePhoto(int id,HttpServletRequest request) {
+    private Router updateCar(HttpServletRequest request,Map<String,String> carData,Map<String,String> errors,String language){
+        User user = (User) request.getSession().getAttribute(CURRENT_USER);
+        Router router = new Router();
+        int id = Integer.parseInt(carData.get("carId"));
+        Car carOld = carService.findById(id);
+        if(carOld != null) {
+            if (!errors.isEmpty()) {
+                carOld.setModel(carData.get("model"));
+                carOld.setRegistrationNumber(carData.get("number"));
+                List<CarBrand> brands = carService.findAllBrands();
+                request.setAttribute("brands",brands);
+                request.setAttribute("errors",errors);
+                request.setAttribute("car",carOld);
+                request.setAttribute("isCar", true);
+                router.setPage(PageManager.getProperty("path.page.driver"));
+            } else {
+                String[] entityBrand = carData.get("brand").split("\\s");
+                CarBrand carBrand = new CarBrand(Integer.parseInt(entityBrand[0]), entityBrand[1]);
+                carOld.setBrand(carBrand);
+                carOld.setCapacity(Capacity.valueOf(carData.get("capacity")));
+                carOld.setRegistrationNumber(carData.get("number"));
+                carOld.setModel(carData.get("model"));
+                String photoPath = savePhoto(request,user.getId());
+                if (StringUtils.isNotEmpty(photoPath)) {
+                    carOld.setPhotoPath(photoPath);
+                }
+                carService.updateCar(carOld);
+                request.getSession().setAttribute("updateMessage",new MessageManager(language).getProperty("message.updatedcar"));
+                router.setPage("/controller?command=main");
+                router.setRoute(Router.RouteType.REDIRECT);
+            }
+        }else {
+            request.setAttribute("wrongAction",new MessageManager(language).getProperty("message.wrongid"));
+            router.setPage("path.page.error");
+        }
+        return router;
+    }
+
+    private String savePhoto(HttpServletRequest request, int userId) {
         LOGGER.log(Level.INFO,"saving photo");
         Part photoPart = null;
         try {
@@ -130,6 +143,6 @@ public class SaveCarCommand implements Command {
         } catch (IOException | ServletException e) {
             LOGGER.log(Level.ERROR,"Exception while getting part",e);
         }
-        return new FileManager().savePhoto(photoPart,id,true);
+        return new FileManager().savePhoto(photoPart,userId,true);
     }
 }
