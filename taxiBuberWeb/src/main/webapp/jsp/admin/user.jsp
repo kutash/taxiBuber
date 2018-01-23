@@ -18,7 +18,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body>
-    <jsp:include page="header.jsp"/>
+    <jsp:include page="/jsp/user/header.jsp"/>
     <c:url var="switchLanguage" value="controller" scope="page">
         <c:param name="command" value="edit"/>
         <c:param name="userId" value="${user.id}"/>
@@ -31,7 +31,7 @@
                     <div>
                         <input type='file' id="imgInp" style="display: none"/>
                         <a href="javascript:{}" id="img">
-                            <img id="blah" src="${pageContext.request.contextPath}/controller?command=photo&amp;photo=${user.photoPath}" alt="your image" width="300" height="300"  />
+                            <img id="blah" src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${user.photoPath}&amp;userId=${user.id}" alt="your image" width="300" height="300"  />
                         </a>
                         <div class="rating">
                             <h1 id="rating">${user.rating}</h1>
@@ -43,35 +43,50 @@
                 </div>
                 <div class="col-sm-7 text-center">
                     <form class="form-horizontal" action="controller" method="post" enctype="multipart/form-data" id="saveUserForm">
-                        <input type="hidden" name="command" value="save_user">
+                        <input type="hidden" name="command" value="update_user">
+                        <input type="hidden" name="userId" value="${user.id}">
                         <div class="form-group">
                             <label class="control-label col-sm-3" for="name"><fmt:message key="label.name"/>:</label>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" id="name" name="name" value="${user.name}" placeholder="Enter name"/>
+                                <div style="display: none" id="error-name" class="err"><fmt:message key="label.errorname"/></div>
+                                <div style="display: none" id="blank-name" class="err"><fmt:message key="label.blank"/></div>
+                                <div class="err2">${errors.name}</div>
+                                <div class="err2">${errors.nameBlank}</div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-3" for="surname"><fmt:message key="label.surname"/>:</label>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" id="surname" name="surname" value="${user.surname}" placeholder="Enter surname"/>
+                                <div style="display: none" id="error-surname" class="err"><fmt:message key="label.errorname"/></div>
+                                <div style="display: none" id="blank-surname" class="err"><fmt:message key="label.blank"/></div>
+                                <div class="err2">${errors.surname}</div>
+                                <div class="err2">${errors.surnameBlank}</div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-3" for="patronymic"><fmt:message key="label.patronymic"/>:</label>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" id="patronymic" name="patronymic" value="${user.patronymic}" placeholder="Enter patronymic"/>
+                                <div style="display: none" id="error-patronymic" class="err"><fmt:message key="label.errorname"/></div>
+                                <div class="err2">${errors.patronymic}</div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-3" for="birthday"><fmt:message key="label.birthday"/>:</label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" id="birthday" name="birthday" value="${user.birthday}" placeholder="yyyy-mm-dd"/>
+                                <input type="text" class="form-control" id="birthday" name="birthday" value="${not empty birthday ? birthday : user.birthday}" placeholder="yyyy-mm-dd"/>
+                                <div style="display: none" id="error-birthday" class="err"><fmt:message key="label.wrongdate"/></div>
+                                <div class="err2">${errors.date}</div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-3" for="phone"><fmt:message key="label.phone"/>:</label>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" id="phone" name="phone" value="${user.phone}" placeholder="X(XXX)XXX-XX-XX">
+                                <div style="display: none" id="error-phone" class="err"><fmt:message key="label.invalidphone"/></div>
+                                <div class="err2">${errors.phone}</div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -96,11 +111,17 @@
                                         <option selected="selected" value="CLIENT">CLIENT</option>
                                     </c:if>
                                 </select>
+                                    <div class="err2">${errors.role}</div>
                             </div>
                         </div>
                         <div class="form-group" id="submit-button">
                             <div class="col-sm-offset-2 col-sm-6">
-                                <button type="submit" class="btn btn-default">Submit</button>
+                                <button type="submit" class="btn btn-default">Save</button>
+                            </div>
+                        </div>
+                        <div class="form-group" id="cancel-button">
+                            <div class="col-sm-offset-2 col-sm-6">
+                                <button type="submit" class="btn btn-danger">Cancel</button>
                             </div>
                         </div>
                     </form>
@@ -113,7 +134,7 @@
                         <c:forEach var="comment" items="${comments}">
                             <tr>
                                 <td class="col-md-3" style="padding-left: 50px">
-                                    <img src="${pageContext.request.contextPath}/controller?command=photo&amp;photo=${comment.reviewerPhoto}" width="70" height="70"  class="comment-photo"/>
+                                    <img src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${comment.reviewerPhoto}&amp;userId=${comment.reviewerId}" width="70" height="70"  class="comment-photo"/>
                                     <c:out value="${comment.reviewerName}"/><br>
                                         <c:out value="${comment.date}"/>
                                 </td>

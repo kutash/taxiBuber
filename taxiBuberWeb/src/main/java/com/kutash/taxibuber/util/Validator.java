@@ -107,12 +107,15 @@ public class Validator {
         }else {
             map.put("passwordBlank", messageManager.getProperty("label.blank"));
         }
-
-        if (!passwordConfirm.equals(password)) {
-            map.put("passwordConfirm", messageManager.getProperty("label.notmatch"));
+        if (StringUtils.isNotEmpty(passwordConfirm)) {
+            if (!passwordConfirm.equals(password)) {
+                map.put("passwordConfirm", messageManager.getProperty("label.notmatch"));
+            }
         }
-        if (!role.equals(UserRole.CLIENT.name()) && !role.equals(UserRole.DRIVER.name())){
-            map.put("role", messageManager.getProperty("label.roleerror"));
+        if (StringUtils.isNotEmpty(role)) {
+            if (!role.equals(UserRole.CLIENT.name()) && !role.equals(UserRole.DRIVER.name())) {
+                map.put("role", messageManager.getProperty("label.roleerror"));
+            }
         }
         return map;
     }

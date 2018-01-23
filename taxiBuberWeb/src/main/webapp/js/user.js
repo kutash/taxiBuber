@@ -1,8 +1,11 @@
 $(document).ready(function () {
     var userRole = $('.before-form').text();
-    if (userRole == 'ADMIN') {
-        $('input#name, input#surname, input#patronymic, input#email, input#birthday, input#phone, select#role').attr('disabled', true);
+    if (userRole === 'ADMIN') {
+        $('input#name, input#surname, input#patronymic, input#email, input#birthday, input#phone, select#role, input#imgInp').attr('disabled', true);
         $('div#submit-button').css('display','none');
+    }else if (userRole === 'DRIVER' || userRole === 'CLIENT'){
+        $('input#email').attr('disabled', true);
+        $('select#role').css('display','none');
     }
 
 });
@@ -22,17 +25,6 @@ $(document).ready(function () {
         previewFile(this);
     })
 });
-
-function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-
-        reader.onload = function(e) {
-            $('#blah').attr('src', e.target.result);
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
 
 function previewFile(input) {
     var preview = $('#blah');

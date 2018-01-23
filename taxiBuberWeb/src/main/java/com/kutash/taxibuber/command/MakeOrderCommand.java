@@ -83,7 +83,6 @@ public class MakeOrderCommand implements Command {
             request.setAttribute("destination", data.get("destination"));
         }
         router.setPage("controller?command=main");
-
         return router;
     }
 

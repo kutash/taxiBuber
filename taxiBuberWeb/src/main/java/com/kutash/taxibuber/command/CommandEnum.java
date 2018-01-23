@@ -20,7 +20,8 @@ public enum CommandEnum {
     COMPLETE_TRIP(new CompleteTripCommand(new TripService(),new CarService())),
     SAVE_USER(new SaveUserCommand(new UserService())),
     SET_COORDINATES(new SetCoordinatesCommand(new CarService())),
-    SAVE_CAR(new SaveCarCommand(new CarService()));
+    SAVE_CAR(new SaveCarCommand(new CarService())),
+    UPDATE_USER(new UpdateUserCommand(new UserService()));
 
     Command command;
 
