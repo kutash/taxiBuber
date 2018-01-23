@@ -28,8 +28,13 @@ public class MainCommand implements Command {
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"main command");
         Router router = new Router();
+        UserRole role;
         User user = (User) request.getSession().getAttribute("currentUser");
-        UserRole role = user.getRole();
+        if (user == null){
+            role = UserRole.UNKNOWN;
+        }else {
+            role = user.getRole();
+        }
         switch (role){
             case CLIENT:
                 List<Address> addresses = service.findAddresses(user.getId());
@@ -43,6 +48,9 @@ public class MainCommand implements Command {
                 request.setAttribute("car", car);
                 request.setAttribute("brands",brands);
                 router.setPage(PageManager.getProperty("path.page.driver"));
+                break;
+            case UNKNOWN:
+                router.setPage(PageManager.getProperty("path.page.login"));
                 break;
         }
         return router;

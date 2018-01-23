@@ -34,7 +34,6 @@ public class Controller extends HttpServlet {
 
     private void processRequest(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
         LOGGER.log(Level.INFO,"processRequest method");
-        System.out.println(request.getCharacterEncoding());
         CommandFactory client = new CommandFactory();
         Command command = client.defineCommand(request);
         Router router = command.execute(request,response);

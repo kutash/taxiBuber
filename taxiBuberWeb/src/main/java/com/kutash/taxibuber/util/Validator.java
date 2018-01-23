@@ -167,20 +167,26 @@ public class Validator {
     }
 
     public HashMap<String,String> validateOrder(HashMap<String,String> data,String language){
+        LOGGER.log(Level.INFO, "validating order");
         HashMap<String, String> map = new HashMap<>();
         MessageManager messageManager = new MessageManager(language);
         if (StringUtils.isEmpty(data.get("carId"))){
             map.put("emptyCar",messageManager.getProperty("label.emptyCar"));
+        }
+        if (StringUtils.isEmpty(data.get("duration")) || StringUtils.isEmpty(data.get("distance"))) {
+            map.put("distance", messageManager.getProperty("message.wrongorder"));
+        }else {
+            String result = new CostCalculator(new CarService()).defineCost(data.get("distance"), data.get("duration"), data.get("capacity"), data.get("carId"));
+            if (!result.equals(data.get("cost"))){
+                data.put("cost",result);
+                map.put("costError",messageManager.getProperty("message.wrongorder"));
+            }
         }
         if (StringUtils.isEmpty(data.get("source"))){
             map.put("sourceError",messageManager.getProperty("label.sourceerror"));
         }
         if (StringUtils.isEmpty(data.get("destination"))){
             map.put("destError",messageManager.getProperty("label.desterror"));
-        }
-        String result = new CostCalculator(new CarService()).defineCost(data.get("distance"), data.get("duration"), data.get("capacity"), data.get("carId"));
-        if (!result.equals(data.get("cost"))){
-            map.put("costError",messageManager.getProperty("label.costerror"));
         }
         return map;
     }

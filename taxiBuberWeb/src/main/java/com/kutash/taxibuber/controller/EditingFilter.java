@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.EnumSet;
 
-@WebFilter(filterName="filter5",urlPatterns = { "/controller" }, servletNames = { "Controller" })
+@WebFilter(urlPatterns = { "/controller" }, servletNames = { "Controller" })
 public class EditingFilter implements Filter {
 
     private static final Logger LOGGER = LogManager.getLogger();

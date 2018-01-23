@@ -12,6 +12,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="../../css/app.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}css/fontawesome-free-5.0.4/web-fonts-with-css/css/fontawesome-all.css">
         <script type="text/javascript" src="../../js/order.js"></script>
         <script src="../../js/jquery.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -25,6 +26,13 @@
         </c:url>
         <form action="${switchLanguage}" method="post" id="l"></form>
         <div class="container">
+            <div class="alert alert-info alert-dismissable fade in" id="no-cars" style="display: none">
+                <a href="#" class="close" id="alert" aria-label="close">&times;</a>
+                <div id="message-cars">
+                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                    <span style="font-size: 20px"><fmt:message key="label.emptyCar"/></span>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-sm-4 text-center">
                     <form class="form-horizontal" id="order-form" action="controller" method="post" onsubmit="return false">
@@ -33,6 +41,7 @@
                             <label class="control-label col-sm-3" for="start"><fmt:message key="label.source"/>:</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" id="start" name="start" required="required" value="<c:out value="${source}"/>"/>
+                                <div class="err">${errors.sourceError}</div>
                             </div>
                             <div style="display: none; margin-left: -44px" id="source-error" class="err"><fmt:message key="label.sourceerror"/></div>
                         </div>
@@ -51,6 +60,7 @@
                                     </div><!-- /btn-group -->
                                 </div>
                             </div>
+                            <div class="err">${errors.destError}</div>
                             <div style="display: none; margin-left: -44px" id="dest-error" class="err"><fmt:message key="label.desterror"/></div>
                         </div>
                         <div class="form-group">
@@ -58,6 +68,7 @@
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" id="car" placeholder="<fmt:message key="label.choosecar"/>" readonly value="<c:out value="${car}"/>"/>
                                 <input type="hidden" id="carId" name="carId" value="${carId}">
+                                <div class="err">${errors.emptyCar}</div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -81,6 +92,8 @@
                         <span class="label-span" style="margin-left: -26px"><fmt:message key="label.distance"/>:</span><span class="info-span" id="distance"><c:out value="${distanceNumber}"/></span> <span class="label-span"><fmt:message key="label.kilometers"/></span><br>
                         <span class="label-span"><fmt:message key="label.duration"/>:</span><span id="duration" class="info-span"><c:out value="${durationText}"/></span><span class="label-span"></span><br>
                         <span class="label-span" style="margin-left: -29px"><fmt:message key="label.cost"/>:</span><span id="cost" class="info-span"><c:out value="${cost}"/></span> <span class="label-span"><fmt:message key="label.currency"/></span>
+                        <div class="err">${errors.costError}</div>
+                        <div class="err">${errors.distanceError}</div>
                     </div>
                     <div class="form-group" id="order">
                         <div class="col-sm-offset-3 col-sm-6" style="margin-top: 20px">
@@ -97,7 +110,7 @@
             <div class="footer-content">&copy; 2017.EPAM Systems Taxi Buber</div>
         </div>
         <!-- Modal driver-->
-        <div id="myModal" class="modal fade hide" role="dialog">
+        <div id="myModal" class="modal fade" role="dialog">
             <div class="modal-dialog modal-lg">
                 <!-- Modal content-->
                 <div class="modal-content">

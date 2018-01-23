@@ -48,9 +48,10 @@ public class MakeOrderCommand implements Command {
         User user = (User) request.getSession().getAttribute("currentUser");
         HttpSession session = request.getSession();
         HashMap<String,String> data = getData(request);
-        float distanceNumber = Float.parseFloat(data.get("distance")) / 1000;
+        float distanceNumber = 0.0f;
         HashMap<String,String> errors = new Validator().validateOrder(data,language);
         if (errors.isEmpty()){
+            distanceNumber = Float.parseFloat(data.get("distance")) / 1000;
             int carId = Integer.parseInt(data.get("carId"));
             Car car = carService.findById(carId);
             int sourceId = addressService.createAddress(data.get("source"),user.getId());
@@ -60,24 +61,29 @@ public class MakeOrderCommand implements Command {
             Trip trip = new Trip(new BigDecimal(data.get("cost")), new Date(), distanceNumber, carId, sourceId, destinationId, TripStatus.ORDERED);
             tripService.createTrip(trip);
             session.setAttribute("orderMessage", new MessageManager(language).getProperty("message.ordersuccess"));
+            router.setRoute(Router.RouteType.REDIRECT);
         }else {
+            System.out.println(errors);
             if (!errors.containsKey("emptyCar")){
                 int carId = Integer.parseInt(data.get("carId"));
                 Car car = carService.findById(carId);
                 session.setAttribute("car", car.getBrand().getName() + " " + car.getModel());
                 session.setAttribute("carId", car.getId());
+            }if (!errors.containsKey("distance")){
+                distanceNumber = Float.parseFloat(data.get("distance")) / 1000;
             }
-            request.getSession().setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
-            session.setAttribute("cost", data.get("cost"));
-            session.setAttribute("durationText", data.get("durationText"));
-            session.setAttribute("duration", data.get("duration"));
-            session.setAttribute("distanceNumber", distanceNumber);
-            session.setAttribute("distance", data.get("distance"));
-            session.setAttribute("source", data.get("source"));
-            session.setAttribute("destination", data.get("destination"));
+            request.setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
+            request.setAttribute("errors",errors);
+            request.setAttribute("cost", data.get("cost"));
+            request.setAttribute("durationText", data.get("durationText"));
+            request.setAttribute("duration", data.get("duration"));
+            request.setAttribute("distanceNumber", distanceNumber);
+            request.setAttribute("distance", data.get("distance"));
+            request.setAttribute("source", data.get("source"));
+            request.setAttribute("destination", data.get("destination"));
         }
-        router.setPage("path.page.welcome");
-        router.setRoute(Router.RouteType.REDIRECT);
+        router.setPage("controller?command=main");
+
         return router;
     }
 

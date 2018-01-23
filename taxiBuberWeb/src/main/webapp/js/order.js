@@ -8,12 +8,16 @@ window.onload = function () {
         })
     }
 
+    document.getElementById('alert').addEventListener('click',function () {
+        document.getElementById('no-cars').style.display = 'none';
+    });
+
     document.getElementById('order-button').addEventListener('click', function (event) {
         event.preventDefault();
         var start = document.getElementById('start').value;
         var end = document.getElementById('end').value;
         var carId = document.getElementById('carId').value;
-        if (start === '' || end === ''  || carId === ''){
+        /*if (start === '' || end === ''  || carId === ''){
             var modalMessage = $('#modal-message');
             if(start === ''){
                 document.getElementById('message-source').style.display = 'block';
@@ -32,9 +36,9 @@ window.onload = function () {
                 document.getElementById('message-car').style.display = 'none';
             }, 2000);
 
-        }else {
+        }else {*/
             document.getElementById('order-form').submit();
-        }
+        //}
     });
 
     var message = document.getElementById('order-message').innerHTML;
@@ -239,46 +243,49 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 }
 
 function getAvailableCars() {
+    var infoWindowCars = new google.maps.InfoWindow({map: map});
+
     var bodyType = document.getElementById('body-type').value;
     $.ajax({
         type:"GET",
         url: "ajaxController?command=free_cars&latitude="+latitude+"&longitude="+longitude+"&bodyType="+bodyType,
         contentType: 'application/json'
     }).done(function(results){
+
         if (results.length === 0){
             deleteMarkers();
-            var infoWindow = new google.maps.InfoWindow({map: map});
             var pos = {
                 lat: latitude,
                 lng: longitude
             };
-            infoWindow.setPosition(pos);
-            infoWindow.setContent('В данный момент нет машин по вашему запросу. Попробуйте изменить запрос или повторите его через несколько минут');
-        }
-        minDistance = 0;
-
-        for (var i = 0; i < results.length; i++) {
-            deleteMarkers();
-            setMarkers(results[i]);
-        }
-        distances.sort(function compareNumeric(a, b) {
-            return a - b;
-        });
-        if (changeZoom) {
-            if (distances[0] > 5000) {
-                map.setZoom(12);
-            } else if (distances[0] > 7000) {
-                map.setZoom(11);
-            } else if (distances[0] > 10000) {
-                map.setZoom(10);
-            }else if (distances[0] > 20000) {
-                map.setZoom(8);
+            document.getElementById('no-cars').style.display = 'block';
+        }else {
+            document.getElementById('no-cars').style.display = 'none';
+            minDistance = 0;
+            for (var i = 0; i < results.length; i++) {
+                deleteMarkers();
+                setMarkers(results[i]);
+            }
+            distances.sort(function compareNumeric(a, b) {
+                return a - b;
+            });
+            if (changeZoom) {
+                if (distances[0] > 5000) {
+                    map.setZoom(12);
+                } else if (distances[0] > 7000) {
+                    map.setZoom(11);
+                } else if (distances[0] > 10000) {
+                    map.setZoom(10);
+                } else if (distances[0] > 20000) {
+                    map.setZoom(8);
+                }
             }
         }
         distances = [];
     }).fail(function(xhr, textStatus, error){
         console.log(xhr);
     });
+
 }
 
 function setMarkers(result) {
@@ -317,7 +324,7 @@ function setMarkers(result) {
             }
             distances.push(distanceVal);
             var duration = response.rows[0].elements[0].duration.text;
-            contentString = '<div>'+brand+' '+model+'</div><div><img src="ajaxController?command=photo&amp;photo='+photo+'&amp;userId='+id+'" width="70px" height="70px"/></div><div>Driver:<a data-toggle="modal" data-target="#myModal" href="" onclick="show('+id+')">'+driver+'</a><br/>Расстояние:'+distance+'<br/>Время подачи машины:'+duration+'</div>';
+            contentString = '<div><i class="fa fa-car fa-2x" aria-hidden="true"></i></div><div>'+brand+' '+model+'</div><div><img src="ajaxController?command=photo&amp;photo='+photo+'&amp;userId='+id+'" width="70px" height="70px"/></div><div>Driver:<a data-toggle="modal" data-target="#myModal" href="" onclick="show('+id+')">'+driver+'</a><br/>Расстояние:'+distance+'<br/>Время подачи машины:'+duration+'</div>';
         } else {
             contentString = '<div>Can not define distance</div><div>'+brand+' '+model+'</div><div><a href="#">Выбрать</a></div>';
         }
