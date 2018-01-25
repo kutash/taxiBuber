@@ -2,8 +2,6 @@ package com.kutash.taxibuber.controller;
 
 import com.kutash.taxibuber.command.Command;
 import com.kutash.taxibuber.command.CommandFactory;
-import com.kutash.taxibuber.resource.MessageManager;
-import com.kutash.taxibuber.resource.PageManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,18 +35,11 @@ public class Controller extends HttpServlet {
         CommandFactory client = new CommandFactory();
         Command command = client.defineCommand(request);
         Router router = command.execute(request,response);
-        if (router != null) {
-            if (router.getRoute().equals(Router.RouteType.FORWARD)) {
-                RequestDispatcher dispatcher = request.getRequestDispatcher(router.getPage());
-                dispatcher.forward(request, response);
-            }else {
-                response.sendRedirect(request.getContextPath() + router.getPage());
-            }
+        if (router.getRoute().equals(Router.RouteType.FORWARD)) {
+            RequestDispatcher dispatcher = request.getRequestDispatcher(router.getPage());
+            dispatcher.forward(request, response);
         }else {
-            String page = PageManager.getProperty("path.page.error");
-            String language = (String) request.getSession().getAttribute("language");
-            request.getSession().setAttribute("nullPage", new MessageManager(language).getProperty("message.nullpage"));
-            response.sendRedirect(request.getContextPath() + page);
+            response.sendRedirect(request.getContextPath() + router.getPage());
         }
     }
 }

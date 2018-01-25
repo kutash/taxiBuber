@@ -49,7 +49,7 @@
                         <h4 style="font-size: 35px;"><span class="glyphicon glyphicon-lock" style="font-size: 35px;"></span><fmt:message key="label.enter"/></h4>
                     </div>
                     <div class="modal-body" style="padding:40px 50px;">
-                        <form role="form" id="jform" action="controller" method="post" data-toggle="validator">
+                        <form role="form" id="jform" action="controller" method="post">
                             <input type="hidden" name="command"  value="login">
                             <div class="error" id="error-login">${errorLoginPassMessage}</div>
                             <div class="form-group">
@@ -200,7 +200,7 @@
                                         </div>
                                         <div class="form-group" id="save">
                                             <div class="col-sm-offset-2 col-sm-6">
-                                                <input type="submit" id="save-button" class="btn btn-primary" value="save" form="saveUserForm">
+                                                <input type="submit" id="save-button" class="btn btn-primary" value="<fmt:message key="button.save" />" form="saveUserForm">
                                             </div>
                                         </div>
                                     </form>
@@ -209,7 +209,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default cancel-signup" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-default cancel-signup" data-dismiss="modal"><fmt:message key="button.cancel" /></button>
                     </div>
                 </div>
             </div>

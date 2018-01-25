@@ -6,7 +6,6 @@ $(document).ready(function () {
 
     var modalMessage = $('#modal-message2');
     var update = $('#message-update');
-    console.log(update.text());
     if (update.text() !== ''){
         modalMessage.modal('show');
         update.css('display', 'block');
@@ -25,6 +24,12 @@ $(document).ready(function () {
             create.css('display', 'none');
         }, 2000);
     }
+
+    ($('.err2').each(function () {
+        if($(this).text() !== ''){
+            $(this).parent().children('.form-control').addClass('error-input');
+        }
+    }));
 
     $("#blah").click(function() {
         $("#imgInp").click();
@@ -104,7 +109,7 @@ $(document).ready(function () {
         $('#save-button').attr('disabled', 'disabled');
         var photoPath = $('#car-photo').val();
         var id = $('#user-id').val();
-        $('#blah').attr('src','/controller?command=photo&photo='+photoPath+'&userId='+id);
+        $('#blah').attr('src','/ajaxController?command=photo&photo='+photoPath+'&userId='+id);
     });
 
 });

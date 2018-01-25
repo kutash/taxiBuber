@@ -59,7 +59,7 @@
             </div>
         </nav>
         <c:url var="switchLanguage" value="controller" scope="page">
-            <c:param name="command" value="order"/>
+            <c:param name="command" value="main"/>
         </c:url>
         <form action="${switchLanguage}" method="post" id="l"></form>
         <div class="container">
@@ -161,9 +161,9 @@
                                                 <input type="text" class="form-control" id="number" name="number" value="${car.registrationNumber}" placeholder="0000XX-0"/>
                                                 <div style="display: none" id="error-number" class="err"><fmt:message key="label.errornumber"/></div>
                                                 <div style="display: none" id="blank-number" class="err"><fmt:message key="label.blank"/></div>
-                                                <div class="err">${errors.number}</div>
-                                                <div class="err">${errors.numberBlank}</div>
-                                                <div class="err">${errors.notuniquenumber}</div>
+                                                <div class="err2">${errors.number}</div>
+                                                <div class="err2">${errors.numberBlank}</div>
+                                                <div class="err2">${errors.notuniquenumber}</div>
                                             </div>
                                         </div>
                                         <div class="form-group required">
@@ -172,8 +172,8 @@
                                                 <input type="text" class="form-control" id="model" name="model" value="${car.model}" placeholder="<fmt:message key="label.entermodel"/>"/>
                                                 <div style="display: none" id="error-model" class="err"><fmt:message key="label.errormodel"/></div>
                                                 <div style="display: none" id="blank-model" class="err"><fmt:message key="label.blank"/></div>
-                                                <div class="err">${errors.model}</div>
-                                                <div class="err">${errors.modelBlank}</div>
+                                                <div class="err2">${errors.model}</div>
+                                                <div class="err2">${errors.modelBlank}</div>
                                             </div>
                                         </div>
                                         <div class="form-group required">
@@ -185,7 +185,7 @@
                                                         <option value="${brand.id} ${brand.name}" ${brand.id == car.brand.id ? 'selected="selected"' : ''}>${brand.name}</option>
                                                     </c:forEach>
                                                 </select>
-                                                <div class="err">${errors.brand}</div>
+                                                <div class="err2">${errors.brand}</div>
                                             </div>
                                         </div>
                                         <div class="form-group required">
@@ -217,12 +217,12 @@
                                                         <option value="MINIBUS"><fmt:message key="label.minibus"/></option>
                                                     </c:if>
                                                 </select>
-                                                <div class="err">${errors.capacity}</div>
+                                                <div class="err2">${errors.capacity}</div>
                                             </div>
                                         </div>
                                         <div class="form-group" id="save">
                                             <div class="col-sm-offset-2 col-sm-6">
-                                                <button type="submit" id="save-button" class="btn btn-primary" form="saveCarForm"><i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button>
+                                                <button type="submit" id="save-button" class="btn btn-primary" form="saveCarForm"><fmt:message key="button.save"/></button>
                                             </div>
                                         </div>
                                     </form>
@@ -230,7 +230,7 @@
                             </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default cancel-car" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-default cancel-car" data-dismiss="modal"><fmt:message key="button.cancel"/></button>
                     </div>
                 </div>
             </div>

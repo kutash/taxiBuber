@@ -34,7 +34,7 @@ public class AjaxController extends HttpServlet {
         CommandFactory client = new CommandFactory();
         Command command = client.defineCommand(request);
         Router router = command.execute(request,response);
-        if (router != null) {
+            if (router != null) {
             response.setContentType("application/json");
             response.getWriter().write(router.getPage());
         }/*else {

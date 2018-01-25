@@ -42,8 +42,6 @@ public class Validator {
         String name = data.get("name");
         String surname = data.get("surname");
         String patronymic = data.get("patronymic");
-        String email = data.get("email");
-        String password = data.get("password");
         String phone = data.get("phone");
         String birthday = data.get("birthday");
         String role = data.get("role");
@@ -78,20 +76,23 @@ public class Validator {
                 map.put("date", messageManager.getProperty("label.wrongdate"));
             }
         }
-        if (StringUtils.isNotEmpty(email)) {
-            if(new UserService().isUniqueEmail(email)) {
-                Matcher emailMatcher = patternEmail.matcher(email);
-                if (!emailMatcher.matches()) {
-                    map.put("email", messageManager.getProperty("label.invalidemail"));
+        if (data.containsKey("email")) {
+            String email = data.get("email");
+            if (StringUtils.isNotEmpty(email)) {
+                if (new UserService().isUniqueEmail(email)) {
+                    Matcher emailMatcher = patternEmail.matcher(email);
+                    if (!emailMatcher.matches()) {
+                        map.put("email", messageManager.getProperty("label.invalidemail"));
+                    }
+                    if (email.toCharArray().length > 90) {
+                        map.put("emailSize", messageManager.getProperty("label.maxemail"));
+                    }
+                } else {
+                    map.put("notunique", messageManager.getProperty("label.notunique"));
                 }
-                if (email.toCharArray().length > 90) {
-                    map.put("emailSize", messageManager.getProperty("label.maxemail"));
-                }
-            }else {
-                map.put("notunique", messageManager.getProperty("label.notunique"));
+            } else {
+                map.put("emailBlank", messageManager.getProperty("label.blank"));
             }
-        }else {
-            map.put("emailBlank", messageManager.getProperty("label.blank"));
         }
         if (StringUtils.isNotEmpty(phone)) {
             Matcher phoneMatcher = patternPhone.matcher(phone);
@@ -99,22 +100,42 @@ public class Validator {
                 map.put("phone", messageManager.getProperty("label.invalidphone"));
             }
         }
-        if (StringUtils.isNotEmpty(password)) {
-            Matcher passwordMatcher = patternPassword.matcher(password);
-            if (!passwordMatcher.matches()) {
-                map.put("password", messageManager.getProperty("label.invalidpsw"));
+        if (data.containsKey("password")) {
+            String password = data.get("password");
+            if (StringUtils.isNotEmpty(password)) {
+                Matcher passwordMatcher = patternPassword.matcher(password);
+                if (!passwordMatcher.matches()) {
+                    map.put("password", messageManager.getProperty("label.invalidpsw"));
+                }
+            } else {
+                map.put("passwordBlank", messageManager.getProperty("label.blank"));
             }
-        }else {
-            map.put("passwordBlank", messageManager.getProperty("label.blank"));
-        }
-        if (StringUtils.isNotEmpty(passwordConfirm)) {
-            if (!passwordConfirm.equals(password)) {
-                map.put("passwordConfirm", messageManager.getProperty("label.notmatch"));
+            if (StringUtils.isNotEmpty(passwordConfirm)) {
+                if (!passwordConfirm.equals(password)) {
+                    map.put("passwordConfirm", messageManager.getProperty("label.notmatch"));
+                }
             }
         }
         if (StringUtils.isNotEmpty(role)) {
             if (!role.equals(UserRole.CLIENT.name()) && !role.equals(UserRole.DRIVER.name())) {
                 map.put("role", messageManager.getProperty("label.roleerror"));
+            }
+        }
+        return map;
+    }
+
+    public Map<String,String> checkPassword(String password,String passwordConfirm,String language){
+        LOGGER.log(Level.INFO,"validating user");
+        MessageManager messageManager = new MessageManager(language);
+        Pattern patternPassword = Pattern.compile(PASSWORD);
+        Map<String, String> map = new HashMap<>();
+        Matcher passwordMatcher = patternPassword.matcher(password);
+        if (StringUtils.isEmpty(password) || !passwordMatcher.matches()) {
+            map.put("password", messageManager.getProperty("label.invalidpsw"));
+        }
+        if (StringUtils.isNotEmpty(passwordConfirm)) {
+            if (!passwordConfirm.equals(password)) {
+                map.put("passwordConfirm", messageManager.getProperty("label.notmatch"));
             }
         }
         return map;

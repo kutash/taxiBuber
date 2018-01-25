@@ -40,12 +40,11 @@ $(document).ready(function () {
         $('#modal-signup').modal('show');
     }
 
-    setTimeout(function(){
-        $('#jform').trigger( 'reset' );
-        $('#saveUserForm').trigger( 'reset' );
-        $('.err').css('display', 'none');
-        $('input[type=text], input[type=email], input[type=password]').removeClass('error-input not-error');
-    }, 2000);
+    ($('.err2').each(function () {
+            if($(this).text() !== ''){
+                $(this).parent().children('.form-control').addClass('error-input');
+            }
+    }));
 
 });
 
@@ -155,7 +154,7 @@ $(document).ready(function() {
     });
 
 
-    /*$('input#name, input#surname, input#email, input#patronymic, input#phone, input#birthday, input#password, input#repeat').on("keyup", function(){
+    $('input#name, input#surname, input#email, input#patronymic, input#phone, input#birthday, input#password, input#repeat').on("keyup", function(){
         var id = $(this).attr('id');
         var val = $(this).val();
         var rv_name = /^[a-zA-Zа-яА-Я]*[a-zA-Zа-яА-Я-\s]{3,44}$/;
@@ -314,9 +313,8 @@ $(document).ready(function() {
         $('.err').css('display', 'none');
         $('input[type=text], input[type=email], input[type=password]').removeClass('error-input not-error');
         $('#save-button').attr('disabled', 'disabled');
-        $('#blah').attr('src','/controller?command=photo');
+        $('#blah').attr('src','/ajaxController?command=photo');
     });
-*/
 });
 
 function removeDisabled() {

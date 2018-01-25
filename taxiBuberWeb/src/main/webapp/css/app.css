@@ -277,3 +277,12 @@ h4 {
     margin-top: 0;
     margin-left: 31%;
 }
+
+#cancel-button {
+    margin-left: 50px;
+}
+
+#change-psw{
+    font-size: 20px;
+    margin-right: 325px;
+}

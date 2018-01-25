@@ -1,5 +1,6 @@
 package com.kutash.taxibuber.service;
 
+import com.kutash.taxibuber.resource.MessageManager;
 import com.kutash.taxibuber.util.PasswordEncryptor;
 import com.kutash.taxibuber.dao.CommentDAO;
 import com.kutash.taxibuber.dao.DAOFactory;
@@ -12,6 +13,8 @@ import com.kutash.taxibuber.util.Validator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -149,6 +152,17 @@ public class UserService {
         }
         transactionManager.endTransaction();
         return result;
+    }
+
+    public Map<String,String> checkPassword(User user, String oldPassword,String password,String passwordConfirm,String language){
+        String encryptedPassword = new PasswordEncryptor(user.getEmail()).encrypt(oldPassword);
+        Map<String, String> errors = new HashMap<>();
+        if (user.getPassword().equals(encryptedPassword)) {
+            errors = new Validator().checkPassword(password, passwordConfirm, language);
+        }else {
+            errors.put("wrongPassword",new MessageManager(language).getProperty("label.wrongpassword"));
+        }
+        return errors;
     }
 
     public List<Comment> findComments(int userId) {

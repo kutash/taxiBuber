@@ -20,7 +20,6 @@
             <li class="active"><a href="controller?command=show_users"><fmt:message key="label.users"/></a></li>
             <li><a href="controller?command=show_cars"><fmt:message key="label.cars"/></a></li>
             <li><a href="#"><fmt:message key="label.trips"/></a></li>
-            <li><a href="#"><fmt:message key="label.email"/></a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li>

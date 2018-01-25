@@ -76,9 +76,24 @@ public class UpdateUserCommand implements Command {
                 }
                 userService.updateUser(user);
                 router.setRoute(Router.RouteType.REDIRECT);
-                router.setPage("/controller?command=main");
+                router.setPage("controller?command=edit&userId="+user.getId());
             }
         }
+        /*StringBuffer switchLanguage = request.getRequestURL();
+        switchLanguage.append("?");
+        Map<String, String[]> parameters = request.getParameterMap();
+        for (Map.Entry entry: parameters.entrySet()) {
+            String key = (String) entry.getKey();
+            if (!key.equals("language")) {
+                String[] value = (String[]) entry.getValue();
+                switchLanguage.append(key);
+                switchLanguage.append("=");
+                switchLanguage.append(value[0]);
+                switchLanguage.append("&");
+            }
+        }
+        switchLanguage.delete(switchLanguage.length()-1,switchLanguage.length());
+        request.getSession().setAttribute("switchLanguage2",switchLanguage);*/
         return router;
     }
 
@@ -89,6 +104,12 @@ public class UpdateUserCommand implements Command {
         userData.put("patronymic",request.getParameter(PATRONYMIC));
         userData.put("birthday",request.getParameter(BIRTHDAY));
         userData.put("phone",request.getParameter(PHONE));
+        /*Map<String, String[]> parameters = request.getParameterMap();
+        for (Map.Entry entry: parameters.entrySet()) {
+            String key = (String) entry.getKey();
+            String[] value = (String[]) entry.getValue();
+            userData.put(key,value[0]);
+        }*/
         return userData;
     }
 
