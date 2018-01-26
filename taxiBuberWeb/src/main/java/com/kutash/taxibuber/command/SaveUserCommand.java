@@ -1,6 +1,7 @@
 package com.kutash.taxibuber.command;
 
 import com.kutash.taxibuber.controller.Router;
+import com.kutash.taxibuber.entity.Status;
 import com.kutash.taxibuber.entity.User;
 import com.kutash.taxibuber.entity.UserRole;
 import com.kutash.taxibuber.resource.PageManager;
@@ -57,7 +58,7 @@ public class SaveUserCommand implements Command {
             request.setAttribute("isErrors",true);
             router.setPage(PageManager.getProperty("path.page.login"));
         }else {
-            user = new User(userData.get("name"),userData.get("surname"),userData.get("patronymic"),userData.get("email"),userData.get("password"),UserRole.valueOf(userData.get("role")), DateParser.parseDate(userData.get("birthday")),userData.get("phone"));
+            user = new User(userData.get("name"),userData.get("surname"),userData.get("patronymic"),userData.get("email"),userData.get("password"),UserRole.valueOf(userData.get("role")), DateParser.parseDate(userData.get("birthday")),userData.get("phone"), Status.ACTIVE);
             int id = userService.create(user);
             user.setId(id);
             String photoPath = savePhoto(id,request);

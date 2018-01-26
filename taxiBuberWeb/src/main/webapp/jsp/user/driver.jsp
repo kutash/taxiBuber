@@ -21,43 +21,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
     </head>
     <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="${home}"><span class="glyphicon glyphicon-home"></span> <fmt:message key="label.title"/></a>
-                </div>
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="controller?command=main"><fmt:message key="label.order"/></a></li>
-                    <li>
-                        <c:url var="edit" value="controller">
-                            <c:param name="command" value="edit"/>
-                            <c:param name="userId" value="${currentUser.id}"/>
-                        </c:url>
-                        <a href="${edit}"><fmt:message key="label.profile"/></a>
-                    </li>
-                    <li><a href="#"><fmt:message key="label.trips"/></a></li>
-                    <li><a href="#" data-toggle="modal" data-target="#modal-car"><fmt:message key="label.car"/></a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <span class="user-name">${currentUser.name}</span>
-                        <img src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${currentUser.photoPath}&amp;userId=${currentUser.id}"  id="header-photo" width="30px" height="30px"/>
-                    </li>
-                    <li>
-                        <c:url var="logout" value="controller">
-                            <c:param name="command" value="logout"/>
-                        </c:url>
-                        <a href="${logout}"><span class="glyphicon glyphicon-log-out"></span> <fmt:message key="label.logout"/></a>
-                    </li>
-                    <li class="lang">
-                        <select id="language" name="language" onchange="submit()" class="selectpicker show-tick" data-width="100px" form="l">
-                            <option value="en_US" ${language == 'en_US' ? 'selected' : ''}>English</option>
-                            <option value="ru_RU" ${language == 'ru_RU' ? 'selected' : ''}>Русский</option>
-                        </select>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+        <jsp:include page="/jsp/user/driver_header.jsp"/>
         <c:url var="switchLanguage" value="controller" scope="page">
             <c:param name="command" value="main"/>
         </c:url>
@@ -115,22 +79,8 @@
                 </div>
             </div>
         </div>
-        <!-- Modal message-->
-        <div class="modal fade" id="modal-message2" role="dialog">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content modal-message">
-                    <div class="modal-body modal-message-body">
-                        <div class="form-group">
-                            <div class="col-sm-offset-3 col-sm-6" style="margin-top: 20px">
-                                <div id="message-update" style="display: none">${updateMessage}</div>
-                                <div id="message-create" style="display: none">${createMessage}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Modal car-->
+
+        <%--<!-- Modal car-->
         <div class="modal fade" id="modal-car" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -234,6 +184,8 @@
                     </div>
                 </div>
             </div>
+        </div>--%>
+        <jsp:include page="/jsp/user/modal_car.jsp"/>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWwujQHc9yN2BSlbT_L0-L7VLlQAYnUUg&libraries=places&callback=initMap"></script>
     </body>
 </html>

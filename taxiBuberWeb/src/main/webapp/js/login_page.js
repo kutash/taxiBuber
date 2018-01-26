@@ -311,6 +311,7 @@ $(document).ready(function() {
     $('.cancel-signup').on('click',function () {
         $('#saveUserForm').trigger( 'reset' );
         $('.err').css('display', 'none');
+        $('.err2').css('display', 'none');
         $('input[type=text], input[type=email], input[type=password]').removeClass('error-input not-error');
         $('#save-button').attr('disabled', 'disabled');
         $('#blah').attr('src','/ajaxController?command=photo');

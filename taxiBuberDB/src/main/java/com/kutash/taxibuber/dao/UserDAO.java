@@ -1,5 +1,6 @@
 package com.kutash.taxibuber.dao;
 
+import com.kutash.taxibuber.entity.Status;
 import com.kutash.taxibuber.entity.User;
 import com.kutash.taxibuber.entity.UserRole;
 import com.kutash.taxibuber.exception.DAOException;
@@ -13,12 +14,12 @@ import java.util.List;
 public class UserDAO extends AbstractDAO<User> {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String FIND_ALL_USERS = "SELECT id_user,role,email,password,rating,`name`,surname,patronymic,birthday,photo_path,phone FROM user";
-    private static final String FIND_USER_BY_ID = "SELECT id_user,role,email,password,rating,`name`,surname,patronymic,birthday,photo_path,phone FROM user WHERE id_user = ?";
+    private static final String FIND_ALL_USERS = "SELECT id_user,role,email,password,rating,`name`,surname,patronymic,birthday,photo_path,phone,status FROM user WHERE status != 'ARCHIVED'";
+    private static final String FIND_USER_BY_ID = "SELECT id_user,role,email,password,rating,`name`,surname,patronymic,birthday,photo_path,phone,status FROM user WHERE id_user = ?";
     private static final String DELETE_USER_BY_ID = "DELETE FROM user WHERE id_user = ?";
-    private static final String CREATE_USER = "INSERT INTO user(name,surname,patronymic,birthday,email,role,password,rating,photo_path,phone) VALUES (?,?,?,?,?,?,?,?,?,?)";
-    private static final String UPDATE_USER = "UPDATE user  SET name=?,surname=?,patronymic=?,birthday=?,email=?,role=?,password=?,rating=?,photo_path=?,phone=? WHERE id_user=?";
-    private static final String FIND_USER_BY_EMAIL = "SELECT id_user,role,email,password,rating,`name`,surname,patronymic,birthday,photo_path,phone FROM user WHERE email = ?";
+    private static final String CREATE_USER = "INSERT INTO user(name,surname,patronymic,birthday,email,role,password,rating,photo_path,phone,status) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String UPDATE_USER = "UPDATE user  SET name=?,surname=?,patronymic=?,birthday=?,email=?,role=?,password=?,rating=?,photo_path=?,phone=?,status=? WHERE id_user=?";
+    private static final String FIND_USER_BY_EMAIL = "SELECT id_user,role,email,password,rating,`name`,surname,patronymic,birthday,photo_path,phone,status FROM user WHERE email = ?";
     private static final String IS_EMAIL_EXISTS = "SELECT email FROM user WHERE email = ?";
 
     @Override
@@ -106,7 +107,7 @@ public class UserDAO extends AbstractDAO<User> {
         try {
             preparedStatement = getPreparedStatement(UPDATE_USER);
             preparedStatement = setUserValues(preparedStatement,entity);
-            preparedStatement.setInt(11,entity.getId());
+            preparedStatement.setInt(12,entity.getId());
             preparedStatement.executeUpdate();
         }catch (SQLException e){
             throw new DAOException("Exception while updating user",e);
@@ -166,7 +167,8 @@ public class UserDAO extends AbstractDAO<User> {
             String photoPath = resultSet.getString("photo_path");
             String phone = resultSet.getString("phone");
             float rating = resultSet.getFloat("rating");
-            user = new User(idUser, rating, firstName, lastName, middleName, email, password, role, birthday, photoPath,phone);
+            Status status = Status.valueOf(resultSet.getString("status"));
+            user = new User(idUser, rating, firstName, lastName, middleName, email, password, role, birthday, photoPath,phone,status);
         }catch (SQLException e){
             throw new DAOException("Exception while getting user from resultSet",e);
         }
@@ -184,11 +186,12 @@ public class UserDAO extends AbstractDAO<User> {
                 preparedStatement.setDate(4, new java.sql.Date(entity.getBirthday().getTime()));
             }
             preparedStatement.setString(5, entity.getEmail());
-            preparedStatement.setString(6, String.valueOf(entity.getRole()));
+            preparedStatement.setString(6, entity.getRole().name());
             preparedStatement.setString(7, entity.getPassword());
             preparedStatement.setFloat(8, entity.getRating());
             preparedStatement.setString(9, entity.getPhotoPath());
             preparedStatement.setString(10, entity.getPhone());
+            preparedStatement.setString(11,entity.getStatus().name());
         }catch (SQLException e){
             throw new DAOException("Exception while set values to prepareStatement",e);
         }

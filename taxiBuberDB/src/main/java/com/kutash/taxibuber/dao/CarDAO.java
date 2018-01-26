@@ -3,6 +3,7 @@ package com.kutash.taxibuber.dao;
 import com.kutash.taxibuber.entity.Capacity;
 import com.kutash.taxibuber.entity.Car;
 import com.kutash.taxibuber.entity.CarBrand;
+import com.kutash.taxibuber.entity.Status;
 import com.kutash.taxibuber.exception.DAOException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -17,23 +18,23 @@ import java.util.List;
 public class CarDAO extends AbstractDAO<Car> {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String FIND_ALL_CARS = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,\n" +
+    private static final String FIND_ALL_CARS = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,c.status,\n" +
             "cb.id_brand,cb.`name`,concat(u.name,' ',u.surname) AS driver_name FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand\n" +
-            "INNER JOIN user AS u ON c.id_user = u.id_user";
-    private static final String FIND_ALL_AVAILABLE = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,\n" +
+            "INNER JOIN user AS u ON c.id_user = u.id_user WHERE c.status != 'ARCHIVED'";
+    private static final String FIND_ALL_AVAILABLE = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,c.status,\n" +
             "cb.id_brand,cb.`name`,concat(u.name,' ',u.surname) AS driver_name FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand\n" +
-            "INNER JOIN user AS u ON c.id_user = u.id_user WHERE is_available=TRUE";
-    private static final String FIND_AVAILABLE_BY_BODY_TYPE = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,\n" +
+            "INNER JOIN user AS u ON c.id_user = u.id_user WHERE c.status ='ACTIVE' AND is_available=TRUE";
+    private static final String FIND_AVAILABLE_BY_BODY_TYPE = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,c.status,\n" +
             "cb.id_brand,cb.`name`,concat(u.name,' ',u.surname) AS driver_name FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand\n" +
-            "INNER JOIN user AS u ON c.id_user = u.id_user WHERE is_available=TRUE AND capacity=?";
-    private static final String FIND_CAR_BY_ID = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,\n" +
+            "INNER JOIN user AS u ON c.id_user = u.id_user WHERE c.status ='ACTIVE' AND is_available=TRUE AND capacity=?";
+    private static final String FIND_CAR_BY_ID = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,c.status,\n" +
             "cb.id_brand,cb.`name`,concat(u.name,' ',u.surname) AS driver_name FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand\n" +
             "INNER JOIN user AS u ON c.id_user = u.id_user WHERE id_car = ?";
-    private static final String UPDATE_CAR = "UPDATE car SET registration_number=?,model=?,photo_path=?,is_available=?,latitude=?,longitude=?,id_brand=?,id_user=?,capacity=? WHERE id_car=?";
-    private static final String FIND_CAR_BY_USER_ID = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,\n" +
+    private static final String UPDATE_CAR = "UPDATE car SET registration_number=?,model=?,photo_path=?,is_available=?,latitude=?,longitude=?,id_brand=?,id_user=?,capacity=?,status=? WHERE id_car=?";
+    private static final String FIND_CAR_BY_USER_ID = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,c.status,\n" +
             "cb.id_brand,cb.`name`,concat(u.name,' ',u.surname) AS driver_name FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand\n" +
             "INNER JOIN user AS u ON c.id_user = u.id_user WHERE c.id_user = ?";
-    private static final String CREATE_CAR = "INSERT INTO car(registration_number,model,photo_path,is_available,latitude,longitude,id_brand,id_user,capacity) VALUES (?,?,?,?,?,?,?,?,?)";
+    private static final String CREATE_CAR = "INSERT INTO car(registration_number,model,photo_path,is_available,latitude,longitude,id_brand,id_user,capacity,status) VALUES (?,?,?,?,?,?,?,?,?,?)";
     private static final String FIND_ALL_BRANDS = "SELECT id_brand,name FROM car_brand";
     private static final String FIND_BRAND_BY_ID = "SELECT id_brand,name FROM car_brand WHERE id_brand = ?";
     private static final String IS_NUMBER_EXISTS = "SELECT registration_number FROM car WHERE registration_number = ?";
@@ -151,7 +152,7 @@ public class CarDAO extends AbstractDAO<Car> {
         try {
             preparedStatement = getPreparedStatement(UPDATE_CAR);
             preparedStatement = setCarValues(preparedStatement,entity);
-            preparedStatement.setInt(10,entity.getId());
+            preparedStatement.setInt(11,entity.getId());
             preparedStatement.executeUpdate();
         }catch (SQLException e){
             throw new DAOException("Exception while updating car",e);
@@ -263,7 +264,8 @@ public class CarDAO extends AbstractDAO<Car> {
             preparedStatement.setString(6, entity.getLongitude());
             preparedStatement.setInt(7, entity.getBrand().getId());
             preparedStatement.setInt(8, entity.getUserId());
-            preparedStatement.setString(9, String.valueOf(entity.getCapacity()));
+            preparedStatement.setString(9, entity.getCapacity().name());
+            preparedStatement.setString(10,entity.getStatus().name());
         }catch (SQLException e){
             throw new DAOException("Exception while set values to prepareStatement",e);
         }
@@ -283,8 +285,9 @@ public class CarDAO extends AbstractDAO<Car> {
             String longitude = resultSet.getString("longitude");
             int idUser = resultSet.getInt("id_user");
             String driverName = resultSet.getString("driver_name");
+            Status status = Status.valueOf(resultSet.getString("status"));
             CarBrand carBrand = new CarBrand(resultSet.getInt("id_brand"),resultSet.getString("name"));
-            car = new Car(idCar,number,capacity,model,photo,isAvailable,latitude,longitude,carBrand,idUser,driverName);
+            car = new Car(idCar,number,capacity,model,photo,isAvailable,latitude,longitude,carBrand,idUser,driverName,status);
         }catch (SQLException e){
             throw new DAOException("Exception while getting car from resultSet",e);
         }

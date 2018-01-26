@@ -9,13 +9,12 @@ $(document).ready(function () {
     if (update.text() !== ''){
         modalMessage.modal('show');
         update.css('display', 'block');
-        setTimeout(function(){
+        /*setTimeout(function(){
             modalMessage.modal("hide");
             update.css('display', 'none');
-        }, 2000);
+        }, 2000);*/
     }
     var create = $('#message-create');
-    console.log(create.text());
     if (create.text() !== ''){
         modalMessage.modal('show');
         create.css('display', 'block');
@@ -31,10 +30,10 @@ $(document).ready(function () {
         }
     }));
 
-    $("#blah").click(function() {
-        $("#imgInp").click();
+    $("#car-img").click(function() {
+        $("#file-car").click();
     });
-    $('#imgInp').change(function () {
+    $('#file-car').change(function () {
         previewFile(this);
     });
 
@@ -109,13 +108,13 @@ $(document).ready(function () {
         $('#save-button').attr('disabled', 'disabled');
         var photoPath = $('#car-photo').val();
         var id = $('#user-id').val();
-        $('#blah').attr('src','/ajaxController?command=photo&photo='+photoPath+'&userId='+id);
+        $('#car-img').attr('src','/ajaxController?command=photo&photo='+photoPath+'&userId='+id);
     });
 
 });
 
 function previewFile(input) {
-    var preview = $('#blah');
+    var preview = $('#car-img');
     var file    = input.files[0];
     var reader  = new FileReader();
 

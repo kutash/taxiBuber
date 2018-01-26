@@ -6,14 +6,15 @@ import java.util.ResourceBundle;
 public class MessageManager {
 
     private ResourceBundle resourceBundle;
-    private String locale = "en_US";
 
     public MessageManager(String locale) {
-        if (locale != null && !locale.isEmpty()){
-            this.locale = locale;
+        String[] country = locale.split("_");
+        if (country.length == 2) {
+            resourceBundle = ResourceBundle.getBundle("messages", new Locale(country[0], country[1]));
+        } else {
+            System.out.println(locale);
+            resourceBundle = ResourceBundle.getBundle("messages",new Locale(locale));
         }
-        String[] country = this.locale.split("_");
-        resourceBundle = ResourceBundle.getBundle("messages",new Locale(country[0],country[1]));
     }
 
     public String getProperty(String key) {

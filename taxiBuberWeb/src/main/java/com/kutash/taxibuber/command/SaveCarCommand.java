@@ -1,10 +1,7 @@
 package com.kutash.taxibuber.command;
 
 import com.kutash.taxibuber.controller.Router;
-import com.kutash.taxibuber.entity.Capacity;
-import com.kutash.taxibuber.entity.Car;
-import com.kutash.taxibuber.entity.CarBrand;
-import com.kutash.taxibuber.entity.User;
+import com.kutash.taxibuber.entity.*;
 import com.kutash.taxibuber.resource.MessageManager;
 import com.kutash.taxibuber.resource.PageManager;
 import com.kutash.taxibuber.service.CarService;
@@ -83,17 +80,17 @@ public class SaveCarCommand implements Command {
             request.setAttribute("errors",errors);
             request.setAttribute("car", car);
             request.setAttribute("isCar", true);
-            router.setPage(PageManager.getProperty("path.page.driver"));
         } else {
             String photoPath = savePhoto(request,user.getId());
             String[] entityBrand = carData.get("brand").split("\\s");
             CarBrand carBrand = new CarBrand(Integer.parseInt(entityBrand[0]), entityBrand[1]);
-            car = new Car(carData.get("number"),Capacity.valueOf(carData.get("capacity")),carData.get("model"),photoPath,true,carBrand,user.getId());
+            car = new Car(carData.get("number"),Capacity.valueOf(carData.get("capacity")),carData.get("model"),photoPath,false,carBrand,user.getId(), Status.ACTIVE);
             carService.createCar(car);
             request.getSession().setAttribute("createMessage",new MessageManager(language).getProperty("message.createdcar"));
-            router.setPage("/controller?command=main");
+            request.getSession().setAttribute("isCar", false);
             router.setRoute(Router.RouteType.REDIRECT);
         }
+        router.setPage("/controller?command=main");
         return router;
     }
 

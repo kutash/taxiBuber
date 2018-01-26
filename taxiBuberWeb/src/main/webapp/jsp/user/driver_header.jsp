@@ -1,9 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ctg" uri="/WEB-INF/tld/custom.tld" %>
 <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale.toString()}" scope="session" />
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="${pageContext.request.contextPath}/messages"/>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title><fmt:message key="label.title"/></title>
@@ -18,7 +20,7 @@
             <a class="navbar-brand" href="${home}"><span class="glyphicon glyphicon-home"></span> <fmt:message key="label.title"/></a>
         </div>
         <ul class="nav navbar-nav">
-            <li class="active"><a href="controller?command=main"><fmt:message key="label.order"/></a></li>
+            <li><a href="controller?command=main"><fmt:message key="label.order"/></a></li>
             <li>
                 <c:url var="edit" value="controller">
                     <c:param name="command" value="edit"/>
@@ -27,6 +29,7 @@
                 <a href="${edit}"><fmt:message key="label.profile"/></a>
             </li>
             <li><a href="#"><fmt:message key="label.trips"/></a></li>
+            <li><a href="#" data-toggle="modal" data-target="#modal-car"><fmt:message key="label.car"/></a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li>
@@ -40,7 +43,7 @@
                 <a href="${logout}"><span class="glyphicon glyphicon-log-out"></span> <fmt:message key="label.logout"/></a>
             </li>
             <li class="lang">
-                <select id="language" name="language" onchange="submit()" class="selectpicker show-tick" data-width="95px">
+                <select id="language" name="language" onchange="submit()" class="selectpicker show-tick" data-width="fit">
                     <option data-content='<span class="flag-icon flag-icon-us"></span> En' value="en" ${language == 'en' ? 'selected' : ''}>En</option>
                     <option data-content='<span class="flag-icon flag-icon-ru"></span> Ru' value="ru_RU" ${language == 'ru_RU' ? 'selected' : ''}>Ru</option>
                 </select>

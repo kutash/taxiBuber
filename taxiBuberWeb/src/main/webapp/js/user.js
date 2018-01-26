@@ -1,14 +1,8 @@
 $(document).ready(function () {
     var userRole = $('.before-form').text();
     if (userRole === 'ADMIN') {
-        $('input#name, input#surname, input#patronymic, input#email, input#birthday, input#phone, select#role, input#imgInp').attr('disabled', true);
-        $('div#save-button').css('display','none');
-        $('div#cancel-button').css('display','none');
-        $('input#name, input#surname').removeClass('required')
-    }else if (userRole === 'DRIVER' || userRole === 'CLIENT'){
-        $('input#email').attr('disabled', true);
-        $('select#role').css('display','none');
-        $('#label-role').css('display','none');
+        $('div.form-group').removeClass('required');
+        console.log($('.required'))
     }
 
     ($('.err2').each(function () {
@@ -16,6 +10,19 @@ $(document).ready(function () {
             $(this).parent().children('.form-control').addClass('error-input');
         }
     }));
+
+    if ($('#update-password').text() !== ''){
+        var modalMessage = $('#modal-message');
+        modalMessage.modal('show');
+        setTimeout(function(){
+            modalMessage.modal("hide");
+        }, 2000);
+    }
+
+    if ($('#is-password').val() === 'true'){
+        var modalPassword = $('#myModal');
+        modalPassword.modal('show');
+    }
 
     $('input#name, input#surname, input#patronymic, input#phone, input#birthday').on("keyup", function(){
         var id = $(this).attr('id');
@@ -112,6 +119,72 @@ $(document).ready(function () {
         $('#blah').attr('src','/ajaxController?command=photo&photo='+photoPath+'&userId='+id);
     });
 
+    $('input#password, input#repeat, input#old-password').on("keyup", function(){
+        var id = $(this).attr('id');
+        var val = $(this).val();
+        var rv_psw = /^[а-яА-Яa-zA-Z0-9_-]{6,40}$/;
+
+        switch(id) {
+            case 'old-password':
+                if (val === '') {
+                    $('#change-password').attr('disabled', 'disabled');
+                    $(this).removeClass('not-error').addClass('error-input');
+                    $('#error-old').css('display', 'none');
+                    $('#blank-old').css('display', 'block');
+                } else if (!rv_psw.test(val)) {
+                    $('#change-password').attr('disabled', 'disabled');
+                    $(this).removeClass('not-error').addClass('error-input');
+                    $('#error-old').css('display', 'block');
+                    $('#blank-old').css('display', 'none');
+                } else {
+                    $(this).removeClass('error-input').addClass('not-error');
+                    $('#error-old').css('display', 'none');
+                    $('#blank-old').css('display', 'none');
+                    removeDisabledPassw();
+                }
+                break;
+
+            case 'password':
+                if (val === '') {
+                    $('#change-password').attr('disabled', 'disabled');
+                    $(this).removeClass('not-error').addClass('error-input');
+                    $('#error-password').css('display', 'none');
+                    $('#blank-password').css('display', 'block');
+                } else if (!rv_psw.test(val)) {
+                    $('#change-password').attr('disabled', 'disabled');
+                    $(this).removeClass('not-error').addClass('error-input');
+                    $('#error-password').css('display', 'block');
+                    $('#blank-password').css('display', 'none');
+                } else {
+                    $(this).removeClass('error-input').addClass('not-error');
+                    $('#error-password').css('display', 'none');
+                    $('#blank-password').css('display', 'none');
+                    removeDisabledPassw();
+                }
+                break;
+
+            case 'repeat':
+                if (val !== $('#password').val()) {
+                    $('#change-password').attr('disabled', 'disabled');
+                    $(this).removeClass('not-error').addClass('error-input');
+                    $('#repeat-password').css('display', 'block');
+                } else {
+                    $(this).removeClass('error-input').addClass('not-error');
+                    $('#repeat-password').css('display', 'none');
+                    removeDisabledPassw();
+                }
+                break;
+        }
+    });
+
+    $('.cancel').on('click',function () {
+        $('#changePasswordForm').trigger( 'reset' );
+        $('.err').css('display', 'none');
+        $('.err2').css('display', 'none');
+        $('input[type=password]').removeClass('error-input not-error');
+        $('#change-password').attr('disabled', 'disabled');
+    });
+
 
 });
 
@@ -151,6 +224,26 @@ function removeDisabled() {
     if ($('.error-input').length === 0 && $('input#name').val() !=='' && $('input#surname').val() !=='' ){
         $('#save-button').removeAttr('disabled');
     }
+}
+
+function removeDisabledPassw() {
+    if ($('.error-input').length === 0 && $('input#old-password').val() !=='' && $('input#password').val() !=='' && $('input#repeat').val() !==''){
+        $('#change-password').removeAttr('disabled');
+    }
+}
+
+function deleteA(id) {
+    console.log(id);
+    $('#'+id).remove();
+    $.ajax({
+        type:"POST",
+        url: "ajaxController?command=delete_address&addressId="+id,
+        contentType: 'application/json'
+    }).done(function(result){
+        console.log(result);
+
+    })
+
 }
 
 

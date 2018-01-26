@@ -15,9 +15,10 @@ public class User extends AbstractEntity {
     private Date birthday;
     private String photoPath;
     private String phone;
+    private Status status;
     private List<Comment> comments;
 
-    public User(String name, String surname, String patronymic, String email, String password, UserRole role, Date birthday, String phone) {
+    public User(String name, String surname, String patronymic, String email, String password, UserRole role, Date birthday, String phone,Status status) {
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
@@ -26,6 +27,7 @@ public class User extends AbstractEntity {
         this.role = role;
         this.birthday = birthday;
         this.phone = phone;
+        this.status = status;
     }
 
     public User(String name, String surname, String patronymic, String email, String password,String phone) {
@@ -37,7 +39,7 @@ public class User extends AbstractEntity {
         this.phone = phone;
     }
 
-    public User(int id, float rating, String name, String surname, String patronymic, String email, String password, UserRole role, Date birthday, String photoPath, String phone) {
+    public User(int id, float rating, String name, String surname, String patronymic, String email, String password, UserRole role, Date birthday, String photoPath, String phone,Status status) {
         super(id);
         this.rating = rating;
         this.name = name;
@@ -49,6 +51,7 @@ public class User extends AbstractEntity {
         this.birthday = birthday;
         this.photoPath = photoPath;
         this.phone = phone;
+        this.status = status;
     }
 
     public float getRating() {
@@ -131,8 +134,12 @@ public class User extends AbstractEntity {
         this.phone = phone;
     }
 
-    public String getFullName(){
-        return surname+" "+name+" "+patronymic;
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public List<Comment> getComments() {
@@ -142,4 +149,9 @@ public class User extends AbstractEntity {
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
+
+    public String getFullName(){
+        return surname+" "+name+" "+patronymic;
+    }
+
 }

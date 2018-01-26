@@ -4,6 +4,7 @@ import com.kutash.taxibuber.dao.AddressDAO;
 import com.kutash.taxibuber.dao.DAOFactory;
 import com.kutash.taxibuber.dao.TransactionManager;
 import com.kutash.taxibuber.entity.Address;
+import com.kutash.taxibuber.entity.Status;
 import com.kutash.taxibuber.exception.DAOException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -49,7 +50,7 @@ public class AddressService {
             AddressDAO addressDAO = new DAOFactory().getAddressDAO();
             try {
                 transactionManager.beginTransaction(addressDAO);
-                result = addressDAO.create(new Address(newAddress,userId));
+                result = addressDAO.create(new Address(newAddress,userId, Status.ACTIVE));
                 transactionManager.commit();
             } catch (DAOException e) {
                 try {
@@ -80,6 +81,27 @@ public class AddressService {
                 LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
             }
             LOGGER.log(Level.ERROR,"Exception while finding address by id {}",e);
+        }
+        transactionManager.endTransaction();
+        return address;
+    }
+
+    public Address update(Address newAddress){
+        LOGGER.log(Level.INFO,"Updatin address id={}",newAddress.getId());
+        AddressDAO addressDAO = new DAOFactory().getAddressDAO();
+        TransactionManager transactionManager = new TransactionManager();
+        Address address = null;
+        try {
+            transactionManager.beginTransaction(addressDAO);
+            address = addressDAO.update(newAddress);
+            transactionManager.commit();
+        } catch (DAOException e) {
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+            }
+            LOGGER.log(Level.ERROR,"Exception while updating address {}",e);
         }
         transactionManager.endTransaction();
         return address;

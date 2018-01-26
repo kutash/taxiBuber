@@ -42,12 +42,12 @@ public class MainCommand implements Command {
                 router.setPage(PageManager.getProperty("path.page.welcome"));
                 break;
             case DRIVER:
-                Car car = carService.findByUserId(user.getId());
-                List<CarBrand> brands = carService.findAllBrands();
+                /*Car car = carService.findByUserId(user.getId());
+                List<CarBrand> brands = carService.findAllBrands();*/
                 request.getSession().setAttribute("currentUser",user);
-                request.setAttribute("car", car);
-                request.setAttribute("brands",brands);
-                router.setPage(PageManager.getProperty("path.page.driver"));
+                /*request.setAttribute("car", car);
+                request.setAttribute("brands",brands);*/
+                router.setPage("controller?command=edit&userId="+user.getId());
                 break;
             case UNKNOWN:
                 router.setPage(PageManager.getProperty("path.page.login"));

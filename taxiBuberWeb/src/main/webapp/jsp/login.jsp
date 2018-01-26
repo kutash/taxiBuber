@@ -11,6 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/flag-icon-css-master/css/flag-icon.css">
     <script src="../js/jquery.js"></script>
     <script src="../js/login_page.js"></script>
     <script src="../js/bootstrap.min.js"></script>
@@ -32,9 +33,9 @@
             <li><a href="#" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-log-in"></span> <fmt:message key="label.login"/></a></li>
             <li class="lang">
                 <form action="../index.jsp" method="post">
-                    <select id="language" name="language" onchange="submit()" class="selectpicker show-tick" data-width="100px">
-                        <option value="en_US" ${language == 'en_US' ? 'selected' : ''}>English</option>
-                        <option value="ru_RU" ${language == 'ru_RU' ? 'selected' : ''}>Русский</option>
+                    <select id="language" name="language" onchange="submit()" class="selectpicker show-tick" data-width="fit">
+                        <option data-content='<span class="flag-icon flag-icon-us"></span> En' value="en" ${language == 'en' ? 'selected' : ''}>En</option>
+                        <option data-content='<span class="flag-icon flag-icon-ru"></span> Ru' value="ru_RU" ${language == 'ru_RU' ? 'selected' : ''}>Ru</option>
                     </select>
                 </form>
             </li>

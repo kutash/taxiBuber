@@ -5,12 +5,11 @@ import com.kutash.taxibuber.service.*;
 public enum CommandEnum {
     LOGIN(new LoginCommand(new LoginService())),
     SHOW_USERS(new ShowUsersCommand(new UserService())),
-    EDIT(new EditUserCommand(new UserService())),
+    EDIT(new EditUserCommand(new UserService(),new CarService(),new AddressService())),
     LOGOUT(new LogoutCommand()),
     PHOTO(new PhotoCommand()),
     MAIN(new MainCommand(new AddressService(),new CarService())),
     MAKE_ORDER(new MakeOrderCommand(new TripService(),new CarService(),new AddressService())),
-    SHOW_CARS(new ShowCarsCommand(new CarService())),
     FREE_CARS(new FreeCarsCommand(new CarService())),
     PRICE(new PriceCommand(new CarService())),
     CAR(new EditCarCommand(new CarService())),
@@ -22,7 +21,10 @@ public enum CommandEnum {
     SET_COORDINATES(new SetCoordinatesCommand(new CarService())),
     SAVE_CAR(new SaveCarCommand(new CarService())),
     UPDATE_USER(new UpdateUserCommand(new UserService())),
-    CHANGE_PASSWORD(new ChangePasswordCommand(new UserService()));
+    CHANGE_PASSWORD(new ChangePasswordCommand(new UserService())),
+    BAN(new BanCommand(new UserService(),new CarService())),
+    DELETE(new DeleteCommand(new UserService(),new CarService())),
+    DELETE_ADDRESS(new DeleteAddressCommand(new AddressService()));
 
     Command command;
 

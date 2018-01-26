@@ -52,4 +52,38 @@ function paginate(contentId,pagerId,perPage) {
 	return false;
 }
 
+$(document).ready(function () {
 
+    var modalMessage = $('#modal-message2');
+    var update = $('#message-update');
+    if (update.text() !== '') {
+        modalMessage.modal('show');
+        update.css('display', 'block');
+        /*setTimeout(function(){
+         modalMessage.modal("hide");
+         update.css('display', 'none');
+         }, 2000);*/
+    }
+
+    $('#delete-link').on('click',function () {
+        var modalMessage = $('#modal-message2');
+        $('#message-delete').css('display','block');
+        $('#delete-div').css('display','block');
+        modalMessage.modal('show');
+    });
+
+    $('#yes').on('click',function () {
+        $("#delete-link").attr("href", "${delete}");
+    });
+
+    $('#no').on('click',function () {
+        $('#modal-message2').modal('hide');
+    })
+});
+
+function deleteUser(id) {
+    var modalMessage = $('#modal-message2');
+    $('#message-delete').css('display','block');
+    $('#delete-div').css('display','block');
+    modalMessage.modal('show');
+}

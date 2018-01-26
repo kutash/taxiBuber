@@ -12,6 +12,7 @@ public class Car extends AbstractEntity {
     private CarBrand brand;
     private int userId;
     private String driverFullName;
+    private Status status;
 
     public Car(String registrationNumber, Capacity capacity, String model,CarBrand brand) {
         this.registrationNumber = registrationNumber;
@@ -25,7 +26,7 @@ public class Car extends AbstractEntity {
         this.model = model;
     }
 
-    public Car(int id, String registrationNumber, Capacity capacity, String model, String photoPath, boolean isAvailable, String latitude, String longitude, CarBrand brand, int userId, String driverFullName) {
+    public Car(int id, String registrationNumber, Capacity capacity, String model, String photoPath, boolean isAvailable, String latitude, String longitude, CarBrand brand, int userId, String driverFullName,Status status) {
         super(id);
         this.registrationNumber = registrationNumber;
         this.capacity = capacity;
@@ -37,9 +38,10 @@ public class Car extends AbstractEntity {
         this.brand = brand;
         this.userId = userId;
         this.driverFullName = driverFullName;
+        this.status = status;
     }
 
-    public Car(String registrationNumber, Capacity capacity, String model, String photoPath, boolean isAvailable, CarBrand brand, int userId) {
+    public Car(String registrationNumber, Capacity capacity, String model, String photoPath, boolean isAvailable, CarBrand brand, int userId, Status status) {
         this.registrationNumber = registrationNumber;
         this.capacity = capacity;
         this.model = model;
@@ -47,6 +49,7 @@ public class Car extends AbstractEntity {
         this.isAvailable = isAvailable;
         this.brand = brand;
         this.userId = userId;
+        this.status = status;
     }
 
     public String getRegistrationNumber() {
@@ -127,5 +130,13 @@ public class Car extends AbstractEntity {
 
     public void setDriverFullName(String driverFullName) {
         this.driverFullName = driverFullName;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

@@ -15,14 +15,18 @@
         <link rel="stylesheet" href="../../css/app.css">
         <script src=".${pageContext.request.contextPath}/js/jquery.js"></script>
         <script src="${pageContext.request.contextPath}/js/user.js"></script>
+        <script src="${pageContext.request.contextPath}/js/car.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body>
-    <c:if test="${currentUser.role == 'DRIVER' || currentUser.role == 'CLIENT'}">
+    <c:if test="${currentUser.role == 'CLIENT'}">
         <jsp:include page="/jsp/user/header.jsp"/>
     </c:if>
     <c:if test="${currentUser.role == 'ADMIN'}">
         <jsp:include page="/jsp/admin/header.jsp"/>
+    </c:if>
+    <c:if test="${currentUser.role == 'DRIVER'}">
+        <jsp:include page="/jsp/user/driver_header.jsp"/>
     </c:if>
     <c:url var="switchLanguage" value="controller" scope="page">
         <c:param name="command" value="edit"/>
@@ -32,9 +36,9 @@
         <div class="container">
             <div class="row">
                 <div class="before-form">${currentUser.role}</div>
-                <div class="col-sm-4 text-center">
+                <div class="col-sm-4 text-center" style="margin-left: 91px">
                     <div>
-                        <input type='file' id="imgInp" style="display: none" name="photo" form="saveUserForm"/>
+                        <input type='file' id="imgInp" style="display: none" name="photo" form="saveUserForm" ${currentUser.role == 'ADMIN' ? 'disabled' : ''}/>
                         <a href="javascript:{}" id="img">
                             <img id="blah" src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${user.photoPath}&amp;userId=${user.id}" alt="your image" width="300" height="300"  />
                         </a>
@@ -54,7 +58,7 @@
                         <div class="form-group required">
                             <label class="control-label col-sm-3" for="name"><fmt:message key="label.name"/>:</label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" id="name" name="name" value="${user.name}" placeholder="Enter name"/>
+                                <input type="text" class="form-control" id="name" name="name" value="${user.name}" placeholder="Enter name" ${currentUser.role == 'ADMIN' ? 'disabled' : ''}/>
                                 <div style="display: none" id="error-name" class="err"><fmt:message key="label.errorname"/></div>
                                 <div style="display: none" id="blank-name" class="err"><fmt:message key="label.blank"/></div>
                                 <div class="err2">${errors.name}</div>
@@ -64,7 +68,7 @@
                         <div class="form-group required">
                             <label class="control-label col-sm-3" for="surname"><fmt:message key="label.surname"/>:</label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" id="surname" name="surname" value="${user.surname}" placeholder="Enter surname"/>
+                                <input type="text" class="form-control" id="surname" name="surname" value="${user.surname}" placeholder="Enter surname" ${currentUser.role == 'ADMIN' ? 'disabled' : ''}/>
                                 <div style="display: none" id="error-surname" class="err"><fmt:message key="label.errorname"/></div>
                                 <div style="display: none" id="blank-surname" class="err"><fmt:message key="label.blank"/></div>
                                 <div class="err2">${errors.surname}</div>
@@ -74,7 +78,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-3" for="patronymic"><fmt:message key="label.patronymic"/>:</label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" id="patronymic" name="patronymic" value="${user.patronymic}" placeholder="Enter patronymic"/>
+                                <input type="text" class="form-control" id="patronymic" name="patronymic" value="${user.patronymic}" placeholder="Enter patronymic" ${currentUser.role == 'ADMIN' ? 'disabled' : ''}/>
                                 <div style="display: none" id="error-patronymic" class="err"><fmt:message key="label.errorname"/></div>
                                 <div class="err2">${errors.patronymic}</div>
                             </div>
@@ -82,7 +86,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-3" for="birthday"><fmt:message key="label.birthday"/>:</label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" id="birthday" name="birthday" value="${not empty birthday ? birthday : user.birthday}" placeholder="yyyy-mm-dd"/>
+                                <input type="text" class="form-control" id="birthday" name="birthday" value="${not empty birthday ? birthday : user.birthday}" placeholder="yyyy-mm-dd" ${currentUser.role == 'ADMIN' ? 'disabled' : ''}/>
                                 <div style="display: none" id="error-birthday" class="err"><fmt:message key="label.wrongdate"/></div>
                                 <div class="err2">${errors.date}</div>
                             </div>
@@ -90,7 +94,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-3" for="phone"><fmt:message key="label.phone"/>:</label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" id="phone" name="phone" value="${user.phone}" placeholder="X(XXX)XXX-XX-XX">
+                                <input type="text" class="form-control" id="phone" name="phone" value="${user.phone}" placeholder="X(XXX)XXX-XX-XX" ${currentUser.role == 'ADMIN' ? 'disabled' : ''}>
                                 <div style="display: none" id="error-phone" class="err"><fmt:message key="label.invalidphone"/></div>
                                 <div class="err2">${errors.phone}</div>
                             </div>
@@ -98,45 +102,83 @@
                         <div class="form-group">
                             <label class="control-label col-sm-3" for="email"><fmt:message key="label.email"/>:</label>
                             <div class="col-sm-6">
-                                <input type="email" class="form-control" id="email" name="email" value="${user.email}" placeholder="Enter email">
+                                <input type="email" class="form-control" id="email" name="email" value="${user.email}" placeholder="Enter email" disabled>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-3" for="email"><fmt:message key="label.password"/>:</label>
-                            <div class="col-sm-6" style="margin-top: 5px">
-                                <a href="#" data-toggle="modal" data-target="#myModal" id="change-psw" style=""><fmt:message key="label.changepassword"/></a>
+                        <c:if test="${currentUser.role == 'DRIVER' || currentUser.role == 'CLIENT'}">
+                            <div class="form-group" id="password-group">
+                                <label class="control-label col-sm-3" for="email"><fmt:message key="label.password"/>:</label>
+                                <div class="col-sm-6" style="margin-top: 7px">
+                                    <a href="#" data-toggle="modal" data-target="#myModal" id="change-psw" style="font-size: 15px"><fmt:message key="label.changepassword"/></a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-3" for="role" id="label-role"><fmt:message key="label.role"/>:</label>
-                            <div class="col-sm-6">
-                                <%--можно сделат choose--%>
-                                <select class="form-control" id="role" name="role">
-                                    <c:if test="${user.role == 'DRIVER'}">
-                                        <option value="">not chosen</option>
-                                        <option selected="selected" value="DRIVER">DRIVER</option>
-                                        <option value="CLIENT">CLIENT</option>
-                                    </c:if>
-                                    <c:if test="${user.role == 'CLIENT'}">
-                                        <option value="">not chosen</option>
-                                        <option value="DRIVER">DRIVER</option>
-                                        <option selected="selected" value="CLIENT">CLIENT</option>
-                                    </c:if>
-                                </select>
+                            <div class="form-group" style="margin-top: 55px;">
+                                <div class="col-sm-offset-2 col-sm-6">
+                                    <button type="submit" id="save-button" class="btn btn-success btn-md" form="saveUserForm"><fmt:message key="button.save"/></button>
+                                    <button class="btn btn-danger btn-md" id="cancel-button"><fmt:message key="button.cancel"/></button>
+                                </div>
+                            </div>
+                        </c:if>
+                        <c:if test="${currentUser.role == 'ADMIN'}">
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="role" id="label-role"><fmt:message key="label.role"/>:</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="role" name="role" disabled>
+                                        <c:if test="${user.role == 'DRIVER'}">
+                                            <option value="">not chosen</option>
+                                            <option selected="selected" value="DRIVER">DRIVER</option>
+                                            <option value="CLIENT">CLIENT</option>
+                                        </c:if>
+                                        <c:if test="${user.role == 'CLIENT'}">
+                                            <option value="">not chosen</option>
+                                            <option value="DRIVER">DRIVER</option>
+                                            <option selected="selected" value="CLIENT">CLIENT</option>
+                                        </c:if>
+                                    </select>
                                     <div class="err2">${errors.role}</div>
+                                </div>
                             </div>
-                        </div>
+                            <c:if test="${user.role == 'DRIVER'}">
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="email"><fmt:message key="label.car"/>:</label>
+                                    <div class="col-sm-6" style="margin-top: 5px">
+                                        <a href="#" data-toggle="modal" data-target="#modal-car" id="car" style="font-size: 16px;margin-right: 72%;">${car.brand.name } ${car.model}</a>
+                                    </div>
+                                </div>
+                            </c:if>
+                        </c:if>
                     </form>
-                    <div class="form-group" style="margin-top: 27px;">
-                        <div class="col-sm-offset-2 col-sm-6">
-                            <button type="submit" id="save-button" class="btn btn-success btn-md" form="saveUserForm"><fmt:message key="button.save"/></button>
-                            <button class="btn btn-danger btn-md" id="cancel-button"><fmt:message key="button.cancel"/></button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="panel-group" id="addresses">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#collapse1"><fmt:message key="label.myaddresses"/></a>
+                            </h4>
+                        </div>
+                        <div id="collapse1" class="panel-collapse collapse">
+                            <ul class="list-group">
+                            <c:forEach var="address" items="${addresses}">
+                                <li class="list-group-item" id="${address.id}">
+                                    ${address.address}
+                                        <%--<c:url var="delete" value="/ajaxController">
+                                            <c:param name="command" value="delete_address"/>
+                                            <c:param name="addressId" value="${address.id}"/>
+                                        </c:url>--%>
+                                        <input type="hidden" id="${address.id}" value="${address.id}">
+                                    <a style="float: right;font-size: 25px" href="javascript:{}" onclick="deleteA(${address.id})"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                </li>
+                            </c:forEach>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="comment-div">
+                    <h1 style="text-align: center">Comments</h1>
                     <table class="table">
                         <tbody>
                         <c:forEach var="comment" items="${comments}">
@@ -169,20 +211,20 @@
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <button type="button" class="close cancel" data-dismiss="modal">&times;</button>
                         <h4 style="font-size: 30px;" class="modal-title"><i class="fa fa-key" aria-hidden="true"></i><fmt:message key="label.changepassword"/></h4>
                     </div>
                     <div class="modal-body">
                         <form action="controller" id="changePasswordForm" method="post" class="form-horizontal">
                             <input type="hidden" name="command" value="change_password">
+                            <input type="hidden" id="is-password" value="${isPassword}">
                             <div class="form-group required">
                                 <label class="control-label col-sm-4" for="old-password"><fmt:message key="label.oldpassword"/>:</label>
                                 <div class="col-sm-8">
                                     <input type="password" class="form-control" id="old-password" name="oldPassword" placeholder="Enter password">
                                     <div style="display: none" id="error-old" class="err"><fmt:message key="label.invalidpsw"/></div>
                                     <div style="display: none" id="blank-old" class="err"><fmt:message key="label.blank"/></div>
-                                    <div class="err2">${errors.password}</div>
-                                    <div class="err2">${errors.passwordBlank}</div>
+                                    <div class="err2">${errors.wrongPassword}</div>
                                 </div>
                             </div>
                             <div class="form-group required" id="div-pwd">
@@ -205,17 +247,27 @@
                             </div>
                             <div class="form-group" id="save">
                                 <div class="col-sm-offset-5 col-sm-6">
-                                    <button type="submit" id="change-password" class="btn btn-success" form="changePasswordForm"><fmt:message key="label.change"/></button>
+                                    <button type="submit" id="change-password" class="btn btn-success" form="changePasswordForm" disabled><fmt:message key="label.change"/></button>
                                 </div>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal"><fmt:message key="button.cancel"/></button>
+                        <button type="button" class="btn btn-danger cancel" data-dismiss="modal"><fmt:message key="button.cancel"/></button>
                     </div>
                 </div>
-
             </div>
         </div>
+        <!-- Modal message-->
+        <div class="modal fade" id="modal-message" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content modal-message">
+                    <div class="modal-body modal-message-body">
+                        <div id="update-password">${updatePassword}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <jsp:include page="/jsp/user/modal_car.jsp"/>
     </body>
 </html>

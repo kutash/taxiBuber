@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 
 public class UserDAOTest {
 
-    private Connection connection;
+    /*private Connection connection;
     private UserDAO userDAO;
 
     @BeforeClass
@@ -75,5 +75,5 @@ public class UserDAOTest {
     @AfterClass
     public void closeConnection() throws SQLException {
         connection.close();
-    }
+    }*/
 }

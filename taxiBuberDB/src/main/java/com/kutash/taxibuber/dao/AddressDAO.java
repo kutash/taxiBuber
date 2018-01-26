@@ -1,6 +1,7 @@
 package com.kutash.taxibuber.dao;
 
 import com.kutash.taxibuber.entity.Address;
+import com.kutash.taxibuber.entity.Status;
 import com.kutash.taxibuber.exception.DAOException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -15,12 +16,12 @@ import java.util.List;
 public class AddressDAO extends AbstractDAO<Address> {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String FIND_ADDRESS_BY_ID = "SELECT id_address,address,id_user FROM address WHERE id_address = ?";
-    private static final String FIND_ADDRESS_BY_USER_ID = "SELECT id_address, address, id_user FROM address WHERE id_user = ?";
+    private static final String FIND_ADDRESS_BY_ID = "SELECT id_address,address,id_user,status FROM address WHERE id_address = ?";
+    private static final String FIND_ADDRESS_BY_USER_ID = "SELECT id_address, address, id_user, status FROM address WHERE status != 'ARCHIVED' AND id_user = ?";
     private static final String DELETE_ADDRESS_BY_USER_ID = "DELETE FROM address WHERE id_user = ?";
     private static final String DELETE_ADDRESS_BY_ID = "DELETE FROM address WHERE id_address = ?";
-    private static final String CREATE_ADDRESS = "INSERT INTO address (address,id_user) VALUES (?,?)";
-    private static final String UPDATE_ADDRESS = "UPDATE address SET address=?,id_user=? WHERE id_address=?";
+    private static final String CREATE_ADDRESS = "INSERT INTO address (address,id_user,status) VALUES (?,?,?)";
+    private static final String UPDATE_ADDRESS = "UPDATE address SET address=?,id_user=?,status=? WHERE id_address=?";
 
     @Override
     public List<Address> findAll() {
@@ -128,7 +129,7 @@ public class AddressDAO extends AbstractDAO<Address> {
         try {
             preparedStatement = getPreparedStatement(UPDATE_ADDRESS);
             preparedStatement = setValues(preparedStatement,entity);
-            preparedStatement.setInt(3,entity.getId());
+            preparedStatement.setInt(4,entity.getId());
             preparedStatement.executeUpdate();
         }catch (SQLException e){
             throw new DAOException("Exception while updating address {}",e);
@@ -144,7 +145,8 @@ public class AddressDAO extends AbstractDAO<Address> {
             int idAddress = resultSet.getInt("id_address");
             String fullAddress = resultSet.getString("address");
             int userId = resultSet.getInt("id_user");
-            address = new Address(idAddress,fullAddress,userId);
+            Status status = Status.valueOf(resultSet.getString("status"));
+            address = new Address(idAddress,fullAddress,userId,status);
         }catch (SQLException e){
             throw new DAOException("Exception while getting address from resultSet",e);
         }
@@ -155,6 +157,7 @@ public class AddressDAO extends AbstractDAO<Address> {
         try {
             preparedStatement.setString(1, entity.getAddress());
             preparedStatement.setInt(2, entity.getUserId());
+            preparedStatement.setString(3,entity.getStatus().name());
         }catch (SQLException e){
             throw new DAOException("Exception while set values to prepareStatement {}",e);
         }

@@ -33,7 +33,7 @@ public class AdminSecurityFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
         HttpSession session = req.getSession();
         CommandEnum command = CommandEnum.valueOf(req.getParameter("command").toUpperCase());
-        EnumSet<CommandEnum> adminCommands = EnumSet.of(CommandEnum.SHOW_USERS,CommandEnum.SHOW_CARS);
+        EnumSet<CommandEnum> adminCommands = EnumSet.of(CommandEnum.SHOW_USERS);
         if (adminCommands.contains(command)) {
                 if (session == null || session.getAttribute("currentUser") == null) {
                 RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/index.jsp");

@@ -125,7 +125,7 @@ public class Validator {
     }
 
     public Map<String,String> checkPassword(String password,String passwordConfirm,String language){
-        LOGGER.log(Level.INFO,"validating user");
+        LOGGER.log(Level.INFO,"validating password");
         MessageManager messageManager = new MessageManager(language);
         Pattern patternPassword = Pattern.compile(PASSWORD);
         Map<String, String> map = new HashMap<>();
