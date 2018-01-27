@@ -233,7 +233,6 @@ function removeDisabledPassw() {
 }
 
 function deleteA(id) {
-    console.log(id);
     $('#'+id).remove();
     $.ajax({
         type:"POST",
@@ -243,7 +242,6 @@ function deleteA(id) {
         console.log(result);
 
     })
-
 }
 
 

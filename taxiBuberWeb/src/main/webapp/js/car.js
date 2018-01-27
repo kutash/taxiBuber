@@ -10,10 +10,10 @@ $(document).ready(function () {
         modalMessage.modal('show');
         update.css('margin','12%');
         update.css('display', 'block');
-        /*setTimeout(function(){
+        setTimeout(function(){
             modalMessage.modal("hide");
             update.css('display', 'none');
-        }, 2000);*/
+        }, 2000);
     }
     var create = $('#message-create');
     if (create.text() !== ''){
@@ -23,7 +23,7 @@ $(document).ready(function () {
         setTimeout(function(){
             modalMessage.modal("hide");
             create.css('display', 'none');
-        }, 2000);
+        }, 3000);
     }
 
     ($('.err2').each(function () {

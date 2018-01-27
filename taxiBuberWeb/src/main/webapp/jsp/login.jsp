@@ -5,41 +5,47 @@
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="${pageContext.request.contextPath}/messages"/>
 <html>
-<head>
-    <title><fmt:message key="label.title"/></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/app.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/flag-icon-css-master/css/flag-icon.css">
-    <script src="../js/jquery.js"></script>
-    <script src="../js/login_page.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
-</head>
-<body>
-<nav class="navbar navbar-inverse" style="position: inherit">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <c:url var="home" value="/index.jsp" scope="application">
-            </c:url>
-            <a class="navbar-brand" href="${home}"><span class="glyphicon glyphicon-home"></span> <fmt:message key="label.title"/></a>
+    <head>
+        <title><fmt:message key="label.title"/></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../css/app.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/flag-icon-css-master/css/flag-icon.css">
+        <script src="../js/jquery.js"></script>
+        <script src="../js/login_page.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-inverse" style="position: inherit">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <c:url var="home" value="/index.jsp" scope="application">
+                    </c:url>
+                    <a class="navbar-brand" href="${home}"><span class="glyphicon glyphicon-home"></span> <fmt:message key="label.title"/></a>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#modal-signup"><span class="glyphicon glyphicon-user"></span> <fmt:message key="label.signup"/></a>
+                    </li>
+                    <li><a href="#" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-log-in"></span> <fmt:message key="label.login"/></a></li>
+                    <li class="lang">
+                        <form action="../index.jsp" method="post">
+                            <select id="language" name="language" onchange="submit()" class="selectpicker show-tick" data-width="fit">
+                                <option data-content='<span class="flag-icon flag-icon-ru"></span> Ru' value="ru" ${language == 'ru' ? 'selected' : ''}>Ru</option>
+                                <option data-content='<span class="flag-icon flag-icon-us"></span> En' value="en" ${language == 'en' ? 'selected' : ''}>En</option>
+                            </select>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div id="login-content" class="background-login"></div>
+        <div class="footer">
+            <div class="footer-content">&copy; 2017.EPAM Systems Taxi Buber</div>
         </div>
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a href="#" data-toggle="modal" data-target="#modal-signup"><span class="glyphicon glyphicon-user"></span> <fmt:message key="label.signup"/></a>
-            </li>
-            <li><a href="#" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-log-in"></span> <fmt:message key="label.login"/></a></li>
-            <li class="lang">
-                <form action="../index.jsp" method="post">
-                    <select id="language" name="language" onchange="submit()" class="selectpicker show-tick" data-width="fit">
-                        <option data-content='<span class="flag-icon flag-icon-ru"></span> Ru' value="ru" ${language == 'ru' ? 'selected' : ''}>Ru</option>
-                        <option data-content='<span class="flag-icon flag-icon-us"></span> En' value="en" ${language == 'en' ? 'selected' : ''}>En</option>
-                    </select>
-                </form>
-            </li>
-        </ul>
         <!-- Modal sign in-->
         <div class="modal fade" id="myModal" role="dialog" >
             <div class="modal-dialog">
@@ -215,11 +221,5 @@
                 </div>
             </div>
         </div>
-    </div>
-</nav>
-<div id="login-content" class="background-login"></div>
-<div class="footer">
-    <div class="footer-content">&copy; 2017.EPAM Systems Taxi Buber</div>
-</div>
-</body>
+    </body>
 </html>

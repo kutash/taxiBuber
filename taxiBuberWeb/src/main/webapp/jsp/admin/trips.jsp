@@ -84,21 +84,17 @@
                         <c:if test="${currentUser.role == 'DRIVER'}">
                             <td><c:out value="${trip.clientName}"/></td>
                             <td>
-                                <form action="controller" method="post" id="comment-form">
-                                    <input type="hidden" name="command" value="comment">
-                                    <input type="hidden" name="userId" value="${trip.clientId}">
-                                </form>
-                                <a class="comment-link" href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-commenting-o" aria-hidden="true"></i></a>
+                                <a class="comment-link" id="${trip.clientId}" href="javascript:{}">
+                                    <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                                </a>
                             </td>
                         </c:if>
                         <c:if test="${currentUser.role == 'CLIENT'}">
                             <td><c:out value="${trip.driverName}"/></td>
                             <td>
-                                <form action="controller" method="post" id="comment-form">
-                                    <input type="hidden" name="command" value="comment">
-                                    <input type="hidden" name="userId" value="${trip.driverId}">
-                                </form>
-                                <a class="comment-link" href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-commenting-o" aria-hidden="true"></i></a>
+                                <a class="comment-link" id="${trip.driverId})" href="javascript:{}">
+                                    <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                                </a>
                             </td>
                         </c:if>
                     </tr>
@@ -119,7 +115,9 @@
                     <h4 style="font-size: 30px" class="modal-title"><i class="fa fa-comments-o" aria-hidden="true"></i> <fmt:message key="label.comment"/></h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal">
+                    <form class="form-horizontal" action="controller" method="post" id="comment-form">
+                        <input type="hidden" name="command" value="comment">
+                        <input type="hidden" name="userId" id="user-id">
                         <input type="hidden" name="valuation" id="valuation">
                         <div class="form-group">
                             <label class="control-label col-sm-3" for="comment"><fmt:message key="label.comment"/>:</label>
@@ -151,6 +149,7 @@
                                 </div>
                             </div>
                         </div>
+                        <div>${wrongComment}</div>
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <button type="submit" class="btn btn-success" form="comment-form">Submit</button>
@@ -162,7 +161,17 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
-
+        </div>
+    </div>
+    <!-- Modal message-->
+    <div class="modal fade" id="modal-message" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content modal-message">
+                <div class="modal-body modal-message-body">
+                    <input type="hidden" value="${isCreated}" id="is-created">
+                    <div id="message-deleted" style="margin: 12%"><fmt:message key="label.comment"/> <fmt:message key="message.created"/></div>
+                </div>
+            </div>
         </div>
     </div>
 </body>

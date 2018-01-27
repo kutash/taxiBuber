@@ -40,7 +40,7 @@
                     </thead>
                     <tbody id="content">
                         <c:forEach var="user" items="${users}">
-                            <tr class="${user.status == 'BANNED' ? 'banned' : ''}">
+                            <tr class="${user.status == 'BANNED' ? 'banned' : ''}" id="tr${user.id}">
                                 <td class="users">
                                     <img id="blah" src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${user.photoPath}&amp;userId=${user.id}" width="55" height="55"  />
                                 </td>
@@ -57,20 +57,12 @@
                                 <td class="users"><c:out value="${user.birthday}"/></td>
                                 <td class="users"><c:out value="${user.status}"/></td>
                                 <td class="users">
-                                    <c:url var="ban" value="controller">
-                                        <c:param name="command" value="ban"/>
-                                        <c:param name="userId" value="${user.id}"/>
-                                    </c:url>
-                                    <a href="${ban}" class="${user.status == 'BANNED' ? 'banned' : ''}">
+                                    <a href="javascript:{}" class="${user.status == 'BANNED' ? 'banned' : ''} ban-link" id="${user.id}">
                                         <i class="fa fa-ban" style="line-height: 3.428571;" aria-hidden="true"></i>
                                     </a>
                                 </td>
                                 <td class="users">
-                                    <form id="delete${user.id}" method="post">
-                                        <input type="hidden" name="command" value="delete">
-                                        <input type="hidden" name="userId" value="${user.id}">
-                                    </form>
-                                    <a  href="javascript:{}" class="${user.status == 'BANNED' ? 'banned' : ''} callConfirm" onclick="deleteUser(${user.id})">
+                                    <a  href="javascript:{}" class="${user.status == 'BANNED' ? 'banned' : ''} callConfirm" id="${user.id}">
                                         <i class="fa fa-trash" style="line-height: 3.428571;" aria-hidden="true"></i>
                                     </a>
                                 </td>
@@ -84,17 +76,26 @@
         <div class="footer">
             <div class="footer-content">&copy; 2017.EPAM Systems Taxi Buber</div>
         </div>
+        <!-- Modal message danger-->
+        <div class="modal fade" id="modal-message2" role="dialog" data-backdrop="static">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content modal-danger">
+                    <div class="modal-body modal-message-body">
+                        <div id="message-delete"><fmt:message key="label.deleteuser"/></div>
+                        <div class="col-sm-offset-3 col-sm-6" style="margin-top: 20px;" id="delete-div">
+                            <input type="button" id="yes" class="yes btn btn-default" style="float: left; color: red" value="<fmt:message key="label.yes"/>"/>
+                            <input type="button" id="no" class="no btn btn-default" style="float: right" value="<fmt:message key="label.no"/>"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Modal message-->
-        <div class="modal fade" id="modal-message2" role="dialog">
+        <div class="modal fade" id="modal-message" role="dialog">
             <div class="modal-dialog modal-sm">
                 <div class="modal-content modal-message">
                     <div class="modal-body modal-message-body">
-                        <div id="message-delete" style="display: none"><fmt:message key="label.deleteuser"/></div>
-                        <div class="col-sm-offset-3 col-sm-6" style="margin-top: 20px; display: none" id="delete-div">
-                            <input type="button" id="yes" class="yes btn btn-danger" style="float: left" value="<fmt:message key="label.yes"/>"/>
-                            <input type="button" id="no" class="no btn btn-default" style="float: right" value="<fmt:message key="label.no"/>"/>
-                        </div>
-                        <div id="message-deleted">${deletedMessage}</div>
+                        <div id="message-deleted" style="margin: 12%"><fmt:message key="label.user"/><fmt:message key="message.deleted"/></div>
                     </div>
                 </div>
             </div>

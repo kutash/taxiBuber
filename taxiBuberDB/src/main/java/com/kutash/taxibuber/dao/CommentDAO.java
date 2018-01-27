@@ -158,7 +158,7 @@ public class CommentDAO extends AbstractDAO<Comment> {
         try {
             preparedStatement.setString(1, entity.getText());
             preparedStatement.setInt(2, entity.getUserId());
-            preparedStatement.setDate(3, (java.sql.Date) entity.getDate());
+            preparedStatement.setDate(3, new java.sql.Date(entity.getDate().getTime()));
             preparedStatement.setInt(4, entity.getReviewerId());
             preparedStatement.setByte(5, entity.getMark());
         }catch (SQLException e){

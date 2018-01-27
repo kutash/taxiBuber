@@ -40,7 +40,30 @@ $(document).ready(function(){
 
     });
 
+    if ($('#is-created').val() === 'true'){
+        var modalMessage = $('#modal-message');
+        modalMessage.modal('show');
+        setTimeout(function(){
+            modalMessage.modal("hide");
+        }, 2000);
+    }
+
+    $('.comment-link').on('click',function () {
+        var id = $(this).attr('id');
+        $('#user-id').val(id);
+        $('#myModal').modal('show');
+    });
 
 });
+
+/*function createComment(id) {
+
+    $('.comment-link').on('click',function () {
+
+        console.log($('#user-id').val());
+        $('#myModal').modal('show');
+    });
+
+}*/
 
 

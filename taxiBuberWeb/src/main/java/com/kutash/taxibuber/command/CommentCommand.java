@@ -22,6 +22,7 @@ public class CommentCommand implements Command {
     private static final String CURRENT_USER = "currentUser";
     private static final String USER_ID = "userId";
     private static final String LANGUAGE = "language";
+    private static final String NUMBER = "number";
     private UserService userService;
 
     CommentCommand(UserService userService){
@@ -37,16 +38,18 @@ public class CommentCommand implements Command {
         String text = request.getParameter(COMMENT);
         byte valuation = Byte.parseByte(request.getParameter(VALUATION));
         int userId = Integer.parseInt(request.getParameter(USER_ID));
-        if (StringUtils.isNotEmpty(text) && valuation>0){
+        if (StringUtils.isNotEmpty(text) && text.length() <= 1000 && valuation > 0){
             Comment comment = new Comment(text,userId,reviewer.getId(),new Date(),valuation);
             int result = userService.createComment(comment);
             if (result > 0){
                 userService.changeRating(userId);
                 router.setRoute(Router.RouteType.REDIRECT);
-                session.setAttribute("savedComment",new MessageManager(language).getProperty("yyyyyyyyyyyyyyyyyy"));
+                session.setAttribute("isCreated",true);
+                router.setPage("controller?command=trips");
             }
         }else {
-            session.setAttribute("wrongComment",new MessageManager(language).getProperty("yyyyyyyyyyyyyyyyyy"));
+            session.setAttribute("wrongComment",new MessageManager(language).getProperty("message.wrongcomment"));
+            router.setPage("controller?command=trips");
         }
         return router;
     }

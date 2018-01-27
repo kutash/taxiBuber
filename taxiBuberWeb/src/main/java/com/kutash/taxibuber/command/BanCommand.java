@@ -1,5 +1,6 @@
 package com.kutash.taxibuber.command;
 
+import com.google.gson.Gson;
 import com.kutash.taxibuber.controller.Router;
 import com.kutash.taxibuber.entity.Car;
 import com.kutash.taxibuber.entity.Status;
@@ -30,25 +31,31 @@ public class BanCommand implements Command{
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"ban user");
+        String result = "";
         Router router = new Router();
         int userId = Integer.parseInt(request.getParameter(USER_ID));
         User user = userService.findById(userId);
         if (user.getStatus().equals(Status.ACTIVE)) {
             user.setStatus(Status.BANNED);
+            result = "banned";
         }else {
             user.setStatus(Status.ACTIVE);
+            result = "unbanned";
         }
         userService.updateUser(user);
         if (user.getRole().equals(UserRole.DRIVER)) {
             Car car = carService.findByUserId(userId);
-            if (car.getStatus().equals(Status.ACTIVE)){
-                car.setStatus(Status.BANNED);
-            }else {
-                car.setStatus(Status.ACTIVE);
+            if (car != null) {
+                if (car.getStatus().equals(Status.ACTIVE)) {
+                    car.setStatus(Status.BANNED);
+                } else {
+                    car.setStatus(Status.ACTIVE);
+                }
+                carService.updateCar(car);
             }
-            carService.updateCar(car);
         }
-        router.setPage("controller?command=show_users");
+        String json = new Gson().toJson(result);
+        router.setPage(json);
         return router;
     }
 }

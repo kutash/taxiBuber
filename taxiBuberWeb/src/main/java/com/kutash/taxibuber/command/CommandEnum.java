@@ -24,7 +24,8 @@ public enum CommandEnum {
     BAN(new BanCommand(new UserService(),new CarService())),
     DELETE(new DeleteCommand(new UserService(),new CarService())),
     DELETE_ADDRESS(new DeleteAddressCommand(new AddressService())),
-    TRIPS(new ShowTripsCommand(new TripService()));
+    TRIPS(new ShowTripsCommand(new TripService())),
+    COMMENT(new CommentCommand(new UserService()));
 
     Command command;
 

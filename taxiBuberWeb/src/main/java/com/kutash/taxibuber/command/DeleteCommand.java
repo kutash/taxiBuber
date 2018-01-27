@@ -1,5 +1,6 @@
 package com.kutash.taxibuber.command;
 
+import com.google.gson.Gson;
 import com.kutash.taxibuber.controller.Router;
 import com.kutash.taxibuber.entity.Car;
 import com.kutash.taxibuber.entity.Status;
@@ -43,9 +44,8 @@ public class DeleteCommand implements Command {
                 carService.updateCar(car);
             }
         }
-        String language = (String) request.getSession().getAttribute(LANGUAGE);
-        request.setAttribute("deletedMessage",new MessageManager(language).getProperty("message.deleted"));
-        router.setPage("controller?command=show_users");
+        String json = new Gson().toJson("ok");
+        router.setPage(json);
         return router;
     }
 }

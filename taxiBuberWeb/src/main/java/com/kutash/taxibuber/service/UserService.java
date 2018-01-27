@@ -191,7 +191,7 @@ public class UserService {
         float result = (float) sum/comments.size();
         float rating = new BigDecimal(result).setScale(1, RoundingMode.UP).floatValue();
         User user = findById(userId);
-        user.setRating(result);
+        user.setRating(rating);
         updateUser(user);
     }
 }

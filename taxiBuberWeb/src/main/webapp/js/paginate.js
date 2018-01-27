@@ -53,18 +53,62 @@ function paginate(contentId,pagerId,perPage) {
 }
 
 $(document).ready(function () {
+    $('.ban-link').on('click',function () {
+        var id = $(this).attr('id');
+        $.ajax({
+            type:"POST",
+            url: "ajaxController?command=ban&userId="+id,
+            contentType: 'application/json'
+        }).done(function(result){
+            var tr = $('#tr'+id);
+            var a = tr.find('a');
+            if(result === 'banned') {
+                tr.addClass('banned');
+                a.find('i').addClass('banned');
+                tr.find('a').addClass('banned');
+            }else if(result === 'unbanned'){
+                tr.removeClass('banned');
+                a.find('i').removeClass('banned');
+                tr.find('a').removeClass('banned');
+            }
 
-    var modalMessage = $('#modal-message2');
-    var update = $('#message-deleted');
-    if (update.text() !== '') {
+        });
+    });
+
+
+    var idDel;
+
+    $('.callConfirm').on('click',function () {
+        idDel = $(this).attr('id');
+        var modalMessage = $('#modal-message2');
         modalMessage.modal('show');
-        update.css('margin','12%');
-        update.css('display', 'block');
-        setTimeout(function(){
-         modalMessage.modal("hide");
-         update.css('display', 'none');
-         }, 2000);
-    }
+    });
+
+    $('.yes').on('click',function () {
+        $('#modal-message2').modal('hide');
+        $('#tr'+idDel).remove();
+        $.ajax({
+            type:"POST",
+            url: "ajaxController?command=delete&userId="+idDel,
+            contentType: 'application/json'
+        }).done(function(result){
+            console.log(result);
+            if(result === 'ok'){
+                var modalMessage = $('#modal-message');
+                var update = $('#message-deleted');
+                modalMessage.modal('show');
+                setTimeout(function(){
+                    modalMessage.modal("hide");
+                }, 2000);
+            }
+
+        });
+    });
+
+    $('.no').on('click',function () {
+        $('#modal-message2').modal('hide');
+    })
+
 
 });
 
@@ -72,18 +116,54 @@ function deleteUser(id) {
 
     $('.callConfirm').on('click',function () {
         var modalMessage = $('#modal-message2');
-        $('#message-delete').css('display','block');
-        $('#delete-div').css('display','block');
         modalMessage.modal('show');
     });
 
     $('.yes').on('click',function () {
-        $('#delete'+id).submit();
+        $('#modal-message2').modal('hide');
+        $('#'+id).remove();
+        $.ajax({
+            type:"POST",
+            url: "ajaxController?command=delete&userId="+id,
+            contentType: 'application/json'
+        }).done(function(result){
+            console.log(result);
+            if(result === 'ok'){
+                var modalMessage = $('#modal-message');
+                var update = $('#message-deleted');
+                modalMessage.modal('show');
+                setTimeout(function(){
+                    modalMessage.modal("hide");
+                }, 2000);
+            }
+
+        });
     });
 
     $('.no').on('click',function () {
         $('#modal-message2').modal('hide');
     })
+}
+
+function banUser(id) {
+    $.ajax({
+        type:"POST",
+        url: "ajaxController?command=ban&userId="+id,
+        contentType: 'application/json'
+    }).done(function(result){
+        var tr = $('#'+id);
+        var a = tr.find('a');
+        if(result === 'banned') {
+            tr.addClass('banned');
+            a.find('i').addClass('banned');
+            tr.find('a').addClass('banned');
+        }else if(result === 'unbanned'){
+            tr.removeClass('banned');
+            a.find('i').removeClass('banned');
+            tr.find('a').removeClass('banned');
+        }
+
+    });
 }
 
 
