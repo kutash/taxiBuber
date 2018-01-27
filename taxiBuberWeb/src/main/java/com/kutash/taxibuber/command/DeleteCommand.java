@@ -5,6 +5,7 @@ import com.kutash.taxibuber.entity.Car;
 import com.kutash.taxibuber.entity.Status;
 import com.kutash.taxibuber.entity.User;
 import com.kutash.taxibuber.entity.UserRole;
+import com.kutash.taxibuber.resource.MessageManager;
 import com.kutash.taxibuber.service.CarService;
 import com.kutash.taxibuber.service.UserService;
 import org.apache.logging.log4j.Level;
@@ -18,6 +19,7 @@ public class DeleteCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String USER_ID = "userId";
+    private static final String LANGUAGE = "language";
     private UserService userService;
     private CarService carService;
 
@@ -41,6 +43,8 @@ public class DeleteCommand implements Command {
                 carService.updateCar(car);
             }
         }
+        String language = (String) request.getSession().getAttribute(LANGUAGE);
+        request.setAttribute("deletedMessage",new MessageManager(language).getProperty("message.deleted"));
         router.setPage("controller?command=show_users");
         return router;
     }

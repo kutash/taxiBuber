@@ -1,11 +1,8 @@
 package com.kutash.taxibuber.service;
 
+import com.kutash.taxibuber.dao.*;
 import com.kutash.taxibuber.resource.MessageManager;
 import com.kutash.taxibuber.util.PasswordEncryptor;
-import com.kutash.taxibuber.dao.CommentDAO;
-import com.kutash.taxibuber.dao.DAOFactory;
-import com.kutash.taxibuber.dao.TransactionManager;
-import com.kutash.taxibuber.dao.UserDAO;
 import com.kutash.taxibuber.entity.Comment;
 import com.kutash.taxibuber.entity.User;
 import com.kutash.taxibuber.exception.DAOException;
@@ -14,6 +11,8 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,29 +62,6 @@ public class UserService {
         return user;
     }
 
-    public int deleteUsers(int ... ids) {
-        LOGGER.log(Level.INFO,"deleting users");
-        TransactionManager transactionManager = new TransactionManager();
-        int res = 0;
-        UserDAO userDAO = new DAOFactory().getUserDAO();
-        try {
-            transactionManager.beginTransaction(userDAO);
-            for (int id : ids) {
-                res += userDAO.delete(id);
-            }
-            transactionManager.commit();
-        }catch (DAOException e){
-            try {
-                transactionManager.rollback();
-            } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
-            }
-            LOGGER.log(Level.ERROR,"Exception while deleting user {}",e);
-        }
-        transactionManager.endTransaction();
-        return res;
-    }
-
     public Map<String,String> validateUser(Map<String,String> data,String language){
         return new Validator().validateUser(data,language);
     }
@@ -114,7 +90,7 @@ public class UserService {
     }
 
     public User updateUser(User newUser){
-        LOGGER.log(Level.INFO,"Updatin user id={}",newUser.getId());
+        LOGGER.log(Level.INFO,"Updating user id={}",newUser.getId());
         UserDAO userDAO = new DAOFactory().getUserDAO();
         TransactionManager transactionManager = new TransactionManager();
         User user = null;
@@ -184,5 +160,38 @@ public class UserService {
         }
         transactionManager.endTransaction();
         return comments;
+    }
+
+    public int createComment(Comment comment) {
+        TransactionManager transactionManager = new TransactionManager();
+        int result = 0;
+        CommentDAO commentDAO = new DAOFactory().getCommentDAO();
+        try {
+            transactionManager.beginTransaction(commentDAO);
+            result = commentDAO.create(comment);
+            transactionManager.commit();
+        } catch (DAOException e) {
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.catching(e1);
+            }
+            LOGGER.catching(e);
+        }
+        transactionManager.endTransaction();
+        return result;
+    }
+
+    public void changeRating(int userId){
+        List<Comment> comments = findComments(userId);
+        int sum = 0;
+        for (Comment comment : comments){
+            sum+=comment.getMark();
+        }
+        float result = (float) sum/comments.size();
+        float rating = new BigDecimal(result).setScale(1, RoundingMode.UP).floatValue();
+        User user = findById(userId);
+        user.setRating(result);
+        updateUser(user);
     }
 }

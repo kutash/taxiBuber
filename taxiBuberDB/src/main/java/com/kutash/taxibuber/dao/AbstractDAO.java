@@ -17,7 +17,7 @@ public abstract class AbstractDAO<T extends AbstractEntity> {
     private static final Logger LOGGER = LogManager.getLogger();
     private Connection connection;
 
-    public void setConnection(Connection connection){
+    void setConnection(Connection connection){
         this.connection=connection;
     }
 

@@ -55,35 +55,35 @@ function paginate(contentId,pagerId,perPage) {
 $(document).ready(function () {
 
     var modalMessage = $('#modal-message2');
-    var update = $('#message-update');
+    var update = $('#message-deleted');
     if (update.text() !== '') {
         modalMessage.modal('show');
+        update.css('margin','12%');
         update.css('display', 'block');
-        /*setTimeout(function(){
+        setTimeout(function(){
          modalMessage.modal("hide");
          update.css('display', 'none');
-         }, 2000);*/
+         }, 2000);
     }
 
-    $('#delete-link').on('click',function () {
+});
+
+function deleteUser(id) {
+
+    $('.callConfirm').on('click',function () {
         var modalMessage = $('#modal-message2');
         $('#message-delete').css('display','block');
         $('#delete-div').css('display','block');
         modalMessage.modal('show');
     });
 
-    $('#yes').on('click',function () {
-        $("#delete-link").attr("href", "${delete}");
+    $('.yes').on('click',function () {
+        $('#delete'+id).submit();
     });
 
-    $('#no').on('click',function () {
+    $('.no').on('click',function () {
         $('#modal-message2').modal('hide');
     })
-});
-
-function deleteUser(id) {
-    var modalMessage = $('#modal-message2');
-    $('#message-delete').css('display','block');
-    $('#delete-div').css('display','block');
-    modalMessage.modal('show');
 }
+
+

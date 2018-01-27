@@ -1,16 +1,20 @@
 package com.kutash.taxibuber.command;
 
 import com.kutash.taxibuber.controller.Router;
+import com.kutash.taxibuber.entity.Car;
+import com.kutash.taxibuber.entity.CarBrand;
 import com.kutash.taxibuber.entity.User;
 import com.kutash.taxibuber.entity.UserRole;
 import com.kutash.taxibuber.resource.MessageManager;
 import com.kutash.taxibuber.resource.PageManager;
+import com.kutash.taxibuber.service.CarService;
 import com.kutash.taxibuber.service.LoginService;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public class LoginCommand implements Command {
 
@@ -18,9 +22,12 @@ public class LoginCommand implements Command {
     private static final String EMAIL = "email";
     private static final String PASSWORD = "password";
     private LoginService service;
+    private CarService carService;
 
-    LoginCommand(LoginService service){
+    LoginCommand(LoginService service,CarService carService){
+
         this.service=service;
+        this.carService=carService;
     }
 
     @Override

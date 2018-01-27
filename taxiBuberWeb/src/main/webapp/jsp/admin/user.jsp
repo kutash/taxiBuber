@@ -150,35 +150,34 @@
                     </form>
                 </div>
             </div>
-            <div class="row">
-                <div class="panel-group" id="addresses">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                                <a data-toggle="collapse" href="#collapse1"><fmt:message key="label.myaddresses"/></a>
-                            </h4>
-                        </div>
-                        <div id="collapse1" class="panel-collapse collapse">
-                            <ul class="list-group">
-                            <c:forEach var="address" items="${addresses}">
-                                <li class="list-group-item" id="${address.id}">
-                                    ${address.address}
-                                        <%--<c:url var="delete" value="/ajaxController">
-                                            <c:param name="command" value="delete_address"/>
-                                            <c:param name="addressId" value="${address.id}"/>
-                                        </c:url>--%>
-                                        <input type="hidden" id="${address.id}" value="${address.id}">
-                                    <a style="float: right;font-size: 25px" href="javascript:{}" onclick="deleteA(${address.id})"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                </li>
-                            </c:forEach>
-                            </ul>
+            <c:if test="${currentUser.role == 'CLIENT'}">
+                <div class="row">
+                    <div class="panel-group" id="addresses">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" href="#collapse1"><fmt:message key="label.myaddresses"/></a>
+                                </h4>
+                            </div>
+                            <div id="collapse1" class="panel-collapse collapse">
+                                <ul class="list-group">
+                                <c:forEach var="address" items="${addresses}">
+                                    <li class="list-group-item" id="${address.id}">
+                                        ${address.address}
+                                            <input type="hidden" id="${address.id}" value="${address.id}">
+                                        <a style="float: right;font-size: 25px" href="javascript:{}" onclick="deleteA(${address.id})"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                    </li>
+                                </c:forEach>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </c:if>
+            <c:if test="${comments != null}">
             <div class="row">
                 <div class="comment-div">
-                    <h1 style="text-align: center">Comments</h1>
+                    <h1 style="text-align: center"><i class="fa fa-comments-o" aria-hidden="true"></i> <fmt:message key="label.comments"/></h1>
                     <table class="table">
                         <tbody>
                         <c:forEach var="comment" items="${comments}">
@@ -200,7 +199,9 @@
                     </table>
                 </div>
             </div>
+            </c:if>
         </div>
+
         <div class="footer">
             <div class="footer-content">&copy; 2017.EPAM Systems Taxi Buber</div>
         </div>

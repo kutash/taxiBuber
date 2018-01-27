@@ -8,6 +8,7 @@ $(document).ready(function () {
     var update = $('#message-update');
     if (update.text() !== ''){
         modalMessage.modal('show');
+        update.css('margin','12%');
         update.css('display', 'block');
         /*setTimeout(function(){
             modalMessage.modal("hide");
@@ -17,6 +18,7 @@ $(document).ready(function () {
     var create = $('#message-create');
     if (create.text() !== ''){
         modalMessage.modal('show');
+        create.css('margin','12%');
         create.css('display', 'block');
         setTimeout(function(){
             modalMessage.modal("hide");

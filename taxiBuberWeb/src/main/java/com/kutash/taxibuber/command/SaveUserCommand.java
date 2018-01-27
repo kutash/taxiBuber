@@ -67,7 +67,7 @@ public class SaveUserCommand implements Command {
             request.getSession().setAttribute("currentUser",user);
             request.getSession().setAttribute("isCar",true);
             router.setRoute(Router.RouteType.REDIRECT);
-            router.setPage("/controller?command=main");
+            router.setPage("/controller?command=edit&userId="+id);
 
         }
         return router;

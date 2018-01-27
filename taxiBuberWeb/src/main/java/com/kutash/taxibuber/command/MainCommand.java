@@ -30,6 +30,7 @@ public class MainCommand implements Command {
         Router router = new Router();
         UserRole role;
         User user = (User) request.getSession().getAttribute("currentUser");
+        System.out.println(user);
         if (user == null){
             role = UserRole.UNKNOWN;
         }else {
@@ -42,12 +43,13 @@ public class MainCommand implements Command {
                 router.setPage(PageManager.getProperty("path.page.welcome"));
                 break;
             case DRIVER:
-                /*Car car = carService.findByUserId(user.getId());
-                List<CarBrand> brands = carService.findAllBrands();*/
                 request.getSession().setAttribute("currentUser",user);
-                /*request.setAttribute("car", car);
-                request.setAttribute("brands",brands);*/
-                router.setPage("controller?command=edit&userId="+user.getId());
+                Car car = carService.findByUserId(user.getId());
+                List<CarBrand> brands = carService.findAllBrands();
+                request.getSession().setAttribute("currentUser",user);
+                request.setAttribute("car", car);
+                request.setAttribute("brands",brands);
+                router.setPage(PageManager.getProperty("path.page.driver"));
                 break;
             case UNKNOWN:
                 router.setPage(PageManager.getProperty("path.page.login"));

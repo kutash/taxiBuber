@@ -10,10 +10,10 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <link rel="stylesheet" href="../../css/app.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}css/app.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}css/fontawesome-free-5.0.4/web-fonts-with-css/css/fontawesome-all.css">
-        <script src="../../js/jquery.js"></script>
-        <script type="text/javascript" src="../../js/paginate.js"></script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}js/jquery.js"></script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}js/paginate.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body>
@@ -66,15 +66,11 @@
                                     </a>
                                 </td>
                                 <td class="users">
-                                    <c:url var="delete" value="controller">
-                                        <c:param name="command" value="delete"/>
-                                        <c:param name="userId" value="${user.id}"/>
-                                    </c:url>
-                                    <%--<form id="delete" method="post">
+                                    <form id="delete${user.id}" method="post">
                                         <input type="hidden" name="command" value="delete">
                                         <input type="hidden" name="userId" value="${user.id}">
-                                    </form>--%>
-                                    <a href="${delete}" id="delete-link" class="${user.status == 'BANNED' ? 'banned' : ''}">
+                                    </form>
+                                    <a  href="javascript:{}" class="${user.status == 'BANNED' ? 'banned' : ''} callConfirm" onclick="deleteUser(${user.id})">
                                         <i class="fa fa-trash" style="line-height: 3.428571;" aria-hidden="true"></i>
                                     </a>
                                 </td>
@@ -95,8 +91,8 @@
                     <div class="modal-body modal-message-body">
                         <div id="message-delete" style="display: none"><fmt:message key="label.deleteuser"/></div>
                         <div class="col-sm-offset-3 col-sm-6" style="margin-top: 20px; display: none" id="delete-div">
-                            <input type="button" id="yes" class="btn btn-danger" value="<fmt:message key="label.yes"/>"/>
-                            <input type="button" id="no" class="btn btn-danger" value="<fmt:message key="label.no"/>"/>
+                            <input type="button" id="yes" class="yes btn btn-danger" style="float: left" value="<fmt:message key="label.yes"/>"/>
+                            <input type="button" id="no" class="no btn btn-default" style="float: right" value="<fmt:message key="label.no"/>"/>
                         </div>
                         <div id="message-deleted">${deletedMessage}</div>
                     </div>

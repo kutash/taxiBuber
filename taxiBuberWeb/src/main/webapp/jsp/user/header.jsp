@@ -26,7 +26,12 @@
                 </c:url>
                 <a href="${edit}"><fmt:message key="label.profile"/></a>
             </li>
-            <li><a href="#"><fmt:message key="label.trips"/></a></li>
+            <li>
+                <c:url var="trips" value="controller">
+                    <c:param name="command" value="trips"/>
+                </c:url>
+                <a href="${trips}"><fmt:message key="label.trips"/></a>
+            </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li>
@@ -40,9 +45,9 @@
                 <a href="${logout}"><span class="glyphicon glyphicon-log-out"></span> <fmt:message key="label.logout"/></a>
             </li>
             <li class="lang">
-                <select id="language" name="language" onchange="submit()" class="selectpicker show-tick" data-width="95px">
+                <select id="language" name="language" onchange="submit()" class="selectpicker show-tick" data-width="fit" form="l">
                     <option data-content='<span class="flag-icon flag-icon-us"></span> En' value="en" ${language == 'en' ? 'selected' : ''}>En</option>
-                    <option data-content='<span class="flag-icon flag-icon-ru"></span> Ru' value="ru_RU" ${language == 'ru_RU' ? 'selected' : ''}>Ru</option>
+                    <option data-content='<span class="flag-icon flag-icon-ru"></span> Ru' value="ru" ${language == 'ru' ? 'selected' : ''}>Ru</option>
                 </select>
             </li>
         </ul>

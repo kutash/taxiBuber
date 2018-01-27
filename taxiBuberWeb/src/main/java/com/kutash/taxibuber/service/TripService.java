@@ -4,14 +4,59 @@ import com.kutash.taxibuber.dao.DAOFactory;
 import com.kutash.taxibuber.dao.TransactionManager;
 import com.kutash.taxibuber.dao.TripDAO;
 import com.kutash.taxibuber.entity.Trip;
+import com.kutash.taxibuber.entity.UserRole;
 import com.kutash.taxibuber.exception.DAOException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
+
 public class TripService {
 
     private static final Logger LOGGER = LogManager.getLogger();
+
+    public List<Trip> findAll() {
+        LOGGER.log(Level.INFO,"Finding all trips");
+        TransactionManager transactionManager = new TransactionManager();
+        TripDAO tripDAO = new DAOFactory().getTripDAO();
+        List<Trip> trips = null;
+        try {
+            transactionManager.beginTransaction(tripDAO);
+            trips = tripDAO.findAll();
+            transactionManager.commit();
+        } catch (DAOException e) {
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.catching(e1);
+            }
+            LOGGER.catching(e);
+        }
+        transactionManager.endTransaction();
+        return trips;
+    }
+
+    public List<Trip> findByUserId(int userId, UserRole role) {
+        LOGGER.log(Level.INFO,"Finding all trips by user id");
+        TransactionManager transactionManager = new TransactionManager();
+        TripDAO tripDAO = new DAOFactory().getTripDAO();
+        List<Trip> trips = null;
+        try {
+            transactionManager.beginTransaction(tripDAO);
+            trips = tripDAO.findByUserId(userId,role);
+            transactionManager.commit();
+        } catch (DAOException e) {
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.catching(e1);
+            }
+            LOGGER.catching(e);
+        }
+        transactionManager.endTransaction();
+        return trips;
+    }
 
     public int createTrip(Trip trip){
         int result = 0;

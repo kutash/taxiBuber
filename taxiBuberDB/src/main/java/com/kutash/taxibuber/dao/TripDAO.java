@@ -1,7 +1,9 @@
 package com.kutash.taxibuber.dao;
 
+import com.kutash.taxibuber.entity.Address;
 import com.kutash.taxibuber.entity.Trip;
 import com.kutash.taxibuber.entity.TripStatus;
+import com.kutash.taxibuber.entity.UserRole;
 import com.kutash.taxibuber.exception.DAOException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -14,12 +16,23 @@ import java.util.List;
 public class TripDAO extends AbstractDAO<Trip> {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String FIND_ALL_TRIPS = "SELECT id_trip,price,date,distance,id_car,departure_address,destination_address,status FROM trip";
+    private static final String FIND_ALL_TRIPS = "SELECT t.id_trip, t.price, t.date, t.distance, t.id_car, t.departure_address, a.address AS departure_string, t.destination_address, ad.address AS \n" +
+            "destination_string,t.status,c.id_user as driver_id,concat(u.surname,' ',u.name) AS driver_name, us.id_user AS client_id,concat(us.surname,' ',us.name)\n" +
+            "AS client_name FROM trip AS t INNER JOIN car AS c ON t.id_car = c.id_car INNER JOIN user AS u ON c.id_user = u.id_user INNER JOIN address AS a ON \n" +
+            "t.departure_address = a.id_address INNER JOIN user AS us ON a.id_user = us.id_user INNER JOIN address AS ad ON t.destination_address = ad.id_address";
     private static final String FIND_TRIP_BY_ID = "SELECT id_trip,price,date,distance,id_car,departure_address,destination_address,status FROM trip WHERE id_trip = ?";
+    private static final String FIND_TRIPS_BY_CLIENT_ID = "SELECT t.id_trip, t.price, t.date, t.distance, t.id_car, t.departure_address, a.address AS departure_string, t.destination_address, ad.address AS\n" +
+            "destination_string,t.status,c.id_user as driver_id,concat(u.surname,' ',u.name) AS driver_name, us.id_user AS client_id,concat(us.surname,' ',us.name)\n" +
+            "AS client_name FROM trip AS t INNER JOIN car AS c ON t.id_car = c.id_car INNER JOIN user AS u ON c.id_user = u.id_user INNER JOIN address AS a ON\n" +
+            "t.departure_address = a.id_address INNER JOIN user AS us ON a.id_user = us.id_user INNER JOIN address AS ad ON t.destination_address = ad.id_address WHERE us.id_user=?";
+    private static final String FIND_TRIPS_BY_DRIVER_ID = "SELECT t.id_trip, t.price, t.date, t.distance, t.id_car, t.departure_address, a.address AS departure_string, t.destination_address, ad.address AS\n" +
+            "destination_string,t.status,c.id_user as driver_id,concat(u.surname,' ',u.name) AS driver_name, us.id_user AS client_id,concat(us.surname,' ',us.name)\n" +
+            "AS client_name FROM trip AS t INNER JOIN car AS c ON t.id_car = c.id_car INNER JOIN user AS u ON c.id_user = u.id_user INNER JOIN address AS a ON\n" +
+            "t.departure_address = a.id_address INNER JOIN user AS us ON a.id_user = us.id_user INNER JOIN address AS ad ON t.destination_address = ad.id_address WHERE u.id_user=?";
     private static final String DELETE_TRIP_BY_ID = "DELETE FROM trip WHERE id_trip = ?";
     private static final String CREATE_TRIP = "INSERT INTO trip(price,date,distance,id_car,departure_address,destination_address,status) VALUES (?,?,?,?,?,?,?)";
     private static final String UPDATE_TRIP = "UPDATE trip  SET price=?,date=?,distance=?,id_car=?,departure_address=?,destination_address=?, status=? WHERE id_trip=?";
-    private static final String FIND_ORDERED_TRIP = "SELECT id_trip,price,date,distance,t.id_car,departure_address,destination_address,status FROM trip as t INNER JOIN car as c ON t.id_car = c.id_car WHERE c.id_user = ? AND status='ORDERED'";
+    private static final String FIND_ORDERED_TRIP = "SELECT t.id_trip,t.price,t.date,t.distance,t.id_car,t.departure_address,t.destination_address,t.status FROM trip as t INNER JOIN car as c ON t.id_car = c.id_car WHERE c.id_user = ? AND t.status='ORDERED'";
 
     @Override
     public List<Trip> findAll() throws DAOException {
@@ -30,13 +43,39 @@ public class TripDAO extends AbstractDAO<Trip> {
             statement = getStatement();
             ResultSet resultSet = statement.executeQuery(FIND_ALL_TRIPS);
             while (resultSet.next()) {
-                Trip trip = getTrip(resultSet);
+                Trip trip = getTripForUser(resultSet);
                 trips.add(trip);
             }
         } catch (SQLException e) {
             throw new DAOException("Exception while finding all trips",e);
         }finally {
             close(statement);
+        }
+        return trips;
+    }
+
+    public List<Trip> findByUserId(int userId, UserRole role) throws DAOException {
+        LOGGER.log(Level.INFO,"Finding trips by user id");
+        PreparedStatement preparedStatement = null;
+        List<Trip> trips = new ArrayList<>();
+        try {
+            if (role.equals(UserRole.CLIENT)) {
+                preparedStatement = getPreparedStatement(FIND_TRIPS_BY_CLIENT_ID);
+            }else if (role.equals(UserRole.DRIVER)){
+                preparedStatement = getPreparedStatement(FIND_TRIPS_BY_DRIVER_ID);
+            }
+            if (preparedStatement != null) {
+                preparedStatement.setInt(1, userId);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    Trip trip = getTripForUser(resultSet);
+                    trips.add(trip);
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Exception while finding trips by cli",e);
+        }finally {
+            close(preparedStatement);
         }
         return trips;
     }
@@ -60,6 +99,7 @@ public class TripDAO extends AbstractDAO<Trip> {
         }
         return trip;
     }
+
 
     public Trip findOrdered(int userId) throws DAOException {
         LOGGER.log(Level.INFO,"find trip where status=ORDERED by user id {}",userId);
@@ -148,6 +188,36 @@ public class TripDAO extends AbstractDAO<Trip> {
             throw new DAOException("Exception while set values to prepareStatement",e);
         }
         return preparedStatement;
+    }
+
+    private Trip getTripForUser(ResultSet resultSet) throws DAOException {
+        Trip trip;
+        try {
+            int idTrip = resultSet.getInt("id_trip");
+            BigDecimal price = resultSet.getBigDecimal("price");
+            java.util.Date date = resultSet.getDate("date");
+            float distance = resultSet.getFloat("distance");
+            int carId = resultSet.getInt("id_car");
+            int departureAddress = resultSet.getInt("departure_address");
+            String departure = resultSet.getString("departure_string");
+            int destinationAddress = resultSet.getInt("destination_address");
+            String destination = resultSet.getString("destination_string");
+            TripStatus status = TripStatus.valueOf(resultSet.getString("status"));
+            int driverId = resultSet.getInt("driver_id");
+            String driverName = resultSet.getString("driver_name");
+            int clientId = resultSet.getInt("client_id");
+            String clientName = resultSet.getString("client_name");
+            trip = new Trip(idTrip,price,date,distance,carId,status);
+            trip.setDriverId(driverId);
+            trip.setDriverName(driverName);
+            trip.setClientId(clientId);
+            trip.setClientName(clientName);
+            trip.setDeparture(new Address(departureAddress,departure));
+            trip.setDestination(new Address(destinationAddress,destination));
+        }catch (SQLException e){
+            throw new DAOException("Exception while getting trip from resultSet",e);
+        }
+        return trip;
     }
 
     private Trip getTrip(ResultSet resultSet) throws DAOException {

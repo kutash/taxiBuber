@@ -12,14 +12,12 @@ public class Comment extends AbstractEntity {
     private String reviewerName;
     private String reviewerPhoto;
 
-    public Comment(String text, int userId, int reviewerId, Date date, byte mark, String reviewerName, String reviewerPhoto) {
+    public Comment(String text, int userId, int reviewerId, Date date, byte mark) {
         this.text = text;
         this.userId = userId;
         this.reviewerId = reviewerId;
         this.date = date;
         this.mark = mark;
-        this.reviewerName = reviewerName;
-        this.reviewerPhoto = reviewerPhoto;
     }
 
     public Comment(int id, String text, int userId, int reviewerId, Date date, byte mark, String reviewerName, String reviewerPhoto) {

@@ -19,6 +19,11 @@ public class Address extends AbstractEntity {
         this.status = status;
     }
 
+    public Address(int id, String address) {
+        super(id);
+        this.address = address;
+    }
+
     public String getAddress() {
         return address;
     }

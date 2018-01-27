@@ -34,8 +34,8 @@
             <li class="lang">
                 <form action="../index.jsp" method="post">
                     <select id="language" name="language" onchange="submit()" class="selectpicker show-tick" data-width="fit">
+                        <option data-content='<span class="flag-icon flag-icon-ru"></span> Ru' value="ru" ${language == 'ru' ? 'selected' : ''}>Ru</option>
                         <option data-content='<span class="flag-icon flag-icon-us"></span> En' value="en" ${language == 'en' ? 'selected' : ''}>En</option>
-                        <option data-content='<span class="flag-icon flag-icon-ru"></span> Ru' value="ru_RU" ${language == 'ru_RU' ? 'selected' : ''}>Ru</option>
                     </select>
                 </form>
             </li>

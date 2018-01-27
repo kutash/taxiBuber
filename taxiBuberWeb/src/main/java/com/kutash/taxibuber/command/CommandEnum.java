@@ -3,7 +3,7 @@ package com.kutash.taxibuber.command;
 import com.kutash.taxibuber.service.*;
 
 public enum CommandEnum {
-    LOGIN(new LoginCommand(new LoginService())),
+    LOGIN(new LoginCommand(new LoginService(),new CarService())),
     SHOW_USERS(new ShowUsersCommand(new UserService())),
     EDIT(new EditUserCommand(new UserService(),new CarService(),new AddressService())),
     LOGOUT(new LogoutCommand()),
@@ -12,7 +12,6 @@ public enum CommandEnum {
     MAKE_ORDER(new MakeOrderCommand(new TripService(),new CarService(),new AddressService())),
     FREE_CARS(new FreeCarsCommand(new CarService())),
     PRICE(new PriceCommand(new CarService())),
-    CAR(new EditCarCommand(new CarService())),
     USER_INFO(new UserInfoCommand(new UserService())),
     NEW_ORDER(new NewOrderCommand(new TripService(),new AddressService())),
     START_TRIP(new StartTripCommand(new TripService())),
@@ -24,7 +23,8 @@ public enum CommandEnum {
     CHANGE_PASSWORD(new ChangePasswordCommand(new UserService())),
     BAN(new BanCommand(new UserService(),new CarService())),
     DELETE(new DeleteCommand(new UserService(),new CarService())),
-    DELETE_ADDRESS(new DeleteAddressCommand(new AddressService()));
+    DELETE_ADDRESS(new DeleteAddressCommand(new AddressService())),
+    TRIPS(new ShowTripsCommand(new TripService()));
 
     Command command;
 
