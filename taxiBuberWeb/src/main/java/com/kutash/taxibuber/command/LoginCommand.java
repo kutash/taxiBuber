@@ -1,10 +1,7 @@
 package com.kutash.taxibuber.command;
 
 import com.kutash.taxibuber.controller.Router;
-import com.kutash.taxibuber.entity.Car;
-import com.kutash.taxibuber.entity.CarBrand;
-import com.kutash.taxibuber.entity.User;
-import com.kutash.taxibuber.entity.UserRole;
+import com.kutash.taxibuber.entity.*;
 import com.kutash.taxibuber.resource.MessageManager;
 import com.kutash.taxibuber.resource.PageManager;
 import com.kutash.taxibuber.service.CarService;
@@ -21,6 +18,7 @@ public class LoginCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String EMAIL = "email";
     private static final String PASSWORD = "password";
+    private static final String LANGUAGE = "language";
     private LoginService service;
     private CarService carService;
 
@@ -34,34 +32,36 @@ public class LoginCommand implements Command {
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"login command");
         Router router = new Router();
+        String language = (String) request.getSession().getAttribute(LANGUAGE);
         String email = request.getParameter(EMAIL);
         String password = request.getParameter(PASSWORD);
         User user;
         UserRole userRole;
         user = service.logIn(password,email);
-        if (user == null){
-            userRole = UserRole.UNKNOWN;
-        }else {
-            userRole = user.getRole();
-        }
-        switch (userRole){
-            case ADMIN:
-                request.getSession().setAttribute("currentUser",user);
-                router.setPage("/controller?command=show_users");
-                break;
-            case UNKNOWN:
-                String language = (String) request.getSession().getAttribute("language");
-                request.setAttribute("errorLoginPassMessage", new MessageManager(language).getProperty("message.loginerror"));
+        if (user != null) {
+            if (user.getStatus().equals(Status.BANNED)) {
+                request.setAttribute("errorLoginPassMessage", new MessageManager(language).getProperty("message.banned"));
                 router.setPage(PageManager.getProperty("path.page.login"));
-                break;
-            case CLIENT:
-                request.getSession().setAttribute("currentUser",user);
-                router.setPage("/controller?command=main");
-                break;
-            case DRIVER:
-                request.getSession().setAttribute("currentUser",user);
-                router.setPage("/controller?command=main");
-                break;
+            } else {
+                userRole = user.getRole();
+                switch (userRole) {
+                    case ADMIN:
+                        request.getSession().setAttribute("currentUser", user);
+                        router.setPage("/controller?command=show_users");
+                        break;
+                    case CLIENT:
+                        request.getSession().setAttribute("currentUser", user);
+                        router.setPage("/controller?command=main");
+                        break;
+                    case DRIVER:
+                        request.getSession().setAttribute("currentUser", user);
+                        router.setPage("/controller?command=main");
+                        break;
+                }
+            }
+        }else {
+            request.setAttribute("errorLoginPassMessage", new MessageManager(language).getProperty("message.login"));
+            router.setPage(PageManager.getProperty("path.page.login"));
         }
         return router;
     }

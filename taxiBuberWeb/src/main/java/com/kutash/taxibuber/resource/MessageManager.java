@@ -12,8 +12,7 @@ public class MessageManager {
         if (locale != null) {
             resourceBundle = ResourceBundle.getBundle("messages", new Locale(locale));
         }else {
-            Locale localeDefault = new Locale("en");
-            resourceBundle = ResourceBundle.getBundle("messages", localeDefault);
+            resourceBundle = ResourceBundle.getBundle("messages");
         }
     }
 

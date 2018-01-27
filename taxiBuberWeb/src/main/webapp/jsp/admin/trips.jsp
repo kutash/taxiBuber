@@ -92,7 +92,7 @@
                         <c:if test="${currentUser.role == 'CLIENT'}">
                             <td><c:out value="${trip.driverName}"/></td>
                             <td>
-                                <a class="comment-link" id="${trip.driverId})" href="javascript:{}">
+                                <a class="comment-link" id="${trip.driverId}" href="javascript:{}">
                                     <i class="fa fa-commenting-o" aria-hidden="true"></i>
                                 </a>
                             </td>
@@ -111,7 +111,7 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="close cancel" data-dismiss="modal">&times;</button>
                     <h4 style="font-size: 30px" class="modal-title"><i class="fa fa-comments-o" aria-hidden="true"></i> <fmt:message key="label.comment"/></h4>
                 </div>
                 <div class="modal-body">
@@ -119,10 +119,13 @@
                         <input type="hidden" name="command" value="comment">
                         <input type="hidden" name="userId" id="user-id">
                         <input type="hidden" name="valuation" id="valuation">
+                        <div class="error-comment" id="error-comment">${wrongComment}</div>
                         <div class="form-group">
                             <label class="control-label col-sm-3" for="comment"><fmt:message key="label.comment"/>:</label>
                             <div class="col-sm-8">
                                 <textarea class="form-control" id="comment" rows="5" name="comment" form="comment-form"></textarea>
+                                <div style="display: none" id="max-comment" class="err"><fmt:message key="label.maxcomment"/></div>
+                                <div style="display: none" id="blank-comment" class="err"><fmt:message key="label.blank"/></div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -149,16 +152,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div>${wrongComment}</div>
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" class="btn btn-success" form="comment-form">Submit</button>
+                                <button type="submit" class="btn btn-success" id="submit-button" form="comment-form" disabled>Submit</button>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default cancel" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

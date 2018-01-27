@@ -101,6 +101,7 @@ button.close {
     font-size: large;
     font-weight: bold;
     margin-bottom: 3%;
+    text-align: center;
 }
 
 a.pager-link {
@@ -296,7 +297,7 @@ h4 {
 }
 
 .banned {
-    color: #bfbaba;
+    color: #bfbaba!important;
 }
 
 .users{
@@ -315,26 +316,13 @@ h4 {
     margin-left: 50px;
 }
 
-/*
-.rating2 {
-    unicode-bidi: bidi-override;
-    direction: rtl;
-    margin-right: 203px;
-    margin-top: -7px;
-    font-size: 30px;
+.delete-icon{
+    color: black;
 }
-.rating2 > span {
-    display: inline-block;
-    position: relative;
-    width: 1.1em;
 
+.ban-icon {
+    color: red;
 }
-.rating2 > span:hover:before,
-.rating2 > span:hover ~ span:before {
-    content: "\2605";
-    position: absolute;
-    color: yellow;
-}*/
 
 /* Rating Star Widgets Style */
 .rating-stars ul {
@@ -363,4 +351,12 @@ h4 {
 /* Selected state of the stars */
 .rating-stars ul > li.star.selected > i.fa {
     color:#FF912C;
+}
+
+.error-comment {
+    color: red;
+    margin-left: 129px;
+    font-size: large;
+    font-weight: bold;
+    margin-bottom: 14px;
 }

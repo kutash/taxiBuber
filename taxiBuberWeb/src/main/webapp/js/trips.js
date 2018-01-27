@@ -40,6 +40,10 @@ $(document).ready(function(){
 
     });
 
+    if ($('#error-comment').text() !== ''){
+        $('#myModal').modal('show');
+    }
+
     if ($('#is-created').val() === 'true'){
         var modalMessage = $('#modal-message');
         modalMessage.modal('show');
@@ -54,16 +58,47 @@ $(document).ready(function(){
         $('#myModal').modal('show');
     });
 
-});
-
-/*function createComment(id) {
-
-    $('.comment-link').on('click',function () {
-
-        console.log($('#user-id').val());
-        $('#myModal').modal('show');
+    $('.star').on('click',function () {
+        if($('#comment').val() !== ''){
+            $('#submit-button').removeAttr('disabled');
+        }
     });
 
-}*/
+    $('textarea#comment').on("keyup", function(){
+        var val = $(this).val();
+        if (val.length > 1000) {
+            $('#submit-button').attr('disabled', 'disabled');
+            $(this).removeClass('not-error').addClass('error-input');
+            //$('#invalid-comment').css('display', 'none');
+            $('#blank-comment').css('display', 'none');
+            $('#max-comment').css('display', 'block');
+        } else if (val === '') {
+            $('#submit-button').attr('disabled', 'disabled');
+            $(this).removeClass('not-error').addClass('error-input');
+            //$('#invalid-comment').css('display', 'none');
+            $('#blank-comment').css('display', 'block');
+            $('#max-comment').css('display', 'none');
+        } else {
+            $(this).removeClass('error-input').addClass('not-error');
+            //$('#invalid-comment').css('display', 'none');
+            $('#blank-comment').css('display', 'none');
+            $('#max-comment').css('display', 'none');
+            if ($('.error-input').length === 0 && $('#valuation').val() !==''){
+                $('#submit-button').removeAttr('disabled');
+            }
+        }
+
+    });
+
+    $('.cancel').on('click',function () {
+        $('#comment-form').trigger( 'reset' );
+        $('.err').css('display', 'none');
+        $('#comment').removeClass('error-input not-error');
+        $('.star').removeClass('selected');
+        $('#submit-button').attr('disabled', 'disabled');
+    });
+
+});
+
 
 

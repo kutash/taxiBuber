@@ -30,30 +30,26 @@ public class MainCommand implements Command {
         Router router = new Router();
         UserRole role;
         User user = (User) request.getSession().getAttribute("currentUser");
-        System.out.println(user);
         if (user == null){
-            role = UserRole.UNKNOWN;
+            router.setPage(PageManager.getProperty("path.page.login"));
         }else {
             role = user.getRole();
-        }
-        switch (role){
-            case CLIENT:
-                List<Address> addresses = service.findAddresses(user.getId());
-                request.setAttribute("addresses",addresses);
-                router.setPage(PageManager.getProperty("path.page.welcome"));
-                break;
-            case DRIVER:
-                request.getSession().setAttribute("currentUser",user);
-                Car car = carService.findByUserId(user.getId());
-                List<CarBrand> brands = carService.findAllBrands();
-                request.getSession().setAttribute("currentUser",user);
-                request.setAttribute("car", car);
-                request.setAttribute("brands",brands);
-                router.setPage(PageManager.getProperty("path.page.driver"));
-                break;
-            case UNKNOWN:
-                router.setPage(PageManager.getProperty("path.page.login"));
-                break;
+            switch (role) {
+                case CLIENT:
+                    List<Address> addresses = service.findAddresses(user.getId());
+                    request.setAttribute("addresses", addresses);
+                    router.setPage(PageManager.getProperty("path.page.welcome"));
+                    break;
+                case DRIVER:
+                    request.getSession().setAttribute("currentUser", user);
+                    Car car = carService.findByUserId(user.getId());
+                    List<CarBrand> brands = carService.findAllBrands();
+                    request.getSession().setAttribute("currentUser", user);
+                    request.setAttribute("car", car);
+                    request.setAttribute("brands", brands);
+                    router.setPage(PageManager.getProperty("path.page.driver"));
+                    break;
+            }
         }
         return router;
     }

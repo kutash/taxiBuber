@@ -33,7 +33,6 @@
                             <th><fmt:message key="label.role"/></th>
                             <th><fmt:message key="label.email"/></th>
                             <th><fmt:message key="label.birthday"/></th>
-                            <th><fmt:message key="label.status"/></th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -55,15 +54,14 @@
                                 <td class="users"><c:out value="${user.role}"/></td>
                                 <td class="users"><c:out value="${user.email}"/></td>
                                 <td class="users"><c:out value="${user.birthday}"/></td>
-                                <td class="users"><c:out value="${user.status}"/></td>
                                 <td class="users">
-                                    <a href="javascript:{}" class="${user.status == 'BANNED' ? 'banned' : ''} ban-link" id="${user.id}">
-                                        <i class="fa fa-ban" style="line-height: 3.428571;" aria-hidden="true"></i>
+                                    <a href="javascript:{}" class="ban-link" id="${user.id}">
+                                        <i class="fa fa-ban ban-icon ${user.status == 'BANNED' ? 'banned' : ''}" style="line-height: 3.428571;" aria-hidden="true"></i>
                                     </a>
                                 </td>
                                 <td class="users">
-                                    <a  href="javascript:{}" class="${user.status == 'BANNED' ? 'banned' : ''} callConfirm" id="${user.id}">
-                                        <i class="fa fa-trash" style="line-height: 3.428571;" aria-hidden="true"></i>
+                                    <a  href="javascript:{}" class="callConfirm" id="${user.id}">
+                                        <i class="fa fa-trash delete-icon ${user.status == 'BANNED' ? 'banned' : ''}" style="line-height: 3.428571;" aria-hidden="true"></i>
                                     </a>
                                 </td>
                             </tr>

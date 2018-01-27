@@ -65,16 +65,15 @@ $(document).ready(function () {
             if(result === 'banned') {
                 tr.addClass('banned');
                 a.find('i').addClass('banned');
-                tr.find('a').addClass('banned');
+                //tr.find('a').addClass('banned');
             }else if(result === 'unbanned'){
                 tr.removeClass('banned');
                 a.find('i').removeClass('banned');
-                tr.find('a').removeClass('banned');
+                //tr.find('a').removeClass('banned');
             }
 
         });
     });
-
 
     var idDel;
 
@@ -108,62 +107,5 @@ $(document).ready(function () {
     $('.no').on('click',function () {
         $('#modal-message2').modal('hide');
     })
-
-
 });
-
-function deleteUser(id) {
-
-    $('.callConfirm').on('click',function () {
-        var modalMessage = $('#modal-message2');
-        modalMessage.modal('show');
-    });
-
-    $('.yes').on('click',function () {
-        $('#modal-message2').modal('hide');
-        $('#'+id).remove();
-        $.ajax({
-            type:"POST",
-            url: "ajaxController?command=delete&userId="+id,
-            contentType: 'application/json'
-        }).done(function(result){
-            console.log(result);
-            if(result === 'ok'){
-                var modalMessage = $('#modal-message');
-                var update = $('#message-deleted');
-                modalMessage.modal('show');
-                setTimeout(function(){
-                    modalMessage.modal("hide");
-                }, 2000);
-            }
-
-        });
-    });
-
-    $('.no').on('click',function () {
-        $('#modal-message2').modal('hide');
-    })
-}
-
-function banUser(id) {
-    $.ajax({
-        type:"POST",
-        url: "ajaxController?command=ban&userId="+id,
-        contentType: 'application/json'
-    }).done(function(result){
-        var tr = $('#'+id);
-        var a = tr.find('a');
-        if(result === 'banned') {
-            tr.addClass('banned');
-            a.find('i').addClass('banned');
-            tr.find('a').addClass('banned');
-        }else if(result === 'unbanned'){
-            tr.removeClass('banned');
-            a.find('i').removeClass('banned');
-            tr.find('a').removeClass('banned');
-        }
-
-    });
-}
-
 

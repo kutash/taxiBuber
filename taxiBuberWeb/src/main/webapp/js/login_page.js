@@ -29,10 +29,16 @@ $(document).ready(function () {
     var error_login = $('#error-login');
     var message = error_login.text();
     if (message === 'Incorrect email or password!') {
-        error_login.css("margin-left", "120px");
+        //error_login.css("margin-left", "120px");
         $('#myModal').modal('show');
     }else if (message === 'Неверный адрес электронной почты или пароль!'){
-        error_login.css("margin-left", "28px");
+        //error_login.css("margin-left", "28px");
+        $('#myModal').modal('show');
+    }else if (message === 'Your account has been temporarily suspended!'){
+        //error_login.css("margin-left", "28px");
+        $('#myModal').modal('show');
+    }else if (message === 'Ваш аккаунт временно заблокирован!'){
+        //error_login.css("margin-left", "28px");
         $('#myModal').modal('show');
     }
 

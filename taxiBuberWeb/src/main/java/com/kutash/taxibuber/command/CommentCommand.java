@@ -36,9 +36,10 @@ public class CommentCommand implements Command {
         User reviewer = (User) session.getAttribute(CURRENT_USER);
         String language = (String) session.getAttribute(LANGUAGE);
         String text = request.getParameter(COMMENT);
-        byte valuation = Byte.parseByte(request.getParameter(VALUATION));
+        String mark = request.getParameter(VALUATION);
         int userId = Integer.parseInt(request.getParameter(USER_ID));
-        if (StringUtils.isNotEmpty(text) && text.length() <= 1000 && valuation > 0){
+        if (StringUtils.isNotEmpty(text) && text.length() <= 1000 && StringUtils.isNotEmpty(mark)){
+            byte valuation = Byte.parseByte(request.getParameter(VALUATION));
             Comment comment = new Comment(text,userId,reviewer.getId(),new Date(),valuation);
             int result = userService.createComment(comment);
             if (result > 0){
