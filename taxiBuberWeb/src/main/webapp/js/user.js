@@ -185,16 +185,25 @@ $(document).ready(function () {
         $('#change-password').attr('disabled', 'disabled');
     });
 
+    $('.delete-address').on('click',function () {
+        var id = $(this).attr('id');
+        //$('#li'+id).remove();
+        $.ajax({
+            type:"POST",
+            url: "ajaxController?command=delete_address&addressId="+id,
+            contentType: 'application/json'
+        }).done(function(result){
+            console.log(result);
+            if(result === 'deleted'){
+                $('#li'+id).remove();
+            }
+        })
+    });
 
-});
-
-$(document).ready(function () {
     var rating = $('#rating').text();
     var per = 100*rating/5;
     $('#str').css({'width' : per+'%'});
-});
 
-$(document).ready(function () {
     $("#blah").click(function() {
         $("#imgInp").click();
     });
@@ -233,7 +242,7 @@ function removeDisabledPassw() {
 }
 
 function deleteA(id) {
-    $('#'+id).remove();
+    $('#li'+id).remove();
     $.ajax({
         type:"POST",
         url: "ajaxController?command=delete_address&addressId="+id,

@@ -13,7 +13,7 @@ $(document).ready(function () {
         setTimeout(function(){
             modalMessage.modal("hide");
             update.css('display', 'none');
-        }, 2000);
+        }, 3000);
     }
     var create = $('#message-create');
     if (create.text() !== ''){
@@ -23,6 +23,17 @@ $(document).ready(function () {
         setTimeout(function(){
             modalMessage.modal("hide");
             create.css('display', 'none');
+        }, 3000);
+    }
+
+    var deleted = $('#message-deleted');
+    if (deleted.text() !== ''){
+        modalMessage.modal('show');
+        deleted.css('margin','12%');
+        deleted.css('display', 'block');
+        setTimeout(function(){
+            modalMessage.modal("hide");
+            deleted.css('display', 'none');
         }, 3000);
     }
 
@@ -48,12 +59,12 @@ $(document).ready(function () {
         switch(id) {
             case 'number':
                 if (val === '') {
-                    $('#save-button').attr('disabled', 'disabled');
+                    $('#save-car').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#error-number').css('display', 'none');
                     $('#blank-number').css('display', 'block');
                 } else if (!rv_number.test(val)) {
-                    $('#save-button').attr('disabled', 'disabled');
+                    $('#save-car').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#error-number').css('display', 'block');
                     $('#blank-number').css('display', 'none');
@@ -67,12 +78,12 @@ $(document).ready(function () {
 
             case 'model':
                 if (val === '') {
-                    $('#save-button').attr('disabled', 'disabled');
+                    $('#save-car').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#error-model').css('display', 'none');
                     $('#blank-model').css('display', 'block');
                 } else if (!rv_model.test(val)) {
-                    $('#save-button').attr('disabled', 'disabled');
+                    $('#save-car').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#error-model').css('display', 'block');
                     $('#blank-model').css('display', 'none');
@@ -89,7 +100,7 @@ $(document).ready(function () {
 
     $('#brand').on('change',function () {
         if ($('#brand').val() === ''){
-            $('#save-button').attr('disabled', 'disabled');
+            $('#save-car').attr('disabled', 'disabled');
         }else {
             removeDisabled();
         }
@@ -97,21 +108,35 @@ $(document).ready(function () {
 
     $('#capacity').on('change',function () {
         if ($('#capacity').val() === ''){
-            $('#save-button').attr('disabled', 'disabled');
+            $('#save-car').attr('disabled', 'disabled');
         }else {
             removeDisabled();
         }
     });
 
     $('.cancel-car').on('click',function () {
-        $('#saveCarForm').trigger( 'reset' );
-        $('.err').css('display', 'none');
+        $('#cancelCarForm').submit();
+        /*$('.err').css('display', 'none');
         $('input[type=text]').removeClass('error-input not-error');
-        $('#save-button').attr('disabled', 'disabled');
+        $('#save-car').attr('disabled', 'disabled');
         var photoPath = $('#car-photo').val();
         var id = $('#user-id').val();
-        $('#car-img').attr('src','/ajaxController?command=photo&photo='+photoPath+'&userId='+id);
+        $('#car-img').attr('src','/ajaxController?command=photo&photo='+photoPath+'&userId='+id);*/
     });
+
+    $('#delete-button').on('click',function () {
+        var modalMessage = $('#modal-confirm');
+        modalMessage.modal('show');
+    });
+
+    $('.yes').on('click',function () {
+        $('#modal-confirm').modal('hide');
+        $('#deleteCarForm').submit();
+    });
+
+    $('.no').on('click',function () {
+        $('#modal-confirm').modal('hide');
+    })
 
 });
 
@@ -123,7 +148,6 @@ function previewFile(input) {
     reader.onload = function (e) {
         preview.attr('src', e.target.result);
     };
-
     if (file) {
         reader.readAsDataURL(file);
     } else {

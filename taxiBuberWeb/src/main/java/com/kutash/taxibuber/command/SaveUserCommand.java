@@ -65,7 +65,7 @@ public class SaveUserCommand implements Command {
             user.setPhotoPath(photoPath);
             user = userService.updateUser(user);
             request.getSession().setAttribute("currentUser",user);
-            request.getSession().setAttribute("isCar",true);
+            //request.getSession().setAttribute("isCar",true);
             router.setRoute(Router.RouteType.REDIRECT);
             router.setPage("/controller?command=edit&userId="+id);
 

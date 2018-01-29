@@ -12,7 +12,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="../../css/app.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}css/app.css">
         <script src=".${pageContext.request.contextPath}/js/jquery.js"></script>
         <script src="${pageContext.request.contextPath}/js/user.js"></script>
         <script src="${pageContext.request.contextPath}/js/car.js"></script>
@@ -33,6 +33,11 @@
         <c:param name="userId" value="${user.id}"/>
     </c:url>
     <form action="${switchLanguage}" method="post" id="l"></form>
+    <form action="controller" method="post" id="cancelCarForm">
+        <input type="hidden" name="command" value="cancel">
+        <input type="hidden" value="${user.id}" name="userId">
+        <button type="button" class="btn btn-default cancel-car" data-dismiss="modal"><fmt:message key="button.cancel"/></button>
+    </form>
         <div class="container">
             <div class="row">
                 <div class="before-form">${currentUser.role}</div>
@@ -109,13 +114,27 @@
                             <div class="form-group" id="password-group">
                                 <label class="control-label col-sm-3" for="email"><fmt:message key="label.password"/>:</label>
                                 <div class="col-sm-6" style="margin-top: 7px">
-                                    <a href="#" data-toggle="modal" data-target="#myModal" id="change-psw" style="font-size: 15px"><fmt:message key="label.changepassword"/></a>
+                                    <a href="#" data-toggle="modal" data-target="#myModal" id="change-psw" style="font-size: 17px"><fmt:message key="label.changepassword"/></a>
                                 </div>
                             </div>
+                            <c:if test="${currentUser.role == 'DRIVER'}">
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="email"><fmt:message key="label.car"/>:</label>
+                                    <div class="col-sm-6" style="margin-top: 5px">
+                                        <c:if test="${car != null}">
+                                            <a href="#" data-toggle="modal" data-target="#modal-car" id="car" style="font-size: 17px;margin-right: 72%;">${car.brand.name } ${car.model}</a>
+                                            <a href="#" id="delete-button"><i class="fa fa-trash" aria-hidden="true" style="font-size: 20px"></i></a>
+                                        </c:if>
+                                        <c:if test="${car == null}">
+                                            <a href="#" data-toggle="modal" data-target="#modal-car" id="car" style="font-size: 17px;margin-right: 68%;"><fmt:message key="label.addcar"/></a>
+                                        </c:if>
+                                    </div>
+                                </div>
+                            </c:if>
                             <div class="form-group" style="margin-top: 55px;">
                                 <div class="col-sm-offset-2 col-sm-6">
-                                    <button type="submit" id="save-button" class="btn btn-success btn-md" form="saveUserForm"><fmt:message key="button.save"/></button>
-                                    <button class="btn btn-danger btn-md" id="cancel-button"><fmt:message key="button.cancel"/></button>
+                                    <button type="submit" id="save-button" class="btn btn-success btn-md" form="saveUserForm"><i class="fa fa-floppy-o" aria-hidden="true"></i> <fmt:message key="button.save"/></button>
+                                    <button class="btn btn-danger btn-md" id="cancel-button"><i class="fa fa-ban" aria-hidden="true"></i> <fmt:message key="button.cancel"/></button>
                                 </div>
                             </div>
                         </c:if>
@@ -142,7 +161,12 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-3" for="email"><fmt:message key="label.car"/>:</label>
                                     <div class="col-sm-6" style="margin-top: 5px">
-                                        <a href="#" data-toggle="modal" data-target="#modal-car" id="car" style="font-size: 16px;margin-right: 72%;">${car.brand.name } ${car.model}</a>
+                                        <c:if test="${car != null}">
+                                            <a href="#" data-toggle="modal" data-target="#modal-car" id="car" style="font-size: 16px;margin-right: 72%;">${car.brand.name } ${car.model}</a>
+                                        </c:if>
+                                        <c:if test="${car == null}">
+                                            <fmt:message key="label.nocar"/>
+                                        </c:if>
                                     </div>
                                 </div>
                             </c:if>
@@ -162,10 +186,9 @@
                             <div id="collapse1" class="panel-collapse collapse">
                                 <ul class="list-group">
                                 <c:forEach var="address" items="${addresses}">
-                                    <li class="list-group-item" id="${address.id}">
+                                    <li class="list-group-item" id="li${address.id}">
                                         ${address.address}
-                                            <input type="hidden" id="${address.id}" value="${address.id}">
-                                        <a style="float: right;font-size: 25px" href="javascript:{}" onclick="deleteA(${address.id})"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                        <a style="float: right;font-size: 25px" href="javascript:{}" class="delete-address" id="${address.id}"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                     </li>
                                 </c:forEach>
                                 </ul>

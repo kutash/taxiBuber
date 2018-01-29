@@ -39,7 +39,6 @@
                 </c:url>
                 <a href="${trips}"><fmt:message key="label.trips"/></a>
             </li>
-            <li><a href="#" data-toggle="modal" data-target="#modal-car"><fmt:message key="label.car"/></a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li>
@@ -54,8 +53,8 @@
             </li>
             <li class="lang">
                 <select id="language" name="language" onchange="submit()" class="selectpicker show-tick" data-width="fit" form="l">
-                    <option data-content='<span class="flag-icon flag-icon-us"></span> En' value="en" ${language == 'en' ? 'selected' : ''}>En</option>
                     <option data-content='<span class="flag-icon flag-icon-ru"></span> Ru' value="ru" ${language == 'ru' ? 'selected' : ''}>Ru</option>
+                    <option data-content='<span class="flag-icon flag-icon-us"></span> En' value="en" ${language == 'en' ? 'selected' : ''}>En</option>
                 </select>
             </li>
         </ul>

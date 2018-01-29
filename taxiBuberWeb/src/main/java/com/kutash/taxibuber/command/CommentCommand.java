@@ -6,6 +6,7 @@ import com.kutash.taxibuber.entity.User;
 import com.kutash.taxibuber.resource.MessageManager;
 import com.kutash.taxibuber.service.UserService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,6 +32,7 @@ public class CommentCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
+        LOGGER.log(Level.INFO,"Saving comment");
         Router router = new Router();
         HttpSession session = request.getSession();
         User reviewer = (User) session.getAttribute(CURRENT_USER);

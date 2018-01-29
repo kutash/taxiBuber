@@ -17,7 +17,7 @@ window.onload = function () {
         var start = document.getElementById('start').value;
         var end = document.getElementById('end').value;
         var carId = document.getElementById('carId').value;
-        /*if (start === '' || end === ''  || carId === ''){
+        if (start === '' || end === ''  || carId === ''){
             var modalMessage = $('#modal-message');
             if(start === ''){
                 document.getElementById('message-source').style.display = 'block';
@@ -36,9 +36,9 @@ window.onload = function () {
                 document.getElementById('message-car').style.display = 'none';
             }, 2000);
 
-        }else {*/
+        }else {
             document.getElementById('order-form').submit();
-        //}
+        }
     });
 
     var message = document.getElementById('order-message').innerHTML;

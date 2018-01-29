@@ -34,7 +34,8 @@ public class EditUserCommand implements Command {
         int id = Integer.parseInt(request.getParameter(USER_ID));
         User user = service.findById(id);
         List<Comment> comments = service.findComments(id);
-        if (user.getRole().equals(UserRole.DRIVER)){
+        Boolean isCar = (Boolean) request.getAttribute("isCar");
+        if (user.getRole().equals(UserRole.DRIVER) && isCar == null || !isCar){
             Car car = carService.findByUserId(user.getId());
             List<CarBrand> brands = carService.findAllBrands();
             request.setAttribute("brands",brands);

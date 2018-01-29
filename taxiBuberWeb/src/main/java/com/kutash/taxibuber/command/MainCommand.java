@@ -43,10 +43,8 @@ public class MainCommand implements Command {
                 case DRIVER:
                     request.getSession().setAttribute("currentUser", user);
                     Car car = carService.findByUserId(user.getId());
-                    List<CarBrand> brands = carService.findAllBrands();
                     request.getSession().setAttribute("currentUser", user);
                     request.setAttribute("car", car);
-                    request.setAttribute("brands", brands);
                     router.setPage(PageManager.getProperty("path.page.driver"));
                     break;
             }

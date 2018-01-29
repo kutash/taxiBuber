@@ -1,5 +1,6 @@
 package com.kutash.taxibuber.command;
 
+import com.google.gson.Gson;
 import com.kutash.taxibuber.controller.Router;
 import com.kutash.taxibuber.entity.Address;
 import com.kutash.taxibuber.entity.Status;
@@ -29,7 +30,8 @@ public class DeleteAddressCommand implements Command {
         Address address = addressService.findAddressById(addressId);
         address.setStatus(Status.ARCHIVED);
         addressService.update(address);
-        router.setPage("ok");
+        String json = new Gson().toJson("deleted");
+        router.setPage(json);
         return router;
     }
 }

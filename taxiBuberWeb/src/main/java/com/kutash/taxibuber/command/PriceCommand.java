@@ -29,8 +29,8 @@ public class PriceCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        Router router = new Router();
         LOGGER.log(Level.INFO,"getting cost");
+        Router router = new Router();
         String distance = request.getParameter(DISTANCE);
         String duration = request.getParameter(DURATION);
         String carId = request.getParameter(CAR_ID);

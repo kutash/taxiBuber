@@ -59,8 +59,37 @@ window.onload = function () {
         }
         document.getElementById("complete-form").submit();
     });
+
+    document.getElementById('work').addEventListener('change',function () {
+        console.log(this.checked);
+        if(this.checked) {
+            document.getElementById('start-work').style.display = 'none';
+            document.getElementById('stop-work').style.display = 'block';
+            setCarCoordinates(latitude,longitude);
+            setAvailable(true);
+        }else {
+            document.getElementById('start-work').style.display = 'block';
+            document.getElementById('stop-work').style.display = 'none';
+            setAvailable(false);
+        }
+    })
 };
 
+function setAvailable(isAvailable) {
+    var carId = document.getElementById('car-id').value;
+    $.ajax({
+        type:"GET",
+        url: "ajaxController?command=set_available&carId="+carId+"&isAvailable"+isAvailable,
+        contentType: 'application/json'
+    }).done(function(result){
+        console.log(result);
+        if(result === 'no car'){
+            document.getElementById('no-car').style.display = 'block';
+            document.getElementById('start-work').style.display = 'block';
+            document.getElementById('stop-work').style.display = 'none';
+        }
+    });
+}
 
 function getNewOrder() {
     $.ajax({
@@ -80,9 +109,10 @@ function getNewOrder() {
 }
 
 function setCarCoordinates(latitude,longitude) {
+    var carId = document.getElementById('car-id').value;
     $.ajax({
         type:"GET",
-        url: "ajaxController?command=set_coordinates&latitude="+latitude+"&longitude="+longitude,
+        url: "ajaxController?command=set_coordinates&carId="+carId+"&latitude="+latitude+"&longitude="+longitude,
         contentType: 'application/json'
     }).done(function(result){
         console.log(result);
@@ -103,7 +133,7 @@ function initMap() {
             };
             latitude = position.coords.latitude;
             longitude = position.coords.longitude;
-            setCarCoordinates(latitude,longitude);
+            //setCarCoordinates(latitude,longitude);
             var geocoder = new google.maps.Geocoder;
             var latLng = new google.maps.LatLng(latitude,longitude);
 

@@ -11,12 +11,11 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <link rel="stylesheet" href="../../css/app.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}css/app.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}css/fontawesome-free-5.0.4/web-fonts-with-css/css/fontawesome-all.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
-        <script src="../../js/jquery.js"></script>
-        <script type="text/javascript" src="../../js/driver.js"></script>
-        <script type="text/javascript" src="../../js/car.js"></script>
+        <script src="${pageContext.request.contextPath}js/jquery.js"></script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}js/driver.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
     </head>
@@ -28,36 +27,47 @@
         <form action="${switchLanguage}" method="post" id="l"></form>
         <div class="container">
             <div class="row">
-                <div style="margin-left: 400px">
-                    <form class="form-inline" id="complete-form" action="controller" method="post">
+                <div class="col-sm-4 text-center">
+                    <form class="form-horizontal" id="complete-form" action="controller" method="post">
+                        <div class="checkbox">
+                            <input type="checkbox" id="work">
+                            <label id="start-work" style="display: block" class="label-span"><fmt:message key="label.start"/></label>
+                            <label id="stop-work" style="display: none" class="label-span"><fmt:message key="label.stop"/></label><br>
+                        </div>
+                        <div class="alert alert-danger fade in" style="display: none" id="no-car">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <fmt:message key="label.nocar"/>
+                        </div>
                         <input type="hidden" name="command" value="complete_trip">
                         <input type="hidden" id="tripId" name="tripId">
                         <input type="hidden" name="latitude" id="latitude">
                         <input type="hidden" name="longitude" id="longitude">
+                        <input type="hidden" name="carId" value="${car.id}" id="car-id">
                         <div class="form-group">
-                            <label class="control-label col-sm-3 label-driver" for="start"><fmt:message key="label.source"/>:</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control input-driver" id="start" readonly/>
+                            <label class="control-label col-sm-4 label-driver" for="start"><fmt:message key="label.source"/>:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="start" readonly/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-3 label-driver" for="end"><fmt:message key="label.destination"/>:</label>
-                            <div class="col-sm-9">
-                                <input type="text" style="margin-left: -33px;" class="form-control input-driver" id="end" readonly/>
+                            <label class="control-label col-sm-4 label-driver" for="end"><fmt:message key="label.destination"/>:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="end" readonly/>
+                            </div>
+                        </div>
+                        <div id="divDistance-driver" style="display: none">
+                            <span class="label-span"><fmt:message key="label.distance"/>:</span><span class="info-span" id="distance"></span> <span class="label-span"><fmt:message key="label.kilometers"/></span><br>
+                            <span class="label-span" style="margin-left: 30px"><fmt:message key="label.duration"/>:</span><span id="duration" class="info-span"></span><span class="label-span"></span><br>
+                            <div class="form-group">
+                                <div class="col-sm-offset-3 col-sm-6" id="complete-div">
+                                    <input type="submit" form="complete-form" id="complete" class="btn btn-danger" value="<fmt:message key="label.complete"/>"/>
+                                </div>
                             </div>
                         </div>
                     </form>
                 </div>
-                    <div id="map" style="width:1100px;height:600px;background:gray;margin-left: 284px;"></div>
-                <%--</div>--%>
-            </div>
-            <div id="divDistance-driver" style="display: none">
-                <span class="label-span"><fmt:message key="label.distance"/>:</span><span class="info-span" id="distance"></span> <span class="label-span"><fmt:message key="label.kilometers"/></span>
-                <span class="label-span" style="margin-left: 30px"><fmt:message key="label.duration"/>:</span><span id="duration" class="info-span"></span><span class="label-span"></span><br>
-                <div class="form-group">
-                    <div class="col-sm-offset-3 col-sm-6" id="complete-div">
-                        <input type="submit" form="complete-form" id="complete" class="btn btn-danger" value="<fmt:message key="label.complete"/>"/>
-                    </div>
+                <div class="col-sm-8 text-center">
+                    <div id="map" style="width:1050px;height:700px;background:gray"></div>
                 </div>
             </div>
         </div>
@@ -79,7 +89,6 @@
                 </div>
             </div>
         </div>
-        <jsp:include page="/jsp/user/modal_car.jsp"/>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWwujQHc9yN2BSlbT_L0-L7VLlQAYnUUg&libraries=places&callback=initMap"></script>
     </body>
 </html>

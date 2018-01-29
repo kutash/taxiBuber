@@ -15,7 +15,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close cancel-car" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title" style="font-size: 35px;"><i class="fa fa-car" aria-hidden="true"></i><fmt:message key="label.car"/></h4>
+                    <h4 class="modal-title" style="font-size: 35px;"><i class="fa fa-car" aria-hidden="true"></i> <fmt:message key="label.car"/></h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -23,7 +23,6 @@
                         <div class="col-sm-3 text-center">
                             <div>
                                 <input type="hidden" id="car-photo" value="${car.photoPath}">
-                                <input type="hidden" id="user-id" value="${car.userId}">
                                 <input type='file' id="file-car" style="display: none" name="photo" form="saveCarForm" ${currentUser.role == 'ADMIN' ? 'disabled' : ''}/>
                                 <a href="javascript:{}" id="img">
                                     <img id="car-img" src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${car.photoPath}&amp;userId=${car.userId}" alt="your image" width="270" height="270"  />
@@ -34,6 +33,7 @@
                             <form class="form-horizontal" action="controller" method="post" enctype="multipart/form-data" id="saveCarForm">
                                 <input type="hidden" name="command" value="save_car">
                                 <input type="hidden" value="${car.id}" name="carId">
+                                <input type="hidden" value="${not empty car ? car.userId : user.id}" name="userId" id="user-id">
                                 <div class="form-group required">
                                     <label class="control-label col-sm-5" for="number"><fmt:message key="label.number"/>:</label>
                                     <div class="col-sm-7">
@@ -70,7 +70,7 @@
                                 <div class="form-group required">
                                     <label class="control-label col-sm-5" for="capacity"><fmt:message key="label.capacity"/>:</label>
                                     <div class="col-sm-7">
-                                        <select class="form-control selectpicker show-tick" id="capacity" name="capacity" ${currentUser.role == 'ADMIN' ? 'disabled' : ''}>
+                                        <select class="form-control" id="capacity" name="capacity" ${currentUser.role == 'ADMIN' ? 'disabled' : ''}>
                                             <c:if test="${car.capacity == 'CAR'}">
                                                 <option value="">not chosen</option>
                                                 <option selected="selected" value="CAR"><fmt:message key="label.sedan"/></option>
@@ -102,10 +102,15 @@
                                 <c:if test="${currentUser.role == 'DRIVER'}">
                                     <div class="form-group" id="save">
                                         <div class="col-sm-offset-2 col-sm-6">
-                                            <button type="submit" id="save-button" class="btn btn-success" form="saveCarForm"><fmt:message key="button.save"/></button>
+                                            <button type="submit" id="save-car" class="btn btn-success" form="saveCarForm"><i class="fa fa-floppy-o" aria-hidden="true"></i> <fmt:message key="button.save"/></button>
                                         </div>
                                     </div>
                                 </c:if>
+                            </form>
+                            <form id="deleteCarForm" action="controller" method="post">
+                                <input type="hidden" name="command" value="delete_car">
+                                <input type="hidden" value="${car.id}" name="carId">
+                                <input type="hidden" value="${car.userId}" name="userId">
                             </form>
                         </div>
                     </div>
@@ -123,6 +128,21 @@
                 <div class="modal-body modal-message-body">
                     <div id="message-update" style="display: none">${updateMessage}</div>
                     <div id="message-create" style="display: none">${createMessage}</div>
+                    <div id="message-deleted" style="display: none">${deletedMessage}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal message danger-->
+    <div class="modal fade" id="modal-confirm" role="dialog" data-backdrop="static">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content modal-danger">
+                <div class="modal-body modal-message-body">
+                    <div id="message-delete"><fmt:message key="label.deletecar"/></div>
+                    <div class="col-sm-offset-3 col-sm-6" style="margin-top: 20px;" id="delete-div">
+                        <input type="button" id="yes" class="yes btn btn-default" style="float: left; color: red" value="<fmt:message key="label.yes"/>"/>
+                        <input type="button" id="no" class="no btn btn-default" style="float: right" value="<fmt:message key="label.no"/>"/>
+                    </div>
                 </div>
             </div>
         </div>

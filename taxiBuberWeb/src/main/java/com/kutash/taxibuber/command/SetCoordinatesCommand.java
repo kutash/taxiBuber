@@ -1,9 +1,11 @@
 package com.kutash.taxibuber.command;
 
+import com.google.gson.Gson;
 import com.kutash.taxibuber.controller.Router;
 import com.kutash.taxibuber.entity.Car;
 import com.kutash.taxibuber.entity.User;
 import com.kutash.taxibuber.service.CarService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,6 +19,7 @@ public class SetCoordinatesCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String LATITUDE = "latitude";
     private static final String LONGITUDE = "longitude";
+    private static final String CAR_ID = "carId";
 
     private CarService carService;
 
@@ -27,16 +30,22 @@ public class SetCoordinatesCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         Router router = new Router();
-        User user = (User) request.getSession().getAttribute("currentUser");
-        Car car = carService.findByUserId(user.getId());
-        String latitude = new BigDecimal(request.getParameter(LATITUDE)).setScale(6, RoundingMode.UP).toString();
-        String longitude = new BigDecimal(request.getParameter(LONGITUDE)).setScale(6, RoundingMode.UP).toString();
-        if (car != null) {
-            car.setLatitude(latitude);
-            car.setLongitude(longitude);
-            carService.updateCar(car);
+        String result = "ERROR";
+        String carId = request.getParameter(CAR_ID);
+        if (StringUtils.isNotEmpty(carId)) {
+            int id = Integer.parseInt(carId);
+            Car car = carService.findByUserId(id);
+            String latitude = new BigDecimal(request.getParameter(LATITUDE)).setScale(6, RoundingMode.UP).toString();
+            String longitude = new BigDecimal(request.getParameter(LONGITUDE)).setScale(6, RoundingMode.UP).toString();
+            if (car != null) {
+                car.setLatitude(latitude);
+                car.setLongitude(longitude);
+                carService.updateCar(car);
+                result = "OK";
+            }
         }
-        router.setPage("Ok");
+        String json = new Gson().toJson(result);
+        router.setPage(json);
         return router;
     }
 }
