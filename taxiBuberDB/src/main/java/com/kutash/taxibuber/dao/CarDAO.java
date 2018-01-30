@@ -29,7 +29,7 @@ public class CarDAO extends AbstractDAO<Car> {
             "INNER JOIN user AS u ON c.id_user = u.id_user WHERE c.status ='ACTIVE' AND is_available=TRUE AND capacity=?";
     private static final String FIND_CAR_BY_ID = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,c.status,\n" +
             "cb.id_brand,cb.`name`,concat(u.name,' ',u.surname) AS driver_name FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand\n" +
-            "INNER JOIN user AS u ON c.id_user = u.id_user WHERE id_car = ?";
+            "INNER JOIN user AS u ON c.id_user = u.id_user WHERE c.status != 'ARCHIVED' AND id_car = ?";
     private static final String UPDATE_CAR = "UPDATE car SET registration_number=?,model=?,photo_path=?,is_available=?,latitude=?,longitude=?,id_brand=?,id_user=?,capacity=?,status=? WHERE id_car=?";
     private static final String FIND_CAR_BY_USER_ID = "SELECT c.id_car,c.registration_number,c.capacity,c.model,c.photo_path,c.is_available,c.latitude,c.longitude,c.id_user,c.status,\n" +
             "cb.id_brand,cb.`name`,concat(u.name,' ',u.surname) AS driver_name FROM car AS c INNER JOIN car_brand AS cb ON c.id_brand = cb.id_brand\n" +

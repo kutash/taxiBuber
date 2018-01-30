@@ -14,7 +14,7 @@ public enum CommandEnum {
     PRICE(new PriceCommand(new CarService())),
     USER_INFO(new UserInfoCommand(new UserService())),
     NEW_ORDER(new NewOrderCommand(new TripService(),new AddressService())),
-    START_TRIP(new StartTripCommand(new TripService())),
+    START_TRIP(new StartTripCommand(new TripService(),new CarService())),
     COMPLETE_TRIP(new CompleteTripCommand(new TripService(),new CarService())),
     SAVE_USER(new SaveUserCommand(new UserService())),
     SET_COORDINATES(new SetCoordinatesCommand(new CarService())),

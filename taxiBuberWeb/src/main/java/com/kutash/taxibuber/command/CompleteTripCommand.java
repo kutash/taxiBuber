@@ -44,7 +44,7 @@ public class CompleteTripCommand implements Command {
         car.setLongitude(longitude);
         carService.updateCar(car);
         router.setRoute(Router.RouteType.REDIRECT);
-        router.setPage(PageManager.getProperty("path.page.driver"));
+        router.setPage(PageManager.getProperty("path.command.main"));
         return router;
     }
 }

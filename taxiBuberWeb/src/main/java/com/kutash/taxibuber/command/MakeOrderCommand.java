@@ -3,6 +3,7 @@ package com.kutash.taxibuber.command;
 import com.kutash.taxibuber.controller.Router;
 import com.kutash.taxibuber.entity.*;
 import com.kutash.taxibuber.resource.MessageManager;
+import com.kutash.taxibuber.resource.PageManager;
 import com.kutash.taxibuber.service.AddressService;
 import com.kutash.taxibuber.service.CarService;
 import com.kutash.taxibuber.service.TripService;
@@ -29,6 +30,8 @@ public class MakeOrderCommand implements Command {
     private static final String SOURCE = "start";
     private static final String DESTINATION = "end";
     private static final String DURATION_TEXT = "durationText";
+    private static final String CURRENT_USER = "currentUser";
+    private static final int METER_IN_KILOMETER = 1000;
     private TripService tripService;
     private CarService carService;
     private AddressService addressService;
@@ -45,13 +48,13 @@ public class MakeOrderCommand implements Command {
         LOGGER.log(Level.INFO,"making order");
         Router router = new Router();
         String language = (String) request.getSession().getAttribute(LANGUAGE);
-        User user = (User) request.getSession().getAttribute("currentUser");
+        User user = (User) request.getSession().getAttribute(CURRENT_USER);
         HttpSession session = request.getSession();
         HashMap<String,String> data = getData(request);
         float distanceNumber = 0.0f;
         HashMap<String,String> errors = new Validator().validateOrder(data,language);
         if (errors.isEmpty()){
-            distanceNumber = Float.parseFloat(data.get("distance")) / 1000;
+            distanceNumber = Float.parseFloat(data.get("distance")) / METER_IN_KILOMETER;
             int carId = Integer.parseInt(data.get("carId"));
             Car car = carService.findById(carId);
             int sourceId = addressService.createAddress(data.get("source"),user.getId());
@@ -63,14 +66,13 @@ public class MakeOrderCommand implements Command {
             session.setAttribute("orderMessage", new MessageManager(language).getProperty("message.ordersuccess"));
             router.setRoute(Router.RouteType.REDIRECT);
         }else {
-            System.out.println(errors);
             if (!errors.containsKey("emptyCar")){
                 int carId = Integer.parseInt(data.get("carId"));
                 Car car = carService.findById(carId);
                 session.setAttribute("car", car.getBrand().getName() + " " + car.getModel());
                 session.setAttribute("carId", car.getId());
             }if (!errors.containsKey("distance")){
-                distanceNumber = Float.parseFloat(data.get("distance")) / 1000;
+                distanceNumber = Float.parseFloat(data.get("distance")) / METER_IN_KILOMETER;
             }
             request.setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
             request.setAttribute("errors",errors);
@@ -82,7 +84,7 @@ public class MakeOrderCommand implements Command {
             request.setAttribute("source", data.get("source"));
             request.setAttribute("destination", data.get("destination"));
         }
-        router.setPage("controller?command=main");
+        router.setPage(PageManager.getProperty("path.command.main"));
         return router;
     }
 

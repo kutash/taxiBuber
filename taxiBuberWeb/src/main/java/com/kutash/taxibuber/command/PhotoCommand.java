@@ -1,6 +1,7 @@
 package com.kutash.taxibuber.command;
 
 import com.kutash.taxibuber.controller.Router;
+import com.kutash.taxibuber.resource.PhotoManager;
 import com.kutash.taxibuber.util.FileManager;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
@@ -23,27 +24,21 @@ public class PhotoCommand implements Command {
 
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"getting photo for contact");
-        Properties properties = new Properties();
-        try {
-            properties.load(PhotoCommand.class.getResourceAsStream("/photo.properties"));
-        } catch (IOException e) {
-            LOGGER.log(Level.ERROR,"Exception while loading properties {}",e);
-        }
         String photoPath = request.getParameter(PHOTO);
         String userId = request.getParameter(USER_ID);
         String path;
         if (StringUtils.isEmpty(photoPath)) {
             String appPath = request.getServletContext().getRealPath("");
-            path = appPath + properties.getProperty("AVATAR");
+            path = appPath + PhotoManager.getInstance().getProperty("avatar");
         } else {
-            path = properties.getProperty("AVATARS_PATH")+userId+File.separator+photoPath;
+            path = PhotoManager.getInstance().getProperty("avatars_path")+userId+File.separator+photoPath;
         }
         File file = new File(path);
-        int buffSize = Integer.parseInt(properties.getProperty("BUFFER_SIZE"));
+        int buffSize = Integer.parseInt(PhotoManager.getInstance().getProperty("buffer_size"));
 
         response.reset();
         response.setBufferSize(buffSize);
-        response.setContentType(properties.getProperty("CONTENT_TYPE"));
+        response.setContentType(PhotoManager.getInstance().getProperty("content_type"));
         response.setHeader("Content-Length", String.valueOf(file.length()));
         response.setHeader("Content-Disposition", "avatar; filename=\"" + file.getName() + "\"");
         unloadFile(file, response, buffSize);

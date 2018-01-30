@@ -27,9 +27,9 @@ public class LoginService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while finding user by email",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         if (user == null){
             return user;

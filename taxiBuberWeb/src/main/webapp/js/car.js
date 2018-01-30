@@ -3,7 +3,7 @@ $(document).ready(function () {
     if ($('#is-car').val() === 'true'){
         $('#modal-car').modal('show');
     }
-
+    var count = 0;
     var modalMessage = $('#modal-message2');
     var update = $('#message-update');
     if (update.text() !== ''){
@@ -72,6 +72,7 @@ $(document).ready(function () {
                     $(this).removeClass('error-input').addClass('not-error');
                     $('#error-number').css('display', 'none');
                     $('#blank-number').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                     removeDisabled();
                 }
                 break;
@@ -91,6 +92,7 @@ $(document).ready(function () {
                     $(this).removeClass('error-input').addClass('not-error');
                     $('#error-model').css('display', 'none');
                     $('#blank-model').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                     removeDisabled();
                 }
                 break;
@@ -102,6 +104,8 @@ $(document).ready(function () {
         if ($('#brand').val() === ''){
             $('#save-car').attr('disabled', 'disabled');
         }else {
+            $(this).removeClass('error-input').addClass('not-error');
+            $(this).parent().children('.err2').css('display', 'none');
             removeDisabled();
         }
     });
@@ -110,18 +114,30 @@ $(document).ready(function () {
         if ($('#capacity').val() === ''){
             $('#save-car').attr('disabled', 'disabled');
         }else {
+            $(this).removeClass('error-input').addClass('not-error');
+            $(this).parent().children('.err2').css('display', 'none');
             removeDisabled();
         }
     });
 
     $('.cancel-car').on('click',function () {
-        $('#cancelCarForm').submit();
-        /*$('.err').css('display', 'none');
-        $('input[type=text]').removeClass('error-input not-error');
-        $('#save-car').attr('disabled', 'disabled');
-        var photoPath = $('#car-photo').val();
-        var id = $('#user-id').val();
-        $('#car-img').attr('src','/ajaxController?command=photo&photo='+photoPath+'&userId='+id);*/
+        var errorsFromServer = 0;
+        $('.err2').each(function () {
+            if($(this).text() !== ''){
+                errorsFromServer++;
+            }
+        });
+        if(errorsFromServer > 0) {
+            $('#cancelCarForm').submit();
+        }else {
+            $('#saveCarForm').trigger('reset');
+            $('.err').css('display', 'none');
+            $('input[type=text]').removeClass('error-input not-error');
+            $('#save-car').attr('disabled', 'disabled');
+            var photoPath = $('#car-photo').val();
+            var id = $('#user-id').val();
+            $('#car-img').attr('src', '/ajaxController?command=photo&photo=' + photoPath + '&userId=' + id);
+        }
     });
 
     $('#delete-button').on('click',function () {
@@ -157,7 +173,7 @@ function previewFile(input) {
 
 function removeDisabled() {
     if ($('.error-input').length === 0 && $('input#number').val() !=='' && $('input#model').val() !=='' && $('#brand').val() !=='' && $('#capacity').val()){
-        $('#save-button').removeAttr('disabled');
+        $('#save-car').removeAttr('disabled');
     }
 }
 

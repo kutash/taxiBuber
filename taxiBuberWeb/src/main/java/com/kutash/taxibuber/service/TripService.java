@@ -70,9 +70,9 @@ public class TripService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while creating trip {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         return result;
@@ -90,9 +90,9 @@ public class TripService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while finding trip by id {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         return trip;
@@ -111,9 +111,9 @@ public class TripService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while finding trip by id {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         return trip;
@@ -132,9 +132,9 @@ public class TripService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while updating trip {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         return trip;

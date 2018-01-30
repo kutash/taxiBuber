@@ -2,6 +2,8 @@ package com.kutash.taxibuber.controller;
 
 import com.kutash.taxibuber.command.Command;
 import com.kutash.taxibuber.command.CommandFactory;
+import com.kutash.taxibuber.connection.ConnectionPool;
+import com.kutash.taxibuber.exception.DAOException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,6 +24,15 @@ public class Controller extends HttpServlet {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    @Override
+    public void init(){
+        try {
+            ConnectionPool connectionPool = ConnectionPool.getInstance();
+        } catch (DAOException e) {
+            LOGGER.catching(e);
+        }
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request,response);
     }
@@ -31,7 +42,7 @@ public class Controller extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
-        LOGGER.log(Level.INFO,"processRequest method");
+        LOGGER.log(Level.DEBUG,"processRequest method");
         CommandFactory client = new CommandFactory();
         Command command = client.defineCommand(request);
         Router router = command.execute(request,response);
@@ -40,6 +51,15 @@ public class Controller extends HttpServlet {
             dispatcher.forward(request, response);
         }else {
             response.sendRedirect(request.getContextPath() + router.getPage());
+        }
+    }
+
+    @Override
+    public void destroy(){
+        try {
+            ConnectionPool.getInstance().destroyConnections();
+        } catch (DAOException e) {
+            LOGGER.catching(e);
         }
     }
 }

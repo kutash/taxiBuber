@@ -5,6 +5,7 @@ import com.kutash.taxibuber.entity.Car;
 import com.kutash.taxibuber.entity.Status;
 import com.kutash.taxibuber.entity.User;
 import com.kutash.taxibuber.resource.MessageManager;
+import com.kutash.taxibuber.resource.PageManager;
 import com.kutash.taxibuber.service.CarService;
 import com.kutash.taxibuber.service.UserService;
 import org.apache.logging.log4j.Level;
@@ -43,7 +44,7 @@ public class DeleteCarCommand implements Command {
         router.setRoute(Router.RouteType.REDIRECT);
         MessageManager messageManager = new MessageManager(language);
         request.getSession().setAttribute("deletedMessage",messageManager.getProperty("label.car")+" "+messageManager.getProperty("message.deleted"));
-        router.setPage("controller?command=edit&userId="+driver.getId());
+        router.setPage(PageManager.getProperty("path.command.edit")+driver.getId());
         return router;
     }
 }

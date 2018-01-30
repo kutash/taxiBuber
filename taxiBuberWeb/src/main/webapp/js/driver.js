@@ -1,12 +1,14 @@
 var latitude;
 var longitude;
 var map;
+var isWorking = false;
 
 setInterval(getNewOrder, 3000);
 
 window.onload = function () {
     var begin = document.getElementById("begin");
     begin.addEventListener('click',function () {
+        isWorking = false;
         $('#modal-message').modal("hide");
         var id = document.getElementById("tripId").value;
         $.ajax({
@@ -40,6 +42,7 @@ window.onload = function () {
 
     var complete = document.getElementById("complete");
     complete.addEventListener('click',function () {
+        isWorking = true;
         var infoWindow = new google.maps.InfoWindow();
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
@@ -61,13 +64,13 @@ window.onload = function () {
     });
 
     document.getElementById('work').addEventListener('change',function () {
-        console.log(this.checked);
         if(this.checked) {
+            isWorking = true;
             document.getElementById('start-work').style.display = 'none';
             document.getElementById('stop-work').style.display = 'block';
-            setCarCoordinates(latitude,longitude);
             setAvailable(true);
         }else {
+            isWorking = false;
             document.getElementById('start-work').style.display = 'block';
             document.getElementById('stop-work').style.display = 'none';
             setAvailable(false);
@@ -79,7 +82,7 @@ function setAvailable(isAvailable) {
     var carId = document.getElementById('car-id').value;
     $.ajax({
         type:"GET",
-        url: "ajaxController?command=set_available&carId="+carId+"&isAvailable"+isAvailable,
+        url: "ajaxController?command=set_available&carId="+carId+"&isAvailable="+isAvailable,
         contentType: 'application/json'
     }).done(function(result){
         console.log(result);
@@ -87,6 +90,9 @@ function setAvailable(isAvailable) {
             document.getElementById('no-car').style.display = 'block';
             document.getElementById('start-work').style.display = 'block';
             document.getElementById('stop-work').style.display = 'none';
+            document.getElementById('work').checked = false;
+        }else {
+            setCarCoordinates(latitude,longitude);
         }
     });
 }
@@ -133,7 +139,7 @@ function initMap() {
             };
             latitude = position.coords.latitude;
             longitude = position.coords.longitude;
-            //setCarCoordinates(latitude,longitude);
+            setCarCoordinates(latitude,longitude);
             var geocoder = new google.maps.Geocoder;
             var latLng = new google.maps.LatLng(latitude,longitude);
 

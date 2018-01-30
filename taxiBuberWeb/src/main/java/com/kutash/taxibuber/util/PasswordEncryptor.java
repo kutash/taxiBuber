@@ -1,11 +1,12 @@
 package com.kutash.taxibuber.util;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -17,11 +18,8 @@ import javax.crypto.SecretKey;
  * Использует библиотеку Apache Codec http://commons.apache.org/codec/
  */
 public class PasswordEncryptor {
-    /**
-     * Упрощенный конструктор. Создает StringCrypter с ключом
-     * DESSecretKey (алгоритм шифрования DES) со значением key.
-     * Ключ key должен иметь длину 8 байт
-     */
+
+    private static final Logger LOGGER = LogManager.getLogger();
     
     public PasswordEncryptor(String keyString) {
         keyString = keyString.substring(0,8);
@@ -79,8 +77,8 @@ public class PasswordEncryptor {
             byte[] utf8 = str.getBytes("UTF8");
             byte[] enc = ecipher.doFinal(utf8);
             return Base64.encodeBase64String(enc);
-        } catch (IllegalBlockSizeException | BadPaddingException | UnsupportedEncodingException ex) {
-            Logger.getLogger(PasswordEncryptor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalBlockSizeException | BadPaddingException | UnsupportedEncodingException e) {
+            LOGGER.catching(org.apache.logging.log4j.Level.ERROR, e);
         }
         return null;
     }

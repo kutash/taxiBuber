@@ -57,7 +57,7 @@
                                                 <li><a href="#" class="address-link"><c:out value="${address.address}"/></a></li>
                                             </c:forEach>
                                         </ul>
-                                    </div><!-- /btn-group -->
+                                    </div>
                                 </div>
                             </div>
                             <div class="err">${errors.destError}</div>

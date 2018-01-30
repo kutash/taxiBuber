@@ -65,9 +65,9 @@ public class SaveUserCommand implements Command {
             user.setPhotoPath(photoPath);
             user = userService.updateUser(user);
             request.getSession().setAttribute("currentUser",user);
-            //request.getSession().setAttribute("isCar",true);
+            request.getSession().setAttribute("isCar",true);
             router.setRoute(Router.RouteType.REDIRECT);
-            router.setPage("/controller?command=edit&userId="+id);
+            router.setPage(PageManager.getProperty("path.command.edit")+id);
 
         }
         return router;
@@ -88,7 +88,7 @@ public class SaveUserCommand implements Command {
     }
 
     private String savePhoto(int id,HttpServletRequest request) {
-        LOGGER.log(Level.INFO,"saving photo for the user");
+        LOGGER.log(Level.DEBUG,"saving photo for the user");
         Part photoPart = null;
         try {
             photoPart = request.getPart("photo");

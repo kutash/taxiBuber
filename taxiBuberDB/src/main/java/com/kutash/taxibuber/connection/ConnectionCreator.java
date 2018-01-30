@@ -23,7 +23,7 @@ class ConnectionCreator {
         try {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
         } catch (SQLException e) {
-            LOGGER.log(Level.FATAL,"Can not register driver {}",e);
+            LOGGER.catching(Level.FATAL,e);
             throw new RuntimeException(e);
         }
     }
@@ -33,7 +33,7 @@ class ConnectionCreator {
         try {
             connection = DriverManager.getConnection(url,properties);
         } catch (SQLException e) {
-            LOGGER.log(Level.FATAL,"Can not connect to database {}",e);
+            LOGGER.catching(Level.FATAL,e);
             throw new RuntimeException(e);
         }
         return connection;
@@ -46,7 +46,7 @@ class ConnectionCreator {
             try {
                 DriverManager.deregisterDriver(driver);
             } catch (SQLException e) {
-                LOGGER.log(Level.ERROR,"Exception during deregistration of drivers {}",e);
+                LOGGER.catching(Level.ERROR,e);
             }
 
         }

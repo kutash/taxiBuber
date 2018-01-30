@@ -29,9 +29,9 @@ public class AddressService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while finding addresses {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         return addresses;
@@ -56,9 +56,9 @@ public class AddressService {
                 try {
                     transactionManager.rollback();
                 } catch (DAOException e1) {
-                    LOGGER.log(Level.ERROR, "Exception while making rollback", e1);
+                    LOGGER.catching(Level.ERROR, e1);
                 }
-                LOGGER.log(Level.ERROR, "Exception while creating address {}", e);
+                LOGGER.catching(Level.ERROR, e);
             }
             transactionManager.endTransaction();
         }
@@ -78,9 +78,9 @@ public class AddressService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR, e1);;
             }
-            LOGGER.log(Level.ERROR,"Exception while finding address by id {}",e);
+            LOGGER.catching(Level.ERROR, e);
         }
         transactionManager.endTransaction();
         return address;
@@ -99,9 +99,9 @@ public class AddressService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR, e1);;
             }
-            LOGGER.log(Level.ERROR,"Exception while updating address {}",e);
+            LOGGER.catching(Level.ERROR, e);
         }
         transactionManager.endTransaction();
         return address;

@@ -1,5 +1,6 @@
 package com.kutash.taxibuber.util;
 
+import com.kutash.taxibuber.resource.PhotoManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,13 +20,7 @@ public class FileManager {
     public String savePhoto(Part part,int id, boolean isCar){
         LOGGER.log(Level.INFO,"saving photo");
         String fileName = "";
-        Properties properties = new Properties();
-        try {
-            properties.load(FileManager.class.getResourceAsStream("/photo.properties"));
-        } catch (IOException e) {
-            LOGGER.log(Level.ERROR,"Exception while loading photo properties",e);
-        }
-        String photoPath = properties.getProperty("AVATARS_PATH") + id;
+        String photoPath = PhotoManager.getInstance().getProperty("avatars_path") + id;
         File fileSaveDir;
         if (part.getSize()>0){
             fileSaveDir = new File(photoPath);
@@ -70,33 +65,6 @@ public class FileManager {
             boolean deleted = file.delete();
             if (!deleted){
                 LOGGER.log(Level.ERROR, "File wasn't deleted");
-            }
-        }
-    }
-
-    public void deleteEmptyFolder(File file){
-        String[] tempFiles = file.list();
-        if (tempFiles != null && file.isDirectory() && file.exists()) {
-            int length = tempFiles.length;
-            if (length == 0) {
-                boolean deleted = file.delete();
-                if (!deleted) {
-                    LOGGER.log(Level.ERROR, "Empty directory wasn't deleted");
-                }
-            }
-        }
-    }
-
-    private void deleteAllFilesFolder(String path) {
-        File[] files = new File(path).listFiles();
-        if (files != null) {
-            for (File myFile : files) {
-                if (myFile.isFile()) {
-                    boolean deleted = myFile.delete();
-                    if (!deleted){
-                        LOGGER.log(Level.ERROR,"File wasn't deleted");
-                    }
-                }
             }
         }
     }

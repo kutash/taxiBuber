@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CarAvailableCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String IS_AVAILABLE = "distance";
+    private static final String IS_AVAILABLE = "isAvailable";
     private static final String CAR_ID = "carId";
     private CarService service;
 
@@ -25,7 +25,7 @@ public class CarAvailableCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
-        LOGGER.log(Level.INFO,"");
+        LOGGER.log(Level.INFO,"set available");
         Router router = new Router();
         String result;
         String available = request.getParameter(IS_AVAILABLE);

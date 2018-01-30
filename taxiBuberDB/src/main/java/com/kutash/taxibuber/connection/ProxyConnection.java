@@ -34,7 +34,7 @@ public class ProxyConnection implements Connection {
         try {
             ConnectionPool.getInstance().releaseConnection(this);
         } catch (DAOException e) {
-            LOGGER.log(Level.ERROR,"Exception in close method {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
     }
 

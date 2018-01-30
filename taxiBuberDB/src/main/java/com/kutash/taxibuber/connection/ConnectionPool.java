@@ -5,6 +5,8 @@ import com.kutash.taxibuber.resource.DBConfigurationManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -12,7 +14,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class ConnectionPool {
+public class ConnectionPool implements Serializable {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private final static ReentrantLock lock = new ReentrantLock();
@@ -87,5 +89,9 @@ public class ConnectionPool {
             }
         }
         ConnectionCreator.deregisterDrivers();
+    }
+
+    private Object readResolve()  {
+        return instance;
     }
 }

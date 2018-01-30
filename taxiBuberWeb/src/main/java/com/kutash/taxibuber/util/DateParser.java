@@ -20,7 +20,7 @@ public class DateParser {
                 Date birthdayUtil = format.parse(date);
                 birthday = new Date(birthdayUtil.getTime());
             } catch (ParseException e) {
-                LOGGER.log(Level.ERROR,"Exception while parsing date");
+                LOGGER.catching(Level.ERROR, e);;
             }
         }
         return birthday;

@@ -34,9 +34,9 @@ public class UserService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while finding all users {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         return users;
@@ -54,9 +54,9 @@ public class UserService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while finding user by id {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         return user;
@@ -80,9 +80,9 @@ public class UserService {
                 try {
                     transactionManager.rollback();
                 } catch (DAOException e1) {
-                    LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                    LOGGER.catching(Level.ERROR,e1);
                 }
-                LOGGER.log(Level.ERROR,"Exception while creating user {}",e);
+                LOGGER.catching(Level.ERROR,e);
             }
             transactionManager.endTransaction();
         }
@@ -102,9 +102,9 @@ public class UserService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while updating user {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         return user;
@@ -122,9 +122,9 @@ public class UserService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while checking email {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         return result;
@@ -154,9 +154,9 @@ public class UserService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while finding comments {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         return comments;

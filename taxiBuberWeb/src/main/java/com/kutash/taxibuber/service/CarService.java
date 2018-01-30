@@ -6,6 +6,7 @@ import com.kutash.taxibuber.dao.TransactionManager;
 import com.kutash.taxibuber.entity.Car;
 import com.kutash.taxibuber.entity.CarBrand;
 import com.kutash.taxibuber.exception.DAOException;
+import com.kutash.taxibuber.resource.RegulationManager;
 import com.kutash.taxibuber.util.Validator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
@@ -32,9 +33,9 @@ public class CarService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while finding car by id {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         return car;
@@ -53,9 +54,9 @@ public class CarService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while finding car by user id {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         return car;
@@ -74,9 +75,9 @@ public class CarService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while finding all cars {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         return cars;
@@ -99,17 +100,18 @@ public class CarService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while finding all available cars {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         List<Car> nearestCars = new ArrayList<>();
+        double maxDistance = Double.parseDouble(RegulationManager.getInstance().getProperty("max_distance"));
         if (cars != null) {
             for (Car car : cars) {
                 if (car.getLatitude() != null && car.getLongitude() != null) {
                     double distance = defineDistance(Double.parseDouble(latitude), Double.parseDouble(longitude), car);
-                    if (distance < 15.0) {
+                    if (distance < maxDistance) {
                         nearestCars.add(car);
                     }
                 }
@@ -131,9 +133,9 @@ public class CarService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while finding all available cars {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         return cars;
     }
@@ -151,9 +153,9 @@ public class CarService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while updating car {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         return car;
@@ -172,16 +174,12 @@ public class CarService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while finding all car brands {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         return brands;
-    }
-
-    public Map<String,String> validateCar(Map<String,String> data, String language){
-        return new Validator().validateCar(data,language);
     }
 
     private double defineDistance(double latitude,double longitude, Car car){
@@ -207,9 +205,9 @@ public class CarService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while finding car brand by id {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         return carBrand;
@@ -227,9 +225,9 @@ public class CarService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while creating car {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         return result;
@@ -247,9 +245,9 @@ public class CarService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while checking car number {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         return result;
@@ -267,9 +265,9 @@ public class CarService {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.log(Level.ERROR,"Exception while making rollback",e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.log(Level.ERROR,"Exception while checking car number for update {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         return result;

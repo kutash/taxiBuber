@@ -30,13 +30,24 @@
                 <div class="col-sm-4 text-center">
                     <form class="form-horizontal" id="complete-form" action="controller" method="post">
                         <div class="checkbox">
-                            <input type="checkbox" id="work">
-                            <label id="start-work" style="display: block" class="label-span"><fmt:message key="label.start"/></label>
-                            <label id="stop-work" style="display: none" class="label-span"><fmt:message key="label.stop"/></label><br>
+                            <%--<label class="control-label col-sm-4 label-driver"><fmt:message key="label.workstatus"/></label>--%>
+                            <label id="start-work" style="display: ${car.available == true ? 'none' : 'block'}" class="label-span"><fmt:message key="label.start"/></label>
+                                <label id="stop-work" style="display: ${car.available == true ? 'block' : 'none'}" class="label-span"><fmt:message key="label.stop"/></label>
+                            <label class="switch">
+                                <input type="checkbox" id="work" ${car.available == true ? 'checked' : ''}>
+                                <span class="slider round"></span>
+                            </label>
+
                         </div>
-                        <div class="alert alert-danger fade in" style="display: none" id="no-car">
+                        <div class="alert alert-danger" style="display: none" id="no-car">
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                            <fmt:message key="label.nocar"/>
+                            <fmt:message key="label.nullcar"/>
+                            <c:url var="edit" value="controller">
+                                <c:param name="command" value="edit"/>
+                                <c:param name="userId" value="${currentUser.id}"/>
+                                <c:param name="isCarParam" value="true"/>
+                            </c:url>
+                            <a href="${edit}"><fmt:message key="label.addcar"/></a>
                         </div>
                         <input type="hidden" name="command" value="complete_trip">
                         <input type="hidden" id="tripId" name="tripId">

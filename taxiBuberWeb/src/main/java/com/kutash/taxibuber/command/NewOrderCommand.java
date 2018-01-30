@@ -7,6 +7,7 @@ import com.kutash.taxibuber.entity.Trip;
 import com.kutash.taxibuber.entity.User;
 import com.kutash.taxibuber.service.AddressService;
 import com.kutash.taxibuber.service.TripService;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,6 +28,7 @@ public class NewOrderCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
+        LOGGER.log(Level.INFO,"Finding new orders");
         Router router = new Router();
         String json = "Error";
         User user = (User) request.getSession().getAttribute("currentUser");

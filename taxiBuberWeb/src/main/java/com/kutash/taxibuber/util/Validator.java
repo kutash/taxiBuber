@@ -31,7 +31,7 @@ public class Validator {
     private static final String DIGIT = "\\d+";
 
     public Map<String,String> validateUser(Map<String,String> data,String language){
-        LOGGER.log(Level.INFO,"validating user");
+        LOGGER.log(Level.DEBUG,"validating user");
         MessageManager messageManager = new MessageManager(language);
         Pattern patternName = Pattern.compile(NAME);
         Pattern patternEmail = Pattern.compile(EMAIL);
@@ -125,7 +125,7 @@ public class Validator {
     }
 
     public Map<String,String> checkPassword(String password,String passwordConfirm,String language){
-        LOGGER.log(Level.INFO,"validating password");
+        LOGGER.log(Level.DEBUG,"validating password");
         MessageManager messageManager = new MessageManager(language);
         Pattern patternPassword = Pattern.compile(PASSWORD);
         Map<String, String> map = new HashMap<>();
@@ -142,7 +142,7 @@ public class Validator {
     }
 
     public Map<String,String> validateCar(Map<String,String> data ,String language) {
-        LOGGER.log(Level.INFO, "validating car");
+        LOGGER.log(Level.DEBUG, "validating car");
         MessageManager messageManager = new MessageManager(language);
         Pattern patternNumber = Pattern.compile(NUMBER);
         Pattern patternModel = Pattern.compile(MODEL);
@@ -191,7 +191,7 @@ public class Validator {
     }
 
     public HashMap<String,String> validateOrder(HashMap<String,String> data,String language){
-        LOGGER.log(Level.INFO, "validating order");
+        LOGGER.log(Level.DEBUG, "validating order");
         HashMap<String, String> map = new HashMap<>();
         MessageManager messageManager = new MessageManager(language);
         if (StringUtils.isEmpty(data.get("carId"))){
@@ -250,7 +250,7 @@ public class Validator {
             Date birthdayUtil = format.parse(birthday);
             date = new Date(birthdayUtil.getTime());
         } catch (ParseException e) {
-            LOGGER.log(Level.ERROR,"Exception while parsing date");
+            LOGGER.catching(Level.ERROR,e);
         }
         Date now = new Date();
         return !date.after(now);

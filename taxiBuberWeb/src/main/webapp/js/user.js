@@ -2,7 +2,6 @@ $(document).ready(function () {
     var userRole = $('.before-form').text();
     if (userRole === 'ADMIN') {
         $('div.form-group').removeClass('required');
-        console.log($('.required'))
     }
 
     ($('.err2').each(function () {
@@ -11,7 +10,7 @@ $(document).ready(function () {
         }
     }));
 
-    if ($('#update-password').text() !== ''){
+    if ($('#update-password').text() !== '' || $('#update-user').text() !== ''){
         var modalMessage = $('#modal-message');
         modalMessage.modal('show');
         setTimeout(function(){
@@ -35,18 +34,20 @@ $(document).ready(function () {
             case 'name':
                 if (val === '') {
                     $('#save-button').attr('disabled', 'disabled');
-                    $(this).removeClass('not-error').addClass('error-input');
+                    $(this).removeClass('not-error').addClass('error-input-user');
                     $('#error-name').css('display', 'none');
                     $('#blank-name').css('display', 'block');
                 } else if (!rv_name.test(val)) {
                     $('#save-button').attr('disabled', 'disabled');
-                    $(this).removeClass('not-error').addClass('error-input');
+                    $(this).removeClass('not-error').addClass('error-input-user');
                     $('#error-name').css('display', 'block');
                     $('#blank-name').css('display', 'none');
                 } else {
-                    $(this).removeClass('error-input').addClass('not-error');
+                    $(this).removeClass('error-input-user').addClass('not-error');
                     $('#error-name').css('display', 'none');
                     $('#blank-name').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
+                    console.log("before");
                     removeDisabled();
                 }
                 break;
@@ -54,54 +55,59 @@ $(document).ready(function () {
             case 'surname':
                 if (val === '') {
                     $('#save-button').attr('disabled', 'disabled');
-                    $(this).removeClass('not-error').addClass('error-input');
+                    $(this).removeClass('not-error').addClass('error-input-user');
                     $('#error-surname').css('display', 'none');
                     $('#blank-surname').css('display', 'block');
                 } else if (!rv_name.test(val)) {
                     $('#save-button').attr('disabled', 'disabled');
-                    $(this).removeClass('not-error').addClass('error-input');
+                    $(this).removeClass('not-error').addClass('error-input-user');
                     $('#error-surname').css('display', 'block');
                     $('#blank-surname').css('display', 'none');
                 } else {
-                    $(this).removeClass('error-input').addClass('not-error');
+                    $(this).removeClass('error-input-user').addClass('not-error');
                     $('#error-surname').css('display', 'none');
                     $('#blank-surname').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
+                    console.log("before");
                     removeDisabled();
                 }
                 break;
 
             case 'patronymic':
                 if(val === '' || rv_name.test(val)) {
-                    $(this).removeClass('error-input').addClass('not-error');
+                    $(this).removeClass('error-input-user').addClass('not-error');
                     $('#error-patronymic').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                     removeDisabled();
                 } else {
                     $('#save-button').attr('disabled', 'disabled');
-                    $(this).removeClass('not-error').addClass('error-input');
+                    $(this).removeClass('not-error').addClass('error-input-user');
                     $('#error-patronymic').css('display', 'block');
                 }
                 break;
 
             case 'phone':
                 if(val === '' || rv_phone.test(val)) {
-                    $(this).removeClass('error-input').addClass('not-error');
+                    $(this).removeClass('error-input-user').addClass('not-error');
                     $('#error-phone').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                     removeDisabled();
                 } else {
                     $('#save-button').attr('disabled', 'disabled');
-                    $(this).removeClass('not-error').addClass('error-input');
+                    $(this).removeClass('not-error').addClass('error-input-user');
                     $('#error-phone').css('display', 'block');
                 }
                 break;
 
             case 'birthday':
                 if(val === '' || rv_date.test(val)) {
-                    $(this).removeClass('error-input').addClass('not-error');
+                    $(this).removeClass('error-input-user').addClass('not-error');
                     $('#error-birthday').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                     removeDisabled();
                 } else {
                     $('#save-button').attr('disabled', 'disabled');
-                    $(this).removeClass('not-error').addClass('error-input');
+                    $(this).removeClass('not-error').addClass('error-input-user');
                     $('#error-birthday').css('display', 'block');
                 }
                 break;
@@ -110,13 +116,23 @@ $(document).ready(function () {
     });
 
     $('#cancel-button').on('click',function () {
-        $('#saveUserForm').trigger( 'reset' );
-        $('.err').css('display', 'none');
-        $('input[type=text]').removeClass('error-input not-error');
-        $('#save-button').attr('disabled', 'disabled');
-        var photoPath = $('#user-photo').val();
-        var id = $('#user-id').val();
-        $('#blah').attr('src','/ajaxController?command=photo&photo='+photoPath+'&userId='+id);
+        var errorsFromServer = 0;
+        $('.err2').each(function () {
+            if($(this).text() !== ''){
+                errorsFromServer++;
+            }
+        });
+        if(errorsFromServer > 0) {
+            $('#cancelUserForm').submit();
+        }else {
+            $('#saveUserForm').trigger( 'reset' );
+            $('.err').css('display', 'none');
+            $('input[type=text]').removeClass('error-input-user not-error');
+            $('#save-button').attr('disabled', 'disabled');
+            var photoPath = $('#user-photo').val();
+            var id = $('#user-id').val();
+            $('#blah').attr('src','/ajaxController?command=photo&photo='+photoPath+'&userId='+id);
+        }
     });
 
     $('input#password, input#repeat, input#old-password').on("keyup", function(){
@@ -140,6 +156,7 @@ $(document).ready(function () {
                     $(this).removeClass('error-input').addClass('not-error');
                     $('#error-old').css('display', 'none');
                     $('#blank-old').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                     removeDisabledPassw();
                 }
                 break;
@@ -159,6 +176,7 @@ $(document).ready(function () {
                     $(this).removeClass('error-input').addClass('not-error');
                     $('#error-password').css('display', 'none');
                     $('#blank-password').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                     removeDisabledPassw();
                 }
                 break;
@@ -171,6 +189,7 @@ $(document).ready(function () {
                 } else {
                     $(this).removeClass('error-input').addClass('not-error');
                     $('#repeat-password').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                     removeDisabledPassw();
                 }
                 break;
@@ -187,7 +206,6 @@ $(document).ready(function () {
 
     $('.delete-address').on('click',function () {
         var id = $(this).attr('id');
-        //$('#li'+id).remove();
         $.ajax({
             type:"POST",
             url: "ajaxController?command=delete_address&addressId="+id,
@@ -230,7 +248,9 @@ function previewFile(input) {
 }
 
 function removeDisabled() {
-    if ($('.error-input').length === 0 && $('input#name').val() !=='' && $('input#surname').val() !=='' ){
+    console.log("in");
+    console.log($('.error-input-user'));
+    if ($('.error-input-user').length === 0 && $('input#name').val() !=='' && $('input#surname').val() !=='' ){
         $('#save-button').removeAttr('disabled');
     }
 }
@@ -241,17 +261,6 @@ function removeDisabledPassw() {
     }
 }
 
-function deleteA(id) {
-    $('#li'+id).remove();
-    $.ajax({
-        type:"POST",
-        url: "ajaxController?command=delete_address&addressId="+id,
-        contentType: 'application/json'
-    }).done(function(result){
-        console.log(result);
-
-    })
-}
 
 
 

@@ -20,7 +20,6 @@ public class DeleteCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String USER_ID = "userId";
-    private static final String LANGUAGE = "language";
     private UserService userService;
     private CarService carService;
 

@@ -47,15 +47,15 @@ public class LoginCommand implements Command {
                 switch (userRole) {
                     case ADMIN:
                         request.getSession().setAttribute("currentUser", user);
-                        router.setPage("/controller?command=show_users");
+                        router.setPage(PageManager.getProperty("path.command.users"));
                         break;
                     case CLIENT:
                         request.getSession().setAttribute("currentUser", user);
-                        router.setPage("/controller?command=main");
+                        router.setPage(PageManager.getProperty("path.command.main"));
                         break;
                     case DRIVER:
                         request.getSession().setAttribute("currentUser", user);
-                        router.setPage("/controller?command=main");
+                        router.setPage(PageManager.getProperty("path.command.main"));
                         break;
                 }
             }

@@ -6,7 +6,6 @@ import com.kutash.taxibuber.exception.DAOException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.sql.SQLException;
 
 public class TransactionManager {
@@ -18,12 +17,12 @@ public class TransactionManager {
         try {
             connection = ConnectionPool.getInstance().getConnection();
         } catch (DAOException e) {
-            LOGGER.log(Level.ERROR,"Exception while taking connection from the pool",e);
+            LOGGER.catching(Level.ERROR,e);
         }
     }
 
     public void beginTransaction(AbstractDAO abstractDAO, AbstractDAO ... daos) throws DAOException {
-        LOGGER.log(Level.INFO,"Beginning transaction");
+        LOGGER.log(Level.DEBUG,"Beginning transaction");
         try {
             connection.setAutoCommit(false);
         } catch (SQLException e) {
@@ -36,16 +35,16 @@ public class TransactionManager {
     }
 
     public void endTransaction(){
-        LOGGER.log(Level.INFO,"Returning connection to the pool");
+        LOGGER.log(Level.DEBUG,"Returning connection to the pool");
         try {
             ConnectionPool.getInstance().releaseConnection(connection);
         } catch (DAOException e) {
-            LOGGER.log(Level.ERROR,"Exception while releasing connection {}",e);
+            LOGGER.catching(Level.ERROR,e);
         }
     }
 
     public void commit() throws DAOException {
-        LOGGER.log(Level.INFO,"Making commit");
+        LOGGER.log(Level.DEBUG,"Making commit");
         try {
             connection.commit();
         } catch (SQLException e) {
@@ -54,7 +53,7 @@ public class TransactionManager {
     }
 
     public void rollback() throws DAOException {
-        LOGGER.log(Level.INFO,"Making rollback");
+        LOGGER.log(Level.DEBUG,"Making rollback");
         try {
             connection.rollback();
         } catch (SQLException e) {

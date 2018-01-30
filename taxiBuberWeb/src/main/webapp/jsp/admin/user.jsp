@@ -38,6 +38,10 @@
         <input type="hidden" value="${user.id}" name="userId">
         <button type="button" class="btn btn-default cancel-car" data-dismiss="modal"><fmt:message key="button.cancel"/></button>
     </form>
+    <form action="controller" method="get" id="cancelUserForm">
+        <input type="hidden" name="command" value="edit">
+        <input type="hidden" name="userId" value="${user.id}">
+    </form>
         <div class="container">
             <div class="row">
                 <div class="before-form">${currentUser.role}</div>
@@ -120,10 +124,10 @@
                             <c:if test="${currentUser.role == 'DRIVER'}">
                                 <div class="form-group">
                                     <label class="control-label col-sm-3" for="email"><fmt:message key="label.car"/>:</label>
-                                    <div class="col-sm-6" style="margin-top: 5px">
+                                    <div class="col-sm-6" style="margin-top: 2px">
                                         <c:if test="${car != null}">
-                                            <a href="#" data-toggle="modal" data-target="#modal-car" id="car" style="font-size: 17px;margin-right: 72%;">${car.brand.name } ${car.model}</a>
-                                            <a href="#" id="delete-button"><i class="fa fa-trash" aria-hidden="true" style="font-size: 20px"></i></a>
+                                            <a href="#" data-toggle="modal" data-target="#modal-car" id="car" style="font-size: 17px;float: left">${car.brand.name } ${car.model}</a>
+                                            <a href="#" id="delete-button"><i class="fa fa-trash" aria-hidden="true" style="font-size: 20px;float: right"></i></a>
                                         </c:if>
                                         <c:if test="${car == null}">
                                             <a href="#" data-toggle="modal" data-target="#modal-car" id="car" style="font-size: 17px;margin-right: 68%;"><fmt:message key="label.addcar"/></a>
@@ -131,10 +135,10 @@
                                     </div>
                                 </div>
                             </c:if>
-                            <div class="form-group" style="margin-top: 55px;">
-                                <div class="col-sm-offset-2 col-sm-6">
+                            <div class="form-group" style="margin-top: 91px;margin-left: -195px;">
+                                <div class="col-sm-offset-1 col-sm-4">
                                     <button type="submit" id="save-button" class="btn btn-success btn-md" form="saveUserForm"><i class="fa fa-floppy-o" aria-hidden="true"></i> <fmt:message key="button.save"/></button>
-                                    <button class="btn btn-danger btn-md" id="cancel-button"><i class="fa fa-ban" aria-hidden="true"></i> <fmt:message key="button.cancel"/></button>
+                                    <button type="submit" class="btn btn-danger btn-md" id="cancel-button" form="cancelUserForm"><i class="fa fa-ban" aria-hidden="true"></i> <fmt:message key="button.cancel"/></button>
                                 </div>
                             </div>
                         </c:if>
@@ -160,7 +164,7 @@
                             <c:if test="${user.role == 'DRIVER'}">
                                 <div class="form-group">
                                     <label class="control-label col-sm-3" for="email"><fmt:message key="label.car"/>:</label>
-                                    <div class="col-sm-6" style="margin-top: 5px">
+                                    <div class="col-sm-6" style="margin-top: 2px">
                                         <c:if test="${car != null}">
                                             <a href="#" data-toggle="modal" data-target="#modal-car" id="car" style="font-size: 16px;margin-right: 72%;">${car.brand.name } ${car.model}</a>
                                         </c:if>
@@ -288,6 +292,7 @@
                 <div class="modal-content modal-message">
                     <div class="modal-body modal-message-body">
                         <div id="update-password">${updatePassword}</div>
+                        <div id="update-user">${updatedUser}</div>
                     </div>
                 </div>
             </div>

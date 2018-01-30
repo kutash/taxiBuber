@@ -2,8 +2,10 @@ package com.kutash.taxibuber.command;
 
 import com.google.gson.Gson;
 import com.kutash.taxibuber.controller.Router;
+import com.kutash.taxibuber.entity.Car;
 import com.kutash.taxibuber.entity.Trip;
 import com.kutash.taxibuber.entity.TripStatus;
+import com.kutash.taxibuber.service.CarService;
 import com.kutash.taxibuber.service.TripService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
@@ -18,8 +20,11 @@ public class StartTripCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String TRIP_ID = "tripId";
     private TripService service;
+    private CarService carService;
 
-    StartTripCommand(TripService service) {
+    StartTripCommand(TripService service, CarService carService) {
+
+        this.carService=carService;
         this.service = service;
     }
 
@@ -33,6 +38,9 @@ public class StartTripCommand implements Command {
             Trip trip = service.findTripById(Integer.parseInt(tripId));
             trip.setStatus(TripStatus.STARTED);
             trip = service.updateTrip(trip);
+            Car car = carService.findById(trip.getIdCar());
+            car.setAvailable(false);
+            carService.updateCar(car);
             if (trip.getStatus().equals(TripStatus.STARTED)){
                 result = "OK";
             }

@@ -41,9 +41,7 @@ public class MainCommand implements Command {
                     router.setPage(PageManager.getProperty("path.page.welcome"));
                     break;
                 case DRIVER:
-                    request.getSession().setAttribute("currentUser", user);
                     Car car = carService.findByUserId(user.getId());
-                    request.getSession().setAttribute("currentUser", user);
                     request.setAttribute("car", car);
                     router.setPage(PageManager.getProperty("path.page.driver"));
                     break;

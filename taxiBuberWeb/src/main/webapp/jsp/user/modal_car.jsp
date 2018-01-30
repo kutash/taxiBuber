@@ -33,7 +33,7 @@
                             <form class="form-horizontal" action="controller" method="post" enctype="multipart/form-data" id="saveCarForm">
                                 <input type="hidden" name="command" value="save_car">
                                 <input type="hidden" value="${car.id}" name="carId">
-                                <input type="hidden" value="${not empty car ? car.userId : user.id}" name="userId" id="user-id">
+                                <input type="hidden" value="${car.userId}" name="userId" id="driver-id">
                                 <div class="form-group required">
                                     <label class="control-label col-sm-5" for="number"><fmt:message key="label.number"/>:</label>
                                     <div class="col-sm-7">

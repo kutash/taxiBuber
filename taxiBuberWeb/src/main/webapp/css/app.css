@@ -87,6 +87,15 @@ button.close {
     box-shadow: 0 0 5px rgba(255,0,0,0.3);
 }
 
+.error-input-user{
+    border-color: red;
+}
+
+.error-input-user:focus{
+    border-color: red;
+    box-shadow: 0 0 5px rgba(255,0,0,0.3);
+}
+
 .not-error{
     border-color: green;
 }
@@ -162,7 +171,6 @@ a.pager-link-selected {
     border-radius: 5px;
     width: 300px;
     display: inline-flex;
-
 }
 
 h1{
@@ -267,11 +275,11 @@ h4 {
     border-radius: 50px;
 }
 
-.input-driver {
+/*.input-driver {
     width: 300px !important;
     height: 37px;
     margin-left: -20px;
-}
+}*/
 
 .label-driver {
     font-size: 22px;
@@ -287,12 +295,12 @@ h4 {
 }
 
 #cancel-button {
-    margin-left: 50px;
+    margin-left: 70px;
 }
 
 #change-psw{
     font-size: 17px;
-    margin-right: 323px;
+    margin-right: 317px;
 }
 
 .banned {
@@ -372,4 +380,63 @@ h4 {
     margin-bottom: 30px!important;
     margin-top: 3px!important;
     margin-left: -121px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    margin-left: 15px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
 }

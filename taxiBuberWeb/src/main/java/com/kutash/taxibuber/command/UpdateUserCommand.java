@@ -3,6 +3,7 @@ package com.kutash.taxibuber.command;
 import com.kutash.taxibuber.controller.Router;
 import com.kutash.taxibuber.entity.Comment;
 import com.kutash.taxibuber.entity.User;
+import com.kutash.taxibuber.resource.MessageManager;
 import com.kutash.taxibuber.resource.PageManager;
 import com.kutash.taxibuber.service.UserService;
 import com.kutash.taxibuber.util.DateParser;
@@ -15,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.util.HashMap;
@@ -40,6 +42,11 @@ public class UpdateUserCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"saving user");
+        HttpSession session = request.getSession();
+        session.removeAttribute("deletedMessage");
+        session.removeAttribute("createMessage");
+        session.removeAttribute("updateMessage");
+        session.removeAttribute("updatePassword");
         String language = (String) request.getSession().getAttribute(LANGUAGE);
         Router router = new Router();
         String userId = request.getParameter(USER_ID);
@@ -75,8 +82,10 @@ public class UpdateUserCommand implements Command {
                     user.setPhotoPath(photoPath);
                 }
                 userService.updateUser(user);
+                MessageManager messageManager = new MessageManager(language);
+                request.getSession().setAttribute("updatedUser",messageManager.getProperty("message.userupdated"));
                 router.setRoute(Router.RouteType.REDIRECT);
-                router.setPage("controller?command=edit&userId="+user.getId());
+                router.setPage(PageManager.getProperty("path.command.edit")+user.getId());
             }
         }
         /*StringBuffer switchLanguage = request.getRequestURL();
@@ -114,7 +123,7 @@ public class UpdateUserCommand implements Command {
     }
 
     private String savePhoto(int id,HttpServletRequest request) {
-        LOGGER.log(Level.INFO,"saving photo for the user");
+        LOGGER.log(Level.DEBUG,"saving photo for the user");
         Part photoPart = null;
         try {
             photoPart = request.getPart("photo");

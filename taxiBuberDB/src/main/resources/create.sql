@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS `taxi_buber`.`user` (
   `birthday` DATE NULL DEFAULT NULL COMMENT 'user birthday, optional field',
   `photo_path` VARCHAR(255) NULL DEFAULT NULL COMMENT 'path to the user\'s photo  if there is one',
   `phone` VARCHAR(20) NULL DEFAULT NULL,
+  `status` ENUM('ACTIVE', 'ARCHIVED', 'BANNED') NOT NULL DEFAULT 'ACTIVE',
   PRIMARY KEY (`id_user`),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC))
   ENGINE = InnoDB
@@ -46,6 +47,7 @@ CREATE TABLE IF NOT EXISTS `taxi_buber`.`address` (
   `id_address` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'address id',
   `address` VARCHAR(255) NOT NULL COMMENT 'name of the locality',
   `id_user` INT(10) UNSIGNED NOT NULL COMMENT 'each address must have a specific user',
+  `status` ENUM('ACTIVE', 'ARCHIVED', 'BANNED') NOT NULL DEFAULT 'ACTIVE',
   PRIMARY KEY (`id_address`),
   INDEX `fk_address_user1_idx` (`id_user` ASC),
   CONSTRAINT `fk_address_user1`
@@ -82,9 +84,10 @@ CREATE TABLE IF NOT EXISTS `taxi_buber`.`car` (
   `latitude` CHAR(10) NULL DEFAULT NULL COMMENT 'geographical latitude of the car at time of order',
   `longitude` CHAR(10) NULL DEFAULT NULL COMMENT 'eographical longitude of the car at time of order',
   `id_brand` INT(10) UNSIGNED NOT NULL COMMENT 'car brand id',
-  `capacity` ENUM('CAR', 'MINIBUS', 'MINIVAN') NULL DEFAULT NULL,
+  `capacity` ENUM('CAR', 'MINIBUS', 'MINIVAN') CHARACTER SET 'big5' NULL DEFAULT 'CAR',
+  `status` ENUM('ACTIVE', 'ARCHIVED', 'BANNED') NOT NULL DEFAULT 'ACTIVE',
   `id_user` INT(10) UNSIGNED NOT NULL,
-  PRIMARY KEY (`id_car`, `id_brand`, `id_user`),
+  PRIMARY KEY (`id_car`),
   UNIQUE INDEX `state_number_UNIQUE` (`registration_number` ASC),
   INDEX `fk_car_car_brand1_idx` (`id_brand` ASC),
   INDEX `fk_car_user1_idx` (`id_user` ASC),

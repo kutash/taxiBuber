@@ -6,7 +6,7 @@ public class Car extends AbstractEntity {
     private Capacity capacity;
     private String model;
     private String photoPath;
-    private boolean isAvailable;
+    private boolean available = false;
     private String latitude;
     private String longitude;
     private CarBrand brand;
@@ -32,7 +32,7 @@ public class Car extends AbstractEntity {
         this.capacity = capacity;
         this.model = model;
         this.photoPath = photoPath;
-        this.isAvailable = isAvailable;
+        this.available = isAvailable;
         this.latitude = latitude;
         this.longitude = longitude;
         this.brand = brand;
@@ -46,7 +46,7 @@ public class Car extends AbstractEntity {
         this.capacity = capacity;
         this.model = model;
         this.photoPath = photoPath;
-        this.isAvailable = isAvailable;
+        this.available = isAvailable;
         this.brand = brand;
         this.userId = userId;
         this.status = status;
@@ -77,11 +77,11 @@ public class Car extends AbstractEntity {
     }
 
     public boolean isAvailable() {
-        return isAvailable;
+        return available;
     }
 
     public void setAvailable(boolean available) {
-        isAvailable = available;
+        this.available = available;
     }
 
     public String getLatitude() {
@@ -138,5 +138,22 @@ public class Car extends AbstractEntity {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "registrationNumber='" + registrationNumber + '\'' +
+                ", capacity=" + capacity +
+                ", model='" + model + '\'' +
+                ", photoPath='" + photoPath + '\'' +
+                ", isAvailable=" + available +
+                ", latitude='" + latitude + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", brand=" + brand +
+                ", userId=" + userId +
+                ", driverFullName='" + driverFullName + '\'' +
+                ", status=" + status +
+                "} " + super.toString();
     }
 }

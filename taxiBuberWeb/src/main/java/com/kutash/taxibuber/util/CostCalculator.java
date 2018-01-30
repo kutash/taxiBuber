@@ -2,6 +2,7 @@ package com.kutash.taxibuber.util;
 
 import com.kutash.taxibuber.entity.Capacity;
 import com.kutash.taxibuber.entity.Car;
+import com.kutash.taxibuber.resource.RegulationManager;
 import com.kutash.taxibuber.service.CarService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
@@ -13,6 +14,11 @@ import java.math.RoundingMode;
 public class CostCalculator {
 
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final int METER_IN_KILOMETER = 1000;
+    private static final int SECOND_IN_MINUTE = 60;
+    private static final double FOURTH = 0.25;
+    private static final double HALF = 0.50;
+    private static final double THREE_QUARTERS = 0.75;
     private CarService carService;
     
     public CostCalculator(CarService carService){
@@ -28,7 +34,7 @@ public class CostCalculator {
             try {
                 carCapacity = Capacity.valueOf(capacity);
             }catch (IllegalArgumentException e){
-                LOGGER.log(Level.ERROR,"Wrong type of argument capacity",e);
+                LOGGER.catching(Level.ERROR, e);
                 carCapacity = Capacity.CAR;
             }
         }else {
@@ -42,11 +48,11 @@ public class CostCalculator {
     }
 
     private BigDecimal calculateTotalCost(double distance, double duration, double capacityCost) {
-        double costPerKilometer = 0.37;
-        double distanceCost = distance/1000*costPerKilometer;
-        double costPerMinute = 0.05;
-        double durationCost = duration/60*costPerMinute;
-        double landing = 1.80;
+        double costPerKilometer = Double.parseDouble(RegulationManager.getInstance().getProperty("cost_kilometer"));
+        double distanceCost = distance/METER_IN_KILOMETER*costPerKilometer;
+        double costPerMinute = Double.parseDouble(RegulationManager.getInstance().getProperty("cost_minute"));
+        double durationCost = duration/SECOND_IN_MINUTE*costPerMinute;
+        double landing = Double.parseDouble(RegulationManager.getInstance().getProperty("cost_landing"));
         double coefficient = calculateCoefficient();
         double resultCost = distanceCost+durationCost+capacityCost+landing+coefficient;
         return new BigDecimal(resultCost).setScale(2, RoundingMode.UP);
@@ -59,10 +65,10 @@ public class CostCalculator {
                 result = 0.0;
                 break;
             case MINIVAN:
-                result = 5.0;
+                result = Double.parseDouble(RegulationManager.getInstance().getProperty("minivan_increase"));
                 break;
             case MINIBUS:
-                result = 10.0;
+                result = Double.parseDouble(RegulationManager.getInstance().getProperty("minibus_increase"));
                 break;
         }
         return result;
@@ -74,14 +80,14 @@ public class CostCalculator {
         int busy = allCars - available;
         double percent = busy/allCars;
         double coefficient = 0.0;
-        if (percent<0.25){
+        if (percent<FOURTH){
             coefficient = 0.0;
-        }else if (percent>=0.25 && percent<0.50){
-            coefficient = 2.0;
-        }else if (percent>=0.50 && percent<0.75){
-            coefficient = 3.0;
-        }else if (percent>=0.75){
-            coefficient = 4.0;
+        }else if (percent>=FOURTH && percent<HALF){
+            coefficient = Double.parseDouble(RegulationManager.getInstance().getProperty("fourth_half"));
+        }else if (percent>=HALF && percent<THREE_QUARTERS){
+            coefficient = Double.parseDouble(RegulationManager.getInstance().getProperty("half_three_quarters"));
+        }else if (percent>=THREE_QUARTERS){
+            coefficient = Double.parseDouble(RegulationManager.getInstance().getProperty("after_three_quarters"));
         }
         return coefficient;
     }
