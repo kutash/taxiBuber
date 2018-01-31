@@ -28,16 +28,19 @@ public class ShowTripsCommand implements Command {
         LOGGER.log(Level.INFO,"Showing trips");
         Router router = new Router();
         User user = (User) request.getSession().getAttribute(CURRENT_USER);
-        System.out.println(user);
-        List<Trip> trips;
-        UserRole role = user.getRole();
-        if (role.equals(UserRole.ADMIN)){
-            trips = tripService.findAll();
+        if (user == null){
+            router.setPage(PageManager.getProperty("path.page.error403"));
         }else {
-            trips = tripService.findByUserId(user.getId(),role);
+            List<Trip> trips;
+            UserRole role = user.getRole();
+            if (role.equals(UserRole.ADMIN)) {
+                trips = tripService.findAll();
+            } else {
+                trips = tripService.findByUserId(user.getId(), role);
+            }
+            request.setAttribute("trips", trips);
+            router.setPage(PageManager.getProperty("path.page.trips"));
         }
-        request.setAttribute("trips",trips);
-        router.setPage(PageManager.getProperty("path.page.trips"));
         return router;
     }
 }

@@ -32,6 +32,7 @@ public class LoginCommand implements Command {
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"login command");
         Router router = new Router();
+        request.getSession().removeAttribute("sentPassword");
         String language = (String) request.getSession().getAttribute(LANGUAGE);
         String email = request.getParameter(EMAIL);
         String password = request.getParameter(PASSWORD);

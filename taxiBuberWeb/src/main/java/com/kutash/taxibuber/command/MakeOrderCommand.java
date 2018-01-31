@@ -57,12 +57,12 @@ public class MakeOrderCommand implements Command {
             distanceNumber = Float.parseFloat(data.get("distance")) / METER_IN_KILOMETER;
             int carId = Integer.parseInt(data.get("carId"));
             Car car = carService.findById(carId);
-            int sourceId = addressService.createAddress(data.get("source"),user.getId());
-            int destinationId = addressService.createAddress(data.get("destination"),user.getId());
             car.setAvailable(false);
             carService.updateCar(car);
+            int sourceId = addressService.createAddress(data.get("source"), user.getId());
+            int destinationId = addressService.createAddress(data.get("destination"), user.getId());
             Trip trip = new Trip(new BigDecimal(data.get("cost")), new Date(), distanceNumber, carId, sourceId, destinationId, TripStatus.ORDERED);
-            tripService.createTrip(trip);
+            tripService.create(trip);
             session.setAttribute("orderMessage", new MessageManager(language).getProperty("message.ordersuccess"));
             router.setRoute(Router.RouteType.REDIRECT);
         }else {

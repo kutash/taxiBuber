@@ -45,6 +45,7 @@ public class SaveUserCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"saving user");
+        request.getSession().removeAttribute("sentPassword");
         String language = (String) request.getSession().getAttribute(LANGUAGE);
         Router router = new Router();
         User user;

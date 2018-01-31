@@ -8,7 +8,9 @@ setInterval(getNewOrder, 3000);
 window.onload = function () {
     var begin = document.getElementById("begin");
     begin.addEventListener('click',function () {
+        console.log(isWorking+'before begin');
         isWorking = false;
+        console.log(isWorking+'after begin');
         $('#modal-message').modal("hide");
         var id = document.getElementById("tripId").value;
         $.ajax({
@@ -42,7 +44,9 @@ window.onload = function () {
 
     var complete = document.getElementById("complete");
     complete.addEventListener('click',function () {
+        console.log(isWorking+'before complete');
         isWorking = true;
+        console.log(isWorking+'after complete');
         var infoWindow = new google.maps.InfoWindow();
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
@@ -65,7 +69,6 @@ window.onload = function () {
 
     document.getElementById('work').addEventListener('change',function () {
         if(this.checked) {
-            isWorking = true;
             document.getElementById('start-work').style.display = 'none';
             document.getElementById('stop-work').style.display = 'block';
             setAvailable(true);
@@ -93,25 +96,29 @@ function setAvailable(isAvailable) {
             document.getElementById('work').checked = false;
         }else {
             setCarCoordinates(latitude,longitude);
+            isWorking = true;
         }
     });
 }
 
 function getNewOrder() {
-    $.ajax({
-        type:"GET",
-        url: "ajaxController?command=new_order",
-        contentType: 'application/json'
-    }).done(function(result){
-        console.log(result);
-        if(result !== 'no trips'){
-            var modalMessage = $('#modal-message');
-            modalMessage.modal('show');
-            document.getElementById("tripId").value = result.id;
-            document.getElementById("start").value = result.departure.address;
-            document.getElementById("end").value = result.destination.address;
-        }
-    });
+    console.log(isWorking+'in get order');
+    if(isWorking) {
+        $.ajax({
+            type: "GET",
+            url: "ajaxController?command=new_order",
+            contentType: 'application/json'
+        }).done(function (result) {
+            console.log(result);
+            if (result !== 'no trips') {
+                var modalMessage = $('#modal-message');
+                modalMessage.modal('show');
+                document.getElementById("tripId").value = result.id;
+                document.getElementById("start").value = result.departure.address;
+                document.getElementById("end").value = result.destination.address;
+            }
+        });
+    }
 }
 
 function setCarCoordinates(latitude,longitude) {

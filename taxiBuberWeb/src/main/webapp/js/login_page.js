@@ -46,23 +46,26 @@ $(document).ready(function () {
         $('#modal-signup').modal('show');
     }
 
+    if ($('#wrong-email').text() !== ''){
+        $('#forgot-password').modal('show');
+    }
+
     ($('.err2').each(function () {
             if($(this).text() !== ''){
                 $(this).parent().children('.form-control').addClass('error-input');
             }
     }));
 
-});
-
-$(document).ready(function () {
     $("#blah").click(function() {
         $("#imgInp").click();
     });
-
     $('#imgInp').change(function () {
         previewFile(this);
     })
+
 });
+
+
 
 function previewFile(input) {
     var preview = $('#blah');
@@ -322,6 +325,59 @@ $(document).ready(function() {
         $('#save-button').attr('disabled', 'disabled');
         $('#blah').attr('src','/ajaxController?command=photo');
     });
+
+    $('#email-forgot').on('keyup',function () {
+        var rv_email = /^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
+        console.log($(this).val());
+        if ($(this).val() === '') {
+            $('#send-button').attr('disabled', 'disabled');
+            $(this).removeClass('not-error').addClass('error-input');
+            $('#error-forgot').css('display', 'none');
+            $('#forgot-blank').css('display', 'block');
+            $('#forgot-size').css('display', 'none');
+        }else if ($(this).val() > 90) {
+            $('#send-button').attr('disabled', 'disabled');
+            $(this).removeClass('not-error').addClass('error-input');
+            $('#error-forgot').css('display', 'none');
+            $('#forgot-blank').css('display', 'none');
+            $('#forgot-size').css('display', 'block');
+        } else if (!rv_email.test($(this).val())) {
+            $('#send-button').attr('disabled', 'disabled');
+            $(this).removeClass('not-error').addClass('error-input');
+            $('#error-forgot').css('display', 'block');
+            $('#forgot-blank').css('display', 'none');
+            $('#forgot-size').css('display', 'none');
+        } else {
+            $(this).removeClass('error-input').addClass('not-error');
+            $('#error-forgot').css('display', 'none');
+            $('#forgot-size').css('display', 'none');
+            $('#forgot-blank').css('display', 'none');
+            $('#send-button').removeAttr('disabled');
+        }
+    });
+
+    $('.can').on('click', function () {
+        $('#forgotPasswordForm').trigger( 'reset' );
+        $('.err').css('display', 'none');
+        $('input[type=email]').removeClass('error-input not-error');
+        $('#send-button').attr('disabled', 'disabled');
+    });
+
+    var modalMessage = $('#modal-message2');
+    var update = $('#message-update');
+    if (update.text() !== ''){
+        modalMessage.modal('show');
+        update.css('margin','9%');
+        update.css('display', 'block');
+        setTimeout(function(){
+            modalMessage.modal("hide");
+            update.css('display', 'none');
+        }, 3000);
+    }
+
+    if($('#wrong-email').text() !== ''){
+        $('#forgot-password').modal('show');
+    }
 });
 
 function removeDisabled() {

@@ -257,7 +257,7 @@ h4 {
     font-size: 20px;
     font-family: cursive;
     color: white;
-    padding-top: 15%;
+    padding-top: 21%;
     text-align: center;
 }
 
@@ -275,12 +275,6 @@ h4 {
     border-radius: 50px;
 }
 
-/*.input-driver {
-    width: 300px !important;
-    height: 37px;
-    margin-left: -20px;
-}*/
-
 .label-driver {
     font-size: 22px;
 }
@@ -295,12 +289,17 @@ h4 {
 }
 
 #cancel-button {
-    margin-left: 70px;
+    margin-left: 81px;
+    font-size: 18px;
+}
+
+#save-button {
+    font-size: 18px;
 }
 
 #change-psw{
     font-size: 17px;
-    margin-right: 317px;
+    float: left;
 }
 
 .banned {
@@ -439,4 +438,25 @@ input:checked + .slider:before {
 
 .slider.round:before {
     border-radius: 50%;
+}
+
+.h1-error {
+    font-size: 250px;
+    text-align: center;
+    margin-top: 130px;
+    margin-bottom: 5px;
+}
+
+.p-error {
+    font-size: 30px;
+    text-align: center;
+}
+
+.a-error {
+    font-family: cursive;
+}
+
+#div-buttons {
+    margin-top: 112px;
+    margin-left: -257px;
 }

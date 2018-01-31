@@ -15,8 +15,8 @@ import javax.servlet.annotation.WebInitParam;
 import java.io.IOException;
 import java.util.Enumeration;
 
-@WebFilter(filterName="filter1", urlPatterns = { "/*" }, initParams = {@WebInitParam(name = "encoding", value = "utf-8", description = "Encoding Param")})
-public class AaEncodingFilter implements Filter {
+@WebFilter(urlPatterns = { "/*" }, initParams = {@WebInitParam(name = "encoding", value = "utf-8", description = "Encoding Param")})
+public class AggregateEncodingFilter implements Filter {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private String code;

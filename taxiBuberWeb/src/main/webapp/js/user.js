@@ -47,8 +47,7 @@ $(document).ready(function () {
                     $('#error-name').css('display', 'none');
                     $('#blank-name').css('display', 'none');
                     $(this).parent().children('.err2').css('display', 'none');
-                    console.log("before");
-                    removeDisabled();
+                    removeDisabledUser();
                 }
                 break;
 
@@ -68,8 +67,7 @@ $(document).ready(function () {
                     $('#error-surname').css('display', 'none');
                     $('#blank-surname').css('display', 'none');
                     $(this).parent().children('.err2').css('display', 'none');
-                    console.log("before");
-                    removeDisabled();
+                    removeDisabledUser();
                 }
                 break;
 
@@ -78,7 +76,7 @@ $(document).ready(function () {
                     $(this).removeClass('error-input-user').addClass('not-error');
                     $('#error-patronymic').css('display', 'none');
                     $(this).parent().children('.err2').css('display', 'none');
-                    removeDisabled();
+                    removeDisabledUser();
                 } else {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input-user');
@@ -91,7 +89,7 @@ $(document).ready(function () {
                     $(this).removeClass('error-input-user').addClass('not-error');
                     $('#error-phone').css('display', 'none');
                     $(this).parent().children('.err2').css('display', 'none');
-                    removeDisabled();
+                    removeDisabledUser();
                 } else {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input-user');
@@ -104,7 +102,7 @@ $(document).ready(function () {
                     $(this).removeClass('error-input-user').addClass('not-error');
                     $('#error-birthday').css('display', 'none');
                     $(this).parent().children('.err2').css('display', 'none');
-                    removeDisabled();
+                    removeDisabledUser();
                 } else {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input-user');
@@ -247,21 +245,17 @@ function previewFile(input) {
     }
 }
 
-function removeDisabled() {
-    console.log("in");
-    console.log($('.error-input-user'));
-    if ($('.error-input-user').length === 0 && $('input#name').val() !=='' && $('input#surname').val() !=='' ){
-        $('#save-button').removeAttr('disabled');
-    }
-}
-
 function removeDisabledPassw() {
     if ($('.error-input').length === 0 && $('input#old-password').val() !=='' && $('input#password').val() !=='' && $('input#repeat').val() !==''){
         $('#change-password').removeAttr('disabled');
     }
 }
 
-
+function removeDisabledUser() {
+    if ($('.error-input-user').length === 0 && $('input#name').val() !=='' && $('input#surname').val() !=='' ){
+        $('#save-button').removeAttr('disabled');
+    }
+}
 
 
 

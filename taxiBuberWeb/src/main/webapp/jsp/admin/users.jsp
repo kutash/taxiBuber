@@ -13,7 +13,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}css/app.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}css/fontawesome-free-5.0.4/web-fonts-with-css/css/fontawesome-all.css">
         <script type="text/javascript" src="${pageContext.request.contextPath}js/jquery.js"></script>
-        <script type="text/javascript" src="${pageContext.request.contextPath}js/paginate.js"></script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}js/users.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body>
@@ -99,7 +99,7 @@
             </div>
         </div>
     </body>
-    <%--<script>
+    <script>
         paginate('content', 'pager', 10);
-    </script>--%>
+    </script>
 </html>

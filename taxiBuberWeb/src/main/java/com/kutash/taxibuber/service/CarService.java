@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class CarService {
+public class CarService extends AbstractService<Car>{
 
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -214,23 +214,9 @@ public class CarService {
     }
 
     public int createCar(Car car) {
-        TransactionManager transactionManager = new TransactionManager();
-        int result = 0;
+        LOGGER.log(Level.INFO,"Creating car");
         CarDAO carDAO = new DAOFactory().getCarDAO();
-        try {
-            transactionManager.beginTransaction(carDAO);
-            result = carDAO.create(car);
-            transactionManager.commit();
-        } catch (DAOException e) {
-            try {
-                transactionManager.rollback();
-            } catch (DAOException e1) {
-                LOGGER.catching(Level.ERROR,e1);
-            }
-            LOGGER.catching(Level.ERROR,e);
-        }
-        transactionManager.endTransaction();
-        return result;
+        return super.create(car,carDAO);
     }
 
     public boolean isUniqueNumber(String number) {

@@ -1,0 +1,11 @@
+template1(user) ::= <<
+    Добрый день, <user.name> <user.surname>.
+    Высылаем вам временный пароль <user.password>
+    С уважением, Buber.
+>>
+
+template2(user) ::= <<
+    Hello, <user.name> <user.surname>.
+         We send you the temporary password <user.password>
+         Sincerely, Buber.
+>>

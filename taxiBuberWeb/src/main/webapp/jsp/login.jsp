@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/app.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/flag-icon-css-master/css/flag-icon.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}css/fontawesome-free-5.0.4/web-fonts-with-css/css/fontawesome-all.css">
         <script src="${pageContext.request.contextPath}/js/jquery.js"></script>
         <script src="${pageContext.request.contextPath}/js/login_page.js"></script>
         <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
@@ -60,26 +61,26 @@
                             <input type="hidden" name="command"  value="login">
                             <div class="error" id="error-login">${errorLoginPassMessage}</div>
                             <div class="form-group">
-                                <label for="username"><span class="glyphicon glyphicon-user"></span><fmt:message key="label.email"/>:</label>
+                                <label for="username"><i class="fa fa-envelope" aria-hidden="true"></i> <fmt:message key="label.email"/>:</label>
                                 <input type="email" name="email" class="form-control" id="username" placeholder="Enter email" required="required">
                                 <div style="display: none" id="max-email" class="err"><fmt:message key="label.maxemail"/></div>
                                 <div style="display: none" id="blank-email" class="err"><fmt:message key="label.blank"/></div>
                                 <div style="display: none" id="invalid-email" class="err"><fmt:message key="label.invalidemail"/></div>
                             </div>
                             <div class="form-group">
-                                <label for="psw"><span class="glyphicon glyphicon-eye-open"></span><fmt:message key="label.password"/>:</label>
+                                <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> <fmt:message key="label.password"/>:</label>
                                 <input type="password" name="password" class="form-control" id="psw" placeholder="Enter password" required="required">
                                 <div style="display: none" id="max-psw" class="err"><fmt:message key="label.maxpsw"/></div>
                                 <div style="display: none" id="blank-psw" class="err"><fmt:message key="label.blank"/></div>
                                 <div style="display: none" id="invalid-psw" class="err"><fmt:message key="label.invalidpsw"/></div>
                             </div>
-                            <button type="submit" class="btn btn-success btn-block" id="submit-button" disabled><span class="glyphicon glyphicon-off"></span><fmt:message key="label.login"/></button>
+                            <button type="submit" class="btn btn-success btn-block" id="submit-button" disabled><span class="glyphicon glyphicon-off"> </span><fmt:message key="label.login"/></button>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-danger btn-default pull-left cancel" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span><fmt:message key="button.cancel" /></button>
-                        <p><fmt:message key="label.member"/> <a href="#" class="cancel" data-dismiss="modal" data-toggle="modal" data-target="#modal-signup"><fmt:message key="label.signup"/></a></p>
-                        <p><fmt:message key="label.forgot"/><a href="#"><fmt:message key="label.password"/></a></p>
+                        <p><fmt:message key="label.member"/> <a href="#" class="cancel" data-dismiss="modal" data-toggle="modal" data-target="#modal-signup"> <fmt:message key="label.signup"/></a></p>
+                        <p><fmt:message key="label.forgot"/><a href="#" class="cancel" data-dismiss="modal" data-toggle="modal" data-target="#forgot-password"> <fmt:message key="label.password"/>?</a></p>
                     </div>
                 </div>
             </div>
@@ -217,6 +218,51 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default cancel-signup" data-dismiss="modal"><fmt:message key="button.cancel" /></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal forgot password-->
+        <div class="modal fade" id="forgot-password" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close can" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" style="font-size: 30px"><fmt:message key="label.send"/></h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" action="controller" method="post" id="forgotPasswordForm">
+                            <input type="hidden" name="command" value="forgot">
+                            <div class="error" id="wrong-email">${wrongEmail}</div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="email"><fmt:message key="label.email"/>:</label>
+                                <div class="col-sm-9">
+                                    <input type="email" class="form-control" name="emailForgot" id="email-forgot" placeholder="Enter email">
+                                    <div style="display: none" id="error-forgot" class="err"><fmt:message key="label.invalidemail"/></div>
+                                    <div style="display: none" id="forgot-blank" class="err"><fmt:message key="label.blank"/></div>
+                                    <div style="display: none" id="forgot-size" class="err"><fmt:message key="label.maxemail"/></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-5 col-sm-6">
+                                    <button type="submit" class="btn btn-success" id="send-button"><fmt:message key="label.send"/></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default can" data-dismiss="modal"><fmt:message key="button.cancel"/></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal message-->
+        <div class="modal fade" id="modal-message2" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content modal-message">
+                    <div class="modal-body modal-message-body">
+                        <div id="message-update" style="display: none">${sentPassword}</div>
                     </div>
                 </div>
             </div>

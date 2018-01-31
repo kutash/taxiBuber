@@ -1,5 +1,6 @@
 package com.kutash.taxibuber.service;
 
+import com.kutash.taxibuber.dao.AbstractDAO;
 import com.kutash.taxibuber.dao.DAOFactory;
 import com.kutash.taxibuber.dao.TransactionManager;
 import com.kutash.taxibuber.dao.TripDAO;
@@ -12,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
-public class TripService {
+public class TripService extends AbstractService<Trip>{
 
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -58,7 +59,7 @@ public class TripService {
         return trips;
     }
 
-    public int createTrip(Trip trip){
+    /*public int createTrip(Trip trip){
         int result = 0;
         TransactionManager transactionManager = new TransactionManager();
         TripDAO tripDAO = new DAOFactory().getTripDAO();
@@ -76,6 +77,12 @@ public class TripService {
         }
         transactionManager.endTransaction();
         return result;
+    }*/
+
+    public int create(Trip entity) {
+        LOGGER.log(Level.INFO,"Creating trip");
+        TripDAO tripDAO = new DAOFactory().getTripDAO();
+        return super.create(entity, tripDAO);
     }
 
     public Trip findOrdered(int userId){
@@ -120,7 +127,7 @@ public class TripService {
     }
 
     public Trip updateTrip(Trip newTrip){
-        LOGGER.log(Level.INFO,"Updatin trip id={}",newTrip.getId());
+        LOGGER.log(Level.INFO,"Updating trip id={}",newTrip.getId());
         TripDAO tripDAO = new DAOFactory().getTripDAO();
         TransactionManager transactionManager = new TransactionManager();
         Trip trip = null;

@@ -9,10 +9,9 @@ public class MessageManager {
 
     public MessageManager(String locale) {
         System.out.println(locale);
+        Locale.setDefault(new Locale("en", "US"));
         if (locale != null) {
             resourceBundle = ResourceBundle.getBundle("messages", new Locale(locale));
-        }else {
-            resourceBundle = ResourceBundle.getBundle("messages");
         }
     }
 

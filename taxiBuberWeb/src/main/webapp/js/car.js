@@ -3,7 +3,7 @@ $(document).ready(function () {
     if ($('#is-car').val() === 'true'){
         $('#modal-car').modal('show');
     }
-    var count = 0;
+
     var modalMessage = $('#modal-message2');
     var update = $('#message-update');
     if (update.text() !== ''){

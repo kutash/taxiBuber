@@ -28,7 +28,8 @@ public enum CommandEnum {
     COMMENT(new CommentCommand(new UserService())),
     DELETE_CAR(new DeleteCarCommand(new CarService(),new UserService())),
     CANCEL(new CancelCommand()),
-    SET_AVAILABLE(new CarAvailableCommand(new CarService()));
+    SET_AVAILABLE(new CarAvailableCommand(new CarService())),
+    FORGOT(new ForgotPasswordCommand(new UserService(),new LoginService()));
 
     Command command;
 

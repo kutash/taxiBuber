@@ -1,0 +1,41 @@
+package com.kutash.taxibuber.command;
+
+import com.kutash.taxibuber.controller.Router;
+import com.kutash.taxibuber.entity.User;
+import com.kutash.taxibuber.resource.MessageManager;
+import com.kutash.taxibuber.resource.PageManager;
+import com.kutash.taxibuber.service.LoginService;
+import com.kutash.taxibuber.service.UserService;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class ForgotPasswordCommand implements Command {
+
+    private static final String EMAIL = "emailForgot";
+    private static final String LANGUAGE = "language";
+    private UserService userService;
+    private LoginService loginService;
+
+    ForgotPasswordCommand(UserService userService, LoginService loginService){
+        this.userService=userService;
+        this.loginService=loginService;
+    }
+    @Override
+    public Router execute(HttpServletRequest request, HttpServletResponse response) {
+        Router router = new Router();
+        String email = request.getParameter(EMAIL);
+        String language = (String) request.getSession().getAttribute(LANGUAGE);
+        User user = loginService.findUserByEmail(email);
+        if (user != null){
+            user = loginService.changePassword(user,language);
+            userService.updateUser(user);
+            request.getSession().setAttribute("sentPassword",new MessageManager(language).getProperty("message.sentpasw"));
+            router.setRoute(Router.RouteType.REDIRECT);
+        }else {
+            request.setAttribute("wrongEmail", new MessageManager(language).getProperty("message.wrongemail"));
+        }
+        router.setPage(PageManager.getProperty("path.page.index"));
+
+        return router;
+    }
+}

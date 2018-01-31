@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class UserService {
+public class UserService extends AbstractService<User>{
 
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -67,24 +67,11 @@ public class UserService {
     }
 
     public int create(User user) {
-        TransactionManager transactionManager = new TransactionManager();
         int result = 0;
         if (isUniqueEmail(user.getEmail())) {
             user.setPassword(new PasswordEncryptor(user.getEmail()).encrypt(user.getPassword()));
             UserDAO userDAO = new DAOFactory().getUserDAO();
-            try {
-                transactionManager.beginTransaction(userDAO);
-                result = userDAO.create(user);
-                transactionManager.commit();
-            } catch (DAOException e) {
-                try {
-                    transactionManager.rollback();
-                } catch (DAOException e1) {
-                    LOGGER.catching(Level.ERROR,e1);
-                }
-                LOGGER.catching(Level.ERROR,e);
-            }
-            transactionManager.endTransaction();
+            result = super.create(user, userDAO);
         }
         return result;
     }

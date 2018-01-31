@@ -13,10 +13,6 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
-/**
- * Класс для шифрования и дешифрования строк
- * Использует библиотеку Apache Codec http://commons.apache.org/codec/
- */
 public class PasswordEncryptor {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -41,9 +37,7 @@ public class PasswordEncryptor {
     public static class DESSecretKey implements SecretKey {
 
         private final byte[] key;
-        /**
-         * ключ должен иметь длину 8 байт
-         */
+
         private DESSecretKey(byte[] key) {
             this.key = key;
         }
@@ -66,12 +60,6 @@ public class PasswordEncryptor {
 
     private Cipher ecipher;
 
-    /**
-     * Функция шифрования
-     *
-     * @param str строка открытого текста
-     * @return зашифрованная строка в формате Base64
-     */
     public String encrypt(String str) {
         try {
             byte[] utf8 = str.getBytes("UTF8");
