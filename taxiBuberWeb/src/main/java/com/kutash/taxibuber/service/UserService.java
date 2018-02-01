@@ -1,10 +1,9 @@
 package com.kutash.taxibuber.service;
 
 import com.kutash.taxibuber.dao.*;
+import com.kutash.taxibuber.entity.*;
 import com.kutash.taxibuber.resource.MessageManager;
 import com.kutash.taxibuber.util.PasswordEncryptor;
-import com.kutash.taxibuber.entity.Comment;
-import com.kutash.taxibuber.entity.User;
 import com.kutash.taxibuber.exception.DAOException;
 import com.kutash.taxibuber.util.Validator;
 import org.apache.logging.log4j.Level;
@@ -149,36 +148,134 @@ public class UserService extends AbstractService<User>{
         return comments;
     }
 
-    public int createComment(Comment comment) {
+    public User findUserInfo(String userId){
+        User user = null;
+        int id = Integer.parseInt(userId);
         TransactionManager transactionManager = new TransactionManager();
-        int result = 0;
         CommentDAO commentDAO = new DAOFactory().getCommentDAO();
+        UserDAO userDAO = new DAOFactory().getUserDAO();
         try {
-            transactionManager.beginTransaction(commentDAO);
-            result = commentDAO.create(comment);
+            transactionManager.beginTransaction(commentDAO, userDAO);
+            user = userDAO.findEntityById(id);
+            List<Comment> comments = commentDAO.findEntityByUserId(id);
+            user.setComments(comments);
+        }catch (DAOException e) {
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.catching(Level.ERROR,e1);
+            }
+            LOGGER.catching(Level.ERROR,e);
+        }
+        transactionManager.endTransaction();
+        return user;
+    }
+
+    public void createComment(Comment commentNew){
+        TransactionManager transactionManager = new TransactionManager();
+        CommentDAO commentDAO = new DAOFactory().getCommentDAO();
+        UserDAO userDAO = new DAOFactory().getUserDAO();
+        List<Comment> comments;
+        try {
+            transactionManager.beginTransaction(commentDAO,userDAO);
+            int created = commentDAO.create(commentNew);
+            if (created > 0) {
+                comments = commentDAO.findEntityByUserId(commentNew.getUserId());
+                int sum = 0;
+                for (Comment comment : comments) {
+                    sum += comment.getMark();
+                }
+                float result = (float) sum / comments.size();
+                float rating = new BigDecimal(result).setScale(1, RoundingMode.UP).floatValue();
+                User user = userDAO.findEntityById(commentNew.getUserId());
+                user.setRating(rating);
+                userDAO.update(user);
+                transactionManager.commit();
+            }else {
+                transactionManager.rollback();
+            }
+        } catch (DAOException e) {
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.catching(Level.ERROR,e1);
+            }
+            LOGGER.catching(Level.ERROR,e);
+        }
+        transactionManager.endTransaction();
+    }
+
+    public User deleteUser(String userId){
+        int id = Integer.parseInt(userId);
+        TransactionManager transactionManager = new TransactionManager();
+        UserDAO userDAO = new DAOFactory().getUserDAO();
+        CarDAO carDAO = new DAOFactory().getCarDAO();
+        User user = null;
+        try {
+            transactionManager.beginTransaction(userDAO,carDAO);
+            user = userDAO.findEntityById(id);
+            user.setStatus(Status.ARCHIVED);
+            user = userDAO.update(user);
+            if (user.getRole().equals(UserRole.DRIVER)) {
+                Car car = carDAO.findEntityByUserId(id);
+                if (car != null) {
+                    car.setStatus(Status.ARCHIVED);
+                    carDAO.update(car);
+                }
+            }
             transactionManager.commit();
         } catch (DAOException e) {
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.catching(e1);
+                LOGGER.catching(Level.ERROR,e1);
             }
-            LOGGER.catching(e);
+            LOGGER.catching(Level.ERROR,e);
+        }
+        transactionManager.endTransaction();
+        return user;
+    }
+
+    public String banUser(String userId){
+        String result;
+        int id = Integer.parseInt(userId);
+        TransactionManager transactionManager = new TransactionManager();
+        UserDAO userDAO = new DAOFactory().getUserDAO();
+        CarDAO carDAO = new DAOFactory().getCarDAO();
+        User user;
+        try {
+            transactionManager.beginTransaction(userDAO,carDAO);
+            user = userDAO.findEntityById(id);
+            if (user.getStatus().equals(Status.ACTIVE)) {
+                user.setStatus(Status.BANNED);
+                result = "banned";
+            }else {
+                user.setStatus(Status.ACTIVE);
+                result = "unbanned";
+            }
+            user = userDAO.update(user);
+            if (user.getRole().equals(UserRole.DRIVER)) {
+                Car car = carDAO.findEntityByUserId(id);
+                if (car != null) {
+                    if (user.getStatus().equals(Status.ACTIVE)) {
+                        car.setStatus(Status.BANNED);
+                    } else {
+                        car.setStatus(Status.ACTIVE);
+                    }
+                    carDAO.update(car);
+                }
+            }
+            transactionManager.commit();
+        } catch (DAOException e) {
+            result = "error";
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.catching(Level.ERROR,e1);
+            }
+            LOGGER.catching(Level.ERROR,e);
         }
         transactionManager.endTransaction();
         return result;
-    }
-
-    public void changeRating(int userId){
-        List<Comment> comments = findComments(userId);
-        int sum = 0;
-        for (Comment comment : comments){
-            sum+=comment.getMark();
-        }
-        float result = (float) sum/comments.size();
-        float rating = new BigDecimal(result).setScale(1, RoundingMode.UP).floatValue();
-        User user = findById(userId);
-        user.setRating(rating);
-        updateUser(user);
     }
 }

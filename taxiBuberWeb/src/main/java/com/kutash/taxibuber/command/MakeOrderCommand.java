@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class MakeOrderCommand implements Command {
 
@@ -34,13 +35,10 @@ public class MakeOrderCommand implements Command {
     private static final int METER_IN_KILOMETER = 1000;
     private TripService tripService;
     private CarService carService;
-    private AddressService addressService;
 
-    MakeOrderCommand(TripService tripService,CarService carService,AddressService addressService){
-
+    MakeOrderCommand(TripService tripService,CarService carService){
         this.carService=carService;
         this.tripService=tripService;
-        this.addressService=addressService;
     }
 
     @Override
@@ -51,41 +49,59 @@ public class MakeOrderCommand implements Command {
         User user = (User) request.getSession().getAttribute(CURRENT_USER);
         HttpSession session = request.getSession();
         HashMap<String,String> data = getData(request);
-        float distanceNumber = 0.0f;
         HashMap<String,String> errors = new Validator().validateOrder(data,language);
         if (errors.isEmpty()){
-            distanceNumber = Float.parseFloat(data.get("distance")) / METER_IN_KILOMETER;
-            int carId = Integer.parseInt(data.get("carId"));
-            Car car = carService.findById(carId);
-            car.setAvailable(false);
-            carService.updateCar(car);
-            int sourceId = addressService.createAddress(data.get("source"), user.getId());
-            int destinationId = addressService.createAddress(data.get("destination"), user.getId());
-            Trip trip = new Trip(new BigDecimal(data.get("cost")), new Date(), distanceNumber, carId, sourceId, destinationId, TripStatus.ORDERED);
-            tripService.create(trip);
-            session.setAttribute("orderMessage", new MessageManager(language).getProperty("message.ordersuccess"));
-            router.setRoute(Router.RouteType.REDIRECT);
-        }else {
-            if (!errors.containsKey("emptyCar")){
-                int carId = Integer.parseInt(data.get("carId"));
-                Car car = carService.findById(carId);
-                session.setAttribute("car", car.getBrand().getName() + " " + car.getModel());
-                session.setAttribute("carId", car.getId());
-            }if (!errors.containsKey("distance")){
-                distanceNumber = Float.parseFloat(data.get("distance")) / METER_IN_KILOMETER;
+            int tripId = tripService.createTrip(data,user.getId());
+            Trip trip = null;
+            if (tripId != 0) {
+                try {
+                    int seconds = 0;
+                    do {
+                        TimeUnit.SECONDS.sleep(6);
+                        seconds += 6;
+                        if (seconds >= 30) {
+                            break;
+                        }
+                        trip = tripService.findTripById(tripId);
+                    } while (!trip.getStatus().equals(TripStatus.STARTED));
+                }catch (InterruptedException e){
+                    LOGGER.catching(Level.ERROR,e);
+                }
+                if (trip.getStatus().equals(TripStatus.STARTED)) {
+                    session.setAttribute("orderMessage", new MessageManager(language).getProperty("message.ordersuccess"));
+                    router.setRoute(Router.RouteType.REDIRECT);
+                }else {
+                    request.setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
+                }
+            }else {
+                request.setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
             }
-            request.setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
-            request.setAttribute("errors",errors);
-            request.setAttribute("cost", data.get("cost"));
-            request.setAttribute("durationText", data.get("durationText"));
-            request.setAttribute("duration", data.get("duration"));
-            request.setAttribute("distanceNumber", distanceNumber);
-            request.setAttribute("distance", data.get("distance"));
-            request.setAttribute("source", data.get("source"));
-            request.setAttribute("destination", data.get("destination"));
+        }else {
+            returnErrors(data,errors,request,language);
         }
         router.setPage(PageManager.getProperty("path.command.main"));
         return router;
+    }
+
+    private void returnErrors(HashMap<String,String> data,HashMap<String,String> errors,HttpServletRequest request,String language){
+        float distanceNumber = 0.0f;
+        if (!errors.containsKey("emptyCar")){
+            int carId = Integer.parseInt(data.get("carId"));
+            Car car = carService.findById(carId);
+            request.setAttribute("car", car.getBrand().getName() + " " + car.getModel());
+            request.setAttribute("carId", car.getId());
+        }if (!errors.containsKey("distance")){
+            distanceNumber = Float.parseFloat(data.get("distance")) / METER_IN_KILOMETER;
+        }
+        request.setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
+        request.setAttribute("errors",errors);
+        request.setAttribute("cost", data.get("cost"));
+        request.setAttribute("durationText", data.get("durationText"));
+        request.setAttribute("duration", data.get("duration"));
+        request.setAttribute("distanceNumber", distanceNumber);
+        request.setAttribute("distance", data.get("distance"));
+        request.setAttribute("source", data.get("source"));
+        request.setAttribute("destination", data.get("destination"));
     }
 
     private HashMap<String,String> getData(HttpServletRequest request){

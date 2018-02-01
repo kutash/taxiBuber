@@ -10,6 +10,7 @@
 <h1 style="font-size: 125px;" class="h1-error">Status Code:${pageContext.errorData.statusCode} <i class="fa fa-exclamation-circle fa-5" aria-hidden="true"></i></h1>
 <p class="p-error">
     ${pageContext.exception.message}<br>
+        ${pageContext.exception.printStackTrace()}
     <a href="${home}" title="Back to home" class="a-error">BACK TO HOME</a>
 </p>
 </body>

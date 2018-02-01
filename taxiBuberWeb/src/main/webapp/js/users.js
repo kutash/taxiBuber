@@ -65,11 +65,11 @@ $(document).ready(function () {
             if(result === 'banned') {
                 tr.addClass('banned');
                 a.find('i').addClass('banned');
-                //tr.find('a').addClass('banned');
+                tr.find('a').addClass('banned');
             }else if(result === 'unbanned'){
                 tr.removeClass('banned');
                 a.find('i').removeClass('banned');
-                //tr.find('a').removeClass('banned');
+                tr.find('a').removeClass('banned');
             }
 
         });

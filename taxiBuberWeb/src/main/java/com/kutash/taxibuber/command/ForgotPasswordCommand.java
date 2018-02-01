@@ -13,11 +13,9 @@ public class ForgotPasswordCommand implements Command {
 
     private static final String EMAIL = "emailForgot";
     private static final String LANGUAGE = "language";
-    private UserService userService;
     private LoginService loginService;
 
-    ForgotPasswordCommand(UserService userService, LoginService loginService){
-        this.userService=userService;
+    ForgotPasswordCommand(LoginService loginService){
         this.loginService=loginService;
     }
     @Override
@@ -25,10 +23,8 @@ public class ForgotPasswordCommand implements Command {
         Router router = new Router();
         String email = request.getParameter(EMAIL);
         String language = (String) request.getSession().getAttribute(LANGUAGE);
-        User user = loginService.findUserByEmail(email);
+        User user = loginService.sendPassword(email,language);
         if (user != null){
-            user = loginService.changePassword(user,language);
-            userService.updateUser(user);
             request.getSession().setAttribute("sentPassword",new MessageManager(language).getProperty("message.sentpasw"));
             router.setRoute(Router.RouteType.REDIRECT);
         }else {

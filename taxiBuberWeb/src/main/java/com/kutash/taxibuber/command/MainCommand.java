@@ -5,6 +5,7 @@ import com.kutash.taxibuber.entity.*;
 import com.kutash.taxibuber.resource.PageManager;
 import com.kutash.taxibuber.service.AddressService;
 import com.kutash.taxibuber.service.CarService;
+import com.kutash.taxibuber.service.TripService;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,10 +19,12 @@ public class MainCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private AddressService service;
     private CarService carService;
+    private TripService tripService;
 
-    MainCommand(AddressService addressService,CarService carService) {
+    MainCommand(AddressService addressService,CarService carService,TripService tripService) {
         this.service = addressService;
         this.carService=carService;
+        this.tripService=tripService;
     }
 
     @Override
@@ -42,6 +45,10 @@ public class MainCommand implements Command {
                     break;
                 case DRIVER:
                     Car car = carService.findByUserId(user.getId());
+                    if(car != null) {
+                        Trip trip = tripService.findStarted(car.getId());
+                        request.setAttribute("trip", trip);
+                    }
                     request.setAttribute("car", car);
                     router.setPage(PageManager.getProperty("path.page.driver"));
                     break;

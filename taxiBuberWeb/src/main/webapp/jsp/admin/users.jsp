@@ -79,7 +79,7 @@
             <div class="modal-dialog modal-sm">
                 <div class="modal-content modal-danger">
                     <div class="modal-body modal-message-body">
-                        <div id="message-delete"><fmt:message key="label.deleteuser"/></div>
+                        <div id="message-delete" style="margin-top: -20px"><fmt:message key="label.deleteuser"/></div>
                         <div class="col-sm-offset-3 col-sm-6" style="margin-top: 20px;" id="delete-div">
                             <input type="button" id="yes" class="yes btn btn-default" style="float: left; color: red" value="<fmt:message key="label.yes"/>"/>
                             <input type="button" id="no" class="no btn btn-default" style="float: right" value="<fmt:message key="label.no"/>"/>
@@ -99,7 +99,7 @@
             </div>
         </div>
     </body>
-    <script>
+    <%--<script>
         paginate('content', 'pager', 10);
-    </script>
+    </script>--%>
 </html>

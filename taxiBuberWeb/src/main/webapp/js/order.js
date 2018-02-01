@@ -37,6 +37,7 @@ window.onload = function () {
             }, 2000);
 
         }else {
+            $('#modal-waiting').modal('show');
             document.getElementById('order-form').submit();
         }
     });

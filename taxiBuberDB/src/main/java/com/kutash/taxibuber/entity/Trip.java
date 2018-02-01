@@ -154,4 +154,23 @@ public class Trip extends AbstractEntity {
     public void setClientName(String clientName) {
         this.clientName = clientName;
     }
+
+    @Override
+    public String toString() {
+        return "Trip{" +
+                "price=" + price +
+                ", date=" + date +
+                ", distance=" + distance +
+                ", idCar=" + idCar +
+                ", departureAddress=" + departureAddress +
+                ", destinationAddress=" + destinationAddress +
+                ", status=" + status +
+                ", departure=" + departure +
+                ", destination=" + destination +
+                ", driverId=" + driverId +
+                ", clientId=" + clientId +
+                ", driverName='" + driverName + '\'' +
+                ", clientName='" + clientName + '\'' +
+                "} " + super.toString();
+    }
 }

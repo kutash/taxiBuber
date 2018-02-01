@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/app.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/flag-icon-css-master/css/flag-icon.css">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}css/fontawesome-free-5.0.4/web-fonts-with-css/css/fontawesome-all.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/fontawesome-free-5.0.4/web-fonts-with-css/css/fontawesome-all.css">
         <script src="${pageContext.request.contextPath}/js/jquery.js"></script>
         <script src="${pageContext.request.contextPath}/js/login_page.js"></script>
         <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
@@ -91,7 +91,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close cancel-signup" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" style="font-size: 35px;"><span class="glyphicon glyphicon-user" style="font-size: 35px;"></span><fmt:message key="label.signup"/></h4>
+                        <h4 class="modal-title" style="font-size: 35px;"><span class="glyphicon glyphicon-user" style="font-size: 35px;"> </span><fmt:message key="label.signup"/></h4>
                     </div>
                     <div class="modal-body">
                         <div class="container" style="margin-bottom: -20px;">
@@ -229,14 +229,14 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close can" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" style="font-size: 30px"><fmt:message key="label.send"/></h4>
+                        <h4 class="modal-title" style="font-size: 30px"><span class="glyphicon glyphicon-envelope"></span> <fmt:message key="label.send"/></h4>
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal" action="controller" method="post" id="forgotPasswordForm">
                             <input type="hidden" name="command" value="forgot">
                             <div class="error" id="wrong-email">${wrongEmail}</div>
                             <div class="form-group">
-                                <label class="control-label col-sm-2" for="email"><fmt:message key="label.email"/>:</label>
+                                <label class="control-label col-sm-2" for="email" style="margin-left: 12px;"><fmt:message key="label.email"/>:</label>
                                 <div class="col-sm-9">
                                     <input type="email" class="form-control" name="emailForgot" id="email-forgot" placeholder="Enter email">
                                     <div style="display: none" id="error-forgot" class="err"><fmt:message key="label.invalidemail"/></div>
@@ -245,8 +245,8 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-offset-5 col-sm-6">
-                                    <button type="submit" class="btn btn-success" id="send-button"><fmt:message key="label.send"/></button>
+                                <div class="col-sm-offset-4 col-sm-6">
+                                    <button type="submit" class="btn btn-success" id="send-button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i> <fmt:message key="label.send"/></button>
                                 </div>
                             </div>
                         </form>

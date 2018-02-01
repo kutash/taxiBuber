@@ -40,7 +40,7 @@ public class EmailSender {
             ST st = new ST();
             if (language.equals("ru") || language.equals("RU_ru")){
                 st = group.getInstanceOf("template1");
-            }else if (language.equals("en") || language.equals("En_en")){
+            }else {
                 st = group.getInstanceOf("template2");
             }
             st.add("user", user);

@@ -129,6 +129,7 @@
                     <div id="message-update" style="display: none">${updateMessage}</div>
                     <div id="message-create" style="display: none">${createMessage}</div>
                     <div id="message-deleted" style="display: none">${deletedMessage}</div>
+                    <div id="message-notdeleted" style="display: none">${wasNotDeleted}</div>
                 </div>
             </div>
         </div>

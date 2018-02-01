@@ -25,12 +25,13 @@ public class DeleteAddressCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"deleting user");
+        String json = "";
         Router router = new Router();
-        int addressId = Integer.parseInt(request.getParameter(ADDRESS_ID));
-        Address address = addressService.findAddressById(addressId);
-        address.setStatus(Status.ARCHIVED);
-        addressService.update(address);
-        String json = new Gson().toJson("deleted");
+        String addressId = request.getParameter(ADDRESS_ID);
+        Address address = addressService.deleteAddress(addressId);
+        if (address.getStatus().equals(Status.ARCHIVED)) {
+            json = new Gson().toJson("deleted");
+        }
         router.setPage(json);
         return router;
     }

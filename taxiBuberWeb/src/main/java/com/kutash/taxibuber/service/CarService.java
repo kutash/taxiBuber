@@ -3,8 +3,11 @@ package com.kutash.taxibuber.service;
 import com.kutash.taxibuber.dao.CarDAO;
 import com.kutash.taxibuber.dao.DAOFactory;
 import com.kutash.taxibuber.dao.TransactionManager;
+import com.kutash.taxibuber.dao.TripDAO;
 import com.kutash.taxibuber.entity.Car;
 import com.kutash.taxibuber.entity.CarBrand;
+import com.kutash.taxibuber.entity.Status;
+import com.kutash.taxibuber.entity.Trip;
 import com.kutash.taxibuber.exception.DAOException;
 import com.kutash.taxibuber.resource.RegulationManager;
 import com.kutash.taxibuber.util.Validator;
@@ -12,6 +15,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -220,6 +226,7 @@ public class CarService extends AbstractService<Car>{
     }
 
     public boolean isUniqueNumber(String number) {
+        LOGGER.log(Level.INFO,"Checking is number unique");
         TransactionManager transactionManager = new TransactionManager();
         boolean result = false;
         CarDAO carDAO = new DAOFactory().getCarDAO();
@@ -240,6 +247,7 @@ public class CarService extends AbstractService<Car>{
     }
 
     public boolean isUniqueNumberForUpdare(String number, int id) {
+        LOGGER.log(Level.INFO,"Checking is number unique");
         TransactionManager transactionManager = new TransactionManager();
         boolean result = false;
         CarDAO carDAO = new DAOFactory().getCarDAO();
@@ -257,5 +265,101 @@ public class CarService extends AbstractService<Car>{
         }
         transactionManager.endTransaction();
         return result;
+    }
+
+    public String setCoordinates(String carId,String latitude,String longitude){
+        String result = "";
+        if (StringUtils.isNotEmpty(carId)) {
+            int id = Integer.parseInt(carId);
+            String latitudeRound = new BigDecimal(latitude).setScale(6, RoundingMode.UP).toString();
+            String longitudeRound = new BigDecimal(longitude).setScale(6, RoundingMode.UP).toString();
+            TransactionManager transactionManager = new TransactionManager();
+            CarDAO carDAO = new DAOFactory().getCarDAO();
+            try {
+                transactionManager.beginTransaction(carDAO);
+                Car car = carDAO.findEntityById(id);
+                if (car != null) {
+                    car.setLatitude(latitudeRound);
+                    car.setLongitude(longitudeRound);
+                    carDAO.update(car);
+                    result = "OK";
+                }
+            }catch (DAOException e) {
+                try {
+                    transactionManager.rollback();
+                } catch (DAOException e1) {
+                    LOGGER.catching(Level.ERROR,e1);
+                }
+                LOGGER.catching(Level.ERROR,e);
+            }
+            transactionManager.endTransaction();
+        }
+        return result;
+    }
+
+    public String setAvailable(String carId,String isAvailable){
+        LOGGER.log(Level.INFO,"Set is the car available");
+        String result = "";
+        if (StringUtils.isEmpty(carId)){
+            return "no car";
+        }
+        int id = Integer.parseInt(carId);
+        TransactionManager transactionManager = new TransactionManager();
+        CarDAO carDAO = new DAOFactory().getCarDAO();
+        TripDAO tripDAO = new DAOFactory().getTripDAO();
+        try {
+            transactionManager.beginTransaction(carDAO,tripDAO);
+            Car car = carDAO.findEntityById(id);
+            if (car == null){
+                return "no car";
+            }
+            if (Boolean.parseBoolean(isAvailable)){
+                car.setAvailable(true);
+                carDAO.update(car);
+                result = "true";
+            }else {
+                Trip trip = tripDAO.findStarted(id);
+                if (trip != null){
+                    result = "trips";
+                }else {
+                    car.setAvailable(false);
+                    carDAO.update(car);
+                    result = "false";
+                }
+            }
+            transactionManager.commit();
+        } catch (DAOException e) {
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.catching(Level.ERROR,e1);
+            }
+            LOGGER.catching(Level.ERROR,e);
+        }
+        transactionManager.endTransaction();
+        return result;
+    }
+
+    public Car deleteCar(String carId){
+        LOGGER.log(Level.INFO,"Deleting car");
+        Car car = null;
+        TransactionManager transactionManager = new TransactionManager();
+        CarDAO carDAO = new DAOFactory().getCarDAO();
+        try {
+            transactionManager.beginTransaction(carDAO);
+            car = carDAO.findEntityById(Integer.parseInt(carId));
+            car.setStatus(Status.ARCHIVED);
+            carDAO.update(car);
+            transactionManager.commit();
+        } catch (DAOException e) {
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.catching(Level.ERROR,e1);
+            }
+            LOGGER.catching(Level.ERROR,e);
+        }
+        transactionManager.endTransaction();
+        return car;
     }
 }

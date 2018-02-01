@@ -161,6 +161,18 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal waiting-->
+        <div class="modal fade" id="modal-waiting" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content modal-message">
+                    <div class="modal-body modal-message-body">
+                        <div><i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i></div>
+                        <div id="waiting-message"><fmt:message key="message.waiting"/></div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWwujQHc9yN2BSlbT_L0-L7VLlQAYnUUg&libraries=places&callback=initMap"></script>
     </body>
 </html>

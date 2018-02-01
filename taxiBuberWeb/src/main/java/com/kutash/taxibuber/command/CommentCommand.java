@@ -44,12 +44,10 @@ public class CommentCommand implements Command {
         if (StringUtils.isNotEmpty(text) && text.length() <= MAX_LENGTH && StringUtils.isNotEmpty(mark)){
             byte valuation = Byte.parseByte(request.getParameter(VALUATION));
             Comment comment = new Comment(text,userId,reviewer.getId(),new Date(),valuation);
-            int result = userService.createComment(comment);
-            if (result > 0){
-                userService.changeRating(userId);
-                router.setRoute(Router.RouteType.REDIRECT);
-                session.setAttribute("isCreated",true);
-            }
+            userService.createComment(comment);
+            router.setRoute(Router.RouteType.REDIRECT);
+            session.setAttribute("isCreated",true);
+
         }else {
             session.setAttribute("wrongComment",new MessageManager(language).getProperty("message.wrongcomment"));
         }

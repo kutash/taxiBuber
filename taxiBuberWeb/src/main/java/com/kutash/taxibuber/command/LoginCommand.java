@@ -4,14 +4,12 @@ import com.kutash.taxibuber.controller.Router;
 import com.kutash.taxibuber.entity.*;
 import com.kutash.taxibuber.resource.MessageManager;
 import com.kutash.taxibuber.resource.PageManager;
-import com.kutash.taxibuber.service.CarService;
 import com.kutash.taxibuber.service.LoginService;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 public class LoginCommand implements Command {
 
@@ -20,12 +18,10 @@ public class LoginCommand implements Command {
     private static final String PASSWORD = "password";
     private static final String LANGUAGE = "language";
     private LoginService service;
-    private CarService carService;
 
-    LoginCommand(LoginService service,CarService carService){
+    LoginCommand(LoginService service){
 
         this.service=service;
-        this.carService=carService;
     }
 
     @Override

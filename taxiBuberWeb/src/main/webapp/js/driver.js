@@ -6,11 +6,15 @@ var isWorking = false;
 setInterval(getNewOrder, 3000);
 
 window.onload = function () {
+
+    if(document.getElementById('work').checked && document.getElementById("tripId").value === ''){
+        isWorking = true;
+    }
+
     var begin = document.getElementById("begin");
     begin.addEventListener('click',function () {
-        console.log(isWorking+'before begin');
+        document.getElementById('work').setAttribute("disabled", "true");
         isWorking = false;
-        console.log(isWorking+'after begin');
         $('#modal-message').modal("hide");
         var id = document.getElementById("tripId").value;
         $.ajax({
@@ -18,9 +22,8 @@ window.onload = function () {
             url: "ajaxController?command=start_trip&tripId="+id,
             contentType: 'application/json'
         }).done(function(results){
-            console.log(results);
-        });
 
+        });
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 var pos = {
@@ -44,9 +47,7 @@ window.onload = function () {
 
     var complete = document.getElementById("complete");
     complete.addEventListener('click',function () {
-        console.log(isWorking+'before complete');
-        isWorking = true;
-        console.log(isWorking+'after complete');
+        document.getElementById('trips').style.display = 'none';
         var infoWindow = new google.maps.InfoWindow();
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
@@ -56,26 +57,51 @@ window.onload = function () {
                 };
                 latitude = position.coords.latitude;
                 longitude = position.coords.longitude;
-                document.getElementById("latitude").value = latitude;
-                document.getElementById("longitude").value = longitude;
+                var tripId = document.getElementById('tripId').value;
+                var data = {
+                    tripId: tripId,
+                    latitude: latitude,
+                    longitude: longitude
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "ajaxController?command=complete_trip",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function(response) {
+                        if(response === 'OK'){
+                            var dvDistance = document.getElementById("divDistance-driver");
+                            dvDistance.style.display = 'none';
+                            document.getElementById("tripId").value = '';
+                            document.getElementById("start").value = '';
+                            document.getElementById("end").value = '';
+                            document.getElementById('work').removeAttribute("disabled");
+                            $('#modal-continue').modal("show");
+
+                            $('.yes').on('click',function () {
+                                $('#modal-continue').modal('hide');
+                                setAvailable(true);
+                            });
+
+                            $('.no').on('click',function () {
+                                $('#modal-continue').modal('hide');
+                                setAvailable(false);
+                            })
+                        }
+                    }
+                });
             }, function () {
                 handleLocationError(true, infoWindow, map.getCenter());
             });
         } else {
             handleLocationError(false, infoWindow, map.getCenter());
         }
-        document.getElementById("complete-form").submit();
     });
 
     document.getElementById('work').addEventListener('change',function () {
         if(this.checked) {
-            document.getElementById('start-work').style.display = 'none';
-            document.getElementById('stop-work').style.display = 'block';
             setAvailable(true);
         }else {
-            isWorking = false;
-            document.getElementById('start-work').style.display = 'block';
-            document.getElementById('stop-work').style.display = 'none';
             setAvailable(false);
         }
     })
@@ -83,12 +109,47 @@ window.onload = function () {
 
 function setAvailable(isAvailable) {
     var carId = document.getElementById('car-id').value;
+    var data = {
+        carId: carId,
+        isAvailable: isAvailable
+    };
     $.ajax({
+        type: "POST",
+        url: "ajaxController?command=set_available",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function(response) {
+            if(response === 'no car'){
+                document.getElementById('no-car').style.display = 'block';
+                document.getElementById('start-work').style.display = 'block';
+                document.getElementById('stop-work').style.display = 'none';
+                document.getElementById('work').checked = false;
+                isWorking = false;
+            }else if(response === 'true'){
+                document.getElementById('start-work').style.display = 'none';
+                document.getElementById('stop-work').style.display = 'block';
+                setCarCoordinates(latitude,longitude);
+                isWorking = true;
+            }else if (response === 'false'){
+                document.getElementById('start-work').style.display = 'block';
+                document.getElementById('stop-work').style.display = 'none';
+                document.getElementById('work').checked = false;
+                isWorking = false;
+            }else if (response === 'trips'){
+                document.getElementById('trips').style.display = 'block';
+                document.getElementById('start-work').style.display = 'none';
+                document.getElementById('stop-work').style.display = 'block';
+                document.getElementById('work').checked = true;
+                isWorking = false;
+            }
+        }
+    });
+
+    /*$.ajax({
         type:"GET",
         url: "ajaxController?command=set_available&carId="+carId+"&isAvailable="+isAvailable,
         contentType: 'application/json'
     }).done(function(result){
-        console.log(result);
         if(result === 'no car'){
             document.getElementById('no-car').style.display = 'block';
             document.getElementById('start-work').style.display = 'block';
@@ -98,19 +159,19 @@ function setAvailable(isAvailable) {
             setCarCoordinates(latitude,longitude);
             isWorking = true;
         }
-    });
+    });*/
 }
 
 function getNewOrder() {
-    console.log(isWorking+'in get order');
-    if(isWorking) {
+    var carId = document.getElementById('car-id').value;
+    if(isWorking && carId > 0) {
         $.ajax({
             type: "GET",
-            url: "ajaxController?command=new_order",
+            url: "ajaxController?command=new_order&carId="+carId,
             contentType: 'application/json'
         }).done(function (result) {
-            console.log(result);
             if (result !== 'no trips') {
+                isWorking = false;
                 var modalMessage = $('#modal-message');
                 modalMessage.modal('show');
                 document.getElementById("tripId").value = result.id;
@@ -123,13 +184,28 @@ function getNewOrder() {
 
 function setCarCoordinates(latitude,longitude) {
     var carId = document.getElementById('car-id').value;
+    var data = {
+        carId: carId,
+        latitude: latitude,
+        longitude: longitude
+    };
     $.ajax({
+        type: "POST",
+        url: "ajaxController?command=set_coordinates",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function(response) {
+
+        }
+    });
+
+    /*$.ajax({
         type:"GET",
         url: "ajaxController?command=set_coordinates&carId="+carId+"&latitude="+latitude+"&longitude="+longitude,
         contentType: 'application/json'
     }).done(function(result){
         console.log(result);
-    });
+    });*/
 }
 
 function initMap() {
@@ -149,9 +225,15 @@ function initMap() {
             setCarCoordinates(latitude,longitude);
             var geocoder = new google.maps.Geocoder;
             var latLng = new google.maps.LatLng(latitude,longitude);
-
             geocodeLatLng(geocoder,map,infoWindow,latLng);
             map.setCenter(pos);
+            if(document.getElementById("tripId").value != ''){
+                console.log(document.getElementById("tripId").value);
+                var directionsService = new google.maps.DirectionsService();
+                var directionsDisplay = new google.maps.DirectionsRenderer({'draggable': false});
+                directionsDisplay.setMap(map);
+                calculateAndDisplayRoute(directionsService,directionsDisplay,latLng)
+            }
         }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
         });
@@ -230,7 +312,6 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay, start) {
             var dvDistance = document.getElementById("divDistance-driver");
             dvDistance.style.display = 'block';
             var distanceSpan = document.getElementById('distance');
-            console.log(distance);
             distanceSpan.innerHTML = ''+(distanceVal/1000);
             var durationSpan = document.getElementById('duration');
             durationSpan.innerHTML = duration;

@@ -28,19 +28,16 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-4 text-center">
-                    <form class="form-horizontal" id="complete-form" action="controller" method="post">
+                    <div class="form-horizontal" id="complete-form">
                         <div class="checkbox">
-                            <%--<label class="control-label col-sm-4 label-driver"><fmt:message key="label.workstatus"/></label>--%>
                             <label id="start-work" style="display: ${car.available == true ? 'none' : 'block'}" class="label-span"><fmt:message key="label.start"/></label>
                                 <label id="stop-work" style="display: ${car.available == true ? 'block' : 'none'}" class="label-span"><fmt:message key="label.stop"/></label>
                             <label class="switch">
                                 <input type="checkbox" id="work" ${car.available == true ? 'checked' : ''}>
                                 <span class="slider round"></span>
                             </label>
-
                         </div>
                         <div class="alert alert-danger" style="display: none" id="no-car">
-                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                             <fmt:message key="label.nullcar"/>
                             <c:url var="edit" value="controller">
                                 <c:param name="command" value="edit"/>
@@ -49,36 +46,38 @@
                             </c:url>
                             <a href="${edit}"><fmt:message key="label.addcar"/></a>
                         </div>
-                        <input type="hidden" name="command" value="complete_trip">
-                        <input type="hidden" id="tripId" name="tripId">
-                        <input type="hidden" name="latitude" id="latitude">
-                        <input type="hidden" name="longitude" id="longitude">
+                        <div class="alert alert-danger" style="display: none" id="trips">
+                            <fmt:message key="message.trips"/>
+                        </div>
+                        <input type="hidden" id="tripId" name="tripId" value="${trip.id}">
                         <input type="hidden" name="carId" value="${car.id}" id="car-id">
                         <div class="form-group">
-                            <label class="control-label col-sm-4 label-driver" for="start"><fmt:message key="label.source"/>:</label>
+                            <label class="control-label col-sm-3 label-driver" for="start"><fmt:message key="label.source"/>:</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="start" readonly/>
+                                <input type="text" class="form-control" id="start" value="${trip.departure.address}" readonly/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-4 label-driver" for="end"><fmt:message key="label.destination"/>:</label>
+                            <label class="control-label col-sm-3 label-driver" for="end"><fmt:message key="label.destination"/>:</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="end" readonly/>
+                                <input type="text" class="form-control" id="end" value="${trip.destination.address}" readonly/>
                             </div>
                         </div>
-                        <div id="divDistance-driver" style="display: none">
+                        <div id="divDistance-driver" style="display: ${empty trip ? 'none' : 'block'}">
                             <span class="label-span"><fmt:message key="label.distance"/>:</span><span class="info-span" id="distance"></span> <span class="label-span"><fmt:message key="label.kilometers"/></span><br>
                             <span class="label-span" style="margin-left: 30px"><fmt:message key="label.duration"/>:</span><span id="duration" class="info-span"></span><span class="label-span"></span><br>
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-sm-6" id="complete-div">
-                                    <input type="submit" form="complete-form" id="complete" class="btn btn-danger" value="<fmt:message key="label.complete"/>"/>
+                                    <button id="complete" class="btn btn-danger" style="font-size: 25px;">
+                                        <i class="fa fa-stop-circle" aria-hidden="true"> <fmt:message key="label.complete"/></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
                 <div class="col-sm-8 text-center">
-                    <div id="map" style="width:1050px;height:700px;background:gray"></div>
+                    <div id="map" style="width:1070px;height:700px;background:gray"></div>
                 </div>
             </div>
         </div>
@@ -93,7 +92,25 @@
                         <div id="order-message"><fmt:message key="message.neworder"/></div>
                         <div class="form-group">
                             <div class="col-sm-offset-3 col-sm-6" style="margin-top: 20px">
-                                <input type="button" id="begin" class="btn btn-danger" value="<fmt:message key="label.begin"/>"/>
+                                <button id="begin" class="btn btn-danger">
+                                    <fmt:message key="label.begin"/> <i class="fa fa-play-circle" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal continue-->
+        <div class="modal fade" id="modal-continue" role="dialog" data-backdrop="static">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content modal-danger">
+                    <div class="modal-body modal-message-body">
+                        <div><fmt:message key="message.continue"/></div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-6" style="margin-top: 20px;" id="delete-div">
+                                <input type="button" id="yes" class="yes btn btn-default" style="float: left; color: red" value="<fmt:message key="label.yes"/>"/>
+                                <input type="button" id="no" class="no btn btn-default" style="float: right" value="<fmt:message key="label.no"/>"/>
                             </div>
                         </div>
                     </div>

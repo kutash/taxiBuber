@@ -280,8 +280,7 @@ h4 {
 }
 
 #complete-div {
-    margin-top: 15px;
-    margin-left: 17%;
+    margin-top: 40px;
 }
 
 #divDistance-driver{
@@ -458,5 +457,10 @@ input:checked + .slider:before {
 
 #div-buttons {
     margin-top: 112px;
-    margin-left: -257px;
+    margin-left: -273px;
+}
+
+#send-button {
+    font-size: 17px;
+    width: 200px;
 }

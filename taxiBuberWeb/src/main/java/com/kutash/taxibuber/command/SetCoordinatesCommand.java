@@ -1,19 +1,16 @@
 package com.kutash.taxibuber.command;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.kutash.taxibuber.controller.Router;
-import com.kutash.taxibuber.entity.Car;
-import com.kutash.taxibuber.entity.User;
 import com.kutash.taxibuber.service.CarService;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.io.IOException;
+import java.io.Reader;
 
 public class SetCoordinatesCommand implements Command {
 
@@ -32,20 +29,17 @@ public class SetCoordinatesCommand implements Command {
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"setting coordinates to the car");
         Router router = new Router();
-        String result = "ERROR";
-        String carId = request.getParameter(CAR_ID);
-        if (StringUtils.isNotEmpty(carId)) {
-            int id = Integer.parseInt(carId);
-            Car car = carService.findById(id);
-            String latitude = new BigDecimal(request.getParameter(LATITUDE)).setScale(6, RoundingMode.UP).toString();
-            String longitude = new BigDecimal(request.getParameter(LONGITUDE)).setScale(6, RoundingMode.UP).toString();
-            if (car != null) {
-                car.setLatitude(latitude);
-                car.setLongitude(longitude);
-                carService.updateCar(car);
-                result = "OK";
-            }
+        Reader reader = null;
+        try {
+            reader = request.getReader();
+        } catch (IOException e) {
+            LOGGER.catching(Level.ERROR,e);
         }
+        JsonObject data = new Gson().fromJson(reader, JsonObject.class);
+        String carId = data.get(CAR_ID).getAsString();
+        String latitude = data.get(LATITUDE).getAsString();
+        String longitude = data.get(LONGITUDE).getAsString();
+        String result = carService.setCoordinates(carId,latitude,longitude);
         String json = new Gson().toJson(result);
         router.setPage(json);
         return router;

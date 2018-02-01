@@ -20,11 +20,8 @@ public class StartTripCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String TRIP_ID = "tripId";
     private TripService service;
-    private CarService carService;
 
-    StartTripCommand(TripService service, CarService carService) {
-
-        this.carService=carService;
+    StartTripCommand(TripService service) {
         this.service = service;
     }
 
@@ -35,12 +32,7 @@ public class StartTripCommand implements Command {
         String result = "ERROR";
         String tripId = request.getParameter(TRIP_ID);
         if (StringUtils.isNotEmpty(tripId)) {
-            Trip trip = service.findTripById(Integer.parseInt(tripId));
-            trip.setStatus(TripStatus.STARTED);
-            trip = service.updateTrip(trip);
-            Car car = carService.findById(trip.getIdCar());
-            car.setAvailable(false);
-            carService.updateCar(car);
+            Trip trip = service.startTrip(Integer.parseInt(tripId));
             if (trip.getStatus().equals(TripStatus.STARTED)){
                 result = "OK";
             }

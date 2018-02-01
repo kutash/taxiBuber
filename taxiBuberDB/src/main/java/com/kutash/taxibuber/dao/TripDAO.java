@@ -20,7 +20,9 @@ public class TripDAO extends AbstractDAO<Trip> {
             "destination_string,t.status,c.id_user as driver_id,concat(u.surname,' ',u.name) AS driver_name, us.id_user AS client_id,concat(us.surname,' ',us.name)\n" +
             "AS client_name FROM trip AS t INNER JOIN car AS c ON t.id_car = c.id_car INNER JOIN user AS u ON c.id_user = u.id_user INNER JOIN address AS a ON \n" +
             "t.departure_address = a.id_address INNER JOIN user AS us ON a.id_user = us.id_user INNER JOIN address AS ad ON t.destination_address = ad.id_address";
-    private static final String FIND_TRIP_BY_ID = "SELECT id_trip,price,date,distance,id_car,departure_address,destination_address,status FROM trip WHERE id_trip = ?";
+    private static final String FIND_TRIP_BY_ID = "SELECT t.id_trip,t.price,t.date,t.distance,t.id_car,t.departure_address,t.destination_address,t.status,a.address AS departure_string,ad.address\n" +
+            "AS destination_string FROM trip as t INNER JOIN car as c ON t.id_car = c.id_car INNER JOIN address AS a ON t.departure_address = a.id_address\n" +
+            "INNER JOIN address AS ad ON t.destination_address = ad.id_address WHERE id_trip = ?;";
     private static final String FIND_TRIPS_BY_CLIENT_ID = "SELECT t.id_trip, t.price, t.date, t.distance, t.id_car, t.departure_address, a.address AS departure_string, t.destination_address, ad.address AS\n" +
             "destination_string,t.status,c.id_user as driver_id,concat(u.surname,' ',u.name) AS driver_name, us.id_user AS client_id,concat(us.surname,' ',us.name)\n" +
             "AS client_name FROM trip AS t INNER JOIN car AS c ON t.id_car = c.id_car INNER JOIN user AS u ON c.id_user = u.id_user INNER JOIN address AS a ON\n" +
@@ -32,7 +34,12 @@ public class TripDAO extends AbstractDAO<Trip> {
     private static final String DELETE_TRIP_BY_ID = "DELETE FROM trip WHERE id_trip = ?";
     private static final String CREATE_TRIP = "INSERT INTO trip(price,date,distance,id_car,departure_address,destination_address,status) VALUES (?,?,?,?,?,?,?)";
     private static final String UPDATE_TRIP = "UPDATE trip  SET price=?,date=?,distance=?,id_car=?,departure_address=?,destination_address=?, status=? WHERE id_trip=?";
-    private static final String FIND_ORDERED_TRIP = "SELECT t.id_trip,t.price,t.date,t.distance,t.id_car,t.departure_address,t.destination_address,t.status FROM trip as t INNER JOIN car as c ON t.id_car = c.id_car WHERE c.id_user = ? AND t.status='ORDERED'";
+    private static final String FIND_ORDERED_TRIP = "SELECT t.id_trip,t.price,t.date,t.distance,t.id_car,t.departure_address,t.destination_address,t.status,a.address AS departure_string,ad.address\n" +
+            "AS destination_string FROM trip as t INNER JOIN car as c ON t.id_car = c.id_car INNER JOIN address AS a ON t.departure_address = a.id_address\n" +
+            "INNER JOIN address AS ad ON t.destination_address = ad.id_address WHERE c.id_car = ? AND t.status='ORDERED'";
+    private static final String FIND_ACTIVE_TRIPS = "SELECT t.id_trip,t.price,t.date,t.distance,t.id_car,t.departure_address,t.destination_address,t.status,a.address AS departure_string,ad.address\n" +
+            "AS destination_string FROM trip as t INNER JOIN car as c ON t.id_car = c.id_car INNER JOIN address AS a ON t.departure_address = a.id_address\n" +
+            "INNER JOIN address AS ad ON t.destination_address = ad.id_address WHERE c.id_car = ? AND t.status = 'STARTED'";
 
     @Override
     public List<Trip> findAll() throws DAOException {
@@ -101,19 +108,38 @@ public class TripDAO extends AbstractDAO<Trip> {
     }
 
 
-    public Trip findOrdered(int userId) throws DAOException {
-        LOGGER.log(Level.INFO,"find trip where status=ORDERED by user id {}",userId);
+    public Trip findOrdered(int carId) throws DAOException {
+        LOGGER.log(Level.INFO,"find trip where status=ORDERED by car id {}",carId);
         Trip trip = null;
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = getPreparedStatement(FIND_ORDERED_TRIP);
-            preparedStatement.setInt(1,userId);
+            preparedStatement.setInt(1,carId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 trip = getTrip(resultSet);
             }
         }catch (SQLException e){
-            throw new DAOException("Exception while finding ORDERED trip by userId",e);
+            throw new DAOException("Exception while finding ORDERED trip by carId",e);
+        }finally {
+            close(preparedStatement);
+        }
+        return trip;
+    }
+
+    public Trip findStarted(int carId) throws DAOException {
+        LOGGER.log(Level.INFO,"find trip where status != COMPLETED by car id {}",carId);
+        Trip trip = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = getPreparedStatement(FIND_ACTIVE_TRIPS);
+            preparedStatement.setInt(1,carId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                trip = getTrip(resultSet);
+            }
+        }catch (SQLException e){
+            throw new DAOException("Exception while finding active trips by carId",e);
         }finally {
             close(preparedStatement);
         }
@@ -229,9 +255,13 @@ public class TripDAO extends AbstractDAO<Trip> {
             float distance = resultSet.getFloat("distance");
             int carId = resultSet.getInt("id_car");
             int departureAddress = resultSet.getInt("departure_address");
+            String departure = resultSet.getString("departure_string");
             int destinationAddress = resultSet.getInt("destination_address");
+            String destination = resultSet.getString("destination_string");
             TripStatus status = TripStatus.valueOf(resultSet.getString("status"));
             trip = new Trip(idTrip,price,date,distance,carId,departureAddress,destinationAddress,status);
+            trip.setDeparture(new Address(departureAddress,departure));
+            trip.setDestination(new Address(destinationAddress,destination));
         }catch (SQLException e){
             throw new DAOException("Exception while getting trip from resultSet",e);
         }

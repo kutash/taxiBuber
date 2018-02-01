@@ -1,15 +1,15 @@
 package com.kutash.taxibuber.service;
 
-import com.kutash.taxibuber.dao.AddressDAO;
-import com.kutash.taxibuber.dao.DAOFactory;
-import com.kutash.taxibuber.dao.TransactionManager;
-import com.kutash.taxibuber.entity.Address;
-import com.kutash.taxibuber.entity.Status;
+import com.kutash.taxibuber.dao.*;
+import com.kutash.taxibuber.entity.*;
 import com.kutash.taxibuber.exception.DAOException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class AddressService {
@@ -35,34 +35,6 @@ public class AddressService {
         }
         transactionManager.endTransaction();
         return addresses;
-    }
-
-    public int createAddress(String newAddress, int userId){
-        int result = 0;
-        List<Address> addresses = findAddresses(userId);
-        for (Address address : addresses){
-            if (address.getAddress().equals(newAddress)){
-                result = address.getId();
-            }
-        }
-        if (result == 0) {
-            TransactionManager transactionManager = new TransactionManager();
-            AddressDAO addressDAO = new DAOFactory().getAddressDAO();
-            try {
-                transactionManager.beginTransaction(addressDAO);
-                result = addressDAO.create(new Address(newAddress,userId, Status.ACTIVE));
-                transactionManager.commit();
-            } catch (DAOException e) {
-                try {
-                    transactionManager.rollback();
-                } catch (DAOException e1) {
-                    LOGGER.catching(Level.ERROR, e1);
-                }
-                LOGGER.catching(Level.ERROR, e);
-            }
-            transactionManager.endTransaction();
-        }
-        return result;
     }
 
     public Address findAddressById(int id) {
@@ -94,6 +66,29 @@ public class AddressService {
         try {
             transactionManager.beginTransaction(addressDAO);
             address = addressDAO.update(newAddress);
+            transactionManager.commit();
+        } catch (DAOException e) {
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.catching(Level.ERROR, e1);;
+            }
+            LOGGER.catching(Level.ERROR, e);
+        }
+        transactionManager.endTransaction();
+        return address;
+    }
+
+    public Address deleteAddress(String id){
+        int addressId = Integer.parseInt(id);
+        Address address = null;
+        AddressDAO addressDAO = new DAOFactory().getAddressDAO();
+        TransactionManager transactionManager = new TransactionManager();
+        try {
+            transactionManager.beginTransaction(addressDAO);
+            address = addressDAO.findEntityById(addressId);
+            address.setStatus(Status.ARCHIVED);
+            address = addressDAO.update(address);
             transactionManager.commit();
         } catch (DAOException e) {
             try {
