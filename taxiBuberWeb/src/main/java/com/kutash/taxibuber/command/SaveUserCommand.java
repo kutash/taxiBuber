@@ -8,6 +8,7 @@ import com.kutash.taxibuber.resource.PageManager;
 import com.kutash.taxibuber.service.UserService;
 import com.kutash.taxibuber.util.DateParser;
 import com.kutash.taxibuber.util.FileManager;
+import com.kutash.taxibuber.util.Validator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -50,7 +51,7 @@ public class SaveUserCommand implements Command {
         Router router = new Router();
         User user;
         Map<String,String> userData = getData(request);
-        Map<String,String> errors = userService.validateUser(userData,language);
+        Map<String,String> errors = new Validator().validateUser(userData,language);
         if (!errors.isEmpty()){
             user = new User(userData.get("name"),userData.get("surname"),userData.get("patronymic"),userData.get("email"),userData.get("password"),userData.get("phone"));
             request.setAttribute("birthday",userData.get("birthday"));
@@ -59,17 +60,17 @@ public class SaveUserCommand implements Command {
             request.setAttribute("isErrors",true);
             router.setPage(PageManager.getProperty("path.page.login"));
         }else {
-            user = new User(userData.get("name"),userData.get("surname"),userData.get("patronymic"),userData.get("email"),userData.get("password"),UserRole.valueOf(userData.get("role")), DateParser.parseDate(userData.get("birthday")),userData.get("phone"), Status.ACTIVE);
-            int id = userService.create(user);
-            user.setId(id);
-            String photoPath = savePhoto(id,request);
-            user.setPhotoPath(photoPath);
-            user = userService.updateUser(user);
+            Part photoPart = null;
+            try {
+                photoPart = request.getPart("photo");
+            } catch (IOException | ServletException e) {
+                LOGGER.log(Level.ERROR,"Exception while getting part",e);
+            }
+            user = userService.saveUser(userData,photoPart);
             request.getSession().setAttribute("currentUser",user);
             request.getSession().setAttribute("isCar",true);
             router.setRoute(Router.RouteType.REDIRECT);
-            router.setPage(PageManager.getProperty("path.command.edit")+id);
-
+            router.setPage(PageManager.getProperty("path.command.edit")+user.getId());
         }
         return router;
     }
@@ -87,16 +88,4 @@ public class SaveUserCommand implements Command {
         userData.put("phone",request.getParameter(PHONE));
         return userData;
     }
-
-    private String savePhoto(int id,HttpServletRequest request) {
-        LOGGER.log(Level.DEBUG,"saving photo for the user");
-        Part photoPart = null;
-        try {
-            photoPart = request.getPart("photo");
-        } catch (IOException | ServletException e) {
-            LOGGER.log(Level.ERROR,"Exception while getting part",e);
-        }
-        return new FileManager().savePhoto(photoPart,id,false);
-    }
-
 }

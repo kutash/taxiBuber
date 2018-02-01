@@ -3,6 +3,8 @@ package com.kutash.taxibuber.service;
 import com.kutash.taxibuber.dao.*;
 import com.kutash.taxibuber.entity.*;
 import com.kutash.taxibuber.resource.MessageManager;
+import com.kutash.taxibuber.util.DateParser;
+import com.kutash.taxibuber.util.FileManager;
 import com.kutash.taxibuber.util.PasswordEncryptor;
 import com.kutash.taxibuber.exception.DAOException;
 import com.kutash.taxibuber.util.Validator;
@@ -10,6 +12,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.servlet.http.Part;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
@@ -61,11 +64,11 @@ public class UserService extends AbstractService<User>{
         return user;
     }
 
-    public Map<String,String> validateUser(Map<String,String> data,String language){
+    /*public Map<String,String> validateUser(Map<String,String> data,String language){
         return new Validator().validateUser(data,language);
-    }
+    }*/
 
-    public int create(User user) {
+    /*public int create(User user) {
         int result = 0;
         if (isUniqueEmail(user.getEmail())) {
             user.setPassword(new PasswordEncryptor(user.getEmail()).encrypt(user.getPassword()));
@@ -73,6 +76,30 @@ public class UserService extends AbstractService<User>{
             result = super.create(user, userDAO);
         }
         return result;
+    }*/
+
+    public User saveUser(Map<String,String> userData,Part photoPart){
+        User user = new User(userData.get("name"),userData.get("surname"),userData.get("patronymic"),userData.get("email"),userData.get("password"),UserRole.valueOf(userData.get("role")), DateParser.parseDate(userData.get("birthday")),userData.get("phone"), Status.ACTIVE);
+        TransactionManager transactionManager = new TransactionManager();
+        UserDAO userDAO = new DAOFactory().getUserDAO();
+        try {
+            transactionManager.beginTransaction(userDAO);
+            int id = userDAO.create(user);
+            user.setId(id);
+            String photoPath = new FileManager().savePhoto(photoPart,id,false);
+            user.setPhotoPath(photoPath);
+            user = userDAO.update(user);
+            transactionManager.commit();
+        } catch (DAOException e) {
+            try {
+                transactionManager.rollback();
+            } catch (DAOException e1) {
+                LOGGER.catching(Level.ERROR,e1);
+            }
+            LOGGER.catching(Level.ERROR,e);
+        }
+        transactionManager.endTransaction();
+        return user;
     }
 
     public User updateUser(User newUser){

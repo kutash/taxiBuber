@@ -8,6 +8,7 @@ import com.kutash.taxibuber.resource.PageManager;
 import com.kutash.taxibuber.service.UserService;
 import com.kutash.taxibuber.util.DateParser;
 import com.kutash.taxibuber.util.FileManager;
+import com.kutash.taxibuber.util.Validator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -58,7 +59,7 @@ public class UpdateUserCommand implements Command {
             id = Integer.parseInt(userId);
             user = userService.findById(id);
             Map<String, String> userData = getData(request);
-            Map<String, String> errors = userService.validateUser(userData, language);
+            Map<String, String> errors = new Validator().validateUser(userData, language);
             if (!errors.isEmpty()) {
                 user.setName(userData.get("name"));
                 user.setSurname(userData.get("surname"));

@@ -120,6 +120,8 @@ public class Validator {
             if (!role.equals(UserRole.CLIENT.name()) && !role.equals(UserRole.DRIVER.name())) {
                 map.put("role", messageManager.getProperty("label.roleerror"));
             }
+        } else {
+            map.put("role", messageManager.getProperty("label.roleerror"));
         }
         return map;
     }

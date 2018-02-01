@@ -188,6 +188,7 @@ $(document).ready(function() {
                     $(this).removeClass('error-input').addClass('not-error');
                     $('#error-name').css('display', 'none');
                     $('#blank-name').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                     removeDisabled();
                 }
                 break;
@@ -207,6 +208,7 @@ $(document).ready(function() {
                     $(this).removeClass('error-input').addClass('not-error');
                     $('#error-surname').css('display', 'none');
                     $('#blank-surname').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                     removeDisabled();
                 }
                 break;
@@ -215,6 +217,7 @@ $(document).ready(function() {
                 if(val === '' || rv_name.test(val)) {
                     $(this).removeClass('error-input').addClass('not-error');
                     $('#error-patronymic').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                     removeDisabled();
                 } else {
                     $('#save-button').attr('disabled', 'disabled');
@@ -247,6 +250,7 @@ $(document).ready(function() {
                     $('#error-email').css('display', 'none');
                     $('#email-size').css('display', 'none');
                     $('#email-blank').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                     removeDisabled();
                 }
                 break;
@@ -255,6 +259,7 @@ $(document).ready(function() {
                 if(val === '' || rv_phone.test(val)) {
                     $(this).removeClass('error-input').addClass('not-error');
                     $('#error-phone').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                     removeDisabled();
                 } else {
                     $('#save-button').attr('disabled', 'disabled');
@@ -267,6 +272,7 @@ $(document).ready(function() {
                 if(val === '' || rv_date.test(val)) {
                     $(this).removeClass('error-input').addClass('not-error');
                     $('#error-birthday').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                     removeDisabled();
                 } else {
                     $('#save-button').attr('disabled', 'disabled');
@@ -290,6 +296,7 @@ $(document).ready(function() {
                     $(this).removeClass('error-input').addClass('not-error');
                     $('#error-password').css('display', 'none');
                     $('#blank-password').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                     removeDisabled();
                 }
                 break;
@@ -302,6 +309,7 @@ $(document).ready(function() {
                 } else {
                     $(this).removeClass('error-input').addClass('not-error');
                     $('#repeat-password').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                     removeDisabled();
                 }
                 break;
@@ -312,7 +320,10 @@ $(document).ready(function() {
     $('#role').on('change',function () {
         if ($('#role').val() === ''){
             $('#save-button').attr('disabled', 'disabled');
+            $(this).removeClass('not-error').addClass('error-input');
         }else {
+            $(this).removeClass('error-input').addClass('not-error');
+            $(this).parent().children('.err2').css('display', 'none');
             removeDisabled();
         }
     });
@@ -321,7 +332,7 @@ $(document).ready(function() {
         $('#saveUserForm').trigger( 'reset' );
         $('.err').css('display', 'none');
         $('.err2').css('display', 'none');
-        $('input[type=text], input[type=email], input[type=password]').removeClass('error-input not-error');
+        $('input[type=text], input[type=email], input[type=password], select').removeClass('error-input not-error');
         $('#save-button').attr('disabled', 'disabled');
         $('#blah').attr('src','/ajaxController?command=photo');
     });

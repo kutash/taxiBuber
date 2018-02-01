@@ -11,7 +11,12 @@ public class MessageManager {
         System.out.println(locale);
         Locale.setDefault(new Locale("en", "US"));
         if (locale != null) {
-            resourceBundle = ResourceBundle.getBundle("messages", new Locale(locale));
+            String[] country = locale.split("_");
+            if (country.length == 2){
+                resourceBundle = ResourceBundle.getBundle("messages", new Locale(country[0],country[1]));
+            }else {
+                resourceBundle = ResourceBundle.getBundle("messages", new Locale(locale));
+            }
         }
     }
 
