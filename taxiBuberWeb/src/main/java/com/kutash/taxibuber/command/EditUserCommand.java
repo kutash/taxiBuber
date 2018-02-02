@@ -34,9 +34,8 @@ public class EditUserCommand implements Command {
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"edit user command");
         Router router = new Router();
-        int id = Integer.parseInt(request.getParameter(USER_ID));
-        User user = service.findById(id);
-        List<Comment> comments = service.findComments(id);
+        String userId = request.getParameter(USER_ID);
+        User user = service.findUser(userId);
         Boolean isCar = (Boolean) request.getAttribute("isCar");
         String isCarParam = request.getParameter(IS_CAR);
         if (user.getRole().equals(UserRole.DRIVER)){
@@ -51,10 +50,9 @@ public class EditUserCommand implements Command {
             request.setAttribute("brands",brands);
         }
         if (user.getRole().equals(UserRole.CLIENT)){
-            List<Address> addresses = addressService.findAddresses(id);
+            List<Address> addresses = addressService.findAddresses(user.getId());
             request.setAttribute("addresses",addresses);
         }
-        request.setAttribute("comments",comments);
         request.setAttribute("user",user);
         router.setPage(PageManager.getProperty("path.page.user"));
         return router;

@@ -5,7 +5,6 @@ import com.kutash.taxibuber.entity.User;
 import com.kutash.taxibuber.resource.MessageManager;
 import com.kutash.taxibuber.resource.PageManager;
 import com.kutash.taxibuber.service.UserService;
-import com.kutash.taxibuber.util.PasswordEncryptor;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,17 +36,14 @@ public class ChangePasswordCommand implements Command {
         session.removeAttribute("deletedMessage");
         session.removeAttribute("createMessage");
         session.removeAttribute("updateMessage");
-        session.removeAttribute("updateUser");
+        session.removeAttribute("updatedUser");
         User user = (User) session.getAttribute(CURRENT_USER);
         String language = (String) session.getAttribute(LANGUAGE);
         String oldPassword = request.getParameter(OLD_PASSWORD);
         String password = request.getParameter(PASSWORD);
         String passwordConfirm = request.getParameter(PASSWORD_CONFIRM);
-        Map<String,String> errors = userService.checkPassword(user,oldPassword,password,passwordConfirm,language);
+        Map<String,String> errors = userService.changePassword(user,oldPassword,password,passwordConfirm,language);
         if (errors.isEmpty()){
-            user.setPassword(new PasswordEncryptor(user.getEmail()).encrypt(password));
-            user = userService.updateUser(user);
-            session.setAttribute("currentUser",user);
             session.setAttribute("updatePassword",new MessageManager(language).getProperty("message.pswupdated"));
             router.setRoute(Router.RouteType.REDIRECT);
         }else {

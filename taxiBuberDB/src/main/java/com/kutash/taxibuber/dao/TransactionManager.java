@@ -36,11 +36,7 @@ public class TransactionManager {
 
     public void endTransaction(){
         LOGGER.log(Level.DEBUG,"Returning connection to the pool");
-        try {
-            ConnectionPool.getInstance().releaseConnection(connection);
-        } catch (DAOException e) {
-            LOGGER.catching(Level.ERROR,e);
-        }
+        connection.close();
     }
 
     public void commit() throws DAOException {

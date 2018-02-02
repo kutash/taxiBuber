@@ -26,7 +26,7 @@ public class UserInfoCommand implements Command {
         Router router = new Router();
         LOGGER.log(Level.INFO,"getting user info");
         String userId = request.getParameter(USER_ID);
-        User user = service.findUserInfo(userId);
+        User user = service.findUser(userId);
         String json = new Gson().toJson(user);
         router.setPage(json);
         return router;

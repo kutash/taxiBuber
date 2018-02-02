@@ -116,12 +116,14 @@ public class Validator {
                 }
             }
         }
-        if (StringUtils.isNotEmpty(role)) {
-            if (!role.equals(UserRole.CLIENT.name()) && !role.equals(UserRole.DRIVER.name())) {
+        if (data.containsKey("role")) {
+            if (StringUtils.isNotEmpty(role)) {
+                if (!role.equals(UserRole.CLIENT.name()) && !role.equals(UserRole.DRIVER.name())) {
+                    map.put("role", messageManager.getProperty("label.roleerror"));
+                }
+            } else {
                 map.put("role", messageManager.getProperty("label.roleerror"));
             }
-        } else {
-            map.put("role", messageManager.getProperty("label.roleerror"));
         }
         return map;
     }

@@ -35,7 +35,7 @@ public class DeleteCarCommand implements Command {
         session.removeAttribute("deletedMessage");
         session.removeAttribute("createMessage");
         session.removeAttribute("updateMessage");
-        session.removeAttribute("updateUser");
+        session.removeAttribute("updatedUser");
         session.removeAttribute("updatePassword");
         String language = (String) session.getAttribute(LANGUAGE);
         MessageManager messageManager = new MessageManager(language);

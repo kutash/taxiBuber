@@ -464,3 +464,7 @@ input:checked + .slider:before {
     font-size: 17px;
     width: 200px;
 }
+
+.message {
+    margin: 8%;
+}

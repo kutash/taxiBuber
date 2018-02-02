@@ -6,7 +6,7 @@ $(document).ready(function () {
 
     var modalMessage = $('#modal-message2');
     var update = $('#message-update');
-    if (update.text() !== ''){
+    /*if (update.text() !== ''){
         modalMessage.modal('show');
         update.css('margin','10%');
         update.css('display', 'block');
@@ -14,9 +14,9 @@ $(document).ready(function () {
             modalMessage.modal("hide");
             update.css('display', 'none');
         }, 3000);
-    }
+    }*/
     var create = $('#message-create');
-    if (create.text() !== ''){
+    /*if (create.text() !== ''){
         modalMessage.modal('show');
         create.css('margin','10%');
         create.css('display', 'block');
@@ -24,10 +24,10 @@ $(document).ready(function () {
             modalMessage.modal("hide");
             create.css('display', 'none');
         }, 3000);
-    }
+    }*/
 
     var deleted = $('#message-deleted');
-    if (deleted.text() !== ''){
+    /*if (deleted.text() !== ''){
         modalMessage.modal('show');
         deleted.css('margin','12%');
         deleted.css('display', 'block');
@@ -35,16 +35,16 @@ $(document).ready(function () {
             modalMessage.modal("hide");
             deleted.css('display', 'none');
         }, 3000);
-    }
+    }*/
 
     var notDeleted = $('#message-notdeleted');
-    if (notDeleted.text() !== ''){
+    if (notDeleted.text() !== '' || deleted.text() != ''|| create.text() != ''|| update.text() != ''){
         modalMessage.modal('show');
-        notDeleted.css('margin','10%');
-        notDeleted.css('display', 'block');
+        /*notDeleted.css('margin','10%');
+        notDeleted.css('display', 'block');*/
         setTimeout(function(){
             modalMessage.modal("hide");
-            notDeleted.css('display', 'none');
+            /*notDeleted.css('display', 'none');*/
         }, 3000);
     }
 
@@ -58,7 +58,7 @@ $(document).ready(function () {
         $("#file-car").click();
     });
     $('#file-car').change(function () {
-        previewFile(this);
+        previewFileCar(this);
     });
 
     $('input#number, input#model').on("keyup", function(){
@@ -167,7 +167,7 @@ $(document).ready(function () {
 
 });
 
-function previewFile(input) {
+function previewFileCar(input) {
     var preview = $('#car-img');
     var file    = input.files[0];
     var reader  = new FileReader();

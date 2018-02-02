@@ -8,6 +8,7 @@ import com.kutash.taxibuber.util.FileManager;
 import com.kutash.taxibuber.util.PasswordEncryptor;
 import com.kutash.taxibuber.exception.DAOException;
 import com.kutash.taxibuber.util.Validator;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,8 +26,9 @@ public class UserService extends AbstractService<User>{
 
     public List<User> findAll() {
         LOGGER.log(Level.INFO,"Finding all users");
-        TransactionManager transactionManager = new TransactionManager();
         UserDAO userDAO = new DAOFactory().getUserDAO();
+        /*TransactionManager transactionManager = new TransactionManager();
+
         List<User> users = null;
         try {
             transactionManager.beginTransaction(userDAO);
@@ -40,8 +42,8 @@ public class UserService extends AbstractService<User>{
             }
             LOGGER.catching(Level.ERROR,e);
         }
-        transactionManager.endTransaction();
-        return users;
+        transactionManager.endTransaction();*/
+        return super.findAll(userDAO);
     }
 
     public User findById(int id) {
@@ -102,25 +104,19 @@ public class UserService extends AbstractService<User>{
         return user;
     }
 
-    public User updateUser(User newUser){
-        LOGGER.log(Level.INFO,"Updating user id={}",newUser.getId());
-        UserDAO userDAO = new DAOFactory().getUserDAO();
-        TransactionManager transactionManager = new TransactionManager();
-        User user = null;
-        try {
-            transactionManager.beginTransaction(userDAO);
-            user = userDAO.update(newUser);
-            transactionManager.commit();
-        } catch (DAOException e) {
-            try {
-                transactionManager.rollback();
-            } catch (DAOException e1) {
-                LOGGER.catching(Level.ERROR,e1);
-            }
-            LOGGER.catching(Level.ERROR,e);
+    public User updateUser(User user,Map<String,String> userData,Part photo){
+        LOGGER.log(Level.INFO,"Updating user id={}",user.getId());
+        String photoPath = new FileManager().savePhoto(photo,user.getId(),false);
+        user.setName(userData.get("name"));
+        user.setSurname(userData.get("surname"));
+        user.setPatronymic(userData.get("patronymic"));
+        user.setPhone(userData.get("phone"));
+        user.setBirthday(DateParser.parseDate(userData.get("birthday")));
+        if (StringUtils.isNotEmpty(photoPath)) {
+            user.setPhotoPath(photoPath);
         }
-        transactionManager.endTransaction();
-        return user;
+        UserDAO userDAO = new DAOFactory().getUserDAO();
+        return super.update(user,userDAO);
     }
 
     public boolean isUniqueEmail(String email) {
@@ -143,18 +139,23 @@ public class UserService extends AbstractService<User>{
         return result;
     }
 
-    public Map<String,String> checkPassword(User user, String oldPassword,String password,String passwordConfirm,String language){
+    public Map<String,String> changePassword(User user, String oldPassword,String password,String passwordConfirm,String language){
         String encryptedPassword = new PasswordEncryptor(user.getEmail()).encrypt(oldPassword);
         Map<String, String> errors = new HashMap<>();
         if (user.getPassword().equals(encryptedPassword)) {
             errors = new Validator().checkPassword(password, passwordConfirm, language);
+            if (errors.isEmpty()){
+                user.setPassword(new PasswordEncryptor(user.getEmail()).encrypt(password));
+                UserDAO userDAO = new DAOFactory().getUserDAO();
+                super.update(user,userDAO);
+            }
         }else {
             errors.put("wrongPassword",new MessageManager(language).getProperty("label.wrongpassword"));
         }
         return errors;
     }
 
-    public List<Comment> findComments(int userId) {
+    /*public List<Comment> findComments(int userId) {
         LOGGER.log(Level.INFO,"Finding comments by user id");
         TransactionManager transactionManager = new TransactionManager();
         CommentDAO commentDAO = new DAOFactory().getCommentDAO();
@@ -173,9 +174,9 @@ public class UserService extends AbstractService<User>{
         }
         transactionManager.endTransaction();
         return comments;
-    }
+    }*/
 
-    public User findUserInfo(String userId){
+    public User findUser(String userId){
         User user = null;
         int id = Integer.parseInt(userId);
         TransactionManager transactionManager = new TransactionManager();

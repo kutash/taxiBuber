@@ -20,7 +20,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
     </head>
     <body>
-        <jsp:include page="/jsp/user/driver_header.jsp"/>
+    <jsp:include page="/jsp/user/header.jsp"/>
         <c:url var="switchLanguage" value="controller" scope="page">
             <c:param name="command" value="main"/>
         </c:url>

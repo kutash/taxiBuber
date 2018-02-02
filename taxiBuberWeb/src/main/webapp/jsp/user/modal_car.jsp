@@ -126,10 +126,10 @@
         <div class="modal-dialog modal-sm">
             <div class="modal-content modal-message">
                 <div class="modal-body modal-message-body">
-                    <div id="message-update" style="display: none">${updateMessage}</div>
-                    <div id="message-create" style="display: none">${createMessage}</div>
-                    <div id="message-deleted" style="display: none">${deletedMessage}</div>
-                    <div id="message-notdeleted" style="display: none">${wasNotDeleted}</div>
+                    <div id="message-update" class="message"> ${updateMessage}</div>
+                    <div id="message-create" class="message">${createMessage}</div>
+                    <div id="message-deleted" class="message">${deletedMessage}</div>
+                    <div id="message-notdeleted" class="message">${wasNotDeleted}</div>
                 </div>
             </div>
         </div>

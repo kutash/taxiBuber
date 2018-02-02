@@ -4,18 +4,17 @@ import com.kutash.taxibuber.dao.CarDAO;
 import com.kutash.taxibuber.dao.DAOFactory;
 import com.kutash.taxibuber.dao.TransactionManager;
 import com.kutash.taxibuber.dao.TripDAO;
-import com.kutash.taxibuber.entity.Car;
-import com.kutash.taxibuber.entity.CarBrand;
-import com.kutash.taxibuber.entity.Status;
-import com.kutash.taxibuber.entity.Trip;
+import com.kutash.taxibuber.entity.*;
 import com.kutash.taxibuber.exception.DAOException;
 import com.kutash.taxibuber.resource.RegulationManager;
+import com.kutash.taxibuber.util.FileManager;
 import com.kutash.taxibuber.util.Validator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.servlet.http.Part;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -25,6 +24,7 @@ import java.util.Map;
 public class CarService extends AbstractService<Car>{
 
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final String SPACE = "\\s";
 
     public Car findById(int id) {
         LOGGER.log(Level.INFO,"Finding car id={}",id);
@@ -146,25 +146,20 @@ public class CarService extends AbstractService<Car>{
         return cars;
     }
 
-    public Car updateCar(Car newCar){
+    public Car updateCar(Map<String,String> carData, Part photo, Car carOld){
         LOGGER.log(Level.INFO,"Updating car");
-        Car car = null;
-        TransactionManager transactionManager = new TransactionManager();
-        CarDAO carDAO = new DAOFactory().getCarDAO();
-        try {
-            transactionManager.beginTransaction(carDAO);
-            car = carDAO.update(newCar);
-            transactionManager.commit();
-        } catch (DAOException e) {
-            try {
-                transactionManager.rollback();
-            } catch (DAOException e1) {
-                LOGGER.catching(Level.ERROR,e1);
-            }
-            LOGGER.catching(Level.ERROR,e);
+        String photoPath = new FileManager().savePhoto(photo,carOld.getUserId(),true);
+        String[] entityBrand = carData.get("brand").split(SPACE);
+        CarBrand carBrand = new CarBrand(Integer.parseInt(entityBrand[0]), entityBrand[1]);
+        carOld.setBrand(carBrand);
+        carOld.setCapacity(Capacity.valueOf(carData.get("capacity")));
+        carOld.setRegistrationNumber(carData.get("number"));
+        carOld.setModel(carData.get("model"));
+        if (StringUtils.isNotEmpty(photoPath)) {
+            carOld.setPhotoPath(photoPath);
         }
-        transactionManager.endTransaction();
-        return car;
+        CarDAO carDAO = new DAOFactory().getCarDAO();
+        return super.update(carOld,carDAO);
     }
 
     public List<CarBrand> findAllBrands() {
@@ -219,8 +214,12 @@ public class CarService extends AbstractService<Car>{
         return carBrand;
     }
 
-    public int createCar(Car car) {
+    public int createCar(Map<String,String> carData, Part photo,User user) {
         LOGGER.log(Level.INFO,"Creating car");
+        String photoPath = new FileManager().savePhoto(photo,user.getId(),true);
+        String[] entityBrand = carData.get("brand").split(SPACE);
+        CarBrand carBrand = new CarBrand(Integer.parseInt(entityBrand[0]), entityBrand[1]);
+        Car car = new Car(carData.get("number"),Capacity.valueOf(carData.get("capacity")),carData.get("model"),photoPath,false,carBrand,user.getId(), Status.ACTIVE);
         CarDAO carDAO = new DAOFactory().getCarDAO();
         return super.create(car,carDAO);
     }

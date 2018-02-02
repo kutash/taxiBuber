@@ -19,15 +19,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body>
-    <c:if test="${currentUser.role == 'CLIENT'}">
-        <jsp:include page="/jsp/user/header.jsp"/>
-    </c:if>
-    <c:if test="${currentUser.role == 'ADMIN'}">
-        <jsp:include page="/jsp/admin/header.jsp"/>
-    </c:if>
-    <c:if test="${currentUser.role == 'DRIVER'}">
-        <jsp:include page="/jsp/user/driver_header.jsp"/>
-    </c:if>
+    <jsp:include page="/jsp/user/header.jsp"/>
     <c:url var="switchLanguage" value="controller" scope="page">
         <c:param name="command" value="edit"/>
         <c:param name="userId" value="${user.id}"/>
@@ -48,18 +40,18 @@
                 <div class="col-sm-6 text-center" style="margin-left: 76px;margin-right: -222px;">
                     <div>
                         <div>
-                        <input type='file' id="imgInp" style="display: none" name="photo" form="saveUserForm" ${currentUser.role == 'ADMIN' ? 'disabled' : ''}/>
-                        <a href="javascript:{}" id="img">
-                            <img id="blah" src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${user.photoPath}&amp;userId=${user.id}" alt="your image" width="300" height="270"  />
-                        </a>
+                            <input type='file' id="imgInp" style="display: none" name="photo" form="saveUserForm" ${currentUser.role == 'ADMIN' ? 'disabled' : ''}/>
+                            <a href="javascript:{}" id="img">
+                                <img id="blah" src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${user.photoPath}&amp;userId=${user.id}" alt="your image" width="300" height="270"  />
+                            </a>
                         </div>
                         <div>
-                        <div class="rating" style="padding: 7px">
-                            <h1 id="rating">${user.rating}</h1>
-                            <div class="productRate">
-                                <div class="productRate-div" id="str"></div>
+                            <div class="rating" style="padding: 7px">
+                                <h1 id="rating">${user.rating}</h1>
+                                <div class="productRate">
+                                    <div class="productRate-div" id="str"></div>
+                                </div>
                             </div>
-                        </div>
                         </div>
                     </div>
                 </div>
@@ -205,13 +197,13 @@
                     </div>
                 </div>
             </c:if>
-            <c:if test="${not empty comments}">
+            <c:if test="${not empty user.comments}">
             <div class="row">
                 <div class="comment-div">
                     <h1 style="text-align: center"><i class="fa fa-comments-o" aria-hidden="true"></i> <fmt:message key="label.comments"/></h1>
-                    <table class="table">
+                    <table class="table" style="width: 1031px;margin-left: 177px">
                         <tbody>
-                        <c:forEach var="comment" items="${comments}">
+                        <c:forEach var="comment" items="${user.comments}">
                             <tr>
                                 <td class="col-md-3" style="padding-left: 50px">
                                     <img src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${comment.reviewerPhoto}&amp;userId=${comment.reviewerId}" width="70" height="70"  class="comment-photo"/>
@@ -295,8 +287,8 @@
             <div class="modal-dialog modal-sm">
                 <div class="modal-content modal-message">
                     <div class="modal-body modal-message-body">
-                        <div id="update-password">${updatePassword}</div>
-                        <div id="update-user">${updatedUser}</div>
+                        <div id="update-password" class="message">${updatePassword}</div>
+                        <div id="update-user" class="message">${updatedUser}</div>
                     </div>
                 </div>
             </div>

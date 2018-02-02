@@ -18,7 +18,7 @@ public enum CommandEnum {
     COMPLETE_TRIP(new CompleteTripCommand(new TripService())),
     SAVE_USER(new SaveUserCommand(new UserService())),
     SET_COORDINATES(new SetCoordinatesCommand(new CarService())),
-    SAVE_CAR(new SaveCarCommand(new CarService(),new UserService())),
+    SAVE_CAR(new SaveCarCommand(new CarService())),
     UPDATE_USER(new UpdateUserCommand(new UserService())),
     CHANGE_PASSWORD(new ChangePasswordCommand(new UserService())),
     BAN(new BanCommand(new UserService())),

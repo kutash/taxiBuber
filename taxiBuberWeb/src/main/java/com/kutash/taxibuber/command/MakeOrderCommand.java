@@ -4,7 +4,6 @@ import com.kutash.taxibuber.controller.Router;
 import com.kutash.taxibuber.entity.*;
 import com.kutash.taxibuber.resource.MessageManager;
 import com.kutash.taxibuber.resource.PageManager;
-import com.kutash.taxibuber.service.AddressService;
 import com.kutash.taxibuber.service.CarService;
 import com.kutash.taxibuber.service.TripService;
 import com.kutash.taxibuber.util.Validator;
@@ -14,8 +13,6 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -71,13 +68,16 @@ public class MakeOrderCommand implements Command {
                     session.setAttribute("orderMessage", new MessageManager(language).getProperty("message.ordersuccess"));
                     router.setRoute(Router.RouteType.REDIRECT);
                 }else {
+                    returnErrors(data,errors,request,language);
                     request.setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
                 }
             }else {
+                returnErrors(data,errors,request,language);
                 request.setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
             }
         }else {
             returnErrors(data,errors,request,language);
+            request.setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
         }
         router.setPage(PageManager.getProperty("path.command.main"));
         return router;
@@ -93,7 +93,6 @@ public class MakeOrderCommand implements Command {
         }if (!errors.containsKey("distance")){
             distanceNumber = Float.parseFloat(data.get("distance")) / METER_IN_KILOMETER;
         }
-        request.setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
         request.setAttribute("errors",errors);
         request.setAttribute("cost", data.get("cost"));
         request.setAttribute("durationText", data.get("durationText"));

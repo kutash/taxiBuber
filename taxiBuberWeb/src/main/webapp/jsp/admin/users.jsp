@@ -17,7 +17,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body>
-    <jsp:include page="header.jsp"/>
+    <jsp:include page="/jsp/user/header.jsp"/>
     <c:url var="switchLanguage" value="controller" scope="page">
         <c:param name="command" value="show_users"/>
     </c:url>

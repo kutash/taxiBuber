@@ -18,18 +18,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <c:if test="${currentUser.role == 'CLIENT'}">
-        <jsp:include page="/jsp/user/header.jsp"/>
-    </c:if>
-    <c:if test="${currentUser.role == 'ADMIN'}">
-        <jsp:include page="/jsp/admin/header.jsp"/>
-    </c:if>
-    <c:if test="${currentUser.role == 'DRIVER'}">
-        <jsp:include page="/jsp/user/driver_header.jsp"/>
-    </c:if>
-    <c:url var="switchLanguage" value="controller" scope="page">
-        <c:param name="command" value="trips"/>
-    </c:url>
+    <jsp:include page="/jsp/user/header.jsp"/>
     <form action="${switchLanguage}" method="post" id="l"></form>
     <div class="container">
         <div>

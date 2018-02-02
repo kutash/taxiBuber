@@ -230,6 +230,7 @@ $(document).ready(function () {
 });
 
 function previewFile(input) {
+    console.log("previe");
     var preview = $('#blah');
     var file    = input.files[0];
     var reader  = new FileReader();

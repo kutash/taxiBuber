@@ -1,9 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ctg" uri="/WEB-INF/tld/custom.tld" %>
 <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale.toString()}" scope="session" />
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="${pageContext.request.contextPath}/messages"/>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title><fmt:message key="label.title"/></title>
@@ -17,22 +19,45 @@
         <div class="navbar-header">
             <a class="navbar-brand" href="${home}"><span class="glyphicon glyphicon-home"></span> <fmt:message key="label.title"/></a>
         </div>
-        <ul class="nav navbar-nav">
-            <li class="active"><a href="controller?command=main"><fmt:message key="label.order"/></a></li>
-            <li>
-                <c:url var="edit" value="controller">
-                    <c:param name="command" value="edit"/>
-                    <c:param name="userId" value="${currentUser.id}"/>
-                </c:url>
-                <a href="${edit}"><fmt:message key="label.profile"/></a>
-            </li>
-            <li>
-                <c:url var="trips" value="controller">
-                    <c:param name="command" value="trips"/>
-                </c:url>
-                <a href="${trips}"><fmt:message key="label.trips"/></a>
-            </li>
-        </ul>
+        <c:if test="${currentUser.role == 'ADMIN'}">
+            <ul class="nav navbar-nav">
+                <li>
+                    <c:url var="users" value="controller">
+                        <c:param name="command" value="show_users"/>
+                    </c:url>
+                    <a href="${users}"><fmt:message key="label.users"/></a>
+                </li>
+                <li>
+                    <c:url var="trips" value="controller">
+                        <c:param name="command" value="trips"/>
+                    </c:url>
+                    <a href="${trips}"><fmt:message key="label.trips"/></a>
+                </li>
+            </ul>
+        </c:if>
+        <c:if test="${currentUser.role == 'DRIVER' || currentUser.role == 'CLIENT'}">
+            <ul class="nav navbar-nav">
+                <li>
+                    <c:url var="main" value="controller">
+                        <c:param name="command" value="main"/>
+                    </c:url>
+                    <a href="${main}"><fmt:message key="label.order"/></a>
+                </li>
+                <li>
+                    <c:url var="edit" value="controller">
+                        <c:param name="command" value="edit"/>
+                        <c:param name="userId" value="${currentUser.id}"/>
+                    </c:url>
+                    <a href="${edit}"><fmt:message key="label.profile"/></a>
+                </li>
+                <li>
+                    <c:url var="trips" value="controller">
+                        <c:param name="command" value="trips"/>
+                    </c:url>
+                    <a href="${trips}"><fmt:message key="label.trips"/></a>
+                </li>
+            </ul>
+        </c:if>
         <ul class="nav navbar-nav navbar-right">
             <li>
                 <span class="user-name">${currentUser.name}</span>

@@ -5,8 +5,6 @@ import com.kutash.taxibuber.entity.*;
 import com.kutash.taxibuber.resource.MessageManager;
 import com.kutash.taxibuber.resource.PageManager;
 import com.kutash.taxibuber.service.CarService;
-import com.kutash.taxibuber.service.UserService;
-import com.kutash.taxibuber.util.FileManager;
 import com.kutash.taxibuber.util.Validator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
@@ -30,14 +28,11 @@ public class SaveCarCommand implements Command {
     private static final String CAR_ID = "carId";
     private static final String CAPACITY = "capacity";
     private static final String LANGUAGE = "language";
-    private static final String DRIVER_ID = "userId";
     private static final String CURRENT_USER = "currentUser";
-    private static final String SPACE = "\\s";
-    private CarService carService;
-    private UserService userService;
 
-    SaveCarCommand(CarService carService, UserService userService){
-        this.userService = userService;
+    private CarService carService;
+
+    SaveCarCommand(CarService carService){
         this.carService = carService;
     }
 
@@ -50,7 +45,7 @@ public class SaveCarCommand implements Command {
         session.removeAttribute("deletedMessage");
         session.removeAttribute("createMessage");
         session.removeAttribute("updateMessage");
-        session.removeAttribute("updateUser");
+        session.removeAttribute("updatedUser");
         session.removeAttribute("updatePassword");
         HashMap<String,String> carData = getData(request);
         Map<String,String> errors = new Validator().validateCar(carData,language);
@@ -89,11 +84,13 @@ public class SaveCarCommand implements Command {
             request.setAttribute("car", car);
             request.setAttribute("isCar", true);
         } else {
-            String photoPath = savePhoto(request,driver.getId());
-            String[] entityBrand = carData.get("brand").split(SPACE);
-            CarBrand carBrand = new CarBrand(Integer.parseInt(entityBrand[0]), entityBrand[1]);
-            car = new Car(carData.get("number"),Capacity.valueOf(carData.get("capacity")),carData.get("model"),photoPath,false,carBrand,driver.getId(), Status.ACTIVE);
-            carService.createCar(car);
+            Part photoPart = null;
+            try {
+                photoPart = request.getPart("photo");
+            } catch (IOException | ServletException e) {
+                LOGGER.catching(Level.ERROR,e);
+            }
+            carService.createCar(carData,photoPart,driver);
             request.getSession().setAttribute("createMessage",new MessageManager(language).getProperty("message.createdcar"));
             request.getSession().setAttribute("isCar", false);
             router.setRoute(Router.RouteType.REDIRECT);
@@ -104,49 +101,29 @@ public class SaveCarCommand implements Command {
 
     private Router updateCar(HttpServletRequest request,Map<String,String> carData,Map<String,String> errors,String language){
         Router router = new Router();
-        String driverId = request.getParameter(DRIVER_ID);
-        User driver = userService.findById(Integer.parseInt(driverId));
+        User driver = (User) request.getSession().getAttribute(CURRENT_USER);
         int id = Integer.parseInt(carData.get("carId"));
         Car carOld = carService.findById(id);
-        if(carOld != null) {
-            if (!errors.isEmpty()) {
-                carOld.setModel(carData.get("model"));
-                carOld.setRegistrationNumber(carData.get("number"));
-                request.setAttribute("errors",errors);
-                request.setAttribute("car",carOld);
-                request.setAttribute("isCar", true);
-            } else {
-                String[] entityBrand = carData.get("brand").split(SPACE);
-                CarBrand carBrand = new CarBrand(Integer.parseInt(entityBrand[0]), entityBrand[1]);
-                carOld.setBrand(carBrand);
-                carOld.setCapacity(Capacity.valueOf(carData.get("capacity")));
-                carOld.setRegistrationNumber(carData.get("number"));
-                carOld.setModel(carData.get("model"));
-                String photoPath = savePhoto(request,driver.getId());
-                if (StringUtils.isNotEmpty(photoPath)) {
-                    carOld.setPhotoPath(photoPath);
-                }
-                carService.updateCar(carOld);
-                request.getSession().setAttribute("updateMessage",new MessageManager(language).getProperty("message.updatedcar"));
-                request.getSession().setAttribute("isCar", false);
-                router.setRoute(Router.RouteType.REDIRECT);
+        if (!errors.isEmpty()) {
+            carOld.setModel(carData.get("model"));
+            carOld.setRegistrationNumber(carData.get("number"));
+            request.setAttribute("errors",errors);
+            request.setAttribute("car",carOld);
+            request.setAttribute("isCar", true);
+        } else {
+            Part photoPart = null;
+            try {
+                photoPart = request.getPart("photo");
+            } catch (IOException | ServletException e) {
+                LOGGER.catching(Level.ERROR,e);
+            }
+            carService.updateCar(carData,photoPart,carOld);
+            request.getSession().setAttribute("updateMessage",new MessageManager(language).getProperty("message.updatedcar"));
+            request.getSession().setAttribute("isCar", false);
+            router.setRoute(Router.RouteType.REDIRECT);
             }
             router.setPage(PageManager.getProperty("path.command.edit")+driver.getId());
-        }else {
-            request.setAttribute("wrongAction",new MessageManager(language).getProperty("message.wrongid"));
-            router.setPage("path.page.error");
-        }
         return router;
     }
 
-    private String savePhoto(HttpServletRequest request, int userId) {
-        LOGGER.log(Level.DEBUG,"saving photo");
-        Part photoPart = null;
-        try {
-            photoPart = request.getPart("photo");
-        } catch (IOException | ServletException e) {
-            LOGGER.catching(Level.ERROR,e);
-        }
-        return new FileManager().savePhoto(photoPart,userId,true);
-    }
 }
