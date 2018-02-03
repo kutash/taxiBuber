@@ -5,8 +5,6 @@ import com.kutash.taxibuber.resource.DBConfigurationManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -14,31 +12,40 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class ConnectionPool implements Serializable {
+public class ConnectionPool implements Cloneable{
 
     private static final Logger LOGGER = LogManager.getLogger();
     private final static ReentrantLock lock = new ReentrantLock();
     private static AtomicBoolean instanceCreated = new AtomicBoolean();
-    private final int  POOL_SIZE = Integer.parseInt(DBConfigurationManager.getInstance().getProperty("poolSize"));
+    private static final int  DEFAULT_POOL_SIZE = 10;
+    private final int POOL_SIZE;
     private static ConnectionPool instance;
     private BlockingQueue<ProxyConnection> connectionQueue;
 
     private ConnectionPool() throws DAOException {
-        connectionQueue = new ArrayBlockingQueue<>(POOL_SIZE);
+        if (instance != null) {
+            throw new IllegalStateException("Already instantiated");
+        }
         ConnectionCreator connectionCreator = new ConnectionCreator();
-        for (int i=0;i<POOL_SIZE;i++){
+        if(connectionCreator.getPoolSize() != 0){
+            POOL_SIZE = connectionCreator.getPoolSize();
+        }else {
+            POOL_SIZE = DEFAULT_POOL_SIZE;
+        }
+        connectionQueue = new ArrayBlockingQueue<>(POOL_SIZE);
+        for (int i = 0; i < POOL_SIZE; i++){
             Connection connection = connectionCreator.getConnection();
             ProxyConnection proxyConnection = new ProxyConnection(connection);
             connectionQueue.offer(proxyConnection);
         }
-        if (connectionQueue.size()<POOL_SIZE){
-            for(int i = connectionQueue.size(); i<POOL_SIZE; i++){
+        if (connectionQueue.size() < POOL_SIZE){
+            for(int i = connectionQueue.size(); i < POOL_SIZE; i++){
                 Connection connection = connectionCreator.getConnection();
                 ProxyConnection proxyConnection = new ProxyConnection(connection);
                 connectionQueue.offer(proxyConnection);
             }
         }
-        if (connectionQueue.size()<POOL_SIZE){
+        if (connectionQueue.size() < POOL_SIZE){
             throw new DAOException("Can not create connections");
         }
     }
@@ -68,7 +75,7 @@ public class ConnectionPool implements Serializable {
         return connection;
     }
 
-    public void releaseConnection(ProxyConnection connection){
+    void releaseConnection(ProxyConnection connection){
         try {
             if (!connection.getAutoCommit()) {
                 connection.setAutoCommit(true);
@@ -91,7 +98,7 @@ public class ConnectionPool implements Serializable {
         ConnectionCreator.deregisterDrivers();
     }
 
-    private Object readResolve()  {
-        return instance;
+    public Object clone() throws CloneNotSupportedException{
+        throw new CloneNotSupportedException("Cannot clone instance of this class");
     }
 }

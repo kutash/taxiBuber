@@ -312,8 +312,8 @@ h4 {
 
 #addresses {
     margin-top: 50px;
-    margin-left: 10%;
-    width: 76%;
+    margin-left: 21%;
+    width: 60%;
 }
 
 .comment-link {
@@ -467,4 +467,21 @@ input:checked + .slider:before {
 
 .message {
     margin: 8%;
+}
+
+.search {
+    padding: 2px;
+    margin-top: 9px;
+    border-radius: 5px;
+    margin-right: -6px;
+    width: 320px;
+    height: 35px;
+}
+
+#search-select {
+    width: 90px;
+    height: 34px;
+    margin-top: 0;
+    margin-left: -89px;
+    border-radius: 5px;
 }

@@ -5,7 +5,7 @@ $(document).ready(function () {
     }
 
     var modalMessage = $('#modal-message2');
-    var update = $('#message-update');
+    var update = $('#message-update').text();
     /*if (update.text() !== ''){
         modalMessage.modal('show');
         update.css('margin','10%');
@@ -15,7 +15,7 @@ $(document).ready(function () {
             update.css('display', 'none');
         }, 3000);
     }*/
-    var create = $('#message-create');
+    var create = $('#message-create').text();
     /*if (create.text() !== ''){
         modalMessage.modal('show');
         create.css('margin','10%');
@@ -26,7 +26,7 @@ $(document).ready(function () {
         }, 3000);
     }*/
 
-    var deleted = $('#message-deleted');
+    var deleted = $('#message-deleted').text();
     /*if (deleted.text() !== ''){
         modalMessage.modal('show');
         deleted.css('margin','12%');
@@ -37,15 +37,19 @@ $(document).ready(function () {
         }, 3000);
     }*/
 
-    var notDeleted = $('#message-notdeleted');
-    if (notDeleted.text() !== '' || deleted.text() != ''|| create.text() != ''|| update.text() != ''){
+    var notDeleted = $('#message-notdeleted').text();
+    if (notDeleted !== '' || deleted !== '' || create !== '' || update !== ''){
+        console.log(notDeleted);
+        console.log(deleted);
+        console.log(update);
+        console.log(create);
         modalMessage.modal('show');
         /*notDeleted.css('margin','10%');
         notDeleted.css('display', 'block');*/
         setTimeout(function(){
             modalMessage.modal("hide");
             /*notDeleted.css('display', 'none');*/
-        }, 3000);
+        }, 2500);
     }
 
     ($('.err2').each(function () {

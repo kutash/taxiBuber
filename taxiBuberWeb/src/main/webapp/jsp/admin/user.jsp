@@ -37,7 +37,7 @@
         <div class="container">
             <div class="row">
                 <div class="before-form">${currentUser.role}</div>
-                <div class="col-sm-6 text-center" style="margin-left: 76px;margin-right: -222px;">
+                <div class="col-sm-6 text-center" style="margin-left: 75px;margin-right: -240px;">
                     <div>
                         <div>
                             <input type='file' id="imgInp" style="display: none" name="photo" form="saveUserForm" ${currentUser.role == 'ADMIN' ? 'disabled' : ''}/>
@@ -132,7 +132,7 @@
                                 </div>
                             </c:if>
                             <div class="form-group" <%--style="margin-top: 91px;margin-left: -145px;"--%> id="div-buttons">
-                                <div class="col-sm-offset-2 col-sm-4">
+                                <div class="col-sm-offset-2 col-sm-5">
                                     <button type="submit" id="save-button" class="btn btn-success btn-md" form="saveUserForm"><i class="fa fa-floppy-o" aria-hidden="true"></i> <fmt:message key="button.save"/></button>
                                     <button type="submit" class="btn btn-danger btn-md" id="cancel-button" form="cancelUserForm"><i class="fa fa-ban" aria-hidden="true"></i> <fmt:message key="button.cancel"/></button>
                                 </div>
@@ -180,7 +180,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a data-toggle="collapse" href="#collapse1"><fmt:message key="label.myaddresses"/></a>
+                                    <a data-toggle="collapse" href="#collapse1"><i class="fas fa-address-card"></i> <fmt:message key="label.myaddresses"/></a>
                                 </h4>
                             </div>
                             <div id="collapse1" class="panel-collapse collapse">
@@ -201,7 +201,7 @@
             <div class="row">
                 <div class="comment-div">
                     <h1 style="text-align: center"><i class="fa fa-comments-o" aria-hidden="true"></i> <fmt:message key="label.comments"/></h1>
-                    <table class="table" style="width: 1031px;margin-left: 177px">
+                    <table class="table" style="margin-top: 50px;margin-left: 15%;width: 78%;">
                         <tbody>
                         <c:forEach var="comment" items="${user.comments}">
                             <tr>

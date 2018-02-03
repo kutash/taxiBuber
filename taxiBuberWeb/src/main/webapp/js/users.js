@@ -106,6 +106,19 @@ $(document).ready(function () {
 
     $('.no').on('click',function () {
         $('#modal-message2').modal('hide');
-    })
+    });
+
+    $('.address-link').on('click',function () {
+        console.log($(this).text());
+        $('#search').text($(this).text());
+    });
+
+    $("#end").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#users-table").find('tr').children('.'+$('#search').text()).filter(function() {
+            console.log($(this).text());
+            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
 });
 

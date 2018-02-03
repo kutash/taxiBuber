@@ -48,11 +48,11 @@
                                         <c:param name="command" value="edit"/>
                                         <c:param name="userId" value="${user.id}"/>
                                     </c:url>
-                                    <a href="${edit}" class="${user.status == 'BANNED' ? 'banned' : ''}"><c:out value="${user.getFullName()}"/></a>
+                                    <a href="${edit}" class="name ${user.status == 'BANNED' ? 'banned' : ''}"><c:out value="${user.getFullName()}"/></a>
                                 </td>
                                 <td class="users"><c:out value="${user.rating}"/></td>
                                 <td class="users"><c:out value="${user.role}"/></td>
-                                <td class="users"><c:out value="${user.email}"/></td>
+                                <td class="email users"><c:out value="${user.email}"/></td>
                                 <td class="users"><c:out value="${user.birthday}"/></td>
                                 <td class="users">
                                     <a href="javascript:{}" class="ban-link" id="${user.id}">

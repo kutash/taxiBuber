@@ -97,7 +97,9 @@
                     </div>
                     <div class="form-group" id="order">
                         <div class="col-sm-offset-3 col-sm-6" style="margin-top: 20px">
-                            <input type="button" id="order-button" class="btn btn-danger" value="<fmt:message key="label.order"/>"/>
+                            <button type="button" id="order-button" class="btn btn-danger">
+                                <fmt:message key="label.order"/> <i class="fas fa-taxi"></i>
+                            </button>
                         </div>
                     </div>
                 </div>

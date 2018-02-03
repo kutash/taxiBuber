@@ -17,6 +17,8 @@ public class MessageManager {
             }else {
                 resourceBundle = ResourceBundle.getBundle("messages", new Locale(locale));
             }
+        }else {
+            resourceBundle = ResourceBundle.getBundle("messages");
         }
     }
 

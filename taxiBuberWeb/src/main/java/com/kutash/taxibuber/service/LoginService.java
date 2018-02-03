@@ -55,7 +55,6 @@ public class LoginService {
         try {
             transactionManager.beginTransaction(userDAO);
             user = userDAO.findEntityByEmail(email);
-            System.out.println(user);
             if (user != null){
                 String password = UUID.randomUUID().toString();
                 user.setPassword(password);

@@ -3,6 +3,7 @@ package com.kutash.test.dao;
 import com.kutash.taxibuber.dao.AddressDAO;
 import com.kutash.taxibuber.dao.DAOFactory;
 import com.kutash.taxibuber.entity.Address;
+import com.kutash.taxibuber.entity.Status;
 import com.kutash.taxibuber.exception.DAOException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -19,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 
 public class AddressDAOTest {
 
-    /*private Connection connection;
+    private Connection connection;
     private AddressDAO addressDAO;
 
     @BeforeClass
@@ -44,45 +45,40 @@ public class AddressDAOTest {
 
     @Test
     public void findEntityByIdTest() throws DAOException {
-        Address expected = new Address(1,"Минск","Казинца","38","176","HOME","236548971","125879463",new Country(1,"Belarus"),4);
+        Address expected = new Address(1,"Минск Казинца 38", 5, Status.ACTIVE);
         Address actual = addressDAO.findEntityById(1);
-        assertEquals("wrong data",expected,actual);
+        assertEquals(expected,actual);
     }
 
     @Test
     public void findAddressByUserIdTest() throws DAOException {
         List<Address> expected = new ArrayList<>();
-        expected.add(new Address(1,"Минск","Казинца","38","176","HOME","236548971","125879463",new Country(1,"Belarus"),4));
-        expected.add(new Address(2,"Минск","пр. Машерова","32","567","WORK","236848971","175879463", new Country(1,"Belarus"),4));
-        List<Address> actual = addressDAO.findAddressByUserId(4);
-        assertEquals("wrong data",expected,actual);
+        expected.add(new Address(1,"Минск Казинца 38", 5, Status.ACTIVE));
+        expected.add(new Address(2,"Минск пр. Машерова 32", 5,Status.ACTIVE));
+        List<Address> actual = addressDAO.findAddressByUserId(5);
+        assertEquals(expected,actual);
     }
 
     @Test(priority = 2)
     public void deleteTest() throws DAOException {
-        assertEquals(1,addressDAO.delete(7));
+        assertEquals(1,addressDAO.delete(5));
     }
 
-    @Test(priority = 1)
+    @Test
     public void createTest() throws DAOException {
-        Address address = new Address("Минск","Кунцевщина","15","122","HOME","123456789","123456789",new Country(1,"Belarus"),3);
-        assertEquals(1,addressDAO.create(address));
+        Address address = new Address(0,"Минск,Кунцевщина 15",3,Status.ACTIVE);
+        assertEquals(5,addressDAO.create(address));
     }
 
     @Test(priority = 1)
     public void updateTest() throws DAOException {
-        Address expected = new Address(2,"Минск","пр. Независимости","35","560","WORK","236848971","175879463", new Country(1,"Belarus"),4);
-        Address actual = addressDAO.update(new Address(2,"Минск","пр. Независимости","35","560","WORK","236848971","175879463", new Country(1,"Belarus"),4));
-        assertEquals("wrong data",expected,actual);
-    }
-
-    @Test
-    public void deleteByUserIdTest() throws DAOException {
-        assertEquals(2,addressDAO.deleteByUserId(1));
+        Address expected = new Address(3,"Минск Ульяновская 123", 4,Status.ACTIVE);
+        Address actual = addressDAO.update(new Address(3,"Минск Ульяновская 123", 4,Status.ACTIVE));
+        assertEquals(expected,actual);
     }
 
     @AfterClass
     public void closeConnection() throws SQLException {
         connection.close();
-    }*/
+    }
 }

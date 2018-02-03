@@ -32,7 +32,6 @@ public class DeleteCarCommand implements Command {
         LOGGER.log(Level.INFO,"Deleting car");
         Router router = new Router();
         HttpSession session = request.getSession();
-        session.removeAttribute("deletedMessage");
         session.removeAttribute("createMessage");
         session.removeAttribute("updateMessage");
         session.removeAttribute("updatedUser");

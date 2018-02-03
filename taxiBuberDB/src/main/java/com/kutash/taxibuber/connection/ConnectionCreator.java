@@ -14,12 +14,14 @@ import java.util.Properties;
 class ConnectionCreator {
 
     private static final Logger LOGGER = LogManager.getLogger();
+    private int poolSize;
     private Properties properties;
     private String url;
 
     ConnectionCreator(){
         properties = DBConfigurationManager.getInstance().getProperties();
         url = DBConfigurationManager.getInstance().getProperty("url");
+        poolSize  = Integer.parseInt(DBConfigurationManager.getInstance().getProperty("poolSize"));
         try {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
         } catch (SQLException e) {
@@ -37,6 +39,10 @@ class ConnectionCreator {
             throw new RuntimeException(e);
         }
         return connection;
+    }
+
+    public int getPoolSize() {
+        return poolSize;
     }
 
     static void deregisterDrivers() {

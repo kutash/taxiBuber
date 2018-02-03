@@ -81,7 +81,8 @@ public class UserService extends AbstractService<User>{
     }*/
 
     public User saveUser(Map<String,String> userData,Part photoPart){
-        User user = new User(userData.get("name"),userData.get("surname"),userData.get("patronymic"),userData.get("email"),userData.get("password"),UserRole.valueOf(userData.get("role")), DateParser.parseDate(userData.get("birthday")),userData.get("phone"), Status.ACTIVE);
+        String encryptedPassword = new PasswordEncryptor(userData.get("email")).encrypt(userData.get("password"));
+        User user = new User(userData.get("name"),userData.get("surname"),userData.get("patronymic"),userData.get("email"),encryptedPassword,UserRole.valueOf(userData.get("role")), DateParser.parseDate(userData.get("birthday")),userData.get("phone"), Status.ACTIVE);
         TransactionManager transactionManager = new TransactionManager();
         UserDAO userDAO = new DAOFactory().getUserDAO();
         try {

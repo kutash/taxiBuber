@@ -47,4 +47,26 @@ public class Address extends AbstractEntity {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Address address1 = (Address) o;
+
+        if (userId != address1.userId) return false;
+        if (address != null ? !address.equals(address1.address) : address1.address != null) return false;
+        return status == address1.status;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + userId;
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        return result;
+    }
 }

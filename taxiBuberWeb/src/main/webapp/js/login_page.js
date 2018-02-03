@@ -65,8 +65,6 @@ $(document).ready(function () {
 
 });
 
-
-
 function previewFile(input) {
     var preview = $('#blah');
     var file    = input.files[0];
@@ -179,11 +177,13 @@ $(document).ready(function() {
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#error-name').css('display', 'none');
                     $('#blank-name').css('display', 'block');
+                    $(this).parent().children('.err2').css('display', 'none');
                 } else if (!rv_name.test(val)) {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#error-name').css('display', 'block');
                     $('#blank-name').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                 } else {
                     $(this).removeClass('error-input').addClass('not-error');
                     $('#error-name').css('display', 'none');
@@ -199,11 +199,13 @@ $(document).ready(function() {
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#error-surname').css('display', 'none');
                     $('#blank-surname').css('display', 'block');
+                    $(this).parent().children('.err2').css('display', 'none');
                 } else if (!rv_name.test(val)) {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#error-surname').css('display', 'block');
                     $('#blank-surname').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                 } else {
                     $(this).removeClass('error-input').addClass('not-error');
                     $('#error-surname').css('display', 'none');
@@ -223,6 +225,7 @@ $(document).ready(function() {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#error-patronymic').css('display', 'block');
+                    $(this).parent().children('.err2').css('display', 'none');
                 }
                 break;
 
@@ -233,18 +236,21 @@ $(document).ready(function() {
                     $('#error-email').css('display', 'none');
                     $('#email-blank').css('display', 'block');
                     $('#email-size').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                 }else if (val.length > 90) {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#error-email').css('display', 'none');
                     $('#email-blank').css('display', 'none');
                     $('#email-size').css('display', 'block');
+                    $(this).parent().children('.err2').css('display', 'none');
                 } else if (!rv_email.test(val)) {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#error-email').css('display', 'block');
                     $('#email-blank').css('display', 'none');
                     $('#email-size').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                 } else {
                     $(this).removeClass('error-input').addClass('not-error');
                     $('#error-email').css('display', 'none');
@@ -265,6 +271,7 @@ $(document).ready(function() {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#error-phone').css('display', 'block');
+                    $(this).parent().children('.err2').css('display', 'none');
                 }
                 break;
 
@@ -278,6 +285,7 @@ $(document).ready(function() {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#error-birthday').css('display', 'block');
+                    $(this).parent().children('.err2').css('display', 'none');
                 }
                 break;
 
@@ -287,11 +295,13 @@ $(document).ready(function() {
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#error-password').css('display', 'none');
                     $('#blank-password').css('display', 'block');
+                    $(this).parent().children('.err2').css('display', 'none');
                 } else if (!rv_psw.test(val)) {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#error-password').css('display', 'block');
                     $('#blank-password').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                 } else {
                     $(this).removeClass('error-input').addClass('not-error');
                     $('#error-password').css('display', 'none');
@@ -306,6 +316,7 @@ $(document).ready(function() {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#repeat-password').css('display', 'block');
+                    $(this).parent().children('.err2').css('display', 'none');
                 } else {
                     $(this).removeClass('error-input').addClass('not-error');
                     $('#repeat-password').css('display', 'none');

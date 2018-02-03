@@ -15,7 +15,8 @@ import java.util.List;
 public class CommentDAO extends AbstractDAO<Comment> {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String FIND_COMMENT_BY_ID = "SELECT id_comment,text,id_user,date,id_reviewer,mark FROM comment WHERE id_comment = ?";
+    private static final String FIND_COMMENT_BY_ID = "SELECT c.id_comment,c.id_user,c.text,c.date,c.id_reviewer,c.mark,u.name,u.photo_path\n" +
+            "FROM comment AS c INNER JOIN user AS u ON c.id_reviewer = u.id_user WHERE id_comment = ?";
     private static final String FIND_COMMENT_BY_USER_ID = "SELECT c.id_comment,c.id_user,c.text,c.date,c.id_reviewer,c.mark,u.name,u.photo_path\n" +
             "FROM comment AS c INNER JOIN user AS u ON c.id_reviewer = u.id_user WHERE c.id_user = ?";
     private static final String DELETE_COMMENT_BY_USER_ID = "DELETE FROM comment WHERE id_user = ?";
@@ -25,7 +26,7 @@ public class CommentDAO extends AbstractDAO<Comment> {
 
 
     @Override
-    public List<Comment> findAll() throws DAOException {
+    public List<Comment> findAll() {
         throw new UnsupportedOperationException();
     }
 
@@ -86,7 +87,7 @@ public class CommentDAO extends AbstractDAO<Comment> {
         return result;
     }
 
-    public int deleteByUserId(int userId) throws DAOException {
+    /*public int deleteByUserId(int userId) throws DAOException {
         LOGGER.log(Level.INFO,"deleting comment where id user {}",userId);
         int result;
         PreparedStatement preparedStatement = null;
@@ -100,7 +101,7 @@ public class CommentDAO extends AbstractDAO<Comment> {
             close(preparedStatement);
         }
         return result;
-    }
+    }*/
 
     @Override
     public int create(Comment entity) throws DAOException {

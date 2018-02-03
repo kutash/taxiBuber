@@ -11,6 +11,7 @@ $(document).ready(function () {
     }));
 
     if ($('#update-password').text() !== '' || $('#update-user').text() !== ''){
+        console.log("user");
         var modalMessage = $('#modal-message');
         modalMessage.modal('show');
         setTimeout(function(){
@@ -37,11 +38,13 @@ $(document).ready(function () {
                     $(this).removeClass('not-error').addClass('error-input-user');
                     $('#error-name').css('display', 'none');
                     $('#blank-name').css('display', 'block');
+                    $(this).parent().children('.err2').css('display', 'none');
                 } else if (!rv_name.test(val)) {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input-user');
                     $('#error-name').css('display', 'block');
                     $('#blank-name').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                 } else {
                     $(this).removeClass('error-input-user').addClass('not-error');
                     $('#error-name').css('display', 'none');
@@ -57,11 +60,13 @@ $(document).ready(function () {
                     $(this).removeClass('not-error').addClass('error-input-user');
                     $('#error-surname').css('display', 'none');
                     $('#blank-surname').css('display', 'block');
+                    $(this).parent().children('.err2').css('display', 'none');
                 } else if (!rv_name.test(val)) {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input-user');
                     $('#error-surname').css('display', 'block');
                     $('#blank-surname').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                 } else {
                     $(this).removeClass('error-input-user').addClass('not-error');
                     $('#error-surname').css('display', 'none');
@@ -81,6 +86,7 @@ $(document).ready(function () {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input-user');
                     $('#error-patronymic').css('display', 'block');
+                    $(this).parent().children('.err2').css('display', 'none');
                 }
                 break;
 
@@ -94,6 +100,7 @@ $(document).ready(function () {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input-user');
                     $('#error-phone').css('display', 'block');
+                    $(this).parent().children('.err2').css('display', 'none');
                 }
                 break;
 
@@ -107,6 +114,7 @@ $(document).ready(function () {
                     $('#save-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input-user');
                     $('#error-birthday').css('display', 'block');
+                    $(this).parent().children('.err2').css('display', 'none');
                 }
                 break;
         }
@@ -145,11 +153,13 @@ $(document).ready(function () {
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#error-old').css('display', 'none');
                     $('#blank-old').css('display', 'block');
+                    $(this).parent().children('.err2').css('display', 'none');
                 } else if (!rv_psw.test(val)) {
                     $('#change-password').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#error-old').css('display', 'block');
                     $('#blank-old').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                 } else {
                     $(this).removeClass('error-input').addClass('not-error');
                     $('#error-old').css('display', 'none');
@@ -165,11 +175,13 @@ $(document).ready(function () {
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#error-password').css('display', 'none');
                     $('#blank-password').css('display', 'block');
+                    $(this).parent().children('.err2').css('display', 'none');
                 } else if (!rv_psw.test(val)) {
                     $('#change-password').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#error-password').css('display', 'block');
                     $('#blank-password').css('display', 'none');
+                    $(this).parent().children('.err2').css('display', 'none');
                 } else {
                     $(this).removeClass('error-input').addClass('not-error');
                     $('#error-password').css('display', 'none');
@@ -184,6 +196,7 @@ $(document).ready(function () {
                     $('#change-password').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#repeat-password').css('display', 'block');
+                    $(this).parent().children('.err2').css('display', 'none');
                 } else {
                     $(this).removeClass('error-input').addClass('not-error');
                     $('#repeat-password').css('display', 'none');

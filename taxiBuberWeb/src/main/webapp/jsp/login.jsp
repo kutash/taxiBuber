@@ -91,7 +91,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close cancel-signup" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" style="font-size: 35px;"><span class="glyphicon glyphicon-user" style="font-size: 35px;"> </span><fmt:message key="label.signup"/></h4>
+                        <h4 class="modal-title" style="font-size: 35px;"><span class="glyphicon glyphicon-user" style="font-size: 35px;"></span> <fmt:message key="label.signup"/></h4>
                     </div>
                     <div class="modal-body">
                         <div class="container" style="margin-bottom: -20px;">
@@ -207,8 +207,10 @@
                                             </div>
                                         </div>
                                         <div class="form-group" id="save">
-                                            <div class="col-sm-offset-2 col-sm-6">
-                                                <input type="submit" id="save-button" class="btn btn-primary" value="<fmt:message key="button.save" />" form="saveUserForm">
+                                            <div class="col-sm-offset-2 col-sm-4">
+                                                <button type="submit" id="save-button" class="btn btn-primary" form="saveUserForm">
+                                                    <i class="far fa-save"></i> <fmt:message key="button.save" />
+                                                </button>
                                             </div>
                                         </div>
                                     </form>
@@ -229,7 +231,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close can" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" style="font-size: 30px"><span class="glyphicon glyphicon-envelope"></span> <fmt:message key="label.send"/></h4>
+                        <h4 class="modal-title" style="font-size: 30px"><i class="far fa-envelope"></i> <fmt:message key="label.send"/></h4>
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal" action="controller" method="post" id="forgotPasswordForm">
@@ -246,7 +248,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-offset-4 col-sm-6">
-                                    <button type="submit" class="btn btn-success" id="send-button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i> <fmt:message key="label.send"/></button>
+                                    <button type="submit" class="btn btn-success" id="send-button"><i class="fas fa-paper-plane"></i> <fmt:message key="label.send"/></button>
                                 </div>
                             </div>
                         </form>

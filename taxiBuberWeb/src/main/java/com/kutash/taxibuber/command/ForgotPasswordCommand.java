@@ -5,7 +5,6 @@ import com.kutash.taxibuber.entity.User;
 import com.kutash.taxibuber.resource.MessageManager;
 import com.kutash.taxibuber.resource.PageManager;
 import com.kutash.taxibuber.service.LoginService;
-import com.kutash.taxibuber.service.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
