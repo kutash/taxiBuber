@@ -70,7 +70,7 @@ CREATE TABLE `car` (
   KEY `fk_car_user1_idx` (`id_user`),
   CONSTRAINT `fk_car_car_brand1` FOREIGN KEY (`id_brand`) REFERENCES `car_brand` (`id_brand`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_car_user1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -79,6 +79,9 @@ CREATE TABLE `car` (
 
 LOCK TABLES `car` WRITE;
 /*!40000 ALTER TABLE `car` DISABLE KEYS */;
+INSERT INTO car (id_car,registration_number, capacity, model, latitude, longitude, is_available, id_brand, id_user,status,photo_path)
+VALUES (1,'3214MA-4', 'MINIVAN', 'Fiesta', '53.298756', '27.892496', 1, 1, 2,'ACTIVE','2car.jpg'),
+  (2,'3315HJ-7', 'CAR', 'E46', '54.235984', '26.698541', 0, 2, 3,'ACTIVE','3car.jpg');
 /*!40000 ALTER TABLE `car` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -93,7 +96,7 @@ CREATE TABLE `car_brand` (
   `id_brand` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'brand id',
   `name` varchar(45) NOT NULL COMMENT 'brand title',
   PRIMARY KEY (`id_brand`)
-) ENGINE=InnoDB AUTO_INCREMENT=164 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,7 +105,7 @@ CREATE TABLE `car_brand` (
 
 LOCK TABLES `car_brand` WRITE;
 /*!40000 ALTER TABLE `car_brand` DISABLE KEYS */;
-INSERT INTO `car_brand` VALUES (1,'ACURA'),(2,'ALFA_ROMEO'),(3,'ARO'),(4,'ASIA'),(5,'ASTON_MARTIN'),(6,'AUDI'),(7,'AUSTIN'),(8,'BAW'),(9,'BEIJING'),(10,'BENTLEY'),(11,'BMW'),(12,'BRILLIANCE'),(13,'BRISTOL'),(14,'BUGATTI'),(15,'BUICK'),(16,'BYD'),(17,'VECTOR'),(18,'VENTURI'),(19,'VOLKSWAGEN'),(20,'VOLVO'),(21,'VORTEX'),(22,'WARTBURG'),(23,'WESTFIELD'),(24,'WIESMANN'),(25,'WULING'),(26,'LADA'),(27,'GEELY'),(28,'GEO'),(29,'GMC'),(30,'GREAT_WALL'),(31,'DACIA'),(32,'DADI'),(33,'DAEWOO'),(34,'DAIHATSU'),(35,'DAIMLER'),(36,'DALLAS'),(37,'DERWAYS'),(38,'DE TOMASO'),(39,'DODGE'),(40,'DONG FENG'),(41,'DONINVEST'),(42,'JEEP'),(43,'JIANGLING'),(44,'JIANGNAN'),(45,'EAGLE'),(46,'ZASTAVA'),(47,'ZX'),(48,'INFINITI'),(49,'INNOCENTI'),(50,'INVICTA'),(51,'IRAN_KHODRO'),(52,'ISDERA'),(53,'ISUZU'),(54,'IVECO'),(55,'XIN KAI'),(56,'CADILLAC'),(57,'CALLAWAY'),(58,'CARBODIES'),(59,'CATERHAM'),(60,'CITROEN'),(61,'CIZETA'),(62,'COGGIOLA'),(63,'KIA'),(64,'KOENIGSEGG'),(65,'QVALE'),(66,'КАМАЗ'),(67,'LAMBORGHINI'),(68,'LANCIA'),(69,'LAND ROVER'),(70,'LANDWIND'),(71,'LEXUS'),(72,'LIFAN'),(73,'LINCOLN'),(74,'LOTUS'),(75,'LTI'),(76,'LUXGEN'),(77,'ЛУАЗ'),(78,'MAHINDRA'),(79,'MARCOS'),(80,'MARLIN'),(81,'MARUSSIA'),(82,'MARUTI'),(83,'MASERATI'),(84,'MAYBACH'),(85,'MAZDA'),(86,'MCLAREN'),(87,'MEGA'),(88,'MERCEDES'),(89,'MERCURY'),(90,'METROCAB'),(91,'MG'),(92,'MINELLI'),(93,'MINI'),(94,'MITSUBISHI'),(95,'MITSUOKA'),(96,'MONTE CARLO'),(97,'MORGAN'),(98,'МОСКВИЧ'),(99,'NISSAN'),(100,'NOBLE'),(101,'OLDSMOBILE'),(102,'OPEL'),(103,'PAGANI'),(104,'PANOZ'),(105,'PAYKAN'),(106,'PERODUA'),(107,'PEUGEOT'),(108,'PLYMOUTH'),(109,'PONTIAC'),(110,'PORSCHE'),(111,'PREMIER'),(112,'PROTON'),(113,'PUMA'),(114,'RELIANT'),(115,'RENAULT'),(116,'ROLLS_ROYCE'),(117,'RONART'),(118,'ROVER'),(119,'SAAB'),(120,'SALEEN'),(121,'SAMSUNG'),(122,'SATURN'),(123,'SCION'),(124,'SEAT'),(125,'SKODA'),(126,'SMA'),(127,'SMART'),(128,'SOUEAST'),(129,'SPECTRE'),(130,'SSANGYONG'),(131,'SUBARU'),(132,'SUZUKI'),(133,'TALBOT'),(134,'TATA'),(135,'TATRA'),(136,'TIANMA'),(137,'TOFAS'),(138,'TOYOTA'),(139,'TRABANT'),(140,'TVR'),(141,'FAW'),(142,'FERRARI'),(143,'FIAT'),(144,'FORD'),(145,'FSO'),(146,'FUQI'),(147,'HAFEI'),(148,'HAIMA'),(149,'HINDUSTAN'),(150,'HOLDEN'),(151,'HONDA'),(152,'HUANGHAI'),(153,'HUMMER'),(154,'HYUNDAI'),(155,'CHANA'),(156,'CHANGFENG'),(157,'CHANGHE'),(158,'CHERY'),(159,'CHEVROLET'),(160,'CHRYSLER'),(161,'SHIFENG'),(162,'SHUANGHUAN'),(163,'JAC');
+INSERT INTO car_brand (id_brand,`name`) VALUES (1,'﻿ACURA'),(2,'ALFA_ROMEO'),(3,'AUDI'),(4,'ASIA');
 /*!40000 ALTER TABLE `car_brand` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -166,7 +169,7 @@ CREATE TABLE `trip` (
   CONSTRAINT `fk_trip_address1` FOREIGN KEY (`departure_address`) REFERENCES `address` (`id_address`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_trip_address2` FOREIGN KEY (`destination_address`) REFERENCES `address` (`id_address`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_trip_car1` FOREIGN KEY (`id_car`) REFERENCES `car` (`id_car`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -209,7 +212,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'ADMIN','petrov123@mail.ru','222222',0,'Петр','Петров','Петрович','1989-11-05','1.jpg','8(029)2851148','ACTIVE'),(2,'DRIVER','bor123@mail.ru','3333',4.2,'Борис','Борискин','Борисович','2000-05-12','2.jpg','8(029)2851148','ACTIVE'),(3,'DRIVER','tolik123@mail.ru','555555',4,'Анатолий','Моржов','Петрович','1995-09-08','3.jpg','8(029)3351148','ACTIVE'),(4,'CLIENT','abram123@mail.ru','666666',5,'Аркадий','Абрамович','Иванович','1984-08-10','4.jpg','8(029)3366668','ACTIVE'),(5,'CLIENT','vasya123@mail.ru','777777',3.2,'Василий','Васин','Васильевич','1969-07-15','5.jpg','8(029)2356489','ACTIVE');
+INSERT INTO `user` VALUES (1,'DRIVER','petrov123@mail.ru','222222',0,'Петр','Петров','Петрович','1989-11-05','1.jpg','8(029)2851148','ACTIVE'),(2,'DRIVER','bor123@mail.ru','3333',4.2,'Борис','Борискин','Борисович','2000-05-12','2.jpg','8(029)2851148','ACTIVE'),(3,'DRIVER','tolik123@mail.ru','555555',4,'Анатолий','Моржов','Петрович','1995-09-08','3.jpg','8(029)3351148','ACTIVE'),(4,'CLIENT','abram123@mail.ru','666666',5,'Аркадий','Абрамович','Иванович','1984-08-10','4.jpg','8(029)3366668','ACTIVE'),(5,'CLIENT','vasya123@mail.ru','777777',3.2,'Василий','Васин','Васильевич','1969-07-15','5.jpg','8(029)2356489','ACTIVE');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

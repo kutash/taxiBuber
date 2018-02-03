@@ -6,6 +6,7 @@
             <class name="com.kutash.test.dao.CommentDAOTest"/>
             <class name="com.kutash.test.dao.UserDAOTest"/>
             <class name="com.kutash.test.dao.AddressDAOTest"/>
+            <class name="com.kutash.test.dao.CarDAOTest"/>
         </classes>
     </test>
 </suite>

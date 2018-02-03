@@ -141,6 +141,46 @@ public class Car extends AbstractEntity {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Car car = (Car) o;
+
+        if (available != car.available) return false;
+        if (userId != car.userId) return false;
+        if (registrationNumber != null ? !registrationNumber.equals(car.registrationNumber) : car.registrationNumber != null)
+            return false;
+        if (capacity != car.capacity) return false;
+        if (model != null ? !model.equals(car.model) : car.model != null) return false;
+        if (photoPath != null ? !photoPath.equals(car.photoPath) : car.photoPath != null) return false;
+        if (latitude != null ? !latitude.equals(car.latitude) : car.latitude != null) return false;
+        if (longitude != null ? !longitude.equals(car.longitude) : car.longitude != null) return false;
+        if (brand != null ? !brand.equals(car.brand) : car.brand != null) return false;
+        if (driverFullName != null ? !driverFullName.equals(car.driverFullName) : car.driverFullName != null)
+            return false;
+        return status == car.status;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (registrationNumber != null ? registrationNumber.hashCode() : 0);
+        result = 31 * result + (capacity != null ? capacity.hashCode() : 0);
+        result = 31 * result + (model != null ? model.hashCode() : 0);
+        result = 31 * result + (photoPath != null ? photoPath.hashCode() : 0);
+        result = 31 * result + (available ? 1 : 0);
+        result = 31 * result + (latitude != null ? latitude.hashCode() : 0);
+        result = 31 * result + (longitude != null ? longitude.hashCode() : 0);
+        result = 31 * result + (brand != null ? brand.hashCode() : 0);
+        result = 31 * result + userId;
+        result = 31 * result + (driverFullName != null ? driverFullName.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Car{" +
                 "registrationNumber='" + registrationNumber + '\'' +

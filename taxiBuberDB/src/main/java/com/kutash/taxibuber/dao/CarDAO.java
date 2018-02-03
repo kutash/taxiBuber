@@ -195,7 +195,7 @@ public class CarDAO extends AbstractDAO<Car> {
         }finally {
             close(preparedStatement);
         }
-        return !result;
+        return result;
     }
 
     public boolean isNumberExistsForUpdate(String number, int id) throws DAOException {
@@ -213,7 +213,8 @@ public class CarDAO extends AbstractDAO<Car> {
         }finally {
             close(preparedStatement);
         }
-        return !result;
+        System.out.println(result);
+        return result;
     }
 
     public List<CarBrand> findAllBrands() throws DAOException {

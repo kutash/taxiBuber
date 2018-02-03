@@ -224,7 +224,7 @@ public class CarService extends AbstractService<Car>{
         return super.create(car,carDAO);
     }
 
-    public boolean isUniqueNumber(String number) {
+    public boolean isNumberExist(String number) {
         LOGGER.log(Level.INFO,"Checking is number unique");
         TransactionManager transactionManager = new TransactionManager();
         boolean result = false;
@@ -245,7 +245,7 @@ public class CarService extends AbstractService<Car>{
         return result;
     }
 
-    public boolean isUniqueNumberForUpdare(String number, int id) {
+    public boolean isNumberExistForUpdare(String number, int id) {
         LOGGER.log(Level.INFO,"Checking is number unique");
         TransactionManager transactionManager = new TransactionManager();
         boolean result = false;

@@ -40,13 +40,13 @@ public class UserDAOTest {
     @Test(priority = 3)
     public void findAllTest() throws DAOException {
         List<User> expected = new ArrayList<>();
-        expected.add(new User(1,0.0f,"Петр","Петров","Петрович","petrov123@mail.ru","222222", UserRole.ADMIN,Date.valueOf("1989-11-05"),"1.jpg","8(029)2851148", Status.ACTIVE));
+        expected.add(new User(1,0.0f,"Петр","Петров","Петрович","petrov123@mail.ru","222222", UserRole.DRIVER,Date.valueOf("1989-11-05"),"1.jpg","8(029)2851148", Status.ACTIVE));
         expected.add(new User(2,4.2f,"Борис","Борискин","Борисович","borisov123@mail.ru","333333",UserRole.DRIVER,Date.valueOf("2003-05-11"),"2.jpg","8(029)2851148", Status.ACTIVE));
         expected.add(new User(3,4.0f,"Анатолий","Моржов","Петрович","tolik123@mail.ru","555555",UserRole.DRIVER,Date.valueOf("1995-09-08"),"3.jpg","8(029)3351148", Status.ACTIVE));
         expected.add(new User(4,5.0f,"Аркадий","Абрамович","Иванович","abram123@mail.ru","666666",UserRole.CLIENT,Date.valueOf("1984-08-10"),"4.jpg","8(029)3366668", Status.ACTIVE));
         expected.add(new User(5,3.2f,"Василий","Васин","Васильевич","vasya123@mail.ru","777777",UserRole.CLIENT,Date.valueOf("1969-07-15"),"5.jpg","8(029)2356489", Status.ACTIVE));
         List<User> actual = userDAO.findAll();
-        assertEquals("wrong data",expected,actual);
+        assertEquals(expected,actual);
     }
 
     @Test(priority = 2)

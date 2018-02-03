@@ -69,4 +69,13 @@ public class Address extends AbstractEntity {
         result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "address='" + address + '\'' +
+                ", userId=" + userId +
+                ", status=" + status +
+                "} " + super.toString();
+    }
 }

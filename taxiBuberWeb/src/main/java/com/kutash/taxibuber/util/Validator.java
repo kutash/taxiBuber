@@ -164,11 +164,11 @@ public class Validator {
                 map.put("number", messageManager.getProperty("label.errornumber"));
             }else {
                 if(data.get("carId") != null){
-                    if (!service.isUniqueNumberForUpdare(number,Integer.parseInt(data.get("carId")))) {
+                    if (service.isNumberExistForUpdare(number,Integer.parseInt(data.get("carId")))) {
                         map.put("number", messageManager.getProperty("label.notuniquenumber"));
                     }
                 }else {
-                    if (!service.isUniqueNumber(number)) {
+                    if (service.isNumberExist(number)) {
                         map.put("number", messageManager.getProperty("label.notuniquenumber"));
                     }
                 }
@@ -176,7 +176,6 @@ public class Validator {
         } else {
             map.put("numberBlank", messageManager.getProperty("label.blank"));
         }
-
         if (StringUtils.isNotEmpty(model)){
             Matcher modelMatcher = patternModel.matcher(model);
             if (!modelMatcher.matches()){
