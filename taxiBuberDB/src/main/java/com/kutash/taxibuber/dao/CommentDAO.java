@@ -19,8 +19,6 @@ public class CommentDAO extends AbstractDAO<Comment> {
             "FROM comment AS c INNER JOIN user AS u ON c.id_reviewer = u.id_user WHERE id_comment = ?";
     private static final String FIND_COMMENT_BY_USER_ID = "SELECT c.id_comment,c.id_user,c.text,c.date,c.id_reviewer,c.mark,u.name,u.photo_path\n" +
             "FROM comment AS c INNER JOIN user AS u ON c.id_reviewer = u.id_user WHERE c.id_user = ?";
-    private static final String DELETE_COMMENT_BY_USER_ID = "DELETE FROM comment WHERE id_user = ?";
-    private static final String DELETE_COMMENT_BY_ID = "DELETE FROM comment WHERE id_comment = ?";
     private static final String CREATE_COMMENT = "INSERT INTO comment (text,id_user,date,id_reviewer,mark) VALUES (?,?,?,?,?)";
     private static final String UPDATE_COMMENT = "UPDATE comment  SET text=?,id_user=?,date=?,id_reviewer=?,mark=? WHERE id_comment=?";
 
@@ -69,39 +67,6 @@ public class CommentDAO extends AbstractDAO<Comment> {
         }
         return comments;
     }
-
-    @Override
-    public int delete(int id) throws DAOException {
-        LOGGER.log(Level.INFO,"deleting comment by id {}",id);
-        int result;
-        PreparedStatement preparedStatement = null;
-        try {
-            preparedStatement = getPreparedStatement(DELETE_COMMENT_BY_ID);
-            preparedStatement.setInt(1,id);
-            result = preparedStatement.executeUpdate();
-        }catch (SQLException e){
-            throw new DAOException("Exception while deleting comment by id {}",e);
-        }finally {
-            close(preparedStatement);
-        }
-        return result;
-    }
-
-    /*public int deleteByUserId(int userId) throws DAOException {
-        LOGGER.log(Level.INFO,"deleting comment where id user {}",userId);
-        int result;
-        PreparedStatement preparedStatement = null;
-        try {
-            preparedStatement = getPreparedStatement(DELETE_COMMENT_BY_USER_ID);
-            preparedStatement.setInt(1,userId);
-            result = preparedStatement.executeUpdate();
-        }catch (SQLException e){
-            throw new DAOException("Exception while deleting comment by user id {}",e);
-        }finally {
-            close(preparedStatement);
-        }
-        return result;
-    }*/
 
     @Override
     public int create(Comment entity) throws DAOException {

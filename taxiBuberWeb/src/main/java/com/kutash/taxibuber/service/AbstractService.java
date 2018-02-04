@@ -1,9 +1,7 @@
 package com.kutash.taxibuber.service;
 
 import com.kutash.taxibuber.dao.AbstractDAO;
-import com.kutash.taxibuber.dao.DAOFactory;
 import com.kutash.taxibuber.dao.TransactionManager;
-import com.kutash.taxibuber.dao.TripDAO;
 import com.kutash.taxibuber.entity.AbstractEntity;
 import com.kutash.taxibuber.exception.DAOException;
 import org.apache.logging.log4j.Level;
@@ -35,7 +33,7 @@ public abstract class AbstractService<T extends AbstractEntity> {
         return result;
     }
 
-    public T update(T entity, AbstractDAO<T> dao){
+    T update(T entity, AbstractDAO<T> dao){
         T entityUpdated = null;
         TransactionManager transactionManager = new TransactionManager();
         try {
@@ -54,7 +52,7 @@ public abstract class AbstractService<T extends AbstractEntity> {
         return entityUpdated;
     }
 
-    public T findEntityById(int id,AbstractDAO<T> dao){
+    T findEntityById(int id,AbstractDAO<T> dao){
         TransactionManager transactionManager = new TransactionManager();
         T entity = null;
         try {
@@ -73,7 +71,7 @@ public abstract class AbstractService<T extends AbstractEntity> {
         return entity;
     }
 
-    public List<T> findAll(AbstractDAO<T> dao){
+    List<T> findAll(AbstractDAO<T> dao){
         TransactionManager transactionManager = new TransactionManager();
         List<T> entities = null;
         try {

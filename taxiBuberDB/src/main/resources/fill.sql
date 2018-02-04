@@ -44,13 +44,13 @@ INSERT INTO car_brand (`name`) VALUES ('﻿ACURA'),('ALFA_ROMEO'),('ARO'),('ASIA
   ('HUMMER'),('HYUNDAI'),('CHANA'),('CHANGFENG'),('CHANGHE'),('CHERY'),('CHEVROLET'),('CHRYSLER'),('SHIFENG'),('SHUANGHUAN'),('JAC');
 
 
-INSERT INTO car (registration_number, capacity, model, latitude, longitude, is_available, id_brand, id_user)
-VALUES ('3214MA-5', 'CAR', 'Fabia', '147895623', '235987415', 1, 125, 2),
-  ('3315HJ-7', 'CAR', 'E46', '147895623', '235987415', 1, 11, 3),
-  ('3416YA-7', 'CAR', 'Corola', '147895623', '235987415', 1, 138, 4),
-  ('3517OU-7', 'MINIVAN', 'Polo', '147895623', '235987415', 1, 19, 9),
-  ('3618PO-7', 'MINIVAN', 'C200', '147895623', '235987415', 1, 88, 10),
-  ('3719MA-5', 'MINIBUS', 'Boxer', '147895623', '235987415', 1, 107, 11);
+INSERT INTO car (registration_number, capacity, model, latitude, longitude, is_available, id_brand, id_user,photo_path)
+VALUES ('3214MA-5', 'CAR', 'Fabia', '147895623', '235987415', 1, 125, 2,'2car.jpg'),
+  ('3315HJ-7', 'CAR', 'E46', '147895623', '235987415', 1, 11, 3,'3car.jpg'),
+  ('3416YA-7', 'CAR', 'Corola', '147895623', '235987415', 1, 138, 4,'4car.jpg'),
+  ('3517OU-7', 'MINIVAN', 'Polo', '147895623', '235987415', 1, 19, 9,'9car.jpg'),
+  ('3618PO-7', 'MINIVAN', 'C200', '147895623', '235987415', 1, 88, 10,'10car.jpg'),
+  ('3719MA-5', 'MINIBUS', 'Boxer', '147895623', '235987415', 1, 107, 11,'11car.jpg');
 
 
 INSERT INTO trip (price, `date`, distance, `status`, id_car, departure_address, destination_address)

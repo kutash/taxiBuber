@@ -25,8 +25,6 @@ public abstract class AbstractDAO<T extends AbstractEntity> {
 
     public abstract T findEntityById(int id) throws DAOException;
 
-    public abstract int delete(int id) throws DAOException;
-
     public abstract int create(T entity) throws DAOException;
 
     public abstract T update(T entity) throws DAOException;

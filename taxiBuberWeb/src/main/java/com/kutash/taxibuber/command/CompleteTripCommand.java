@@ -19,8 +19,6 @@ public class CompleteTripCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String TRIP_ID = "tripId";
-    private static final String LATITUDE = "latitude";
-    private static final String LONGITUDE = "longitude";
     private TripService tripService;
 
     CompleteTripCommand(TripService tripService) {
@@ -32,17 +30,8 @@ public class CompleteTripCommand implements Command {
         LOGGER.log(Level.INFO,"Completing trip");
         Router router = new Router();
         String result = "";
-        Reader reader = null;
-        try {
-            reader = request.getReader();
-        } catch (IOException e) {
-            LOGGER.catching(Level.ERROR,e);
-        }
-        JsonObject data = new Gson().fromJson(reader, JsonObject.class);
-        String tripId = data.get(TRIP_ID).getAsString();
-        String latitude = data.get(LATITUDE).getAsString();
-        String longitude = data.get(LONGITUDE).getAsString();
-        Trip trip = tripService.completeTrip(tripId,latitude,longitude);
+        String tripId = request.getParameter(TRIP_ID);
+        Trip trip = tripService.completeTrip(tripId);
         if (trip.getStatus().equals(TripStatus.COMPLETED)) {
             result = "OK";
         }

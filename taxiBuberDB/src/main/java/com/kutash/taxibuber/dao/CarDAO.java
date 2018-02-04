@@ -120,11 +120,6 @@ public class CarDAO extends AbstractDAO<Car> {
     }
 
     @Override
-    public int delete(int id) throws DAOException {
-        return 0;
-    }
-
-    @Override
     public int create(Car entity) throws DAOException {
         LOGGER.log(Level.INFO,"creating car");
         int result;
@@ -213,7 +208,6 @@ public class CarDAO extends AbstractDAO<Car> {
         }finally {
             close(preparedStatement);
         }
-        System.out.println(result);
         return result;
     }
 

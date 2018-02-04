@@ -58,16 +58,10 @@ window.onload = function () {
                 latitude = position.coords.latitude;
                 longitude = position.coords.longitude;
                 var tripId = document.getElementById('tripId').value;
-                var data = {
-                    tripId: tripId,
-                    latitude: latitude,
-                    longitude: longitude
-                };
                 $.ajax({
-                    type: "POST",
-                    url: "ajaxController?command=complete_trip",
+                    type: "GET",
+                    url: "ajaxController?command=complete_trip&tripId="+tripId,
                     contentType: "application/json",
-                    data: JSON.stringify(data),
                     success: function(response) {
                         if(response === 'OK'){
                             var dvDistance = document.getElementById("divDistance-driver");
@@ -80,6 +74,7 @@ window.onload = function () {
 
                             $('.yes').on('click',function () {
                                 $('#modal-continue').modal('hide');
+                                setCarCoordinates(latitude,longitude);
                                 setAvailable(true);
                             });
 
@@ -228,7 +223,6 @@ function initMap() {
             geocodeLatLng(geocoder,map,infoWindow,latLng);
             map.setCenter(pos);
             if(document.getElementById("tripId").value != ''){
-                console.log(document.getElementById("tripId").value);
                 var directionsService = new google.maps.DirectionsService();
                 var directionsDisplay = new google.maps.DirectionsRenderer({'draggable': false});
                 directionsDisplay.setMap(map);
@@ -240,19 +234,6 @@ function initMap() {
     } else {
         handleLocationError(false, infoWindow, map.getCenter());
     }
-}
-
-function geocodeAddress(geocoder) {
-    var address = document.getElementById('start').value;
-    geocoder.geocode({'address': address}, function(results, status) {
-        if (status === 'OK') {
-            latitude = results[0].geometry.location.lat();
-            longitude = results[0].geometry.location.lng();
-            map.setCenter({lat: latitude, lng: longitude});
-        } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-        }
-    });
 }
 
 function geocodeLatLng(geocoder, map, infowindow, latLng) {

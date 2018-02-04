@@ -8,7 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.List;
 
-public class AddressService {
+public class AddressService extends AbstractService<Address>{
 
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -33,46 +33,10 @@ public class AddressService {
         return addresses;
     }
 
-    public Address findAddressById(int id) {
-        LOGGER.log(Level.INFO,"Finding address id={}",id);
-        AddressDAO addressDAO = new DAOFactory().getAddressDAO();
-        TransactionManager transactionManager = new TransactionManager();
-        Address address = null;
-        try {
-            transactionManager.beginTransaction(addressDAO);
-            address = addressDAO.findEntityById(id);
-            transactionManager.commit();
-        } catch (DAOException e) {
-            try {
-                transactionManager.rollback();
-            } catch (DAOException e1) {
-                LOGGER.catching(Level.ERROR, e1);;
-            }
-            LOGGER.catching(Level.ERROR, e);
-        }
-        transactionManager.endTransaction();
-        return address;
-    }
-
     public Address update(Address newAddress){
         LOGGER.log(Level.INFO,"Updatin address id={}",newAddress.getId());
         AddressDAO addressDAO = new DAOFactory().getAddressDAO();
-        TransactionManager transactionManager = new TransactionManager();
-        Address address = null;
-        try {
-            transactionManager.beginTransaction(addressDAO);
-            address = addressDAO.update(newAddress);
-            transactionManager.commit();
-        } catch (DAOException e) {
-            try {
-                transactionManager.rollback();
-            } catch (DAOException e1) {
-                LOGGER.catching(Level.ERROR, e1);;
-            }
-            LOGGER.catching(Level.ERROR, e);
-        }
-        transactionManager.endTransaction();
-        return address;
+        return super.update(newAddress,addressDAO);
     }
 
     public Address deleteAddress(String id){

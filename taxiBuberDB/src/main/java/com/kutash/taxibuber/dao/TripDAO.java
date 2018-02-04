@@ -31,7 +31,6 @@ public class TripDAO extends AbstractDAO<Trip> {
             "destination_string,t.status,c.id_user as driver_id,concat(u.surname,' ',u.name) AS driver_name, us.id_user AS client_id,concat(us.surname,' ',us.name)\n" +
             "AS client_name FROM trip AS t INNER JOIN car AS c ON t.id_car = c.id_car INNER JOIN user AS u ON c.id_user = u.id_user INNER JOIN address AS a ON\n" +
             "t.departure_address = a.id_address INNER JOIN user AS us ON a.id_user = us.id_user INNER JOIN address AS ad ON t.destination_address = ad.id_address WHERE u.id_user=?";
-    private static final String DELETE_TRIP_BY_ID = "DELETE FROM trip WHERE id_trip = ?";
     private static final String CREATE_TRIP = "INSERT INTO trip(price,date,distance,id_car,departure_address,destination_address,status) VALUES (?,?,?,?,?,?,?)";
     private static final String UPDATE_TRIP = "UPDATE trip  SET price=?,date=?,distance=?,id_car=?,departure_address=?,destination_address=?, status=? WHERE id_trip=?";
     private static final String FIND_ORDERED_TRIP = "SELECT t.id_trip,t.price,t.date,t.distance,t.id_car,t.departure_address,t.destination_address,t.status,a.address AS departure_string,ad.address\n" +
@@ -147,23 +146,6 @@ public class TripDAO extends AbstractDAO<Trip> {
     }
 
     @Override
-    public int delete(int id) throws DAOException {
-        LOGGER.log(Level.INFO,"deleting trip with id {}",id);
-        int result;
-        PreparedStatement preparedStatement = null;
-        try {
-            preparedStatement = getPreparedStatement(DELETE_TRIP_BY_ID);
-            preparedStatement.setInt(1,id);
-            result = preparedStatement.executeUpdate();
-        }catch (SQLException e){
-            throw new DAOException("Exception while deleting trip by id",e);
-        }finally {
-            close(preparedStatement);
-        }
-        return result;
-    }
-
-    @Override
     public int create(Trip entity) throws DAOException {
         LOGGER.log(Level.INFO,"creating trip");
         int result;
@@ -233,13 +215,7 @@ public class TripDAO extends AbstractDAO<Trip> {
             String driverName = resultSet.getString("driver_name");
             int clientId = resultSet.getInt("client_id");
             String clientName = resultSet.getString("client_name");
-            trip = new Trip(idTrip,price,date,distance,carId,status);
-            trip.setDriverId(driverId);
-            trip.setDriverName(driverName);
-            trip.setClientId(clientId);
-            trip.setClientName(clientName);
-            trip.setDeparture(new Address(departureAddress,departure));
-            trip.setDestination(new Address(destinationAddress,destination));
+            trip = new Trip(idTrip,price,date,distance,carId,departureAddress,destinationAddress,status,new Address(departureAddress,departure),new Address(destinationAddress,destination),driverId,clientId,driverName,clientName);
         }catch (SQLException e){
             throw new DAOException("Exception while getting trip from resultSet",e);
         }
@@ -259,9 +235,7 @@ public class TripDAO extends AbstractDAO<Trip> {
             int destinationAddress = resultSet.getInt("destination_address");
             String destination = resultSet.getString("destination_string");
             TripStatus status = TripStatus.valueOf(resultSet.getString("status"));
-            trip = new Trip(idTrip,price,date,distance,carId,departureAddress,destinationAddress,status);
-            trip.setDeparture(new Address(departureAddress,departure));
-            trip.setDestination(new Address(destinationAddress,destination));
+            trip = new Trip(idTrip,price,date,distance,carId,departureAddress,destinationAddress,status,new Address(departureAddress,departure),new Address(destinationAddress,destination));
         }catch (SQLException e){
             throw new DAOException("Exception while getting trip from resultSet",e);
         }

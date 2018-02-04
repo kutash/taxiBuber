@@ -64,26 +64,31 @@ public class UserDAOTest {
     }
 
     @Test
-    public void isEmailExistTest()throws DAOException {
-        assertFalse(userDAO.isEmailExists("abram123@mail.ru"));
-    }
-
-    @Test(priority = 1)
-    public void deleteTest() throws DAOException {
-        assertEquals(1,userDAO.delete(6));
+    public void isEmailExistNegativeTest()throws DAOException {
+        assertFalse(userDAO.isEmailExists("kutash123@mail.ru"));
     }
 
     @Test
+    public void isEmailExistTest()throws DAOException {
+        assertTrue(userDAO.isEmailExists("abram123@mail.ru"));
+    }
+
+    /*@Test(priority = 1)
+    public void deleteTest() throws DAOException {
+        assertEquals(1,userDAO.delete(6));
+    }*/
+
+    @Test
     public void createTest() throws DAOException {
-        User user = new User(0,0.0f,"Петр","Малашевич","Семенович","petya1234@mail.ru","3030",UserRole.DRIVER,Date.valueOf("1985-08-15"),"6.jpg","8(033)1234567",Status.ACTIVE);
-        assertEquals(6,userDAO.create(user));
+        User user = new User(0,3.2f,"Василий","Васин","Васильевич","vasya123@mail.ru","777777",UserRole.CLIENT,Date.valueOf("1969-07-15"),"5.jpg","8(029)2356489", Status.ACTIVE);
+        assertEquals(5,userDAO.create(user));
     }
 
     @Test
     public void updateTest() throws DAOException {
         User expected = new User(2,4.2f,"Борис","Борискин","Борисович","borisov123@mail.ru","333333",UserRole.DRIVER,Date.valueOf("2003-05-11"),"2.jpg","8(029)2851148", Status.ACTIVE);
         User actual = userDAO.update(new User(2,4.2f,"Борис","Борискин","Борисович","borisov123@mail.ru","333333",UserRole.DRIVER,Date.valueOf("2003-05-11"),"2.jpg","8(029)2851148", Status.ACTIVE));
-        assertEquals("wrong data",expected,actual);
+        assertEquals(expected,actual);
     }
 
     @AfterClass

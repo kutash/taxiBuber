@@ -27,58 +27,8 @@ public class UserService extends AbstractService<User>{
     public List<User> findAll() {
         LOGGER.log(Level.INFO,"Finding all users");
         UserDAO userDAO = new DAOFactory().getUserDAO();
-        /*TransactionManager transactionManager = new TransactionManager();
-
-        List<User> users = null;
-        try {
-            transactionManager.beginTransaction(userDAO);
-            users = userDAO.findAll();
-            transactionManager.commit();
-        } catch (DAOException e) {
-            try {
-                transactionManager.rollback();
-            } catch (DAOException e1) {
-                LOGGER.catching(Level.ERROR,e1);
-            }
-            LOGGER.catching(Level.ERROR,e);
-        }
-        transactionManager.endTransaction();*/
         return super.findAll(userDAO);
     }
-
-    public User findById(int id) {
-        TransactionManager transactionManager = new TransactionManager();
-        UserDAO userDAO = new DAOFactory().getUserDAO();
-        User user = null;
-        try {
-            transactionManager.beginTransaction(userDAO);
-            user = userDAO.findEntityById(id);
-            transactionManager.commit();
-        } catch (DAOException e) {
-            try {
-                transactionManager.rollback();
-            } catch (DAOException e1) {
-                LOGGER.catching(Level.ERROR,e1);
-            }
-            LOGGER.catching(Level.ERROR,e);
-        }
-        transactionManager.endTransaction();
-        return user;
-    }
-
-    /*public Map<String,String> validateUser(Map<String,String> data,String language){
-        return new Validator().validateUser(data,language);
-    }*/
-
-    /*public int create(User user) {
-        int result = 0;
-        if (isUniqueEmail(user.getEmail())) {
-            user.setPassword(new PasswordEncryptor(user.getEmail()).encrypt(user.getPassword()));
-            UserDAO userDAO = new DAOFactory().getUserDAO();
-            result = super.create(user, userDAO);
-        }
-        return result;
-    }*/
 
     public User saveUser(Map<String,String> userData,Part photoPart){
         String encryptedPassword = new PasswordEncryptor(userData.get("email")).encrypt(userData.get("password"));
@@ -120,7 +70,7 @@ public class UserService extends AbstractService<User>{
         return super.update(user,userDAO);
     }
 
-    public boolean isUniqueEmail(String email) {
+    public boolean isEmailExist(String email) {
         TransactionManager transactionManager = new TransactionManager();
         boolean result = false;
         UserDAO userDAO = new DAOFactory().getUserDAO();
@@ -155,27 +105,6 @@ public class UserService extends AbstractService<User>{
         }
         return errors;
     }
-
-    /*public List<Comment> findComments(int userId) {
-        LOGGER.log(Level.INFO,"Finding comments by user id");
-        TransactionManager transactionManager = new TransactionManager();
-        CommentDAO commentDAO = new DAOFactory().getCommentDAO();
-        List<Comment> comments = null;
-        try {
-            transactionManager.beginTransaction(commentDAO);
-            comments = commentDAO.findEntityByUserId(userId);
-            transactionManager.commit();
-        } catch (DAOException e) {
-            try {
-                transactionManager.rollback();
-            } catch (DAOException e1) {
-                LOGGER.catching(Level.ERROR,e1);
-            }
-            LOGGER.catching(Level.ERROR,e);
-        }
-        transactionManager.endTransaction();
-        return comments;
-    }*/
 
     public User findUser(String userId){
         User user = null;

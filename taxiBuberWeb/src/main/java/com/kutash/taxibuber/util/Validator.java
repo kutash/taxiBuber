@@ -79,7 +79,7 @@ public class Validator {
         if (data.containsKey("email")) {
             String email = data.get("email");
             if (StringUtils.isNotEmpty(email)) {
-                if (new UserService().isUniqueEmail(email)) {
+                if (!new UserService().isEmailExist(email)) {
                     Matcher emailMatcher = patternEmail.matcher(email);
                     if (!emailMatcher.matches()) {
                         map.put("email", messageManager.getProperty("label.invalidemail"));
@@ -164,7 +164,7 @@ public class Validator {
                 map.put("number", messageManager.getProperty("label.errornumber"));
             }else {
                 if(data.get("carId") != null){
-                    if (service.isNumberExistForUpdare(number,Integer.parseInt(data.get("carId")))) {
+                    if (service.isNumberExistForUpdate(number,Integer.parseInt(data.get("carId")))) {
                         map.put("number", messageManager.getProperty("label.notuniquenumber"));
                     }
                 }else {

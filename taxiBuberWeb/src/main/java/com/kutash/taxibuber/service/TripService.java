@@ -8,7 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -60,26 +59,6 @@ public class TripService extends AbstractService<Trip>{
         return trips;
     }
 
-    /*public int createTrip(Trip trip){
-        int result = 0;
-        TransactionManager transactionManager = new TransactionManager();
-        TripDAO tripDAO = new DAOFactory().getTripDAO();
-        try {
-            transactionManager.beginTransaction(tripDAO);
-            result = tripDAO.create(trip);
-            transactionManager.commit();
-        } catch (DAOException e) {
-            try {
-                transactionManager.rollback();
-            } catch (DAOException e1) {
-                LOGGER.catching(Level.ERROR,e1);
-            }
-            LOGGER.catching(Level.ERROR,e);
-        }
-        transactionManager.endTransaction();
-        return result;
-    }*/
-
     public int create(Trip entity) {
         LOGGER.log(Level.INFO,"Creating trip");
         TripDAO tripDAO = new DAOFactory().getTripDAO();
@@ -109,43 +88,7 @@ public class TripService extends AbstractService<Trip>{
     public Trip findTripById(int id) {
         LOGGER.log(Level.INFO,"Finding trip id={}",id);
         TripDAO tripDAO = new DAOFactory().getTripDAO();
-        TransactionManager transactionManager = new TransactionManager();
-        Trip trip = null;
-        try {
-            transactionManager.beginTransaction(tripDAO);
-            trip = tripDAO.findEntityById(id);
-            transactionManager.commit();
-        } catch (DAOException e) {
-            try {
-                transactionManager.rollback();
-            } catch (DAOException e1) {
-                LOGGER.catching(Level.ERROR,e1);
-            }
-            LOGGER.catching(Level.ERROR,e);
-        }
-        transactionManager.endTransaction();
-        return trip;
-    }
-
-    public Trip updateTrip(Trip newTrip){
-        LOGGER.log(Level.INFO,"Updating trip id={}",newTrip.getId());
-        TripDAO tripDAO = new DAOFactory().getTripDAO();
-        TransactionManager transactionManager = new TransactionManager();
-        Trip trip = null;
-        try {
-            transactionManager.beginTransaction(tripDAO);
-            trip = tripDAO.update(newTrip);
-            transactionManager.commit();
-        } catch (DAOException e) {
-            try {
-                transactionManager.rollback();
-            } catch (DAOException e1) {
-                LOGGER.catching(Level.ERROR,e1);
-            }
-            LOGGER.catching(Level.ERROR,e);
-        }
-        transactionManager.endTransaction();
-        return trip;
+        return super.findEntityById(id,tripDAO);
     }
 
     public Trip startTrip(int tripId){
@@ -174,21 +117,14 @@ public class TripService extends AbstractService<Trip>{
         return trip;
     }
 
-    public Trip completeTrip(String tripId,String latitude,String longitude){
-        String latitudeRound = new BigDecimal(latitude).setScale(6, RoundingMode.UP).toString();
-        String longitudeRound = new BigDecimal(longitude).setScale(6, RoundingMode.UP).toString();
+    public Trip completeTrip(String tripId){
         TripDAO tripDAO = new DAOFactory().getTripDAO();
-        CarDAO carDAO = new DAOFactory().getCarDAO();
         Trip trip = null;
         TransactionManager transactionManager = new TransactionManager();
         try {
-            transactionManager.beginTransaction(tripDAO,carDAO);
+            transactionManager.beginTransaction(tripDAO);
             trip = tripDAO.findEntityById(Integer.parseInt(tripId));
             trip.setStatus(TripStatus.COMPLETED);
-            Car car = carDAO.findEntityById(trip.getIdCar());
-            car.setLatitude(latitudeRound);
-            car.setLongitude(longitudeRound);
-            carDAO.update(car);
             tripDAO.update(trip);
             transactionManager.commit();
         } catch (DAOException e) {

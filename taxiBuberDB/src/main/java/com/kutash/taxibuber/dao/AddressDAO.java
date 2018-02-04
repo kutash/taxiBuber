@@ -18,8 +18,6 @@ public class AddressDAO extends AbstractDAO<Address> {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String FIND_ADDRESS_BY_ID = "SELECT id_address,address,id_user,status FROM address WHERE id_address = ?";
     private static final String FIND_ADDRESS_BY_USER_ID = "SELECT id_address, address, id_user, status FROM address WHERE status != 'ARCHIVED' AND id_user = ?";
-    private static final String DELETE_ADDRESS_BY_USER_ID = "DELETE FROM address WHERE id_user = ?";
-    private static final String DELETE_ADDRESS_BY_ID = "DELETE FROM address WHERE id_address = ?";
     private static final String CREATE_ADDRESS = "INSERT INTO address (address,id_user,status) VALUES (?,?,?)";
     private static final String UPDATE_ADDRESS = "UPDATE address SET address=?,id_user=?,status=? WHERE id_address=?";
 
@@ -66,39 +64,6 @@ public class AddressDAO extends AbstractDAO<Address> {
             close(preparedStatement);
         }
         return addresses;
-    }
-
-    @Override
-    public int delete(int id) throws DAOException {
-        LOGGER.log(Level.INFO,"deleting addresses by id {}",id);
-        int result;
-        PreparedStatement preparedStatement = null;
-        try {
-            preparedStatement = getPreparedStatement(DELETE_ADDRESS_BY_ID);
-            preparedStatement.setInt(1,id);
-            result = preparedStatement.executeUpdate();
-        }catch (SQLException e){
-            throw new DAOException("Exception while deleting address by id {}",e);
-        }finally {
-            close(preparedStatement);
-        }
-        return result;
-    }
-
-    public int deleteByUserId(int userId) throws DAOException {
-        LOGGER.log(Level.INFO,"deleting addresses where id user {}",userId);
-        int result;
-        PreparedStatement preparedStatement = null;
-        try {
-            preparedStatement = getPreparedStatement(DELETE_ADDRESS_BY_USER_ID);
-            preparedStatement.setInt(1,userId);
-            result = preparedStatement.executeUpdate();
-        }catch (SQLException e){
-            throw new DAOException("Exception while deleting address by user id {}",e);
-        }finally {
-            close(preparedStatement);
-        }
-        return result;
     }
 
     @Override

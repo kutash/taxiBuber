@@ -20,15 +20,6 @@ public class Comment extends AbstractEntity {
         this.mark = mark;
     }
 
-    public Comment(int id, String text, int userId, int reviewerId, Date date, byte mark) {
-        super(id);
-        this.text = text;
-        this.userId = userId;
-        this.reviewerId = reviewerId;
-        this.date = date;
-        this.mark = mark;
-    }
-
     public Comment(int id, String text, int userId, int reviewerId, Date date, byte mark, String reviewerName, String reviewerPhoto) {
         super(id);
         this.text = text;

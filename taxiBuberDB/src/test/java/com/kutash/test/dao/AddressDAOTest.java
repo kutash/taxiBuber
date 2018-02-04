@@ -59,10 +59,10 @@ public class AddressDAOTest {
         assertEquals(expected,actual);
     }
 
-    @Test(priority = 2)
+    /*@Test(priority = 2)
     public void deleteTest() throws DAOException {
         assertEquals(1,addressDAO.delete(5));
-    }
+    }*/
 
     @Test
     public void createTest() throws DAOException {

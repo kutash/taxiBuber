@@ -28,23 +28,8 @@ public class CarService extends AbstractService<Car>{
 
     public Car findById(int id) {
         LOGGER.log(Level.INFO,"Finding car id={}",id);
-        TransactionManager transactionManager = new TransactionManager();
         CarDAO carDAO = new DAOFactory().getCarDAO();
-        Car car = null;
-        try {
-            transactionManager.beginTransaction(carDAO);
-            car = carDAO.findEntityById(id);
-            transactionManager.commit();
-        } catch (DAOException e) {
-            try {
-                transactionManager.rollback();
-            } catch (DAOException e1) {
-                LOGGER.catching(Level.ERROR,e1);
-            }
-            LOGGER.catching(Level.ERROR,e);
-        }
-        transactionManager.endTransaction();
-        return car;
+        return super.findEntityById(id,carDAO);
     }
 
     public Car findByUserId(int userId) {
@@ -70,23 +55,8 @@ public class CarService extends AbstractService<Car>{
 
     public List<Car> findAll() {
         LOGGER.log(Level.INFO,"Finding all cars");
-        TransactionManager transactionManager = new TransactionManager();
         CarDAO carDAO = new DAOFactory().getCarDAO();
-        List<Car> cars = null;
-        try {
-            transactionManager.beginTransaction(carDAO);
-            cars = carDAO.findAll();
-            transactionManager.commit();
-        } catch (DAOException e) {
-            try {
-                transactionManager.rollback();
-            } catch (DAOException e1) {
-                LOGGER.catching(Level.ERROR,e1);
-            }
-            LOGGER.catching(Level.ERROR,e);
-        }
-        transactionManager.endTransaction();
-        return cars;
+        return super.findAll(carDAO);
     }
 
     public List<Car> findAllAvailable(String latitude,String longitude,String bodyType) {
@@ -245,7 +215,7 @@ public class CarService extends AbstractService<Car>{
         return result;
     }
 
-    public boolean isNumberExistForUpdare(String number, int id) {
+    public boolean isNumberExistForUpdate(String number, int id) {
         LOGGER.log(Level.INFO,"Checking is number unique");
         TransactionManager transactionManager = new TransactionManager();
         boolean result = false;

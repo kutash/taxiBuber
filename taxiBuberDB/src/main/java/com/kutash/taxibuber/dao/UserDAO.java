@@ -16,7 +16,6 @@ public class UserDAO extends AbstractDAO<User> {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String FIND_ALL_USERS = "SELECT id_user,role,email,password,rating,`name`,surname,patronymic,birthday,photo_path,phone,status FROM user WHERE status != 'ARCHIVED'";
     private static final String FIND_USER_BY_ID = "SELECT id_user,role,email,password,rating,`name`,surname,patronymic,birthday,photo_path,phone,status FROM user WHERE id_user = ?";
-    private static final String DELETE_USER_BY_ID = "DELETE FROM user WHERE id_user = ?";
     private static final String CREATE_USER = "INSERT INTO user(name,surname,patronymic,birthday,email,role,password,rating,photo_path,phone,status) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
     private static final String UPDATE_USER = "UPDATE user  SET name=?,surname=?,patronymic=?,birthday=?,email=?,role=?,password=?,rating=?,photo_path=?,phone=?,status=? WHERE id_user=?";
     private static final String FIND_USER_BY_EMAIL = "SELECT id_user,role,email,password,rating,`name`,surname,patronymic,birthday,photo_path,phone,status FROM user WHERE email = ?";
@@ -60,23 +59,6 @@ public class UserDAO extends AbstractDAO<User> {
             close(preparedStatement);
         }
         return user;
-    }
-
-    @Override
-    public int delete(int id) throws DAOException {
-        LOGGER.log(Level.INFO,"deleting user with id {}",id);
-        int result;
-        PreparedStatement preparedStatement = null;
-        try {
-            preparedStatement = getPreparedStatement(DELETE_USER_BY_ID);
-            preparedStatement.setInt(1,id);
-            result = preparedStatement.executeUpdate();
-        }catch (SQLException e){
-            throw new DAOException("Exception while deleting user by id",e);
-        }finally {
-            close(preparedStatement);
-        }
-        return result;
     }
 
     @Override
@@ -150,7 +132,7 @@ public class UserDAO extends AbstractDAO<User> {
         }finally {
             close(preparedStatement);
         }
-        return !result;
+        return result;
     }
 
     private User getUser(ResultSet resultSet) throws DAOException {

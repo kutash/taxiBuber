@@ -129,7 +129,7 @@ CREATE TABLE `comment` (
   KEY `fk_comment_user2_idx` (`id_reviewer`),
   CONSTRAINT `fk_comment_user1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_comment_user2` FOREIGN KEY (`id_reviewer`) REFERENCES `user` (`id_user`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -178,6 +178,11 @@ CREATE TABLE `trip` (
 
 LOCK TABLES `trip` WRITE;
 /*!40000 ALTER TABLE `trip` DISABLE KEYS */;
+INSERT INTO trip (id_trip,price, `date`, distance, `status`, id_car, departure_address, destination_address)
+VALUES (1,'15.30','2017-01-05', 23.2,'STARTED',1, 1, 2),
+  (2,'22.25','2017-02-04', 28.5,'STARTED',2, 3, 4),
+  (3,'21.82','2017-03-06', 18.9,'ORDERED',1, 2, 1),
+  (4,'13.00','2017-04-07', 13.7,'ORDERED',2, 4, 3);
 /*!40000 ALTER TABLE `trip` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -212,7 +217,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'DRIVER','petrov123@mail.ru','222222',0,'Петр','Петров','Петрович','1989-11-05','1.jpg','8(029)2851148','ACTIVE'),(2,'DRIVER','bor123@mail.ru','3333',4.2,'Борис','Борискин','Борисович','2000-05-12','2.jpg','8(029)2851148','ACTIVE'),(3,'DRIVER','tolik123@mail.ru','555555',4,'Анатолий','Моржов','Петрович','1995-09-08','3.jpg','8(029)3351148','ACTIVE'),(4,'CLIENT','abram123@mail.ru','666666',5,'Аркадий','Абрамович','Иванович','1984-08-10','4.jpg','8(029)3366668','ACTIVE'),(5,'CLIENT','vasya123@mail.ru','777777',3.2,'Василий','Васин','Васильевич','1969-07-15','5.jpg','8(029)2356489','ACTIVE');
+INSERT INTO `user` VALUES (1,'DRIVER','petrov123@mail.ru','222222',0,'Петр','Петров','Петрович','1989-11-05','1.jpg','8(029)2851148','ACTIVE'),(2,'DRIVER','bor123@mail.ru','3333',4.2,'Борис','Борискин','Борисович','2000-05-12','2.jpg','8(029)2851148','ACTIVE'),(3,'DRIVER','tolik123@mail.ru','555555',4,'Анатолий','Моржов','Петрович','1995-09-08','3.jpg','8(029)3351148','ACTIVE'),(4,'CLIENT','abram123@mail.ru','666666',5,'Аркадий','Абрамович','Иванович','1984-08-10','4.jpg','8(029)3366668','ACTIVE');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

@@ -14,13 +14,6 @@ public class Car extends AbstractEntity {
     private String driverFullName;
     private Status status;
 
-    public Car(String registrationNumber, Capacity capacity, String model,CarBrand brand) {
-        this.registrationNumber = registrationNumber;
-        this.capacity = capacity;
-        this.model = model;
-        this.brand = brand;
-    }
-
     public Car(String registrationNumber,String model) {
         this.registrationNumber = registrationNumber;
         this.model = model;

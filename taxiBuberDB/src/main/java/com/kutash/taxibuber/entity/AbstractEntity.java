@@ -38,8 +38,7 @@ public abstract class AbstractEntity implements Serializable,Cloneable {
 
     @Override
     public String toString() {
-        return "AbstractEntity{" +
-                "id=" + id +
+        return "id=" + id +
                 '}';
     }
 }

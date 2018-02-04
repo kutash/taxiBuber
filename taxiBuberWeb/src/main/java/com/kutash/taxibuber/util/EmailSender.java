@@ -37,7 +37,7 @@ public class EmailSender {
                     });
 
             STGroup group = new STGroupFile("emailTemplates.stg");
-            ST st = new ST();
+            ST st;
             if (language.equals("ru") || language.equals("RU_ru")){
                 st = group.getInstanceOf("template1");
             }else {

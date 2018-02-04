@@ -56,14 +56,14 @@ public class CommentDAOTest {
         commentDAO.findAll();
     }
 
-    @Test
+    @Test(priority = 1)
     public void findEntityByIdTest() throws DAOException {
         Comment expected = new Comment(1,"Для меня лично важно, что удобно и быстро можно вызвать такси через смартфон, который всегда под рукой. Спасибо вам.",2,5,Date.valueOf("2017-02-04"),(byte) 5,"Василий", "5.jpg");
         Comment actual = commentDAO.findEntityById(1);
         assertEquals(expected,actual);
     }
 
-    @Test
+    @Test(priority = 1)
     public void findEntityByUserIdTest() throws DAOException {
         List<Comment> expected = new ArrayList<>();
         expected.add(new Comment(1,"Для меня лично важно, что удобно и быстро можно вызвать такси через смартфон, который всегда под рукой. Спасибо вам.",2,5,Date.valueOf("2017-02-04"),(byte) 5,"Василий", "5.jpg"));
@@ -74,14 +74,14 @@ public class CommentDAOTest {
 
     @Test
     public void createTest() throws DAOException {
-        Comment comment = new Comment(0,"Все супер!!!",3,5,Date.valueOf("2017-02-04"),(byte) 4);
+        Comment comment = new Comment(0,"Все супер!!!",3,2,Date.valueOf("2017-02-04"),(byte) 4,"","");
         assertEquals(1,commentDAO.create(comment));
     }
 
     @Test
     public void updateTest() throws DAOException {
         Comment expected = new Comment(4,"Спасибо вам.",5,2,Date.valueOf("2017-02-04"),(byte) 5,"Борис","2.jpg");
-        Comment actual = commentDAO.update(new Comment(4,"Спасибо вам.",5,2,Date.valueOf("2017-02-04"),(byte) 5));
+        Comment actual = commentDAO.update(new Comment(4,"Спасибо вам.",5,2,Date.valueOf("2017-02-04"),(byte) 5,"Борис","2.jpg"));
         assertEquals(expected,actual);
     }
 
