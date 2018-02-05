@@ -3,6 +3,7 @@ package com.kutash.taxibuber.service;
 import com.kutash.taxibuber.dao.*;
 import com.kutash.taxibuber.entity.*;
 import com.kutash.taxibuber.exception.DAOException;
+import com.kutash.taxibuber.websocket.WebSocketSender;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -93,17 +94,16 @@ public class TripService extends AbstractService<Trip>{
 
     public Trip startTrip(int tripId){
         TripDAO tripDAO = new DAOFactory().getTripDAO();
-        CarDAO carDAO = new DAOFactory().getCarDAO();
+        UserDAO userDAO = new DAOFactory().getUserDAO();
         Trip trip = null;
         TransactionManager transactionManager = new TransactionManager();
         try {
-            transactionManager.beginTransaction(tripDAO,carDAO);
+            transactionManager.beginTransaction(tripDAO,userDAO);
             trip = tripDAO.findEntityById(tripId);
-            Car car = carDAO.findEntityById(trip.getIdCar());
-            car.setAvailable(false);
-            carDAO.update(car);
+            User user = userDAO.findEntityById(trip.getClientId());
             trip.setStatus(TripStatus.STARTED);
             trip = tripDAO.update(trip);
+            new WebSocketSender().send(user,"started");
             transactionManager.commit();
         } catch (DAOException e) {
             try {
@@ -160,42 +160,35 @@ public class TripService extends AbstractService<Trip>{
         return trip;
     }
 
-    private Address isExist(List<Address> addresses, Address address){
+    private int isExist(List<Address> addresses, String address){
         for (Address addr : addresses){
-            if (addr.getAddress().equals(address.getAddress())){
-                return addr;
+            if (addr.getAddress().equals(address)){
+                return addr.getId();
             }
         }
-        return address;
+        return 0;
     }
 
     public int createTrip(HashMap<String,String> data, int userId){
         int result = 0;
         float distanceNumber = Float.parseFloat(data.get("distance")) / METER_IN_KILOMETER;
         int carId = Integer.parseInt(data.get("carId"));
-        int sourceId;
-        int destinationId;
-        Address source = new Address(data.get("source"),userId, Status.ACTIVE);
-        Address destination = new Address(data.get("destination"),userId, Status.ACTIVE);
         TransactionManager transactionManager = new TransactionManager();
         DAOFactory daoFactory = new DAOFactory();
         AddressDAO addressDAO = daoFactory.getAddressDAO();
         TripDAO tripDAO = daoFactory.getTripDAO();
         CarDAO carDAO = daoFactory.getCarDAO();
+        UserDAO userDAO = daoFactory.getUserDAO();
         try {
-            transactionManager.beginTransaction(addressDAO,tripDAO,carDAO);
+            transactionManager.beginTransaction(addressDAO,tripDAO,carDAO,userDAO);
             List<Address> addresses = addressDAO.findAddressByUserId(userId);
-            source = isExist(addresses,source);
-            if (source.getId() == 0){
-                sourceId = addressDAO.create(source);
-            }else {
-                sourceId = source.getId();
+            int sourceId = isExist(addresses,data.get("source"));
+            if (sourceId == 0){
+                sourceId = addressDAO.create(new Address(data.get("source"),userId, Status.ACTIVE));
             }
-            destination = isExist(addresses,destination);
-            if (destination.getId() == 0){
-                destinationId = addressDAO.create(destination);
-            }else {
-                destinationId = destination.getId();
+            int destinationId = isExist(addresses,data.get("destination"));
+            if (destinationId == 0){
+                destinationId = addressDAO.create(new Address(data.get("destination"),userId, Status.ACTIVE));
             }
             Car car = carDAO.findEntityById(carId);
             if(!car.isAvailable()){
@@ -203,8 +196,11 @@ public class TripService extends AbstractService<Trip>{
             }
             car.setAvailable(false);
             carDAO.update(car);
+            User user = userDAO.findEntityById(car.getUserId());
             Trip trip = new Trip(new BigDecimal(data.get("cost")), new Date(), distanceNumber, carId, sourceId, destinationId, TripStatus.ORDERED);
             result = tripDAO.create(trip);
+            trip = tripDAO.findEntityById(result);
+            new WebSocketSender().send(user,trip);
             transactionManager.commit();
         } catch (DAOException e) {
             try {

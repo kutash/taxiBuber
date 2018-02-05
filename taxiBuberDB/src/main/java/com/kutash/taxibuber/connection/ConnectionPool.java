@@ -1,7 +1,6 @@
 package com.kutash.taxibuber.connection;
 
 import com.kutash.taxibuber.exception.DAOException;
-import com.kutash.taxibuber.resource.DBConfigurationManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -84,6 +83,10 @@ public class ConnectionPool implements Cloneable{
             LOGGER.log(Level.ERROR,"Can not enable auto-commit mode {}",e);
         }
         connectionQueue.offer(connection);
+    }
+
+    public int getPoolSize(){
+        return connectionQueue.size();
     }
 
     public void destroyConnections(){

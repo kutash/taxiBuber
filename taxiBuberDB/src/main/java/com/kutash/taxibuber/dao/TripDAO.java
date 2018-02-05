@@ -20,9 +20,11 @@ public class TripDAO extends AbstractDAO<Trip> {
             "destination_string,t.status,c.id_user as driver_id,concat(u.surname,' ',u.name) AS driver_name, us.id_user AS client_id,concat(us.surname,' ',us.name)\n" +
             "AS client_name FROM trip AS t INNER JOIN car AS c ON t.id_car = c.id_car INNER JOIN user AS u ON c.id_user = u.id_user INNER JOIN address AS a ON \n" +
             "t.departure_address = a.id_address INNER JOIN user AS us ON a.id_user = us.id_user INNER JOIN address AS ad ON t.destination_address = ad.id_address";
-    private static final String FIND_TRIP_BY_ID = "SELECT t.id_trip,t.price,t.date,t.distance,t.id_car,t.departure_address,t.destination_address,t.status,a.address AS departure_string,ad.address\n" +
-            "AS destination_string FROM trip as t INNER JOIN car as c ON t.id_car = c.id_car INNER JOIN address AS a ON t.departure_address = a.id_address\n" +
-            "INNER JOIN address AS ad ON t.destination_address = ad.id_address WHERE id_trip = ?;";
+    private static final String FIND_TRIP_BY_ID = "SELECT t.id_trip, t.price, t.date, t.distance, t.id_car, t.departure_address, a.address AS departure_string, t.destination_address, ad.address AS\n" +
+            "destination_string,t.status,c.id_user as driver_id,concat(u.surname,' ',u.name) AS driver_name, us.id_user AS client_id,concat(us.surname,' ',us.name)\n" +
+            "AS client_name FROM trip AS t INNER JOIN car AS c ON t.id_car = c.id_car INNER JOIN user AS u ON c.id_user = u.id_user INNER JOIN address AS a ON\n" +
+            "t.departure_address = a.id_address INNER JOIN user AS us ON a.id_user = us.id_user INNER JOIN address AS ad ON t.destination_address = ad.id_address\n" +
+            "WHERE t.id_trip = ?";
     private static final String FIND_TRIPS_BY_CLIENT_ID = "SELECT t.id_trip, t.price, t.date, t.distance, t.id_car, t.departure_address, a.address AS departure_string, t.destination_address, ad.address AS\n" +
             "destination_string,t.status,c.id_user as driver_id,concat(u.surname,' ',u.name) AS driver_name, us.id_user AS client_id,concat(us.surname,' ',us.name)\n" +
             "AS client_name FROM trip AS t INNER JOIN car AS c ON t.id_car = c.id_car INNER JOIN user AS u ON c.id_user = u.id_user INNER JOIN address AS a ON\n" +
@@ -96,7 +98,7 @@ public class TripDAO extends AbstractDAO<Trip> {
             preparedStatement.setInt(1,id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                trip = getTrip(resultSet);
+                trip = getTripForUser(resultSet);
             }
         }catch (SQLException e){
             throw new DAOException("Exception while finding trip by id",e);

@@ -99,7 +99,4 @@
             </div>
         </div>
     </body>
-    <%--<script>
-        paginate('content', 'pager', 10);
-    </script>--%>
 </html>

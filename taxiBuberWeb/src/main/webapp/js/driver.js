@@ -1,20 +1,31 @@
 var latitude;
 var longitude;
 var map;
-var isWorking = false;
+var markerArray = [];
 
-setInterval(getNewOrder, 3000);
+var ws = new WebSocket("ws://localhost:8080/socket");
+ws.onmessage = function(event) {
+    var modalMessage = $('#modal-message');
+    modalMessage.modal('show');
+    var trip = JSON.parse(event.data);
+    document.getElementById("tripId").value = trip.id;
+    document.getElementById("start").value = trip.departure.address;
+    document.getElementById("end").value = trip.destination.address;
+};
+
+ws.onerror = function(event){
+    console.log("Error ", event)
+};
 
 window.onload = function () {
 
-    if(document.getElementById('work').checked && document.getElementById("tripId").value === ''){
+    /*if(document.getElementById('work').checked && document.getElementById("tripId").value === ''){
         isWorking = true;
-    }
+    }*/
 
     var begin = document.getElementById("begin");
     begin.addEventListener('click',function () {
         document.getElementById('work').setAttribute("disabled", "true");
-        isWorking = false;
         $('#modal-message').modal("hide");
         var id = document.getElementById("tripId").value;
         $.ajax({
@@ -36,7 +47,8 @@ window.onload = function () {
                 var directionsService = new google.maps.DirectionsService();
                 var directionsDisplay = new google.maps.DirectionsRenderer({'draggable': false});
                 directionsDisplay.setMap(map);
-                calculateAndDisplayRoute(directionsService, directionsDisplay, latLng);
+                var stepDisplay = new google.maps.InfoWindow;
+                calculateAndDisplayRoute(directionsService, directionsDisplay, latLng, stepDisplay);
             }, function () {
                 handleLocationError(true, infoWindow, map.getCenter());
             });
@@ -114,28 +126,26 @@ function setAvailable(isAvailable) {
         contentType: "application/json",
         data: JSON.stringify(data),
         success: function(response) {
+            console.log(response);
             if(response === 'no car'){
                 document.getElementById('no-car').style.display = 'block';
                 document.getElementById('start-work').style.display = 'block';
                 document.getElementById('stop-work').style.display = 'none';
                 document.getElementById('work').checked = false;
-                isWorking = false;
             }else if(response === 'true'){
                 document.getElementById('start-work').style.display = 'none';
                 document.getElementById('stop-work').style.display = 'block';
+                document.getElementById('work').checked = true;
                 setCarCoordinates(latitude,longitude);
-                isWorking = true;
             }else if (response === 'false'){
                 document.getElementById('start-work').style.display = 'block';
                 document.getElementById('stop-work').style.display = 'none';
                 document.getElementById('work').checked = false;
-                isWorking = false;
             }else if (response === 'trips'){
                 document.getElementById('trips').style.display = 'block';
                 document.getElementById('start-work').style.display = 'none';
                 document.getElementById('stop-work').style.display = 'block';
                 document.getElementById('work').checked = true;
-                isWorking = false;
             }
         }
     });
@@ -193,14 +203,6 @@ function setCarCoordinates(latitude,longitude) {
 
         }
     });
-
-    /*$.ajax({
-        type:"GET",
-        url: "ajaxController?command=set_coordinates&carId="+carId+"&latitude="+latitude+"&longitude="+longitude,
-        contentType: 'application/json'
-    }).done(function(result){
-        console.log(result);
-    });*/
 }
 
 function initMap() {
@@ -225,8 +227,9 @@ function initMap() {
             if(document.getElementById("tripId").value != ''){
                 var directionsService = new google.maps.DirectionsService();
                 var directionsDisplay = new google.maps.DirectionsRenderer({'draggable': false});
+                var stepDisplay = new google.maps.InfoWindow;
                 directionsDisplay.setMap(map);
-                calculateAndDisplayRoute(directionsService,directionsDisplay,latLng)
+                calculateAndDisplayRoute(directionsService,directionsDisplay,latLng,stepDisplay);
             }
         }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
@@ -256,7 +259,10 @@ function geocodeLatLng(geocoder, map, infowindow, latLng) {
     });
 }
 
-function calculateAndDisplayRoute(directionsService, directionsDisplay, start) {
+function calculateAndDisplayRoute(directionsService, directionsDisplay, start,stepDisplay) {
+    for (var i = 0; i < markerArray.length; i++) {
+        markerArray[i].setMap(null);
+    }
     source = document.getElementById("start").value;
     destination = document.getElementById("end").value;
     var waypts = [];
@@ -274,12 +280,13 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay, start) {
     directionsService.route(request2, function (response, status) {
         if (status == google.maps.DirectionsStatus.OK) {
             directionsDisplay.setDirections(response);
+            showSteps(response, markerArray, stepDisplay, map);
         }
     });
     var service = new google.maps.DistanceMatrixService();
     service.getDistanceMatrix({
         origins: [start],
-        destinations: [source],
+        destinations: [destination],
         travelMode: google.maps.TravelMode.DRIVING,
         unitSystem: google.maps.UnitSystem.METRIC,
         avoidHighways: false,
@@ -307,4 +314,29 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.setContent(browserHasGeolocation ?
         'Error: The Geolocation service failed.' :
         'Error: Your browser doesn\'t support geolocation.');
+}
+
+function showSteps(directionResult, markerArray, stepDisplay, map) {
+    // For each step, place a marker, and add the text to the marker's infowindow.
+    // Also attach the marker to an array so we can keep track of it and remove it
+    // when calculating new routes.
+    console.log(directionResult);
+
+    var myRoute = directionResult.routes[0].legs[0];
+    for (var i = 0; i < myRoute.steps.length; i++) {
+        var marker = markerArray[i] = markerArray[i] || new google.maps.Marker;
+        marker.setMap(map);
+        marker.setPosition(myRoute.steps[i].start_location);
+        attachInstructionText(
+            stepDisplay, marker, myRoute.steps[i].instructions, map);
+    }
+}
+
+function attachInstructionText(stepDisplay, marker, text, map) {
+    google.maps.event.addListener(marker, 'click', function() {
+        // Open an info window when the marker is clicked on, containing the text
+        // of the step.
+        stepDisplay.setContent(text);
+        stepDisplay.open(map, marker);
+    });
 }

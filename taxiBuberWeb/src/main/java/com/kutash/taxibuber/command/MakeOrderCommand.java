@@ -12,9 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 public class MakeOrderCommand implements Command {
 
@@ -44,33 +42,12 @@ public class MakeOrderCommand implements Command {
         Router router = new Router();
         String language = (String) request.getSession().getAttribute(LANGUAGE);
         User user = (User) request.getSession().getAttribute(CURRENT_USER);
-        HttpSession session = request.getSession();
         HashMap<String,String> data = getData(request);
         HashMap<String,String> errors = new Validator().validateOrder(data,language);
         if (errors.isEmpty()){
             int tripId = tripService.createTrip(data,user.getId());
-            Trip trip = null;
             if (tripId != 0) {
-                try {
-                    int seconds = 0;
-                    do {
-                        TimeUnit.SECONDS.sleep(6);
-                        seconds += 6;
-                        if (seconds >= 30) {
-                            break;
-                        }
-                        trip = tripService.findTripById(tripId);
-                    } while (!trip.getStatus().equals(TripStatus.STARTED));
-                }catch (InterruptedException e){
-                    LOGGER.catching(Level.ERROR,e);
-                }
-                if (trip.getStatus().equals(TripStatus.STARTED)) {
-                    session.setAttribute("orderMessage", new MessageManager(language).getProperty("message.ordersuccess"));
-                    router.setRoute(Router.RouteType.REDIRECT);
-                }else {
-                    returnErrors(data,errors,request,language);
-                    request.setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
-                }
+                router.setRoute(Router.RouteType.REDIRECT);
             }else {
                 returnErrors(data,errors,request,language);
                 request.setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));

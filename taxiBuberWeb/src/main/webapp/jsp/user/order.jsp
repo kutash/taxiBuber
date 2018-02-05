@@ -155,7 +155,7 @@
             <div class="modal-dialog modal-sm">
                 <div class="modal-content modal-message">
                     <div class="modal-body modal-message-body">
-                        <div id="order-message">${orderMessage}</div>
+                        <div id="message-success" style="display: none"><fmt:message key="message.ordersuccess"/></div>
                         <div id="message-source" style="display: none"><fmt:message key="label.sourceerror"/></div>
                         <div id="message-destination" style="display: none"><fmt:message key="label.desterror"/></div>
                         <div id="message-car" style="display: none"><fmt:message key="label.carerror"/></div>
@@ -164,7 +164,7 @@
             </div>
         </div>
 
-        <!-- Modal waiting-->
+        <%--<!-- Modal waiting-->
         <div class="modal fade" id="modal-waiting" role="dialog">
             <div class="modal-dialog modal-sm">
                 <div class="modal-content modal-message">
@@ -174,7 +174,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>--%>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWwujQHc9yN2BSlbT_L0-L7VLlQAYnUUg&libraries=places&callback=initMap"></script>
     </body>
 </html>

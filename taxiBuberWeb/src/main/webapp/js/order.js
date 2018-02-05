@@ -1,3 +1,22 @@
+var ws = new WebSocket("ws://localhost:8080/socket");
+ws.onmessage = function(event) {
+    if(event.data === 'started') {
+        var modalMessage = $('#modal-message');
+        modalMessage.modal('show');
+        document.getElementById('message-success').style.display = 'block';
+        setTimeout(function () {
+            modalMessage.modal("hide");
+            document.getElementById('message-success').style.display = 'none';
+        }, 2000);
+    }else {
+        console.log(event.data);
+    }
+};
+
+ws.onerror = function(event){
+    console.log("Error ", event)
+};
+
 window.onload = function () {
     var addresses = document.querySelectorAll('.address-link');
     for (var i = 0; i < addresses.length; i++) {
@@ -37,12 +56,11 @@ window.onload = function () {
             }, 2000);
 
         }else {
-            $('#modal-waiting').modal('show');
             document.getElementById('order-form').submit();
         }
     });
 
-    var message = document.getElementById('order-message').innerHTML;
+    /*var message = document.getElementById('order-message').innerHTML;
     if (message !== '' && message !== undefined) {
         var modalMessage = $('#modal-message');
         modalMessage.modal('show');
@@ -50,7 +68,7 @@ window.onload = function () {
             modalMessage.modal("hide");
             document.getElementById('order-message').innerHTML = '';
         }, 2000);
-    }
+    }*/
 
     var dvDistance = document.getElementById("dvDistance");
     var distanceSpan = document.getElementById('distance').innerHTML;
@@ -61,7 +79,7 @@ window.onload = function () {
     }
 };
 
-setInterval(getAvailableCars, 10000);
+setInterval(getAvailableCars, 60000);
 
 var latitude;
 var longitude;
@@ -121,9 +139,9 @@ function initMap() {
             longitude = position.coords.longitude;
             var geocoder = new google.maps.Geocoder;
             var latLng = new google.maps.LatLng(latitude,longitude);
-
             geocodeLatLng(geocoder,map,infoWindow,latLng);
             map.setCenter(pos);
+            getAvailableCars();
         }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
         });
@@ -155,7 +173,6 @@ function geocodeLatLng(geocoder, map, infowindow, latLng) {
                 });
                 infowindow.setContent(results[0].formatted_address);
                 infowindow.open(map, marker);
-                console.log(document.getElementById('start').value);
                 if (document.getElementById('start').value === '') {
                     document.getElementById('start').value = results[0].formatted_address;
                 }
@@ -243,9 +260,18 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
         'Error: Your browser doesn\'t support geolocation.');
 }
 
-function getAvailableCars() {
-    var infoWindowCars = new google.maps.InfoWindow({map: map});
+function send(latitude,longitude) {
+    var bodyType = document.getElementById('body-type').value;
+    var data = {
+        latitude: latitude,
+        longitude: longitude,
+        capacity: bodyType
+    };
+    ws.send(data);
+    return false;
+}
 
+function getAvailableCars() {
     var bodyType = document.getElementById('body-type').value;
     $.ajax({
         type:"GET",
@@ -286,7 +312,6 @@ function getAvailableCars() {
     }).fail(function(xhr, textStatus, error){
         console.log(xhr);
     });
-
 }
 
 function setMarkers(result) {
