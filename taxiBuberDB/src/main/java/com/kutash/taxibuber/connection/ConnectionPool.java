@@ -90,7 +90,8 @@ public class ConnectionPool implements Cloneable{
     }
 
     public void destroyConnections(){
-        for (int i=0;i<POOL_SIZE;i++){
+
+        while (connectionQueue.size() != 0){
             try {
                 ProxyConnection connection = connectionQueue.take();
                 connection.closeConnection();

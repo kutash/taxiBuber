@@ -41,7 +41,7 @@ class ConnectionCreator {
         return connection;
     }
 
-    public int getPoolSize() {
+    int getPoolSize() {
         return poolSize;
     }
 

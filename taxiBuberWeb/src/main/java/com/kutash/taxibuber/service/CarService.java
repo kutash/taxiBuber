@@ -8,7 +8,6 @@ import com.kutash.taxibuber.entity.*;
 import com.kutash.taxibuber.exception.DAOException;
 import com.kutash.taxibuber.resource.RegulationManager;
 import com.kutash.taxibuber.util.FileManager;
-import com.kutash.taxibuber.util.Validator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -154,7 +153,6 @@ public class CarService extends AbstractService<Car>{
     }
 
     private double defineDistance(double latitude,double longitude, Car car){
-        LOGGER.log(Level.INFO,"calculating distance between taxi and client");
         double latitudeClient = Math.toRadians(latitude);
         double latitudeTaxi = Math.toRadians(Double.parseDouble(car.getLatitude()));
         double longitudeClient = Math.toRadians(longitude);

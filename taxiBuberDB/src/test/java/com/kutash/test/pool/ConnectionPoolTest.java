@@ -5,10 +5,6 @@ import com.kutash.taxibuber.connection.ProxyConnection;
 import com.kutash.taxibuber.exception.DAOException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.sql.Connection;
-
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -27,7 +23,7 @@ public class ConnectionPoolTest {
     }
 
     @Test(priority = 1)
-    public void getSameConnectionTest() throws DAOException {
+    public void getOneConnectionTest() throws DAOException {
         ProxyConnection connection = connectionPool.getConnection();
         assertTrue(connectionPool.getPoolSize() == 9);
     }
@@ -39,11 +35,9 @@ public class ConnectionPoolTest {
         assertNotEquals(connection,connection1);
     }
 
-    /*@Test(priority = 3)
+    @Test(priority = 3)
     public void afterDestroyTest() throws DAOException {
         connectionPool.destroyConnections();
-        ProxyConnection connection = connectionPool.getConnection();
-        System.out.println(connectionPool.getPoolSize());
         assertTrue(connectionPool.getPoolSize() == 0);
-    }*/
+    }
 }

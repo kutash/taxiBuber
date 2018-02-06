@@ -44,14 +44,15 @@ public class CostCalculator {
         double duration = Double.parseDouble(durationStr);
         double capacityCost = defineCapacityCost(carCapacity);
         BigDecimal cost = calculateTotalCost(distance, duration, capacityCost);
+        System.out.println(cost);
         return cost.toString();
     }
 
     private BigDecimal calculateTotalCost(double distance, double duration, double capacityCost) {
         double costPerKilometer = Double.parseDouble(RegulationManager.getInstance().getProperty("cost_kilometer"));
-        double distanceCost = distance/METER_IN_KILOMETER*costPerKilometer;
+        double distanceCost = distance / METER_IN_KILOMETER * costPerKilometer;
         double costPerMinute = Double.parseDouble(RegulationManager.getInstance().getProperty("cost_minute"));
-        double durationCost = duration/SECOND_IN_MINUTE*costPerMinute;
+        double durationCost = duration / SECOND_IN_MINUTE * costPerMinute;
         double landing = Double.parseDouble(RegulationManager.getInstance().getProperty("cost_landing"));
         double coefficient = calculateCoefficient();
         double resultCost = distanceCost+durationCost+capacityCost+landing+coefficient;

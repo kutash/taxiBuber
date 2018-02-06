@@ -13,7 +13,7 @@ public enum CommandEnum {
     FREE_CARS(new FreeCarsCommand(new CarService())),
     PRICE(new PriceCommand(new CarService())),
     USER_INFO(new UserInfoCommand(new UserService())),
-    NEW_ORDER(new NewOrderCommand(new TripService())),
+    //NEW_ORDER(new NewOrderCommand(new TripService())),
     START_TRIP(new StartTripCommand(new TripService())),
     COMPLETE_TRIP(new CompleteTripCommand(new TripService())),
     SAVE_USER(new SaveUserCommand(new UserService())),

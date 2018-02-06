@@ -33,15 +33,6 @@
                     </c:url>
                     <a href="${trips}"><fmt:message key="label.trips"/></a>
                 </li>
-                <li>
-                    <input type="text" id="end" name="end" class="form-control" aria-label="..." style="margin-top: 10px;" placeholder="Search by">
-                    <button type="button" id="search" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style=" margin-top: -34px;margin-left: 211px;height: 34px;width: 60px;">
-                        <i class="fas fa-angle-down"></i></button>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a href="#" class="address-link">email</a></li>
-                        <li><a href="#" class="address-link">name</a></li>
-                    </ul>
-                </li>
             </ul>
         </c:if>
         <c:if test="${currentUser.role == 'DRIVER' || currentUser.role == 'CLIENT'}">

@@ -22,7 +22,7 @@
     <body>
         <jsp:include page="/jsp/user/header.jsp"/>
         <c:url var="switchLanguage" value="controller" scope="page">
-            <c:param name="command" value="order"/>
+            <c:param name="command" value="main"/>
         </c:url>
         <form action="${switchLanguage}" method="post" id="l"></form>
         <div class="container">
@@ -82,6 +82,7 @@
                                 </select>
                             </div>
                         </div>
+                        <input type="hidden" id="language" value="${language}"/>
                         <input type="hidden" name="distance" id="distance-input" value="<c:out value="${distance}"/>">
                         <input type="hidden" name="duration" id="duration-input" value="<c:out value="${duration}"/>">
                         <input type="hidden" name="durationText" id="duration-text" value="<c:out value="${durationText}"/>">
@@ -104,7 +105,7 @@
                     </div>
                 </div>
                 <div class="col-sm-8 text-center">
-                    <div id="map" style="width:1070px;height:650px;background:gray"></div>
+                    <div id="map" style="width:1070px;height:700px;background:gray"></div>
                 </div>
             </div>
         </div>
@@ -121,7 +122,7 @@
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <span id="driver"></span>
+                        <div id="driver"></div>
                         <div class="row">
                             <div class="col-sm-4 text-center">
                                 <div>
@@ -136,6 +137,8 @@
                             </div>
                             <div class="col-sm-8 text-center">
                                 <div>
+                                    <div id="comments" style="display: none;font-size: 30px;"><i class="far fa-comments"></i> <fmt:message key="label.comments"/></div>
+                                    <div id="no-comment" style="display: none"><fmt:message key="message.nocomment"/></div>
                                     <table class="table">
                                         <tbody id="tbody">
                                         </tbody>
@@ -155,10 +158,10 @@
             <div class="modal-dialog modal-sm">
                 <div class="modal-content modal-message">
                     <div class="modal-body modal-message-body">
-                        <div id="message-success" style="display: none"><fmt:message key="message.ordersuccess"/></div>
-                        <div id="message-source" style="display: none"><fmt:message key="label.sourceerror"/></div>
-                        <div id="message-destination" style="display: none"><fmt:message key="label.desterror"/></div>
-                        <div id="message-car" style="display: none"><fmt:message key="label.carerror"/></div>
+                        <div class="message" id="message-success" style="display: none"><fmt:message key="message.ordersuccess"/></div>
+                        <div class="message" id="message-source" style="display: none"><fmt:message key="label.sourceerror"/></div>
+                        <div class="message" id="message-destination" style="display: none"><fmt:message key="label.desterror"/></div>
+                        <div class="message" id="message-car" style="display: none"><fmt:message key="label.carerror"/></div>
                     </div>
                 </div>
             </div>

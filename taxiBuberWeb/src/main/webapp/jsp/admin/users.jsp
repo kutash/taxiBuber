@@ -12,12 +12,65 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}css/app.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}css/fontawesome-free-5.0.4/web-fonts-with-css/css/fontawesome-all.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/flag-icon-css-master/css/flag-icon.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}js/jquery.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}js/users.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body>
-    <jsp:include page="/jsp/user/header.jsp"/>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="${home}"><span class="glyphicon glyphicon-home"></span> <fmt:message key="label.title"/></a>
+            </div>
+            <%--<c:if test="${currentUser.role == 'ADMIN'}">--%>
+            <ul class="nav navbar-nav">
+                <li>
+                    <c:url var="showUsers" value="controller">
+                        <c:param name="command" value="show_users"/>
+                    </c:url>
+                    <a href="${showUsers}"><fmt:message key="label.users"/></a>
+                </li>
+                <li>
+                    <c:url var="trips" value="controller">
+                        <c:param name="command" value="trips"/>
+                    </c:url>
+                    <a href="${trips}"><fmt:message key="label.trips"/></a>
+                </li>
+                <li>
+                    <input type="text" id="end" name="end" class="form-control" aria-label="..." style="margin-top: 10px;" placeholder="Search by">
+                    <button type="button" id="search" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style=" margin-top: -34px;margin-left: 211px;height: 34px;width: 60px;">
+                        <i class="fas fa-angle-down"></i></button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a href="#" class="address-link">email</a></li>
+                        <li><a href="#" class="address-link">name</a></li>
+                        <li><a href="#" class="address-link">date</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <%--</c:if>--%>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <span class="user-name">${currentUser.name}</span>
+                    <img src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${currentUser.photoPath}&amp;userId=${currentUser.id}"  id="header-photo" width="30px" height="30px"/>
+                </li>
+                <li>
+                    <c:url var="logout" value="controller">
+                        <c:param name="command" value="logout"/>
+                    </c:url>
+                    <a href="${logout}"><span class="glyphicon glyphicon-log-out"></span> <fmt:message key="label.logout"/></a>
+                </li>
+                <li class="lang">
+                    <select id="language" name="language" onchange="submit()" class="selectpicker show-tick" data-width="fit" form="l">
+                        <option data-content='<span class="flag-icon flag-icon-ru"></span> Ru' value="ru" ${language == 'ru' ? 'selected' : ''}>Ru</option>
+                        <option data-content='<span class="flag-icon flag-icon-us"></span> En' value="en" ${language == 'en' ? 'selected' : ''}>En</option>
+                    </select>
+                </li>
+            </ul>
+        </div>
+    </nav>
     <c:url var="switchLanguage" value="controller" scope="page">
         <c:param name="command" value="show_users"/>
     </c:url>
@@ -43,17 +96,17 @@
                                 <td class="users">
                                     <img id="blah" src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${user.photoPath}&amp;userId=${user.id}" width="55" height="55"  />
                                 </td>
-                                <td class="users">
+                                <td class="name users">
                                     <c:url var="edit" value="controller">
                                         <c:param name="command" value="edit"/>
                                         <c:param name="userId" value="${user.id}"/>
                                     </c:url>
-                                    <a href="${edit}" class="name ${user.status == 'BANNED' ? 'banned' : ''}"><c:out value="${user.getFullName()}"/></a>
+                                    <a href="${edit}" class=" ${user.status == 'BANNED' ? 'banned' : ''}"><c:out value="${user.getFullName()}"/></a>
                                 </td>
                                 <td class="users"><c:out value="${user.rating}"/></td>
                                 <td class="users"><c:out value="${user.role}"/></td>
                                 <td class="email users"><c:out value="${user.email}"/></td>
-                                <td class="users"><c:out value="${user.birthday}"/></td>
+                                <td class="date users"><c:out value="${user.birthday}"/></td>
                                 <td class="users">
                                     <a href="javascript:{}" class="ban-link" id="${user.id}">
                                         <i class="fa fa-ban ban-icon ${user.status == 'BANNED' ? 'banned' : ''}" style="line-height: 3.428571;" aria-hidden="true"></i>

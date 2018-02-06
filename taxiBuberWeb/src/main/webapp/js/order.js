@@ -89,6 +89,10 @@ var markers = [];
 var distances = [];
 var changeZoom = true;
 var minDistance = 0;
+var distanceLabelRus = 'Расстояние';
+var distanceLabelEng = 'Distance';
+var timeLabelRus = 'Время подачи машины';
+var timeLabelEng = 'Car feed time';
 
 function initMap() {
     var directionsService = new google.maps.DirectionsService();
@@ -278,7 +282,6 @@ function getAvailableCars() {
         url: "ajaxController?command=free_cars&latitude="+latitude+"&longitude="+longitude+"&bodyType="+bodyType,
         contentType: 'application/json'
     }).done(function(results){
-
         if (results.length === 0){
             deleteMarkers();
             var pos = {
@@ -293,20 +296,23 @@ function getAvailableCars() {
                 deleteMarkers();
                 setMarkers(results[i]);
             }
-            distances.sort(function compareNumeric(a, b) {
-                return a - b;
-            });
-            if (changeZoom) {
-                if (distances[0] > 5000) {
-                    map.setZoom(12);
-                } else if (distances[0] > 7000) {
-                    map.setZoom(11);
-                } else if (distances[0] > 10000) {
-                    map.setZoom(10);
-                } else if (distances[0] > 20000) {
-                    map.setZoom(8);
+            setTimeout(function(){
+                distances.sort(function compareNumeric(a, b) {
+                    return a - b;
+                });
+                if (changeZoom) {
+                    console.log(distances);
+                    if (distances[0] > 15000) {
+                        map.setZoom(10);
+                    } else if (distances[0] > 10000) {
+                        map.setZoom(11);
+                    } else if (distances[0] > 8000) {
+                        map.setZoom(12);
+                    }else if (distances[0] > 4000) {
+                        map.setZoom(13);
+                    }
                 }
-            }
+            }, 2500);
         }
         distances = [];
     }).fail(function(xhr, textStatus, error){
@@ -319,7 +325,12 @@ function setMarkers(result) {
     var long = result.longitude;
     var brand = result.brand.name;
     var model = result.model;
-    var photo = result.photoPath;
+    var photo;
+    if (result.photoPath === undefined){
+        photo = '';
+    }  else {
+        photo = result.photoPath;
+    }
     var id = result.userId;
     var carId = result.id;
     var capacity = result.capacity;
@@ -350,9 +361,18 @@ function setMarkers(result) {
             }
             distances.push(distanceVal);
             var duration = response.rows[0].elements[0].duration.text;
-            contentString = '<div><i class="fa fa-car fa-2x" aria-hidden="true"></i></div><div>'+brand+' '+model+'</div><div><img src="ajaxController?command=photo&amp;photo='+photo+'&amp;userId='+id+'" width="70px" height="70px"/></div><div>Driver:<a data-toggle="modal" data-target="#myModal" href="" onclick="show('+id+')">'+driver+'</a><br/>Расстояние:'+distance+'<br/>Время подачи машины:'+duration+'</div>';
+            var distanceLabel;
+            var timeLabel;
+            if(document.getElementById('language').value === 'RU_ru' || document.getElementById('language').value === 'ru'){
+                distanceLabel = distanceLabelRus;
+                timeLabel = timeLabelRus;
+            }else {
+                distanceLabel = distanceLabelEng;
+                timeLabel = timeLabelEng;
+            }
+            contentString = '<div><i class="fa fa-car fa-2x" aria-hidden="true"></i></div><div class="car-window">'+brand+' '+model+'</div><div><img src="ajaxController?command=photo&amp;photo='+photo+'&amp;userId='+id+'" width="180px" height="130px"/></div><div class="car-window"><a data-toggle="modal" data-target="#myModal" href="" onclick="show('+id+')">'+driver+'</a><br/>'+distanceLabel+':'+distance+'<br/>'+timeLabel+':'+duration+'</div>';
         } else {
-            contentString = '<div>Can not define distance</div><div>'+brand+' '+model+'</div><div><a href="#">Выбрать</a></div>';
+            contentString = '<div>Can not define distance</div><div>'+brand+' '+model+'</div>';
         }
         var marker = new google.maps.Marker({
             position: latLng,
@@ -360,6 +380,10 @@ function setMarkers(result) {
             map: map
         });
         attachSecretMessage(marker,contentString,result);
+
+        distances.sort(function compareNumeric(a, b) {
+            return a - b;
+        });
     });
 }
 
@@ -411,11 +435,15 @@ function show(id) {
 
         var comments = result.comments;
         if(comments.length === 0){
-            document.getElementById('tbody').innerHTML='У водителя пока нету комментариев';
-        }
-        for (var i=0;i<comments.length;i++){
-            var mark = comments[i].mark*20;
-            document.getElementById('tbody').innerHTML+='<tr><td class="col-md-2"><img src="ajaxController?command=photo&photo='+comments[i].reviewerPhoto+'&amp;userId='+comments[i].reviewerId+'" width="50" height="50" class="comment-photo"/><br/>'+comments[i].reviewerName+'</td><td class="col-md-10">'+comments[i].text+'<br><div style="display: inline-flex"><span class="comment-mark">Оценка:</span><div class="productRate-order" id="rating-div"><div class="productRate-div" style="width:'+mark+'%"></div></div></div><span id="date-span">'+comments[i].date+'</span></td></tr>';
+            document.getElementById('no-comment').style.display ='block';
+            document.getElementById('comments').style.display ='none';
+        }else {
+            document.getElementById('comments').style.display ='block';
+            document.getElementById('no-comment').style.display ='none';
+            for (var i = 0; i < comments.length; i++) {
+                var mark = comments[i].mark * 20;
+                document.getElementById('tbody').innerHTML += '<tr style="border-bottom: 1px solid #ddd"><td class="col-md-2"><img src="ajaxController?command=photo&photo=' + comments[i].reviewerPhoto + '&amp;userId=' + comments[i].reviewerId + '" width="50" height="50" class="comment-photo"/><br/>' + comments[i].reviewerName + '</td><td class="col-md-10"><span style="font-size: 12px">' + comments[i].text + '</span><br><div style="display: inline-flex"><span class="comment-mark">Оценка:</span><div class="productRate-order" id="rating-div"><div class="productRate-div" style="width:' + mark + '%"></div></div></div><span id="date-span">' + comments[i].date + '</span></td></tr>';
+            }
         }
     })
 }

@@ -15,7 +15,9 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}css/app.css">
         <script src=".${pageContext.request.contextPath}/js/jquery.js"></script>
         <script src="${pageContext.request.contextPath}/js/user.js"></script>
-        <script src="${pageContext.request.contextPath}/js/car.js"></script>
+        <c:if test="${user.role == 'DRIVER'}">
+            <script src="${pageContext.request.contextPath}/js/car.js"></script>
+        </c:if>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body>
@@ -36,7 +38,7 @@
     </form>
         <div class="container">
             <div class="row">
-                <div class="before-form">${currentUser.role}</div>
+                <div id="current-user" class="before-form">${currentUser.role}</div>
                 <div class="col-sm-6 text-center" style="margin-left: 75px;margin-right: -240px;">
                     <div>
                         <div>

@@ -218,12 +218,14 @@ h4 {
 
 #driver {
     font-family: "Baskerville Old Face", serif;
-    font-size: xx-large;
-    padding: 25%;
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+    padding-bottom: 16px;
 }
 
 #date-span {
-    padding-top: 21px;
+    padding-top: 28px;
     float: right;
     font-size: 14px;
 }
@@ -484,4 +486,18 @@ input:checked + .slider:before {
     margin-top: 0;
     margin-left: -89px;
     border-radius: 5px;
+}
+
+.car-window{
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#no-comment {
+    margin: 77px;
+    font-size: 25px;
+}
+
+#order-button {
+    font-size: 20px;
 }

@@ -5,18 +5,12 @@ import com.kutash.taxibuber.controller.Router;
 import com.kutash.taxibuber.entity.Car;
 import com.kutash.taxibuber.entity.User;
 import com.kutash.taxibuber.service.CarService;
-import com.kutash.taxibuber.websocket.WebSocketSender;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class FreeCarsCommand implements Command {
 

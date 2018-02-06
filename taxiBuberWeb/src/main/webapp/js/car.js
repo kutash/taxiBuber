@@ -6,7 +6,7 @@ $(document).ready(function () {
 
     var modalMessage = $('#modal-message2');
     var update = $('#message-update').text();
-    /*if (update.text() !== ''){
+    if (update.text() !== ''){
         modalMessage.modal('show');
         update.css('margin','10%');
         update.css('display', 'block');
@@ -14,9 +14,9 @@ $(document).ready(function () {
             modalMessage.modal("hide");
             update.css('display', 'none');
         }, 3000);
-    }*/
+    }
     var create = $('#message-create').text();
-    /*if (create.text() !== ''){
+    if (create.text() !== ''){
         modalMessage.modal('show');
         create.css('margin','10%');
         create.css('display', 'block');
@@ -24,10 +24,10 @@ $(document).ready(function () {
             modalMessage.modal("hide");
             create.css('display', 'none');
         }, 3000);
-    }*/
+    }
 
     var deleted = $('#message-deleted').text();
-    /*if (deleted.text() !== ''){
+    if (deleted.text() !== ''){
         modalMessage.modal('show');
         deleted.css('margin','12%');
         deleted.css('display', 'block');
@@ -35,10 +35,10 @@ $(document).ready(function () {
             modalMessage.modal("hide");
             deleted.css('display', 'none');
         }, 3000);
-    }*/
+    }
 
     var notDeleted = $('#message-notdeleted').text();
-    if (notDeleted !== '' || deleted !== '' || create !== '' || update !== ''){
+    if (notDeleted !== ''){
         console.log(notDeleted);
         console.log(deleted);
         console.log(update);

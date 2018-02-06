@@ -109,7 +109,6 @@ $(document).ready(function () {
     });
 
     $('.address-link').on('click',function () {
-        console.log($(this).text());
         $('#search').text($(this).text());
     });
 
