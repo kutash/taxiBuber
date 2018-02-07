@@ -14,10 +14,10 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}css/fontawesome-free-5.0.4/web-fonts-with-css/css/fontawesome-all.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/flag-icon-css-master/css/flag-icon.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}js/jquery.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}js/users.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
     </head>
     <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -25,7 +25,6 @@
             <div class="navbar-header">
                 <a class="navbar-brand" href="${home}"><span class="glyphicon glyphicon-home"></span> <fmt:message key="label.title"/></a>
             </div>
-            <%--<c:if test="${currentUser.role == 'ADMIN'}">--%>
             <ul class="nav navbar-nav">
                 <li>
                     <c:url var="showUsers" value="controller">
@@ -40,17 +39,41 @@
                     <a href="${trips}"><fmt:message key="label.trips"/></a>
                 </li>
                 <li>
-                    <input type="text" id="end" name="end" class="form-control" aria-label="..." style="margin-top: 10px;" placeholder="Search by">
-                    <button type="button" id="search" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style=" margin-top: -34px;margin-left: 211px;height: 34px;width: 60px;">
-                        <i class="fas fa-angle-down"></i></button>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a href="#" class="address-link">email</a></li>
-                        <li><a href="#" class="address-link">name</a></li>
-                        <li><a href="#" class="address-link">date</a></li>
-                    </ul>
+                    <form class="navbar-form navbar-search" role="search">
+                        <input type="hidden" id="parameter">
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-search btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                    <span class="label-icon"><fmt:message key="label.search"/></span>
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu pull-left" role="menu">
+                                    <li>
+                                        <a href="#">
+                                            <span class="glyphicon glyphicon-user"></span>
+                                            <span class="label-icon"><fmt:message key="label.searchbyname"/></span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fas fa-at"></i>
+                                            <span class="label-icon"><fmt:message key="label.searchbyemail"/></span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                            <span class="label-icon"><fmt:message key="label.searchbydate"/></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <input type="text" class="form-control" id="search-input" style="width: 250px;height: 33px;">
+                        </div>
+                    </form>
                 </li>
             </ul>
-            <%--</c:if>--%>
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <span class="user-name">${currentUser.name}</span>
@@ -63,18 +86,16 @@
                     <a href="${logout}"><span class="glyphicon glyphicon-log-out"></span> <fmt:message key="label.logout"/></a>
                 </li>
                 <li class="lang">
-                    <select id="language" name="language" onchange="submit()" class="selectpicker show-tick" data-width="fit" form="l">
-                        <option data-content='<span class="flag-icon flag-icon-ru"></span> Ru' value="ru" ${language == 'ru' ? 'selected' : ''}>Ru</option>
-                        <option data-content='<span class="flag-icon flag-icon-us"></span> En' value="en" ${language == 'en' ? 'selected' : ''}>En</option>
-                    </select>
+                    <form method="post">
+                        <select id="language" name="language" onchange="submit()" class="selectpicker show-tick" data-width="fit">
+                            <option data-content='<span class="flag-icon flag-icon-ru"></span> Ru' value="ru" ${language == 'ru' ? 'selected' : ''}>Ru</option>
+                            <option data-content='<span class="flag-icon flag-icon-us"></span> En' value="en" ${language == 'en' ? 'selected' : ''}>En</option>
+                        </select>
+                    </form>
                 </li>
             </ul>
         </div>
     </nav>
-    <c:url var="switchLanguage" value="controller" scope="page">
-        <c:param name="command" value="show_users"/>
-    </c:url>
-    <form action="${switchLanguage}" method="post" id="l"></form>
         <div class="container">
             <div>
                 <table class="table table-hover" id="users-table">

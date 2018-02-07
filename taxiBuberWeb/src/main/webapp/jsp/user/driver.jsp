@@ -29,8 +29,6 @@
             <div class="row">
                 <div class="col-sm-4 text-center">
                     <span id="messageGoesHere"></span>
-
-
                     <div class="form-horizontal" id="complete-form">
                         <div class="checkbox">
                             <label id="start-work" style="display: ${car.available == true ? 'none' : 'block'}" class="label-span"><fmt:message key="label.start"/></label>

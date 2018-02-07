@@ -15,7 +15,7 @@
     <h1 class="h1-error">403 <i class="fa fa-exclamation-circle fa-5" aria-hidden="true"></i></h1>
     <p class="p-error">
         <fmt:message key="label.403"/><br>
-        <a href="${home}" title="Back to home" class="a-error"><fmt:message key="label.home"/></a>
+        <a href="/index.jsp" title="Back to home" class="a-error"><fmt:message key="label.home"/></a>
     </p>
 </div>
 </body>

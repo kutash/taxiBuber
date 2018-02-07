@@ -98,6 +98,45 @@ $(document).ready(function(){
         $('#submit-button').attr('disabled', 'disabled');
     });
 
+    $("#search-input").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        var parameter = $('#parameter').val();
+        if (parameter === ''){
+            $("#content").find('tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        }else {
+            $("#content").find('tr').children('.' + parameter).filter(function () {
+                console.log($(this).text());
+                if(($(this).text().toLowerCase().indexOf(value) === -1)){
+                    if ($(this).parent().has('.'+ parameter + '2')) {
+                        $(this).parent().children('.' + parameter + '2').filter(function () {
+                            console.log($(this).text());
+                            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                        });
+                    }else {
+                        $(this).parent().toggle(false)
+                    }
+                }else {
+                    $(this).parent().toggle(true)
+                }
+            });
+        }
+    });
+
+    $(".input-group-btn .dropdown-menu li a").click(function(){
+        var search = $(this).children('.label-icon').html();
+        var selText = $(this).html();
+        if(search === 'Search By Name' || search === 'Поиск по Имени') {
+            $('#parameter').val('name');
+        }else if(search === 'Search By Address' || search === 'Поиск по Адресу') {
+            $('#parameter').val('address');
+        }else if(search === 'Search By Date' || search === 'Поиск по Дате') {
+            $('#parameter').val('date');
+        }
+        $(this).parents('.input-group-btn').find('.btn-search').html(selText);
+    });
+
 });
 
 

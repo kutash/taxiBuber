@@ -4,6 +4,8 @@
     <test name="DaoTest">
         <classes>
             <class name="com.kutash.test.util.CostCalculatorTest"/>
+            <class name="com.kutash.test.util.PasswordEncryptorTest"/>
+            <class name="com.kutash.test.util.DateParserTest"/>
         </classes>
     </test>
 </suite>

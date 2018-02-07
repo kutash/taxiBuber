@@ -13,23 +13,101 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}css/app.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/flag-icon-css-master/css/flag-icon.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}css/fontawesome-free-5.0.4/web-fonts-with-css/css/fontawesome-all.css">
     <script src="${pageContext.request.contextPath}/js/jquery.js"></script>
     <script src="${pageContext.request.contextPath}/js/trips.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
 </head>
 <body>
-    <jsp:include page="/jsp/user/header.jsp"/>
-    <form action="${switchLanguage}" method="post" id="l"></form>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="${home}"><span class="glyphicon glyphicon-home"></span> <fmt:message key="label.title"/></a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li>
+                    <c:url var="showUsers" value="controller">
+                        <c:param name="command" value="show_users"/>
+                    </c:url>
+                    <a href="${showUsers}"><fmt:message key="label.users"/></a>
+                </li>
+                <li>
+                    <c:url var="showTrips" value="controller">
+                        <c:param name="command" value="trips"/>
+                    </c:url>
+                    <a href="${showTrips}"><fmt:message key="label.trips"/></a>
+                </li>
+                <li>
+                    <form class="navbar-form navbar-search" role="search">
+                        <input type="hidden" id="parameter">
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-search btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                    <span class="label-icon"><fmt:message key="label.search"/></span>
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu pull-left" role="menu">
+                                    <li>
+                                        <a href="#">
+                                            <span class="glyphicon glyphicon-user"></span>
+                                            <span class="label-icon"><fmt:message key="label.searchbyname"/></span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <span class="glyphicon glyphicon-home"></span>
+                                            <span class="label-icon"><fmt:message key="label.searchbyaddress"/></span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                            <span class="label-icon"><fmt:message key="label.searchbydate"/></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <input type="text" class="form-control" id="search-input" style="width: 250px;height: 33px;">
+                        </div>
+                    </form>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <span class="user-name">${currentUser.name}</span>
+                    <img src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${currentUser.photoPath}&amp;userId=${currentUser.id}"  id="header-photo" width="30px" height="30px"/>
+                </li>
+                <li>
+                    <c:url var="logout" value="controller">
+                        <c:param name="command" value="logout"/>
+                    </c:url>
+                    <a href="${logout}"><span class="glyphicon glyphicon-log-out"></span> <fmt:message key="label.logout"/></a>
+                </li>
+                <li class="lang">
+                    <form method="post">
+                        <select id="language" name="language" onchange="submit()" class="selectpicker show-tick" data-width="fit">
+                            <option data-content='<span class="flag-icon flag-icon-ru"></span> Ru' value="ru" ${language == 'ru' ? 'selected' : ''}>Ru</option>
+                            <option data-content='<span class="flag-icon flag-icon-us"></span> En' value="en" ${language == 'en' ? 'selected' : ''}>En</option>
+                        </select>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
     <div class="container">
         <div>
-            <table class="table table-hover" id="users-table">
+            <table class="table table-hover" id="trips-table">
                 <thead>
                 <tr>
                     <th><fmt:message key="label.price"/></th>
                     <th><fmt:message key="label.date"/></th>
                     <th><fmt:message key="label.distance"/></th>
-                    <th><fmt:message key="label.source"/></th>
-                    <th><fmt:message key="label.destination"/></th>
+                    <th><span><fmt:message key="label.source"/></span></th>
+                    <th><span><fmt:message key="label.destination"/></span></th>
                     <th><fmt:message key="label.status"/></th>
                     <c:if test="${currentUser.role == 'ADMIN'}">
                         <th><fmt:message key="label.driver"/></th>
@@ -49,20 +127,22 @@
                 <c:forEach var="trip" items="${trips}">
                     <tr>
                         <td><c:out value="${trip.price}"/></td>
-                        <td><c:out value="${trip.date}"/></td>
+                        <td class="date"><c:out value="${trip.date}"/></td>
                         <td><c:out value="${trip.distance}"/></td>
-                        <td><c:out value="${trip.departure.address}"/></td>
-                        <td><c:out value="${trip.destination.address}"/></td>
+                        <td class="address">
+                            <c:out value="${trip.departure.address}"/>
+                        </td>
+                        <td class="address2"><c:out value="${trip.destination.address}"/></td>
                         <td><c:out value="${trip.status}"/></td>
                         <c:if test="${currentUser.role == 'ADMIN'}">
-                            <td>
+                            <td class="name">
                                 <c:url var="edit" value="controller">
                                     <c:param name="command" value="edit"/>
                                     <c:param name="userId" value="${trip.driverId}"/>
                                 </c:url>
                                 <a href="${edit}"><c:out value="${trip.driverName}"/></a>
                             </td>
-                            <td>
+                            <td class="name">
                                 <c:url var="edit" value="controller">
                                     <c:param name="command" value="edit"/>
                                     <c:param name="userId" value="${trip.clientId}"/>
@@ -71,7 +151,7 @@
                             </td>
                         </c:if>
                         <c:if test="${currentUser.role == 'DRIVER'}">
-                            <td><c:out value="${trip.clientName}"/></td>
+                            <td class="name"><c:out value="${trip.clientName}"/></td>
                             <td>
                                 <a class="comment-link" id="${trip.clientId}" href="javascript:{}">
                                     <i class="fa fa-commenting-o" aria-hidden="true"></i>
@@ -79,7 +159,7 @@
                             </td>
                         </c:if>
                         <c:if test="${currentUser.role == 'CLIENT'}">
-                            <td><c:out value="${trip.driverName}"/></td>
+                            <td class="name"><c:out value="${trip.driverName}"/></td>
                             <td>
                                 <a class="comment-link" id="${trip.driverId}" href="javascript:{}">
                                     <i class="fa fa-commenting-o" aria-hidden="true"></i>

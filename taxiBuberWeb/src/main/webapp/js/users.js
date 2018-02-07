@@ -112,12 +112,36 @@ $(document).ready(function () {
         $('#search').text($(this).text());
     });
 
-    $("#end").on("keyup", function() {
+    $("#search-input").on("keyup", function() {
         var value = $(this).val().toLowerCase();
-        $("#users-table").find('tr').children('.'+$('#search').text()).filter(function() {
-            console.log($(this).text());
-            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
+        var parameter = $('#parameter').val();
+        if (parameter === ''){
+            $("#content").find('tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        }else {
+            $("#content").find('tr').children('.' + parameter).filter(function () {
+                $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        }
+    });
+
+    $(".input-group-btn .dropdown-menu li a").click(function(){
+        var search = $(this).children('.label-icon').html();
+        var selText = $(this).html();
+        if(search === 'Search By Name' || search === 'Поиск по Имени') {
+            $('#parameter').val('name');
+        }else if(search === 'Search By Email' || search === 'Поиск по Email') {
+            $('#parameter').val('email');
+        }else if(search === 'Search By Date' || search === 'Поиск по Дате') {
+            $('#parameter').val('date');
+        }
+        $(this).parents('.input-group-btn').find('.btn-search').html(selText);
     });
 });
+
+/*$(function(){
+
+
+});*/
 

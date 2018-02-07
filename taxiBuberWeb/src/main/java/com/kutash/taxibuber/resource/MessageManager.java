@@ -8,7 +8,6 @@ public class MessageManager {
     private ResourceBundle resourceBundle;
 
     public MessageManager(String locale) {
-        System.out.println(locale);
         Locale.setDefault(new Locale("en", "US"));
         if (locale != null) {
             String[] country = locale.split("_");

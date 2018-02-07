@@ -30,7 +30,7 @@ class ConnectionCreator {
         }
     }
 
-    Connection getConnection() {
+    public Connection getConnection() {
         Connection connection ;
         try {
             connection = DriverManager.getConnection(url,properties);
