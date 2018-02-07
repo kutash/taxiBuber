@@ -44,7 +44,6 @@ public class CostCalculator {
         double duration = Double.parseDouble(durationStr);
         double capacityCost = defineCapacityCost(carCapacity);
         BigDecimal cost = calculateTotalCost(distance, duration, capacityCost);
-        System.out.println(cost);
         return cost.toString();
     }
 

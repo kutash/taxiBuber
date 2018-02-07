@@ -6,6 +6,7 @@
             <class name="com.kutash.test.util.CostCalculatorTest"/>
             <class name="com.kutash.test.util.PasswordEncryptorTest"/>
             <class name="com.kutash.test.util.DateParserTest"/>
+            <class name="com.kutash.test.util.ValidatorTest"/>
         </classes>
     </test>
 </suite>

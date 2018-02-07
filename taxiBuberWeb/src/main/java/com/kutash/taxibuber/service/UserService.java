@@ -215,7 +215,7 @@ public class UserService extends AbstractService<User>{
             if (user.getRole().equals(UserRole.DRIVER)) {
                 Car car = carDAO.findEntityByUserId(id);
                 if (car != null) {
-                    if (user.getStatus().equals(Status.ACTIVE)) {
+                    if (user.getStatus().equals(Status.BANNED)) {
                         car.setStatus(Status.BANNED);
                     } else {
                         car.setStatus(Status.ACTIVE);

@@ -70,7 +70,7 @@
                 <a href="${logout}"><span class="glyphicon glyphicon-log-out"></span> <fmt:message key="label.logout"/></a>
             </li>
             <li class="lang">
-                <select id="language" name="language" onchange="submit()" class="selectpicker show-tick" data-width="fit">
+                <select id="language" name="language" onchange="submit()" class="selectpicker show-tick" data-width="fit" form="l">
                     <option data-content='<span class="flag-icon flag-icon-ru"></span> Ru' value="ru" ${language == 'ru' ? 'selected' : ''}>Ru</option>
                     <option data-content='<span class="flag-icon flag-icon-us"></span> En' value="en" ${language == 'en' ? 'selected' : ''}>En</option>
                 </select>

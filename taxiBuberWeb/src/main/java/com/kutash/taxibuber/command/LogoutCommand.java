@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class LogoutCommand implements Command {
 
@@ -26,12 +27,14 @@ public class LogoutCommand implements Command {
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"Log out");
         Router router = new Router();
-        User user = (User) request.getSession().getAttribute(CURRENT_USER);
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute(CURRENT_USER);
         if (user.getRole().equals(UserRole.DRIVER)) {
             loginService.logOut(user.getId());
         }
+        session.removeAttribute("currentUser");
+        session.invalidate();
         router.setPage(PageManager.getProperty("path.page.index"));
-        request.getSession().invalidate();
         return router;
     }
 }

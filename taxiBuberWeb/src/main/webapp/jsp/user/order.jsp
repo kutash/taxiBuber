@@ -30,7 +30,7 @@
                 <a href="#" class="close" id="alert" aria-label="close">&times;</a>
                 <div id="message-cars">
                     <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                    <span style="font-size: 20px"><fmt:message key="label.emptyCar"/></span>
+                    <span style="font-size: 20px"><fmt:message key="label.emptycar"/></span>
                 </div>
             </div>
             <div class="row">
@@ -49,7 +49,7 @@
                             <label class="control-label col-sm-3" for="end"><fmt:message key="label.destination"/>:</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
-                                    <input type="text" id="end" name="end" class="form-control" aria-label="..." required="required" value="<c:out value="${destination}"/>">
+                                    <input type="text" id="end" name="end" class="form-control" aria-label="..." required="required" value="<c:out value="${destination}"/>" style="height: 33px">
                                     <div class="input-group-btn">
                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Address <span class="caret"></span></button>
                                         <ul class="dropdown-menu dropdown-menu-right">

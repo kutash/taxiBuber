@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.concurrent.TimeUnit;
 
 public class LoginCommand implements Command {
 
@@ -44,14 +45,17 @@ public class LoginCommand implements Command {
                 switch (userRole) {
                     case ADMIN:
                         request.getSession().setAttribute("currentUser", user);
+                        request.getSession().setMaxInactiveInterval(30*60);
                         router.setPage(PageManager.getProperty("path.command.users"));
                         break;
                     case CLIENT:
                         request.getSession().setAttribute("currentUser", user);
+                        request.getSession().setMaxInactiveInterval(5*60);
                         router.setPage(PageManager.getProperty("path.command.main"));
                         break;
                     case DRIVER:
                         request.getSession().setAttribute("currentUser", user);
+                        request.getSession().setMaxInactiveInterval(60*60);
                         router.setPage(PageManager.getProperty("path.command.main"));
                         break;
                 }

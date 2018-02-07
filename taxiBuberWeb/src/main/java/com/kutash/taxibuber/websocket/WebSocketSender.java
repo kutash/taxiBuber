@@ -3,7 +3,10 @@ package com.kutash.taxibuber.websocket;
 import com.google.gson.Gson;
 import com.kutash.taxibuber.entity.Trip;
 import com.kutash.taxibuber.entity.User;
-import javax.websocket.*;
+import javax.websocket.EndpointConfig;
+import javax.websocket.OnClose;
+import javax.websocket.Session;
+import javax.websocket.OnOpen;
 import javax.websocket.server.ServerEndpoint;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
@@ -13,9 +16,6 @@ import java.util.stream.Collectors;
 public class WebSocketSender {
 
     private final static ReentrantLock lock = new ReentrantLock();
-    private static final String LATITUDE = "latitude";
-    private static final String LONGITUDE = "longitude";
-    private static final String CAPACITY = "capacity";
     private PushContext pushContext = PushContext.getInstance();
 
 

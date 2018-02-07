@@ -22,7 +22,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="padding-bottom: 2px">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="${home}"><span class="glyphicon glyphicon-home"></span> <fmt:message key="label.title"/></a>
@@ -51,12 +51,30 @@
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu pull-left" role="menu">
-                                    <li>
-                                        <a href="#">
-                                            <span class="glyphicon glyphicon-user"></span>
-                                            <span class="label-icon"><fmt:message key="label.searchbyname"/></span>
-                                        </a>
-                                    </li>
+                                    <c:if test="${currentUser.role == 'ADMIN'}">
+                                        <li>
+                                            <a href="#">
+                                                <span class="glyphicon glyphicon-user"></span>
+                                                <span class="label-icon"><fmt:message key="label.searchbyname"/></span>
+                                            </a>
+                                        </li>
+                                    </c:if>
+                                    <c:if test="${currentUser.role == 'DRIVER'}">
+                                        <li>
+                                            <a href="#">
+                                                <span class="glyphicon glyphicon-user"></span>
+                                                <span class="label-icon"><fmt:message key="label.searchbyclient"/></span>
+                                            </a>
+                                        </li>
+                                    </c:if>
+                                    <c:if test="${currentUser.role == 'CLIENT'}">
+                                        <li>
+                                            <a href="#">
+                                                <span class="glyphicon glyphicon-user"></span>
+                                                <span class="label-icon"><fmt:message key="label.searchbydriver"/></span>
+                                            </a>
+                                        </li>
+                                    </c:if>
                                     <li>
                                         <a href="#">
                                             <span class="glyphicon glyphicon-home"></span>
@@ -142,7 +160,7 @@
                                 </c:url>
                                 <a href="${edit}"><c:out value="${trip.driverName}"/></a>
                             </td>
-                            <td class="name">
+                            <td class="name2">
                                 <c:url var="edit" value="controller">
                                     <c:param name="command" value="edit"/>
                                     <c:param name="userId" value="${trip.clientId}"/>
@@ -151,18 +169,18 @@
                             </td>
                         </c:if>
                         <c:if test="${currentUser.role == 'DRIVER'}">
-                            <td class="name"><c:out value="${trip.clientName}"/></td>
+                            <td class="client"><c:out value="${trip.clientName}"/></td>
                             <td>
                                 <a class="comment-link" id="${trip.clientId}" href="javascript:{}">
-                                    <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                                    <i class="far fa-comment-alt"></i>
                                 </a>
                             </td>
                         </c:if>
                         <c:if test="${currentUser.role == 'CLIENT'}">
-                            <td class="name"><c:out value="${trip.driverName}"/></td>
+                            <td class="driver"><c:out value="${trip.driverName}"/></td>
                             <td>
                                 <a class="comment-link" id="${trip.driverId}" href="javascript:{}">
-                                    <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                                    <i class="far fa-comment-alt"></i>
                                 </a>
                             </td>
                         </c:if>
@@ -170,7 +188,6 @@
                 </c:forEach>
                 </tbody>
             </table>
-            <div id="pager"><fmt:message key="label.page"/>: </div>
         </div>
     </div>
     <!-- Modal -->
@@ -181,7 +198,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close cancel" data-dismiss="modal">&times;</button>
-                    <h4 style="font-size: 30px" class="modal-title"><i class="fa fa-comments-o" aria-hidden="true"></i> <fmt:message key="label.comment"/></h4>
+                    <h4 style="font-size: 30px" class="modal-title"><i class="far fa-comment-alt"></i> <fmt:message key="label.comment"/></h4>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" action="controller" method="post" id="comment-form">

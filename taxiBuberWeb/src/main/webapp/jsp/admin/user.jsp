@@ -22,11 +22,11 @@
     </head>
     <body>
     <jsp:include page="/jsp/user/header.jsp"/>
-    <c:url var="switchLanguage" value="controller" scope="page">
+    <%--<c:url var="switchLanguage" value="controller" scope="page">
         <c:param name="command" value="edit"/>
         <c:param name="userId" value="${user.id}"/>
-    </c:url>
-    <form action="${switchLanguage}" method="post" id="l"></form>
+    </c:url>--%>
+    <form method="post" id="l"></form>
     <form action="controller" method="post" id="cancelCarForm">
         <input type="hidden" name="command" value="cancel">
         <input type="hidden" value="${user.id}" name="userId">
@@ -164,7 +164,7 @@
                                     <label class="control-label col-sm-3" for="email"><fmt:message key="label.car"/>:</label>
                                     <div class="col-sm-7" style="margin-top: 2px">
                                         <c:if test="${car != null}">
-                                            <a href="#" data-toggle="modal" data-target="#modal-car" id="car" style="font-size: 16px;margin-right: 72%;">${car.brand.name } ${car.model}</a>
+                                            <a href="#" data-toggle="modal" data-target="#modal-car" id="car" style="font-size: 17px;float: left">${car.brand.name } ${car.model}</a>
                                         </c:if>
                                         <c:if test="${car == null}">
                                             <fmt:message key="label.nocar"/>

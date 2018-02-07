@@ -30,7 +30,7 @@ public class Validator {
     private static final String SPACE = "\\s";
     private static final String DIGIT = "\\d+";
 
-    public Map<String,String> validateUser(Map<String,String> data,String language){
+    public HashMap<String,String> validateUser(HashMap<String,String> data,String language){
         LOGGER.log(Level.DEBUG,"validating user");
         MessageManager messageManager = new MessageManager(language);
         Pattern patternName = Pattern.compile(NAME);
@@ -47,7 +47,7 @@ public class Validator {
         String role = data.get("role");
         String passwordConfirm = data.get("passwordConfirm");
 
-        Map<String, String> map = new HashMap<>();
+        HashMap<String, String> map = new HashMap<>();
         if (StringUtils.isNotEmpty(name)){
             Matcher nameMatcher = patternName.matcher(name);
             if (!nameMatcher.matches()){
@@ -128,11 +128,11 @@ public class Validator {
         return map;
     }
 
-    public Map<String,String> checkPassword(String password,String passwordConfirm,String language){
+    public HashMap<String,String> checkPassword(String password,String passwordConfirm,String language){
         LOGGER.log(Level.DEBUG,"validating password");
         MessageManager messageManager = new MessageManager(language);
         Pattern patternPassword = Pattern.compile(PASSWORD);
-        Map<String, String> map = new HashMap<>();
+        HashMap<String, String> map = new HashMap<>();
         Matcher passwordMatcher = patternPassword.matcher(password);
         if (StringUtils.isEmpty(password) || !passwordMatcher.matches()) {
             map.put("password", messageManager.getProperty("label.invalidpsw"));
@@ -145,7 +145,7 @@ public class Validator {
         return map;
     }
 
-    public Map<String,String> validateCar(Map<String,String> data ,String language) {
+    public HashMap<String,String> validateCar(HashMap<String,String> data ,String language) {
         LOGGER.log(Level.DEBUG, "validating car");
         MessageManager messageManager = new MessageManager(language);
         Pattern patternNumber = Pattern.compile(NUMBER);
@@ -155,7 +155,7 @@ public class Validator {
         String model = data.get("model");
         String brand = data.get("brand");
         String capacity = data.get("capacity");
-        Map<String, String> map = new HashMap<>();
+        HashMap<String, String> map = new HashMap<>();
         CarService service = new CarService();
 
         if (StringUtils.isNotEmpty(number)) {
@@ -198,7 +198,7 @@ public class Validator {
         HashMap<String, String> map = new HashMap<>();
         MessageManager messageManager = new MessageManager(language);
         if (StringUtils.isEmpty(data.get("carId"))){
-            map.put("emptyCar",messageManager.getProperty("label.emptyCar"));
+            map.put("emptyCar",messageManager.getProperty("label.emptycar"));
         }
         if (StringUtils.isEmpty(data.get("duration")) || StringUtils.isEmpty(data.get("distance"))) {
             map.put("distance", messageManager.getProperty("message.wrongorder"));

@@ -50,8 +50,8 @@ public class SaveUserCommand implements Command {
         String language = (String) request.getSession().getAttribute(LANGUAGE);
         Router router = new Router();
         User user;
-        Map<String,String> userData = getData(request);
-        Map<String,String> errors = new Validator().validateUser(userData,language);
+        HashMap<String,String> userData = getData(request);
+        HashMap<String,String> errors = new Validator().validateUser(userData,language);
         if (!errors.isEmpty()){
             user = new User(userData.get("name"),userData.get("surname"),userData.get("patronymic"),userData.get("email"),userData.get("password"),userData.get("phone"));
             request.setAttribute("birthday",userData.get("birthday"));

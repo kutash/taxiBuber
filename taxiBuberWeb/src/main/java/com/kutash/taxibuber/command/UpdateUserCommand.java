@@ -16,7 +16,6 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 public class UpdateUserCommand implements Command {
 
@@ -46,8 +45,8 @@ public class UpdateUserCommand implements Command {
         Router router = new Router();
         String userId = request.getParameter(USER_ID);
         User user = userService.findUser(userId);
-        Map<String, String> userData = getData(request);
-        Map<String, String> errors = new Validator().validateUser(userData, language);
+        HashMap<String, String> userData = getData(request);
+        HashMap<String, String> errors = new Validator().validateUser(userData, language);
         if (!errors.isEmpty()) {
             user.setName(userData.get("name"));
             user.setSurname(userData.get("surname"));
@@ -71,22 +70,6 @@ public class UpdateUserCommand implements Command {
             router.setRoute(Router.RouteType.REDIRECT);
             router.setPage(PageManager.getProperty("path.command.edit")+user.getId());
         }
-
-        /*StringBuffer switchLanguage = request.getRequestURL();
-        switchLanguage.append("?");
-        Map<String, String[]> parameters = request.getParameterMap();
-        for (Map.Entry entry: parameters.entrySet()) {
-            String key = (String) entry.getKey();
-            if (!key.equals("language")) {
-                String[] value = (String[]) entry.getValue();
-                switchLanguage.append(key);
-                switchLanguage.append("=");
-                switchLanguage.append(value[0]);
-                switchLanguage.append("&");
-            }
-        }
-        switchLanguage.delete(switchLanguage.length()-1,switchLanguage.length());
-        request.getSession().setAttribute("switchLanguage2",switchLanguage);*/
         return router;
     }
 

@@ -20,7 +20,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
     </head>
     <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="padding-bottom: 2px">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="${home}"><span class="glyphicon glyphicon-home"></span> <fmt:message key="label.title"/></a>
@@ -142,7 +142,6 @@
                         </c:forEach>
                     </tbody>
                 </table>
-                <div id="pager"><fmt:message key="label.page"/>: </div>
             </div>
         </div>
         <div class="footer">

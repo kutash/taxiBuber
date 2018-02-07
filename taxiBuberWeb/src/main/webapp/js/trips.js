@@ -105,18 +105,18 @@ $(document).ready(function(){
             $("#content").find('tr').filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
-        }else {
+        }else if (parameter === 'date' ||  parameter === 'client' || parameter === 'driver'){
             $("#content").find('tr').children('.' + parameter).filter(function () {
-                console.log($(this).text());
+                $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        }
+        else {
+            $("#content").find('tr').children('.' + parameter).filter(function () {
                 if(($(this).text().toLowerCase().indexOf(value) === -1)){
-                    if ($(this).parent().has('.'+ parameter + '2')) {
-                        $(this).parent().children('.' + parameter + '2').filter(function () {
-                            console.log($(this).text());
-                            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                        });
-                    }else {
-                        $(this).parent().toggle(false)
-                    }
+                    $(this).parent().children('.' + parameter + '2').filter(function () {
+                        console.log($(this).text());
+                        $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
                 }else {
                     $(this).parent().toggle(true)
                 }
@@ -129,6 +129,10 @@ $(document).ready(function(){
         var selText = $(this).html();
         if(search === 'Search By Name' || search === 'Поиск по Имени') {
             $('#parameter').val('name');
+        }else if(search === 'Search By Driver' || search === 'Поиск по Водителю') {
+            $('#parameter').val('driver');
+        }else if(search === 'Search By Client' || search === 'Поиск по Клиенту') {
+            $('#parameter').val('client');
         }else if(search === 'Search By Address' || search === 'Поиск по Адресу') {
             $('#parameter').val('address');
         }else if(search === 'Search By Date' || search === 'Поиск по Дате') {
