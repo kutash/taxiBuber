@@ -13,8 +13,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}css/app.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}css/fontawesome-free-5.0.4/web-fonts-with-css/css/fontawesome-all.css">
-        <script type="text/javascript" src="${pageContext.request.contextPath}/js/order.js"></script>
         <script src="${pageContext.request.contextPath}/js/jquery.js"></script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/js/order.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
@@ -158,7 +158,6 @@
             <div class="modal-dialog modal-sm">
                 <div class="modal-content modal-message">
                     <div class="modal-body modal-message-body">
-                        <div class="message" id="message-success" style="display: none"><fmt:message key="message.ordersuccess"/></div>
                         <div class="message" id="message-source" style="display: none"><fmt:message key="label.sourceerror"/></div>
                         <div class="message" id="message-destination" style="display: none"><fmt:message key="label.desterror"/></div>
                         <div class="message" id="message-car" style="display: none"><fmt:message key="label.carerror"/></div>
@@ -166,18 +165,7 @@
                 </div>
             </div>
         </div>
-
-        <%--<!-- Modal waiting-->
-        <div class="modal fade" id="modal-waiting" role="dialog">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content modal-message">
-                    <div class="modal-body modal-message-body">
-                        <div><i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i></div>
-                        <div id="waiting-message"><fmt:message key="message.waiting"/></div>
-                    </div>
-                </div>
-            </div>
-        </div>--%>
+        <jsp:include page="/jsp/user/modal_order.jsp"/>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWwujQHc9yN2BSlbT_L0-L7VLlQAYnUUg&libraries=places&callback=initMap"></script>
     </body>
 </html>

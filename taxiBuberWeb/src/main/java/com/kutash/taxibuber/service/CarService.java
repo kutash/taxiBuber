@@ -315,6 +315,7 @@ public class CarService extends AbstractService<Car>{
         try {
             transactionManager.beginTransaction(carDAO);
             car = carDAO.findEntityById(Integer.parseInt(carId));
+            new FileManager().deleteFile(car.getPhotoPath(),car.getUserId());
             car.setStatus(Status.ARCHIVED);
             carDAO.update(car);
             transactionManager.commit();

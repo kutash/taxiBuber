@@ -1,27 +1,32 @@
-var latitude;
-var longitude;
-var map;
-var markerArray = [];
-
 var ws = new WebSocket("ws://localhost:8080/socket");
 ws.onmessage = function(event) {
-    var modalMessage = $('#modal-message');
-    modalMessage.modal('show');
-    var trip = JSON.parse(event.data);
-    document.getElementById("tripId").value = trip.id;
-    document.getElementById("start").value = trip.departure.address;
-    document.getElementById("end").value = trip.destination.address;
+    if(event.data === 'timeout'){
+        ws.close();
+        window.location.href = "http://localhost:8080/index.jsp";
+    }else {
+        var modalMessage = $('#modal-order');
+        modalMessage.modal('show');
+        document.getElementById('message-driver').style.display = 'block';
+        var trip = JSON.parse(event.data);
+        document.getElementById("tripId").value = trip.id;
+        document.getElementById("start").value = trip.departure.address;
+        document.getElementById("end").value = trip.destination.address;
+    }
 };
 
 ws.onerror = function(event){
     console.log("Error ", event)
 };
 
+ws.onclose = function() {
+    console.log("connection closed");
+};
+
 window.onload = function () {
 
-    /*if(document.getElementById('work').checked && document.getElementById("tripId").value === ''){
-        isWorking = true;
-    }*/
+    window.onbeforeunload = function () {
+        ws.close();
+    };
 
     var begin = document.getElementById("begin");
     begin.addEventListener('click',function () {
@@ -33,28 +38,27 @@ window.onload = function () {
             url: "ajaxController?command=start_trip&tripId="+id,
             contentType: 'application/json'
         }).done(function(results){
-
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    latitude = position.coords.latitude;
+                    longitude = position.coords.longitude;
+                    var latLng = new google.maps.LatLng(latitude, longitude);
+                    var directionsService = new google.maps.DirectionsService();
+                    var directionsDisplay = new google.maps.DirectionsRenderer({'draggable': false});
+                    directionsDisplay.setMap(map);
+                    var stepDisplay = new google.maps.InfoWindow;
+                    calculateAndDisplayRoute(directionsService, directionsDisplay, latLng, stepDisplay);
+                }, function () {
+                    handleLocationError(true, infoWindow, map.getCenter());
+                });
+            } else {
+                handleLocationError(false, infoWindow, map.getCenter());
+            }
         });
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var pos = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-                latitude = position.coords.latitude;
-                longitude = position.coords.longitude;
-                var latLng = new google.maps.LatLng(latitude, longitude);
-                var directionsService = new google.maps.DirectionsService();
-                var directionsDisplay = new google.maps.DirectionsRenderer({'draggable': false});
-                directionsDisplay.setMap(map);
-                var stepDisplay = new google.maps.InfoWindow;
-                calculateAndDisplayRoute(directionsService, directionsDisplay, latLng, stepDisplay);
-            }, function () {
-                handleLocationError(true, infoWindow, map.getCenter());
-            });
-        } else {
-            handleLocationError(false, infoWindow, map.getCenter());
-        }
     });
 
     var complete = document.getElementById("complete");
@@ -149,42 +153,6 @@ function setAvailable(isAvailable) {
             }
         }
     });
-
-    /*$.ajax({
-        type:"GET",
-        url: "ajaxController?command=set_available&carId="+carId+"&isAvailable="+isAvailable,
-        contentType: 'application/json'
-    }).done(function(result){
-        if(result === 'no car'){
-            document.getElementById('no-car').style.display = 'block';
-            document.getElementById('start-work').style.display = 'block';
-            document.getElementById('stop-work').style.display = 'none';
-            document.getElementById('work').checked = false;
-        }else {
-            setCarCoordinates(latitude,longitude);
-            isWorking = true;
-        }
-    });*/
-}
-
-function getNewOrder() {
-    var carId = document.getElementById('car-id').value;
-    if(isWorking && carId > 0) {
-        $.ajax({
-            type: "GET",
-            url: "ajaxController?command=new_order&carId="+carId,
-            contentType: 'application/json'
-        }).done(function (result) {
-            if (result !== 'no trips') {
-                isWorking = false;
-                var modalMessage = $('#modal-message');
-                modalMessage.modal('show');
-                document.getElementById("tripId").value = result.id;
-                document.getElementById("start").value = result.departure.address;
-                document.getElementById("end").value = result.destination.address;
-            }
-        });
-    }
 }
 
 function setCarCoordinates(latitude,longitude) {
@@ -204,6 +172,12 @@ function setCarCoordinates(latitude,longitude) {
         }
     });
 }
+
+var latitude;
+var longitude;
+var map;
+var markerArray = [];
+
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {

@@ -60,12 +60,11 @@ public class PasswordEncryptor {
 
     private Cipher ecipher;
 
-    public String encrypt(String str) {
+    public byte[] encrypt(byte[] utf8) {
         try {
-            byte[] utf8 = str.getBytes("UTF8");
             byte[] enc = ecipher.doFinal(utf8);
-            return Base64.encodeBase64String(enc);
-        } catch (IllegalBlockSizeException | BadPaddingException | UnsupportedEncodingException e) {
+            return Base64.encodeBase64(enc);
+        } catch (IllegalBlockSizeException | BadPaddingException e) {
             LOGGER.catching(org.apache.logging.log4j.Level.ERROR, e);
         }
         return null;

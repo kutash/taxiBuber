@@ -39,9 +39,9 @@ public class ChangePasswordCommand implements Command {
         session.removeAttribute("updatedUser");
         User user = (User) session.getAttribute(CURRENT_USER);
         String language = (String) session.getAttribute(LANGUAGE);
-        String oldPassword = request.getParameter(OLD_PASSWORD);
-        String password = request.getParameter(PASSWORD);
-        String passwordConfirm = request.getParameter(PASSWORD_CONFIRM);
+        byte[] oldPassword = request.getParameter(OLD_PASSWORD).getBytes();
+        byte[] password = request.getParameter(PASSWORD).getBytes();
+        byte[] passwordConfirm = request.getParameter(PASSWORD_CONFIRM).getBytes();
         Map<String,String> errors = userService.changePassword(user,oldPassword,password,passwordConfirm,language);
         if (errors.isEmpty()){
             session.setAttribute("updatePassword",new MessageManager(language).getProperty("message.pswupdated"));

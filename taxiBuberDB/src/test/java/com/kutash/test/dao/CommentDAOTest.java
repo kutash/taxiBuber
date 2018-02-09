@@ -20,7 +20,7 @@ import org.testng.annotations.Test;
 import static org.junit.Assert.assertEquals;
 
 
-public class CommentDAOTest {
+/*public class CommentDAOTest {
 
     private static final String DROP_DB = "DROP DATABASE `taxi_buber_test`";
     private Connection connection;
@@ -91,4 +91,4 @@ public class CommentDAOTest {
         dropDB.executeUpdate();
         connection.close();
     }
-}
+}*/

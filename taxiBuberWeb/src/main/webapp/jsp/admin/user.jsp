@@ -296,5 +296,6 @@
             </div>
         </div>
         <jsp:include page="/jsp/user/modal_car.jsp"/>
+        <jsp:include page="/jsp/user/modal_order.jsp"/>
     </body>
 </html>

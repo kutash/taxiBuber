@@ -29,8 +29,10 @@ public class LogoutCommand implements Command {
         Router router = new Router();
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(CURRENT_USER);
-        if (user.getRole().equals(UserRole.DRIVER)) {
-            loginService.logOut(user.getId());
+        if(user != null) {
+            if (user.getRole().equals(UserRole.DRIVER)) {
+                loginService.logOut(user.getId());
+            }
         }
         session.removeAttribute("currentUser");
         session.invalidate();

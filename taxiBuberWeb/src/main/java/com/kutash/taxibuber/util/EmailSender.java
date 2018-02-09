@@ -13,13 +13,14 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 public class EmailSender {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public void sendNewPassword(User user, String language){
+    public void sendNewPassword(User user,String language){
         final Properties properties = EmailManager.getInstance().getProperties();
         final String sender = properties.getProperty("mail.user.name");
         final String password = properties.getProperty("mail.user.password");
@@ -37,7 +38,14 @@ public class EmailSender {
         }else {
             st = group.getInstanceOf("template2");
         }
+        String newPassword = null;
+        try {
+            newPassword = new String(user.getPassword(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            LOGGER.catching(Level.ERROR,e);
+        }
         st.add("user", user);
+        st.add("password",newPassword);
         sendEmail(user.getEmail(), theme, st.render(), properties, session);
     }
 

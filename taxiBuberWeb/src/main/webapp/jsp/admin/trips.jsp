@@ -28,18 +28,41 @@
                 <a class="navbar-brand" href="${home}"><span class="glyphicon glyphicon-home"></span> <fmt:message key="label.title"/></a>
             </div>
             <ul class="nav navbar-nav">
-                <li>
-                    <c:url var="showUsers" value="controller">
-                        <c:param name="command" value="show_users"/>
-                    </c:url>
-                    <a href="${showUsers}"><fmt:message key="label.users"/></a>
-                </li>
-                <li>
-                    <c:url var="showTrips" value="controller">
-                        <c:param name="command" value="trips"/>
-                    </c:url>
-                    <a href="${showTrips}"><fmt:message key="label.trips"/></a>
-                </li>
+                <c:if test="${currentUser.role == 'ADMIN'}">
+                    <li>
+                        <c:url var="showUsers" value="controller">
+                            <c:param name="command" value="show_users"/>
+                        </c:url>
+                        <a href="${showUsers}"><fmt:message key="label.users"/></a>
+                    </li>
+                    <li>
+                        <c:url var="showTrips" value="controller">
+                            <c:param name="command" value="trips"/>
+                        </c:url>
+                        <a href="${showTrips}"><fmt:message key="label.trips"/></a>
+                    </li>
+                </c:if>
+                <c:if test="${currentUser.role == 'DRIVER' || currentUser.role == 'CLIENT'}">
+                    <li>
+                        <c:url var="main" value="controller">
+                            <c:param name="command" value="main"/>
+                        </c:url>
+                        <a href="${main}"><fmt:message key="label.order"/></a>
+                    </li>
+                    <li>
+                        <c:url var="edit" value="controller">
+                            <c:param name="command" value="edit"/>
+                            <c:param name="userId" value="${currentUser.id}"/>
+                        </c:url>
+                        <a href="${edit}"><fmt:message key="label.profile"/></a>
+                    </li>
+                    <li>
+                        <c:url var="showTrips" value="controller">
+                            <c:param name="command" value="trips"/>
+                        </c:url>
+                        <a href="${showTrips}"><fmt:message key="label.trips"/></a>
+                    </li>
+                </c:if>
                 <li>
                     <form class="navbar-form navbar-search" role="search">
                         <input type="hidden" id="parameter">
@@ -117,6 +140,7 @@
         </div>
     </nav>
     <div class="container">
+        <div id="current-user" style="display: none">${currentUser.role}</div>
         <div>
             <table class="table table-hover" id="trips-table">
                 <thead>
@@ -262,5 +286,6 @@
             </div>
         </div>
     </div>
+    <jsp:include page="/jsp/user/modal_order.jsp"/>
 </body>
 </html>

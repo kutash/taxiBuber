@@ -1,5 +1,6 @@
 var ws = new WebSocket("ws://localhost:8080/socket");
 ws.onmessage = function(event) {
+    console.log(event.data);
     if(event.data === 'started') {
         var modalMessage = $('#modal-message');
         modalMessage.modal('show');
@@ -8,8 +9,9 @@ ws.onmessage = function(event) {
             modalMessage.modal("hide");
             document.getElementById('message-success').style.display = 'none';
         }, 2000);
-    }else {
-        console.log(event.data);
+    }else if(event.data === 'timeout'){
+        ws.close();
+        window.location.href = "http://localhost:8080/index.jsp";
     }
 };
 
@@ -17,7 +19,23 @@ ws.onerror = function(event){
     console.log("Error ", event)
 };
 
+ws.onclose = function() {
+    console.log("connection closed");
+};
+
+/*$(document).ready(function() {
+    $(window).on('beforeunload', function () {
+        console.log('end');
+        ws.close();
+    });
+});*/
+
 window.onload = function () {
+
+    window.onbeforeunload = function () {
+        ws.close();
+    };
+
     var addresses = document.querySelectorAll('.address-link');
     for (var i = 0; i < addresses.length; i++) {
         addresses[i].addEventListener('click', function (event) {
@@ -60,16 +78,6 @@ window.onload = function () {
         }
     });
 
-    /*var message = document.getElementById('order-message').innerHTML;
-    if (message !== '' && message !== undefined) {
-        var modalMessage = $('#modal-message');
-        modalMessage.modal('show');
-        setTimeout(function(){
-            modalMessage.modal("hide");
-            document.getElementById('order-message').innerHTML = '';
-        }, 2000);
-    }*/
-
     var dvDistance = document.getElementById("dvDistance");
     var distanceSpan = document.getElementById('distance').innerHTML;
     var durationSpan = document.getElementById('duration').innerHTML;
@@ -79,7 +87,12 @@ window.onload = function () {
     }
 };
 
-setInterval(getAvailableCars, 60000);
+var timerId = setInterval(getAvailableCars, 30000);
+
+setTimeout(function() {
+    console.log("end");
+    clearInterval(timerId);
+}, 60000);
 
 var latitude;
 var longitude;
@@ -301,7 +314,6 @@ function getAvailableCars() {
                     return a - b;
                 });
                 if (changeZoom) {
-                    console.log(distances);
                     if (distances[0] > 15000) {
                         map.setZoom(10);
                     } else if (distances[0] > 10000) {

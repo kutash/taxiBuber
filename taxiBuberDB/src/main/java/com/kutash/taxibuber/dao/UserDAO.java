@@ -7,8 +7,11 @@ import com.kutash.taxibuber.exception.DAOException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.UnsupportedEncodingException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class UserDAO extends AbstractDAO<User> {
@@ -150,7 +153,7 @@ public class UserDAO extends AbstractDAO<User> {
             String phone = resultSet.getString("phone");
             float rating = resultSet.getFloat("rating");
             Status status = Status.valueOf(resultSet.getString("status"));
-            user = new User(idUser, rating, firstName, lastName, middleName, email, password, role, birthday, photoPath,phone,status);
+            user = new User(idUser, rating, firstName, lastName, middleName, email, password.getBytes(), role, birthday, photoPath,phone,status);
         }catch (SQLException e){
             throw new DAOException("Exception while getting user from resultSet",e);
         }
@@ -169,7 +172,11 @@ public class UserDAO extends AbstractDAO<User> {
             }
             preparedStatement.setString(5, entity.getEmail());
             preparedStatement.setString(6, entity.getRole().name());
-            preparedStatement.setString(7, entity.getPassword());
+            try {
+                preparedStatement.setString(7, new String(entity.getPassword(), "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                LOGGER.catching(Level.ERROR,e);
+            }
             preparedStatement.setFloat(8, entity.getRating());
             preparedStatement.setString(9, entity.getPhotoPath());
             preparedStatement.setString(10, entity.getPhone());

@@ -1,5 +1,6 @@
 package com.kutash.test.dao;
 
+/*
 import com.kutash.taxibuber.dao.AddressDAO;
 import com.kutash.taxibuber.dao.DAOFactory;
 import com.kutash.taxibuber.entity.Address;
@@ -77,3 +78,4 @@ public class AddressDAOTest {
         connection.close();
     }
 }
+*/

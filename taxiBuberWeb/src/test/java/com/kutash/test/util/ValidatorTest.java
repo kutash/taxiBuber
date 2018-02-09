@@ -72,16 +72,16 @@ public class ValidatorTest {
         HashMap<String,String> expected4 = new HashMap<>();
         expected4.put("passwordConfirm","Password doesn't match");
         return new Object[][] {
-                {expected1,"1y2u","1y2u","ru"},
-                {expected2,"123qwe","Vb6dozr","ru"},
-                {expected3,"1y2u","1y2u","en"},
-                {expected4,"123qwe","Vb6dozr","en"}};
+                {expected1,"1y2u".getBytes(),"1y2u".getBytes(),"ru"},
+                {expected2,"123qwe".getBytes(),"Vb6dozr".getBytes(),"ru"},
+                {expected3,"1y2u".getBytes(),"1y2u".getBytes(),"en"},
+                {expected4,"123qwe".getBytes(),"Vb6dozr".getBytes(),"en"}};
     }
 
     @Test(dataProvider = "data2")
     public void checkPasswordTest(Object[] data){
         HashMap<String,String> expected = (HashMap<String, String>) data[0];
-        HashMap<String,String> actual = new Validator().checkPassword((String) data[1], (String) data[2],(String) data[3]);
+        HashMap<String,String> actual = new Validator().checkPassword((byte[]) data[1], (byte[]) data[2],(String) data[3]);
         assertEquals(expected,actual);
     }
 

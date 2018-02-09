@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.Part;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class UserService extends AbstractService<User>{
     }
 
     public User saveUser(Map<String,String> userData,Part photoPart){
-        String encryptedPassword = new PasswordEncryptor(userData.get("email")).encrypt(userData.get("password"));
+        byte[] encryptedPassword = new PasswordEncryptor(userData.get("email")).encrypt(userData.get("password").getBytes());
         User user = new User(userData.get("name"),userData.get("surname"),userData.get("patronymic"),userData.get("email"),encryptedPassword,UserRole.valueOf(userData.get("role")), DateParser.parseDate(userData.get("birthday")),userData.get("phone"), Status.ACTIVE);
         TransactionManager transactionManager = new TransactionManager();
         UserDAO userDAO = new DAOFactory().getUserDAO();
@@ -90,10 +91,10 @@ public class UserService extends AbstractService<User>{
         return result;
     }
 
-    public Map<String,String> changePassword(User user, String oldPassword,String password,String passwordConfirm,String language){
-        String encryptedPassword = new PasswordEncryptor(user.getEmail()).encrypt(oldPassword);
+    public Map<String,String> changePassword(User user, byte[] oldPassword,byte[] password,byte[] passwordConfirm,String language){
+        byte[] encryptedPassword = new PasswordEncryptor(user.getEmail()).encrypt(oldPassword);
         Map<String, String> errors = new HashMap<>();
-        if (user.getPassword().equals(encryptedPassword)) {
+        if (Arrays.equals(user.getPassword(), encryptedPassword)) {
             errors = new Validator().checkPassword(password, passwordConfirm, language);
             if (errors.isEmpty()){
                 user.setPassword(new PasswordEncryptor(user.getEmail()).encrypt(password));
@@ -177,6 +178,7 @@ public class UserService extends AbstractService<User>{
             if (user.getRole().equals(UserRole.DRIVER)) {
                 Car car = carDAO.findEntityByUserId(id);
                 if (car != null) {
+                    new FileManager().deleteFolder(car.getUserId());
                     car.setStatus(Status.ARCHIVED);
                     carDAO.update(car);
                 }

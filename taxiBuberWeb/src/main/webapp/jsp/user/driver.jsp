@@ -85,23 +85,6 @@
         <div class="footer">
             <div class="footer-content">&copy; 2017.EPAM Systems Taxi Buber</div>
         </div>
-        <!-- Modal message-->
-        <div class="modal fade" id="modal-message" role="dialog">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content modal-message">
-                    <div class="modal-body modal-message-body">
-                        <div id="order-message"><fmt:message key="message.neworder"/></div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-3 col-sm-6" style="margin-top: 20px">
-                                <button id="begin" class="btn btn-danger">
-                                    <fmt:message key="label.begin"/> <i class="fa fa-play-circle" aria-hidden="true"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <!-- Modal continue-->
         <div class="modal fade" id="modal-continue" role="dialog" data-backdrop="static">
             <div class="modal-dialog modal-sm">
@@ -118,6 +101,7 @@
                 </div>
             </div>
         </div>
+        <jsp:include page="/jsp/user/modal_order.jsp"/>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWwujQHc9yN2BSlbT_L0-L7VLlQAYnUUg&libraries=places&callback=initMap"></script>
     </body>
 </html>

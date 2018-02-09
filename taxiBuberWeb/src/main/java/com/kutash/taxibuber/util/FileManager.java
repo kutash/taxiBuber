@@ -1,17 +1,15 @@
 package com.kutash.taxibuber.util;
 
 import com.kutash.taxibuber.resource.PhotoManager;
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.util.FileUtils;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Properties;
 
 public class FileManager {
 
@@ -59,9 +57,30 @@ public class FileManager {
         return expansion;
     }
 
-    private void deleteFile(String path) {
-        File file = new File(path);
+    public void deleteFile(String path,int id) {
+        String photoPath = PhotoManager.getInstance().getProperty("avatars_path") + id + File.separator + path;
+        File file = new File(photoPath);
         if (file.canWrite() && file.exists()) {
+            boolean deleted = file.delete();
+            if (!deleted){
+                LOGGER.log(Level.ERROR, "File wasn't deleted");
+            }
+        }
+    }
+
+    public void deleteFolder(int id) {
+        String path = PhotoManager.getInstance().getProperty("avatars_path") + id;
+        File file = new File(path);
+        if(file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files != null) {
+                for (File f : files) {
+                    boolean deleted = f.delete();
+                    if (!deleted){
+                        LOGGER.log(Level.ERROR, "File wasn't deleted");
+                    }
+                }
+            }
             boolean deleted = file.delete();
             if (!deleted){
                 LOGGER.log(Level.ERROR, "File wasn't deleted");

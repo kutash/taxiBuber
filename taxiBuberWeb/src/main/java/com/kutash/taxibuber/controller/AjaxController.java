@@ -33,7 +33,6 @@ public class AjaxController extends HttpServlet {
         Command command = client.defineCommand(request);
         Router router = command.execute(request,response);
         if (router != null) {
-            response.setContentType("application/json");
             response.getWriter().write(router.getPage());
         }
     }

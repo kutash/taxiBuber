@@ -1,15 +1,10 @@
 package com.kutash.taxibuber.command;
 
 import com.kutash.taxibuber.controller.Router;
-import com.kutash.taxibuber.entity.Status;
 import com.kutash.taxibuber.entity.User;
-import com.kutash.taxibuber.entity.UserRole;
 import com.kutash.taxibuber.resource.PageManager;
 import com.kutash.taxibuber.service.UserService;
-import com.kutash.taxibuber.util.DateParser;
-import com.kutash.taxibuber.util.FileManager;
 import com.kutash.taxibuber.util.Validator;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,11 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.IOException;
-import java.util.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.Map;
 
 public class SaveUserCommand implements Command {
 
@@ -53,7 +44,7 @@ public class SaveUserCommand implements Command {
         HashMap<String,String> userData = getData(request);
         HashMap<String,String> errors = new Validator().validateUser(userData,language);
         if (!errors.isEmpty()){
-            user = new User(userData.get("name"),userData.get("surname"),userData.get("patronymic"),userData.get("email"),userData.get("password"),userData.get("phone"));
+            user = new User(userData.get("name"),userData.get("surname"),userData.get("patronymic"),userData.get("email"),userData.get("password").getBytes(),userData.get("phone"));
             request.setAttribute("birthday",userData.get("birthday"));
             request.setAttribute("user", user);
             request.setAttribute("errors", errors);
@@ -82,8 +73,10 @@ public class SaveUserCommand implements Command {
         userData.put("patronymic",request.getParameter(PATRONYMIC));
         userData.put("role",request.getParameter(ROLE));
         userData.put("email",request.getParameter(EMAIL));
-        userData.put("password",request.getParameter(PASSWORD));
-        userData.put("passwordConfirm",request.getParameter(PASSWORD_CONFIRM));
+        String password  = new String(request.getParameter(PASSWORD));
+        String passwordConfirm  = new String(request.getParameter(PASSWORD_CONFIRM));
+        userData.put("password", password);
+        userData.put("passwordConfirm",passwordConfirm);
         userData.put("birthday",request.getParameter(BIRTHDAY));
         userData.put("phone",request.getParameter(PHONE));
         return userData;

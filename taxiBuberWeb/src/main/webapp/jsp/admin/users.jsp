@@ -166,7 +166,7 @@
             <div class="modal-dialog modal-sm">
                 <div class="modal-content modal-message">
                     <div class="modal-body modal-message-body">
-                        <div id="message-deleted" style="margin: 12%"><fmt:message key="label.user"/><fmt:message key="message.deleted"/></div>
+                        <div id="message-deleted" class="message"><fmt:message key="label.user"/><fmt:message key="message.deleted"/></div>
                     </div>
                 </div>
             </div>

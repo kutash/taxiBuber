@@ -18,7 +18,7 @@ public class LoginService {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public User logIn(String password, String email) {
+    public User logIn(byte[] password, String email) {
         LOGGER.log(Level.INFO,"log in user password {} email {}",password,email);
         TransactionManager transactionManager = new TransactionManager();
         User user = null;
@@ -37,9 +37,9 @@ public class LoginService {
         }
         transactionManager.endTransaction();
         if (user != null){
-            String encryptedPassword = new PasswordEncryptor(email).encrypt(password);
+            byte[] encryptedPassword = new PasswordEncryptor(email).encrypt(password);
             LOGGER.log(Level.DEBUG,"password {}",encryptedPassword);
-            if (encryptedPassword.equals(user.getPassword())) {
+            if (Arrays.equals(encryptedPassword, user.getPassword())) {
                 return user;
             } else {
                 return null;
@@ -57,9 +57,9 @@ public class LoginService {
             user = userDAO.findEntityByEmail(email);
             if (user != null){
                 String password = UUID.randomUUID().toString();
-                user.setPassword(password);
+                user.setPassword(password.getBytes());
                 new EmailSender().sendNewPassword(user,language);
-                user.setPassword(new PasswordEncryptor(user.getEmail()).encrypt(password));
+                user.setPassword(new PasswordEncryptor(user.getEmail()).encrypt(password.getBytes()));
                 user = userDAO.update(user);
             }
             transactionManager.commit();

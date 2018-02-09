@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -128,13 +129,25 @@ public class Validator {
         return map;
     }
 
-    public HashMap<String,String> checkPassword(String password,String passwordConfirm,String language){
+    public HashMap<String,String> checkPassword(byte[] passwordByte,byte[] passwordConfirmByte,String language){
         LOGGER.log(Level.DEBUG,"validating password");
         MessageManager messageManager = new MessageManager(language);
         Pattern patternPassword = Pattern.compile(PASSWORD);
         HashMap<String, String> map = new HashMap<>();
-        Matcher passwordMatcher = patternPassword.matcher(password);
-        if (StringUtils.isEmpty(password) || !passwordMatcher.matches()) {
+        String password = null;
+        String passwordConfirm = null;
+        try {
+            passwordConfirm = new String(passwordConfirmByte, "UTF-8");
+            password = new String(passwordByte, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            LOGGER.catching(Level.ERROR,e);
+        }
+        if(password != null) {
+            Matcher passwordMatcher = patternPassword.matcher(password);
+            if (StringUtils.isEmpty(password) || !passwordMatcher.matches()) {
+                map.put("password", messageManager.getProperty("label.invalidpsw"));
+            }
+        }else {
             map.put("password", messageManager.getProperty("label.invalidpsw"));
         }
         if (StringUtils.isNotEmpty(passwordConfirm)) {

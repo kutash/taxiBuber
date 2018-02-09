@@ -18,7 +18,6 @@ public class FreeCarsCommand implements Command {
     private static final String LATITUDE = "latitude";
     private static final String LONGITUDE = "longitude";
     private static final String BODY_TYPE = "bodyType";
-    private static final String CURRENT_USER = "currentUser";
     private CarService service;
 
     FreeCarsCommand(CarService carService) {
@@ -32,7 +31,6 @@ public class FreeCarsCommand implements Command {
         String latitude = request.getParameter(LATITUDE);
         String longitude = request.getParameter(LONGITUDE);
         String bodyType = request.getParameter(BODY_TYPE);
-        User user = (User) request.getSession().getAttribute(CURRENT_USER);
         List<Car> cars = service.findAllAvailable(latitude,longitude,bodyType);
         String json = new Gson().toJson(cars);
         router.setPage(json);

@@ -13,7 +13,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebInitParam;
 import java.io.IOException;
-import java.util.Enumeration;
 
 @WebFilter(urlPatterns = { "/*" }, initParams = {@WebInitParam(name = "encoding", value = "utf-8", description = "Encoding Param")})
 public class AggregateEncodingFilter implements Filter {
@@ -28,8 +27,8 @@ public class AggregateEncodingFilter implements Filter {
         LOGGER.log(Level.INFO,"Encoding filter");
         String codeRequest= request.getCharacterEncoding();
         if(code != null && !code.equalsIgnoreCase(codeRequest)) {
-        request.setCharacterEncoding(code);
-        response.setCharacterEncoding(code);
+            request.setCharacterEncoding(code);
+            response.setCharacterEncoding(code);
         }
         chain.doFilter(request, response);
     }

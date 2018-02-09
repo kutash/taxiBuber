@@ -6,43 +6,43 @@ $(document).ready(function () {
 
     var modalMessage = $('#modal-message2');
     var update = $('#message-update').text();
-    if (update.text() !== ''){
+    if (update !== ''){
+        console.log("update");
         modalMessage.modal('show');
-        update.css('margin','10%');
-        update.css('display', 'block');
+        /*update.css('margin','10%');
+        update.css('display', 'block');*/
         setTimeout(function(){
             modalMessage.modal("hide");
-            update.css('display', 'none');
+            /*update.css('display', 'none');*/
         }, 3000);
     }
     var create = $('#message-create').text();
-    if (create.text() !== ''){
+    if (create !== ''){
+        console.log("create");
         modalMessage.modal('show');
-        create.css('margin','10%');
-        create.css('display', 'block');
+        /*create.css('margin','10%');
+        create.css('display', 'block');*/
         setTimeout(function(){
             modalMessage.modal("hide");
-            create.css('display', 'none');
+            /*create.css('display', 'none');*/
         }, 3000);
     }
 
     var deleted = $('#message-deleted').text();
-    if (deleted.text() !== ''){
+    if (deleted !== ''){
+        console.log("delete");
         modalMessage.modal('show');
-        deleted.css('margin','12%');
-        deleted.css('display', 'block');
+        /*deleted.css('margin','12%');
+        deleted.css('display', 'block');*/
         setTimeout(function(){
             modalMessage.modal("hide");
-            deleted.css('display', 'none');
+            /*deleted.css('display', 'none');*/
         }, 3000);
     }
 
     var notDeleted = $('#message-notdeleted').text();
     if (notDeleted !== ''){
-        console.log(notDeleted);
-        console.log(deleted);
-        console.log(update);
-        console.log(create);
+        console.log("not delete");
         modalMessage.modal('show');
         /*notDeleted.css('margin','10%');
         notDeleted.css('display', 'block');*/

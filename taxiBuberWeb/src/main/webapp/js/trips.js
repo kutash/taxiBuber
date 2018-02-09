@@ -1,4 +1,48 @@
+var ws = new WebSocket("ws://localhost:8080/socket");
+ws.onmessage = function(event) {
+    if(event.data === 'started') {
+        $('#modal-order').modal('show');
+        $('#message-success').css('display','block');
+        setTimeout(function () {
+            $('#modal-order').modal("hide");
+            $('#message-success').css('display','none');
+        }, 2000);
+    }else if(event.data === 'timeout'){
+        ws.close();
+        window.location.href = "http://localhost:8080/index.jsp";
+    }else {
+        if ($('#current-user').text() === 'DRIVER') {
+            $('#modal-order').modal('show');
+            $('#message-driver').css('display','block');
+            $('#begin').on('click',function () {
+                var trip = JSON.parse(event.data);
+                var id = trip.id;
+                $.ajax({
+                    type:"GET",
+                    url: "ajaxController?command=start_trip&tripId="+id,
+                    contentType: 'application/json'
+                }).done(function(results){
+                    ws.close();
+                    window.location.href = "http://localhost:8080/controller?command=main";
+                });
+            });
+        }
+    }
+};
+
+ws.onerror = function(event){
+    console.log("Error ", event)
+};
+
+ws.onclose = function() {
+    console.log("connection closed");
+};
+
 $(document).ready(function(){
+
+    $(window).on('beforeunload', function () {
+        ws.close();
+    });
 
     /* 1. Visualizing things on Hover - See next part for action on click */
     $('#stars li').on('mouseover', function(){
