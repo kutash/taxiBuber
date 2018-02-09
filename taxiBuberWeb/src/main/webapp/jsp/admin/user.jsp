@@ -22,10 +22,6 @@
     </head>
     <body>
     <jsp:include page="/jsp/user/header.jsp"/>
-    <%--<c:url var="switchLanguage" value="controller" scope="page">
-        <c:param name="command" value="edit"/>
-        <c:param name="userId" value="${user.id}"/>
-    </c:url>--%>
     <form method="post" id="l"></form>
     <form action="controller" method="post" id="cancelCarForm">
         <input type="hidden" name="command" value="cancel">
@@ -128,12 +124,12 @@
                                             <a href="#" id="delete-button"><i class="fa fa-trash" aria-hidden="true" style="font-size: 24px;float: right"></i></a>
                                         </c:if>
                                         <c:if test="${car == null}">
-                                            <a href="#" data-toggle="modal" data-target="#modal-car" id="car" style="font-size: 17px;margin-right: 68%;"><fmt:message key="label.addcar"/></a>
+                                            <a href="#" data-toggle="modal" data-target="#modal-car" id="car" style="font-size: 17px;float: left;"><fmt:message key="label.addcar"/></a>
                                         </c:if>
                                     </div>
                                 </div>
                             </c:if>
-                            <div class="form-group" <%--style="margin-top: 91px;margin-left: -145px;"--%> id="div-buttons">
+                            <div class="form-group" id="div-buttons">
                                 <div class="col-sm-offset-2 col-sm-5">
                                     <button type="submit" id="save-button" class="btn btn-success btn-md" form="saveUserForm"><i class="fa fa-floppy-o" aria-hidden="true"></i> <fmt:message key="button.save"/></button>
                                     <button type="submit" class="btn btn-danger btn-md" id="cancel-button" form="cancelUserForm"><i class="fa fa-ban" aria-hidden="true"></i> <fmt:message key="button.cancel"/></button>
@@ -167,7 +163,7 @@
                                             <a href="#" data-toggle="modal" data-target="#modal-car" id="car" style="font-size: 17px;float: left">${car.brand.name } ${car.model}</a>
                                         </c:if>
                                         <c:if test="${car == null}">
-                                            <fmt:message key="label.nocar"/>
+                                            <span style="font-size: 17px;float: left"><fmt:message key="label.nocar"/></span>
                                         </c:if>
                                     </div>
                                 </div>
@@ -182,7 +178,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a data-toggle="collapse" href="#collapse1"><i class="fas fa-address-card"></i> <fmt:message key="label.myaddresses"/></a>
+                                    <a data-toggle="collapse" href="#collapse1"><span class="glyphicon glyphicon-list-alt"></span> <fmt:message key="label.myaddresses"/></a>
                                 </h4>
                             </div>
                             <div id="collapse1" class="panel-collapse collapse">

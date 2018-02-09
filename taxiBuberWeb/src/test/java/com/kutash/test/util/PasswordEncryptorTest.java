@@ -4,9 +4,9 @@ import com.kutash.taxibuber.util.PasswordEncryptor;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-/*
 public class PasswordEncryptorTest {
 
     @DataProvider(name = "data")
@@ -21,7 +21,6 @@ public class PasswordEncryptorTest {
     public void encryptPasswordTest(Object[] data){
         byte[] expected = new PasswordEncryptor((String)data[0]).encrypt((byte[]) data[1]);
         byte[] actual = (byte[]) data[2];
-        assertEquals(expected,actual);
+        assertArrayEquals(expected,actual);
     }
 }
-*/

@@ -11,7 +11,7 @@
 <p class="p-error">
     ${pageContext.exception.message}<br>
         ${pageContext.exception.printStackTrace()}
-    <a href="${home}" title="Back to home" class="a-error">BACK TO HOME</a>
+    <a href="/index.jsp" title="Back to home" class="a-error">BACK TO HOME</a>
 </p>
 </body>
 </html>

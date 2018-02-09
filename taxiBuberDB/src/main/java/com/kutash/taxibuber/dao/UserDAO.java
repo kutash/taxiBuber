@@ -7,17 +7,18 @@ import com.kutash.taxibuber.exception.DAOException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.io.UnsupportedEncodingException;
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class UserDAO extends AbstractDAO<User> {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String FIND_ALL_USERS = "SELECT id_user,role,email,password,rating,`name`,surname,patronymic,birthday,photo_path,phone,status FROM user WHERE status != 'ARCHIVED'";
+    private static final String FIND_ALL_USERS = "SELECT id_user,role,email,password,rating,`name`,surname,patronymic,birthday,photo_path,phone,status FROM user WHERE status != 'ARCHIVED' AND role != 'ADMIN'";
     private static final String FIND_USER_BY_ID = "SELECT id_user,role,email,password,rating,`name`,surname,patronymic,birthday,photo_path,phone,status FROM user WHERE id_user = ?";
     private static final String CREATE_USER = "INSERT INTO user(name,surname,patronymic,birthday,email,role,password,rating,photo_path,phone,status) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
     private static final String UPDATE_USER = "UPDATE user  SET name=?,surname=?,patronymic=?,birthday=?,email=?,role=?,password=?,rating=?,photo_path=?,phone=?,status=? WHERE id_user=?";

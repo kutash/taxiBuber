@@ -14,7 +14,7 @@
 <p class="p-error">
     ${wrongAction}<br>
     ${nullPage}<br>
-    <a href="${home}" title="Back to home" class="a-error">BACK TO HOME</a>
+    <a href="/index.jsp" title="Back to home" class="a-error">BACK TO HOME</a>
 </p>
 </body>
 </html>

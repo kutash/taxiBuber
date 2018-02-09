@@ -20,7 +20,7 @@ import org.testng.annotations.Test;
 import static org.junit.Assert.assertEquals;
 
 
-/*public class CommentDAOTest {
+public class CommentDAOTest {
 
     private static final String DROP_DB = "DROP DATABASE `taxi_buber_test`";
     private Connection connection;
@@ -31,7 +31,7 @@ import static org.junit.Assert.assertEquals;
         String aSQLScriptFilePath = "F:/taxiBuber/taxiBuberDB/src/test/resources/test.sql";
 
         Properties properties = new Properties();
-        properties.load(UserDAOTest.class.getResourceAsStream("/dataBase.properties"));
+        properties.load(CommentDAOTest.class.getResourceAsStream("/dataBase.properties"));
         properties.put("autoReconnect", "true");
         properties.put("characterEncoding", "UTF-8");
         properties.put("useUnicode", "true");
@@ -39,14 +39,9 @@ import static org.junit.Assert.assertEquals;
         String url = properties.getProperty("url");
         DriverManager.registerDriver(new com.mysql.jdbc.Driver());
         connection = DriverManager.getConnection(url,properties);
-        try {
-            ScriptRunner sr = new ScriptRunner(connection, false, false);
-            Reader reader = new BufferedReader(new FileReader(aSQLScriptFilePath));
-            sr.runScript(reader);
-        } catch (Exception e) {
-            System.err.println("Failed to Execute" + aSQLScriptFilePath
-                    + " The error is " + e.getMessage());
-        }
+        ScriptRunner sr = new ScriptRunner(connection, false, false);
+        Reader reader = new BufferedReader(new FileReader(aSQLScriptFilePath));
+        sr.runScript(reader);
         commentDAO = new DAOFactory().getCommentDAO();
         commentDAO.setConnection(connection);
     }
@@ -58,21 +53,20 @@ import static org.junit.Assert.assertEquals;
 
     @Test(priority = 1)
     public void findEntityByIdTest() throws DAOException {
-        Comment expected = new Comment(1,"Для меня лично важно, что удобно и быстро можно вызвать такси через смартфон, который всегда под рукой. Спасибо вам.",2,5,Date.valueOf("2017-02-04"),(byte) 5,"Василий", "5.jpg");
-        Comment actual = commentDAO.findEntityById(1);
-        assertEquals(expected,actual);
-    }
-
-    @Test(priority = 1)
-    public void findEntityByUserIdTest() throws DAOException {
-        List<Comment> expected = new ArrayList<>();
-        expected.add(new Comment(1,"Для меня лично важно, что удобно и быстро можно вызвать такси через смартфон, который всегда под рукой. Спасибо вам.",2,5,Date.valueOf("2017-02-04"),(byte) 5,"Василий", "5.jpg"));
-        expected.add(new Comment(3,"Все супер!!!",2,3,Date.valueOf("2017-02-04"),(byte) 5,"Анатолий","3.jpg"));
-        List<Comment> actual = commentDAO.findEntityByUserId(2);
+        Comment expected = new Comment(2,"Пользуюсь этим такси уже год. Все супер, спасибо! Всегда на высоте и очень дешево. Пересадила всех своих знакомых на эту службу:)",3,4,Date.valueOf("2017-02-04"),(byte) 4,"Аркадий", "4.jpg");
+        Comment actual = commentDAO.findEntityById(2);
         assertEquals(expected,actual);
     }
 
     @Test
+    public void findEntityByUserIdTest() throws DAOException {
+        List<Comment> expected = new ArrayList<>();
+        expected.add(new Comment(2,"Пользуюсь этим такси уже год. Все супер, спасибо! Всегда на высоте и очень дешево. Пересадила всех своих знакомых на эту службу:)",3,4,Date.valueOf("2017-02-04"),(byte) 4,"Аркадий", "4.jpg"));
+        List<Comment> actual = commentDAO.findEntityByUserId(3);
+        assertEquals(expected,actual);
+    }
+
+    @Test(priority = 1)
     public void createTest() throws DAOException {
         Comment comment = new Comment(0,"Все супер!!!",3,2,Date.valueOf("2017-02-04"),(byte) 4,"","");
         assertEquals(1,commentDAO.create(comment));
@@ -91,4 +85,4 @@ import static org.junit.Assert.assertEquals;
         dropDB.executeUpdate();
         connection.close();
     }
-}*/
+}

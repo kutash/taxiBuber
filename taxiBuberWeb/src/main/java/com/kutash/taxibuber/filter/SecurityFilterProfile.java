@@ -1,4 +1,4 @@
-package com.kutash.taxibuber.controller;
+package com.kutash.taxibuber.filter;
 
 import com.kutash.taxibuber.command.CommandEnum;
 import com.kutash.taxibuber.entity.User;

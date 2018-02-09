@@ -10,7 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.concurrent.TimeUnit;
+import java.io.UnsupportedEncodingException;
 
 public class LoginCommand implements Command {
 
@@ -33,9 +33,13 @@ public class LoginCommand implements Command {
         String language = (String) request.getSession().getAttribute(LANGUAGE);
         String email = request.getParameter(EMAIL);
         byte[] password = request.getParameter(PASSWORD).getBytes();
-        User user;
+        User user = null;
         UserRole userRole;
-        user = service.logIn(password,email);
+        try {
+            user = service.logIn(password,email);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         if (user != null) {
             if (user.getStatus().equals(Status.BANNED)) {
                 request.setAttribute("errorLoginPassMessage", new MessageManager(language).getProperty("message.banned"));

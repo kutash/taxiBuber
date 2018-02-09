@@ -1,4 +1,4 @@
-package com.kutash.taxibuber.controller;
+package com.kutash.taxibuber.filter;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

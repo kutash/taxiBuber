@@ -20,7 +20,6 @@ import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 
-/*
 public class TripDAOTest {
 
     private Connection connection;
@@ -41,7 +40,7 @@ public class TripDAOTest {
         tripDAO.setConnection(connection);
     }
 
-    @Test(priority = 1)
+    @Test(priority = 2)
     public void findAllTest() throws DAOException {
         List<Trip> expected = new ArrayList<>();
         expected.add(new Trip(1,new BigDecimal("15.30"), Date.valueOf("2017-01-05"), 23.2f,1, 1, 2, TripStatus.STARTED,new Address(1,"Минск Казинца 38"),new Address(2,"Минск пр. Машерова 32"),2,5,"Борискин Борис","Васин Василий"));
@@ -52,43 +51,43 @@ public class TripDAOTest {
         assertEquals(expected,actual);
     }
 
-    @Test(priority = 1)
+    @Test(priority = 2)
     public void findByUserIdTest() throws DAOException {
         List<Trip> expected = new ArrayList<>();
-        expected.add(new Trip(3,new BigDecimal("20.82"), Date.valueOf("2017-03-06"), 17.9f,1, 2, 1, TripStatus.ORDERED,new Address(2,"Минск пр. Машерова 32"),new Address(1,"Минск Казинца 38"),2,5,"Борискин Борис","Васин Василий"));
         expected.add(new Trip(1,new BigDecimal("15.30"), Date.valueOf("2017-01-05"), 23.2f,1, 1, 2, TripStatus.STARTED,new Address(1,"Минск Казинца 38"),new Address(2,"Минск пр. Машерова 32"),2,5,"Борискин Борис","Васин Василий"));
+        expected.add(new Trip(3,new BigDecimal("20.82"), Date.valueOf("2017-03-06"), 17.9f,1, 2, 1, TripStatus.ORDERED,new Address(2,"Минск пр. Машерова 32"),new Address(1,"Минск Казинца 38"),2,5,"Борискин Борис","Васин Василий"));
         List<Trip> actual = tripDAO.findByUserId(2, UserRole.DRIVER);
         assertEquals(expected,actual);
     }
 
-    @Test(priority = 1)
+    @Test(priority = 2)
     public void findEntityById() throws DAOException {
         Trip expected = new Trip(2,new BigDecimal("22.25"), Date.valueOf("2017-02-04"), 28.5f,2, 3, 4, TripStatus.STARTED,new Address(3,"Минск Ленина 125"),new Address(4,"Минск Асаналиева 7"),3,4,"Моржов Анатолий","Абрамович Аркадий");
         Trip actual = tripDAO.findEntityById(2);
         assertEquals(expected,actual);
     }
 
-    @Test(priority = 1)
+    @Test(priority = 2)
     public void findOrderedTest() throws DAOException {
         Trip expected = new Trip(4,new BigDecimal("13.00"), Date.valueOf("2017-04-07"), 13.7f,2, 4, 3, TripStatus.ORDERED,new Address(4,"Минск Асаналиева 7"),new Address(3,"Минск Ленина 125"));
         Trip actual = tripDAO.findOrdered(2);
         assertEquals(expected,actual);
     }
 
-    @Test(priority = 1)
+    @Test(priority = 2)
     public void findStartedTest() throws DAOException {
         Trip expected = new Trip(1,new BigDecimal("15.30"), Date.valueOf("2017-01-05"), 23.2f,1, 1, 2, TripStatus.STARTED,new Address(1,"Минск Казинца 38"),new Address(2,"Минск пр. Машерова 32"));
         Trip actual = tripDAO.findStarted(1);
         assertEquals(expected,actual);
     }
 
-    @Test(priority = 2)
+    @Test(priority = 3)
     public void createTest() throws DAOException {
         int actual = tripDAO.create(new Trip(new BigDecimal("30.70"), Date.valueOf("2017-05-08"), 22.3f,1, 1, 2, TripStatus.ORDERED));
         assertEquals(5,actual);
     }
 
-    @Test
+    @Test(priority = 1)
     public void updateTest() throws DAOException {
         Trip expected = new Trip(3,new BigDecimal("20.82"), Date.valueOf("2017-03-06"), 17.9f,1, 2, 1, TripStatus.ORDERED,new Address(2,"Минск пр. Машерова 32"),new Address(1,"Минск Казинца 38"),2,5,"Борискин Борис","Васин Василий");
         Trip actual = tripDAO.update(new Trip(3,new BigDecimal("20.82"), Date.valueOf("2017-03-06"), 17.9f,1, 2, 1, TripStatus.ORDERED,new Address(2,"Минск пр. Машерова 32"),new Address(1,"Минск Казинца 38"),2,5,"Борискин Борис","Васин Василий"));
@@ -100,4 +99,3 @@ public class TripDAOTest {
         connection.close();
     }
 }
-*/

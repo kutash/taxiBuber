@@ -3,9 +3,11 @@
 <suite name="suite1">
     <test name="DaoTest">
         <classes>
-
-
-
+            <class name="com.kutash.test.dao.CommentDAOTest"/>
+            <class name="com.kutash.test.dao.CarDAOTest"/>
+            <class name="com.kutash.test.dao.AddressDAOTest"/>
+            <class name="com.kutash.test.dao.TripDAOTest"/>
+            <class name="com.kutash.test.dao.UserDAOTest"/>
         </classes>
     </test>
 </suite>

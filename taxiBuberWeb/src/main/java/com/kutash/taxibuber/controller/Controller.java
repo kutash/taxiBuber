@@ -24,6 +24,15 @@ public class Controller extends HttpServlet {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    @Override
+    public void init(){
+        try {
+            ConnectionPool.getInstance();
+        } catch (DAOException e) {
+            LOGGER.catching(Level.ERROR,e);
+        }
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request,response);
     }

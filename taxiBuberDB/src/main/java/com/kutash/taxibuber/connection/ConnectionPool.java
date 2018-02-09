@@ -17,7 +17,6 @@ public class ConnectionPool implements Cloneable{
     private final static ReentrantLock lock = new ReentrantLock();
     private static AtomicBoolean instanceCreated = new AtomicBoolean();
     private static final int  DEFAULT_POOL_SIZE = 10;
-    private final int POOL_SIZE;
     private static ConnectionPool instance;
     private BlockingQueue<ProxyConnection> connectionQueue;
 
@@ -26,6 +25,7 @@ public class ConnectionPool implements Cloneable{
             throw new IllegalStateException("Already instantiated");
         }
         ConnectionCreator connectionCreator = new ConnectionCreator();
+        int POOL_SIZE;
         if(connectionCreator.getPoolSize() != 0){
             POOL_SIZE = connectionCreator.getPoolSize();
         }else {

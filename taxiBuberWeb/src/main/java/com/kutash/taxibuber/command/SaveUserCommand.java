@@ -2,6 +2,7 @@ package com.kutash.taxibuber.command;
 
 import com.kutash.taxibuber.controller.Router;
 import com.kutash.taxibuber.entity.User;
+import com.kutash.taxibuber.entity.UserRole;
 import com.kutash.taxibuber.resource.PageManager;
 import com.kutash.taxibuber.service.UserService;
 import com.kutash.taxibuber.util.Validator;
@@ -11,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.util.HashMap;
@@ -37,7 +39,8 @@ public class SaveUserCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"saving user");
-        request.getSession().removeAttribute("sentPassword");
+        HttpSession session = request.getSession();
+        session.removeAttribute("sentPassword");
         String language = (String) request.getSession().getAttribute(LANGUAGE);
         Router router = new Router();
         User user;
@@ -58,8 +61,13 @@ public class SaveUserCommand implements Command {
                 LOGGER.log(Level.ERROR,"Exception while getting part",e);
             }
             user = userService.saveUser(userData,photoPart);
-            request.getSession().setAttribute("currentUser",user);
-            request.getSession().setAttribute("isCar",true);
+            if (user.getRole().equals(UserRole.CLIENT)){
+                request.getSession().setMaxInactiveInterval(10*60);
+            }else {
+                request.getSession().setMaxInactiveInterval(60*60);
+            }
+            session.setAttribute("currentUser",user);
+            session.setAttribute("isCar",true);
             router.setRoute(Router.RouteType.REDIRECT);
             router.setPage(PageManager.getProperty("path.command.edit")+user.getId());
         }

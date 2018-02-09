@@ -37,6 +37,7 @@ public class ChangePasswordCommand implements Command {
         session.removeAttribute("createMessage");
         session.removeAttribute("updateMessage");
         session.removeAttribute("updatedUser");
+        session.removeAttribute("updatePassword");
         User user = (User) session.getAttribute(CURRENT_USER);
         String language = (String) session.getAttribute(LANGUAGE);
         byte[] oldPassword = request.getParameter(OLD_PASSWORD).getBytes();

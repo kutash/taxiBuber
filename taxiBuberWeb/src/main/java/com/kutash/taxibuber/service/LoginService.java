@@ -12,14 +12,18 @@ import com.kutash.taxibuber.util.PasswordEncryptor;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import java.util.*;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.UUID;
+
 
 public class LoginService {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public User logIn(byte[] password, String email) {
-        LOGGER.log(Level.INFO,"log in user password {} email {}",password,email);
+    public User logIn(byte[] password, String email) throws UnsupportedEncodingException {
+        LOGGER.log(Level.INFO,"log in user email {}",email);
         TransactionManager transactionManager = new TransactionManager();
         User user = null;
         UserDAO userDAO = new DAOFactory().getUserDAO();
@@ -38,7 +42,7 @@ public class LoginService {
         transactionManager.endTransaction();
         if (user != null){
             byte[] encryptedPassword = new PasswordEncryptor(email).encrypt(password);
-            LOGGER.log(Level.DEBUG,"password {}",encryptedPassword);
+            LOGGER.log(Level.INFO,"password {}",new String(encryptedPassword,"UTF-8"));
             if (Arrays.equals(encryptedPassword, user.getPassword())) {
                 return user;
             } else {
@@ -49,6 +53,7 @@ public class LoginService {
     }
 
     public User sendPassword(String email,String language){
+        LOGGER.log(Level.INFO,"sending password to emai {}",email);
         TransactionManager transactionManager = new TransactionManager();
         User user = null;
         UserDAO userDAO = new DAOFactory().getUserDAO();
@@ -76,6 +81,7 @@ public class LoginService {
     }
 
     public void logOut(int userId){
+        LOGGER.log(Level.INFO,"log out user id {}",userId);
         TransactionManager transactionManager = new TransactionManager();
         CarDAO carDAO = new DAOFactory().getCarDAO();
         try {

@@ -1,12 +1,9 @@
 package com.kutash.taxibuber.util;
 
 import com.kutash.taxibuber.resource.PhotoManager;
-import org.apache.commons.codec.binary.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.util.FileUtils;
-
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;

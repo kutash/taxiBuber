@@ -1,4 +1,4 @@
-package com.kutash.taxibuber.controller;
+package com.kutash.taxibuber.filter;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;

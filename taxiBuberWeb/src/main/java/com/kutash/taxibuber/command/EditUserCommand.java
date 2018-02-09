@@ -34,6 +34,11 @@ public class EditUserCommand implements Command {
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"edit user command");
         Router router = new Router();
+        HttpSession session = request.getSession();
+        session.removeAttribute("deletedMessage");
+        session.removeAttribute("createMessage");
+        session.removeAttribute("updateMessage");
+        session.removeAttribute("updatedUser");
         String userId = request.getParameter(USER_ID);
         User user = service.findUser(userId);
         Boolean isCar = (Boolean) request.getAttribute("isCar");

@@ -31,7 +31,7 @@ window.onload = function () {
     var begin = document.getElementById("begin");
     begin.addEventListener('click',function () {
         document.getElementById('work').setAttribute("disabled", "true");
-        $('#modal-message').modal("hide");
+        $('#modal-order').modal("hide");
         var id = document.getElementById("tripId").value;
         $.ajax({
             type:"GET",

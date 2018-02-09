@@ -133,7 +133,7 @@ $(document).ready(function() {
                     $('#invalid-psw').css('display', 'block');
                     $('#blank-psw').css('display', 'none');
                     $('#max-psw').css('display', 'none');
-                } else if (val.length > 50 || val.length < 4) {
+                } else if (val.length > 50 || val.length < 6) {
                     $('#submit-button').attr('disabled', 'disabled');
                     $(this).removeClass('not-error').addClass('error-input');
                     $('#invalid-psw').css('display', 'none');
@@ -346,11 +346,11 @@ $(document).ready(function() {
         $('input[type=text], input[type=email], input[type=password], select').removeClass('error-input not-error');
         $('#save-button').attr('disabled', 'disabled');
         $('#blah').attr('src','/ajaxController?command=photo');
+        $('input#name, input#surname, input#email, input#patronymic, input#phone, input#birthday, input#password, input#repeat').val('');
     });
 
     $('#email-forgot').on('keyup',function () {
         var rv_email = /^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
-        console.log($(this).val());
         if ($(this).val() === '') {
             $('#send-button').attr('disabled', 'disabled');
             $(this).removeClass('not-error').addClass('error-input');

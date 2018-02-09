@@ -23,7 +23,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-/*
 public class CarDAOTest {
 
     private Connection connection;
@@ -44,7 +43,7 @@ public class CarDAOTest {
         carDAO.setConnection(connection);
     }
 
-    @Test(priority = 1)
+    @Test(priority = 2)
     public void findAllTest() throws DAOException {
         List<Car> expected = new ArrayList<>();
         expected.add(new Car(1,"3214MA-5", Capacity.MINIVAN, "Fabia","2car.jpg",true, "53.785461", "27.598741", new CarBrand(1,"﻿ACURA") , 2,"Борис Борискин", Status.ACTIVE));
@@ -54,7 +53,7 @@ public class CarDAOTest {
         assertEquals(expected,actual);
     }
 
-    @Test(priority = 1)
+    @Test(priority = 2)
     public void findAllAvailableTest() throws DAOException {
         List<Car> expected = new ArrayList<>();
         expected.add(new Car(1,"3214MA-5", Capacity.MINIVAN, "Fabia","2car.jpg",true, "53.785461", "27.598741", new CarBrand(1,"﻿ACURA") , 2,"Борис Борискин", Status.ACTIVE));
@@ -63,7 +62,7 @@ public class CarDAOTest {
         assertEquals(expected,actual);
     }
 
-    @Test(priority = 1)
+    @Test(priority = 2)
     public void findAllAvailableByBodyTypeTest() throws DAOException {
         List<Car> expected = new ArrayList<>();
         expected.add(new Car(3,"7894QJ-5", Capacity.CAR, "Megan","1car.jpg",true, "55.235984","25.698541",  new CarBrand(3,"AUDI"), 1,"Петр Петров",Status.ACTIVE));
@@ -142,4 +141,3 @@ public class CarDAOTest {
     }
 
 }
-*/

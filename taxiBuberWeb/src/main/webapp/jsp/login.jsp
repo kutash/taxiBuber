@@ -20,7 +20,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
     </head>
     <body>
-        <nav class="navbar navbar-inverse" style="position: inherit">
+        <nav class="navbar navbar-inverse" style="position: inherit; padding: 9px">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <c:url var="home" value="/index.jsp" scope="application">
@@ -89,7 +89,7 @@
         <div class="modal fade" id="modal-signup" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header" style="height: 95px">
                         <button type="button" class="close cancel-signup" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title" style="font-size: 35px;"><span class="glyphicon glyphicon-user" style="font-size: 35px;"></span> <fmt:message key="label.signup"/></h4>
                     </div>

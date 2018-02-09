@@ -1,4 +1,4 @@
-package com.kutash.taxibuber.controller;
+package com.kutash.taxibuber.listener;
 
 import com.kutash.taxibuber.entity.User;
 import com.kutash.taxibuber.websocket.WebSocketSender;
@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSessionListener;
 
 @WebListener
 public class SessionListener implements HttpSessionListener{
+
     @Override
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
 
