@@ -21,9 +21,9 @@
     </head>
     <body>
     <jsp:include page="/jsp/user/header.jsp"/>
-        <c:url var="switchLanguage" value="controller" scope="page">
+        <%--<c:url var="switchLanguage" value="controller" scope="page">
             <c:param name="command" value="main"/>
-        </c:url>
+        </c:url>--%>
         <form action="${switchLanguage}" method="post" id="l"></form>
         <div class="container">
             <div class="row">
@@ -31,10 +31,10 @@
                     <span id="messageGoesHere"></span>
                     <div class="form-horizontal" id="complete-form">
                         <div class="checkbox">
-                            <label id="start-work" style="display: ${car.available == true ? 'none' : 'block'}" class="label-span"><fmt:message key="label.start"/></label>
-                                <label id="stop-work" style="display: ${car.available == true ? 'block' : 'none'}" class="label-span"><fmt:message key="label.stop"/></label>
+                            <label id="start-work" style="display: ${car.available == false && trip == null ? 'block' : 'none'}" class="label-span"><fmt:message key="label.start"/></label>
+                                <label id="stop-work" style="display: ${car.available == true && trip == null ? 'block' : 'none'}" class="label-span"><fmt:message key="label.stop"/></label>
                             <label class="switch">
-                                <input type="checkbox" id="work" ${car.available == true ? 'checked' : ''}>
+                                <input type="checkbox" id="work" ${car.available == true || not empty trip ? 'checked' : ''} ${not empty trip ? 'disabled' : ''}>
                                 <span class="slider round"></span>
                             </label>
                         </div>

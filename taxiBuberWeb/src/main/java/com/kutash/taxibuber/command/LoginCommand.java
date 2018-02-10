@@ -49,19 +49,17 @@ public class LoginCommand implements Command {
                 switch (userRole) {
                     case ADMIN:
                         request.getSession().setAttribute("currentUser", user);
-                        //request.getSession().setMaxInactiveInterval(30*60);
-                        request.getSession().setMaxInactiveInterval(60);
+                        request.getSession().setMaxInactiveInterval(30*60);
                         router.setPage(PageManager.getProperty("path.command.users"));
                         break;
                     case CLIENT:
                         request.getSession().setAttribute("currentUser", user);
-                        request.getSession().setMaxInactiveInterval(60);
+                        request.getSession().setMaxInactiveInterval(10*60);
                         router.setPage(PageManager.getProperty("path.command.main"));
                         break;
                     case DRIVER:
                         request.getSession().setAttribute("currentUser", user);
-                        //request.getSession().setMaxInactiveInterval(60*60);
-                        request.getSession().setMaxInactiveInterval(60);
+                        request.getSession().setMaxInactiveInterval(60*60);
                         router.setPage(PageManager.getProperty("path.command.main"));
                         break;
                 }

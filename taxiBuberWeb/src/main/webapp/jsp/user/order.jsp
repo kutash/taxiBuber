@@ -21,9 +21,6 @@
     </head>
     <body>
         <jsp:include page="/jsp/user/header.jsp"/>
-        <%--<c:url var="switchLanguage" value="controller" scope="page">
-            <c:param name="command" value="main"/>
-        </c:url>--%>
         <form action="${switchLanguage}" method="post" id="l"></form>
         <div class="container">
             <div class="alert alert-info alert-dismissable fade in" id="no-cars" style="display: none">

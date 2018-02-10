@@ -30,6 +30,7 @@ public class UserDAOTest {
         properties.put("characterEncoding", "UTF-8");
         properties.put("useUnicode", "true");
         properties.put("serverTimezone","Europe/Moscow");
+        properties.put("useSSL","false");
         String url = properties.getProperty("url");
         DriverManager.registerDriver(new com.mysql.jdbc.Driver());
         connection = DriverManager.getConnection(url,properties);

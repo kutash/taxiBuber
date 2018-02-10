@@ -8,6 +8,7 @@
             <class name="com.kutash.test.dao.AddressDAOTest"/>
             <class name="com.kutash.test.dao.TripDAOTest"/>
             <class name="com.kutash.test.dao.UserDAOTest"/>
+            <!--<class name="com.kutash.test.pool.ConnectionPoolTest"/>-->
         </classes>
     </test>
 </suite>

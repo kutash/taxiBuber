@@ -2,7 +2,7 @@ var ws = new WebSocket("ws://localhost:8080/socket");
 ws.onmessage = function(event) {
     console.log(event.data);
     if(event.data === 'started') {
-        var modalMessage = $('#modal-message');
+        var modalMessage = $('#modal-order');
         modalMessage.modal('show');
         document.getElementById('message-success').style.display = 'block';
         setTimeout(function () {

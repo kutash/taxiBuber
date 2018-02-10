@@ -11,7 +11,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.sql.*;
+import java.sql.Date;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -28,14 +32,17 @@ public class CommentDAOTest {
 
     @BeforeTest
     private void initTest() throws IOException, SQLException {
-        String aSQLScriptFilePath = "F:/taxiBuber/taxiBuberDB/src/test/resources/test.sql";
+        String aSQLScriptFilePath = "src/test/resources/test.sql";
 
         Properties properties = new Properties();
-        properties.load(CommentDAOTest.class.getResourceAsStream("/dataBase.properties"));
+        properties.put("url","jdbc:mysql://localhost:3306");
+        properties.put("user","root");
+        properties.put("password","0123");
         properties.put("autoReconnect", "true");
         properties.put("characterEncoding", "UTF-8");
         properties.put("useUnicode", "true");
         properties.put("serverTimezone","Europe/Moscow");
+        properties.put("useSSL","false");
         String url = properties.getProperty("url");
         DriverManager.registerDriver(new com.mysql.jdbc.Driver());
         connection = DriverManager.getConnection(url,properties);

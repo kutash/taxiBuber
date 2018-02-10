@@ -172,7 +172,7 @@
                     </form>
                 </div>
             </div>
-            <c:if test="${currentUser.role == 'CLIENT'}">
+            <c:if test="${currentUser.role == 'CLIENT' && not empty addresses}">
                 <div class="row">
                     <div class="panel-group" id="addresses">
                         <div class="panel panel-default">
