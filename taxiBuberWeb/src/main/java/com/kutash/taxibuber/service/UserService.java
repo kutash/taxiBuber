@@ -46,7 +46,7 @@ public class UserService extends AbstractService<User>{
      * @param photoPart the photo part
      * @return the user
      */
-    public User saveUser(Map<String,String> userData,Part photoPart){
+    public User saveUser(Map<String,String> userData, Part photoPart){
         byte[] encryptedPassword = new PasswordEncryptor(userData.get("email")).encrypt(userData.get("password").getBytes());
         User user = new User(userData.get("name"),userData.get("surname"),userData.get("patronymic"),userData.get("email"),encryptedPassword,UserRole.valueOf(userData.get("role")), DateParser.parseDate(userData.get("birthday")),userData.get("phone"), Status.ACTIVE);
         TransactionManager transactionManager = new TransactionManager();

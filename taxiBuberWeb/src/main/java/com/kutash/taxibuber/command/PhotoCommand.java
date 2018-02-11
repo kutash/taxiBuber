@@ -2,7 +2,6 @@ package com.kutash.taxibuber.command;
 
 import com.kutash.taxibuber.controller.Router;
 import com.kutash.taxibuber.resource.PhotoManager;
-import com.kutash.taxibuber.util.FileManager;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -14,7 +13,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Properties;
 
 /**
  * The type Photo command.
@@ -61,8 +59,7 @@ public class PhotoCommand implements Command {
             }
         } catch (IOException e) {
             LOGGER.log(Level.ERROR, "Exception while unloading photo {}",e);
-        }
-        finally {
+        } finally {
             try {
                 if (out != null && in != null) {
                     out.close();

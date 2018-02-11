@@ -1,7 +1,18 @@
 package com.kutash.taxibuber.service;
 
-import com.kutash.taxibuber.dao.*;
-import com.kutash.taxibuber.entity.*;
+import com.kutash.taxibuber.dao.AddressDAO;
+import com.kutash.taxibuber.dao.CarDAO;
+import com.kutash.taxibuber.dao.DAOFactory;
+import com.kutash.taxibuber.dao.TransactionManager;
+import com.kutash.taxibuber.dao.TripDAO;
+import com.kutash.taxibuber.dao.UserDAO;
+import com.kutash.taxibuber.entity.Status;
+import com.kutash.taxibuber.entity.Address;
+import com.kutash.taxibuber.entity.Car;
+import com.kutash.taxibuber.entity.Trip;
+import com.kutash.taxibuber.entity.TripStatus;
+import com.kutash.taxibuber.entity.User;
+import com.kutash.taxibuber.entity.UserRole;
 import com.kutash.taxibuber.exception.DAOException;
 import com.kutash.taxibuber.websocket.WebSocketSender;
 import org.apache.logging.log4j.Level;
@@ -85,18 +96,6 @@ public class TripService extends AbstractService<Trip>{
         LOGGER.log(Level.INFO,"Creating trip");
         TripDAO tripDAO = new DAOFactory().getTripDAO();
         return super.create(entity, tripDAO);
-    }
-
-    /**
-     * Find trip by id trip.
-     *
-     * @param id the id
-     * @return the trip
-     */
-    public Trip findTripById(int id) {
-        LOGGER.log(Level.INFO,"Finding trip id={}",id);
-        TripDAO tripDAO = new DAOFactory().getTripDAO();
-        return super.findEntityById(id,tripDAO);
     }
 
     /**

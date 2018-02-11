@@ -21,7 +21,9 @@
     </head>
     <body>
         <jsp:include page="/jsp/user/header.jsp"/>
-        <form action="${switchLanguage}" method="post" id="l"></form>
+        <form action="controller" method="post" id="l">
+            <input type="hidden" name="command" value="main">
+        </form>
         <div class="container">
             <div class="alert alert-info alert-dismissable fade in" id="no-cars" style="display: none">
                 <a href="#" class="close" id="alert" aria-label="close">&times;</a>
@@ -82,14 +84,13 @@
                         <input type="hidden" id="language" value="${language}"/>
                         <input type="hidden" name="distance" id="distance-input" value="<c:out value="${distance}"/>">
                         <input type="hidden" name="duration" id="duration-input" value="<c:out value="${duration}"/>">
-                        <input type="hidden" name="durationText" id="duration-text" value="<c:out value="${durationText}"/>">
                         <input type="hidden" name="cost" id="cost-input" value="<c:out value="${cost}"/>">
                     </form>
                     <br/>
                     <div id="dvDistance" style="display: none; margin-top: 45px">
-                        <span class="label-span" style="margin-left: -26px"><fmt:message key="label.distance"/>:</span><span class="info-span" id="distance"><c:out value="${distanceNumber}"/></span> <span class="label-span"><fmt:message key="label.kilometers"/></span><br>
-                        <span class="label-span"><fmt:message key="label.duration"/>:</span><span id="duration" class="info-span"><c:out value="${durationText}"/></span><span class="label-span"></span><br>
-                        <span class="label-span" style="margin-left: -29px"><fmt:message key="label.cost"/>:</span><span id="cost" class="info-span"><c:out value="${cost}"/></span> <span class="label-span"><fmt:message key="label.currency"/></span>
+                        <span class="label-span" style="margin-left: 1px"><fmt:message key="label.distance"/>:</span><span class="info-span" id="distance"><c:out value="${distanceNumber}"/></span> <span class="label-span"><fmt:message key="label.kilometers"/></span><br>
+                        <span class="label-span"><fmt:message key="label.duration"/>:</span><span id="duration" class="info-span"><c:out value="${durationText}"/></span><span class="label-span"> <fmt:message key="label.minutes"/></span><br>
+                        <span class="label-span" style="margin-left: -32px"><fmt:message key="label.cost"/>:</span><span id="cost" class="info-span"><c:out value="${cost}"/></span> <span class="label-span"><fmt:message key="label.currency"/></span>
                         <div class="err">${errors.costError}</div>
                         <div class="err">${errors.distanceError}</div>
                     </div>

@@ -101,7 +101,7 @@
                                     <div>
                                         <input type='file' id="imgInp" style="display: none" name="photo" form="saveUserForm"/>
                                         <a href="javascript:{}" id="img">
-                                            <img id="blah" src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${user.photoPath}" alt="your image" width="280" height="280"  />
+                                            <img id="blah" src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${user.photoPath}" style="border: 1px solid lightgray;" width="280" height="280"  />
                                         </a>
                                     </div>
                                 </div>

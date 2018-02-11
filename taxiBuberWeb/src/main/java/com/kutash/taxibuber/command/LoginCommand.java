@@ -1,7 +1,9 @@
 package com.kutash.taxibuber.command;
 
 import com.kutash.taxibuber.controller.Router;
-import com.kutash.taxibuber.entity.*;
+import com.kutash.taxibuber.entity.Status;
+import com.kutash.taxibuber.entity.User;
+import com.kutash.taxibuber.entity.UserRole;
 import com.kutash.taxibuber.resource.MessageManager;
 import com.kutash.taxibuber.resource.PageManager;
 import com.kutash.taxibuber.service.LoginService;

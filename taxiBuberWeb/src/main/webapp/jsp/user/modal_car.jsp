@@ -25,7 +25,7 @@
                                 <input type="hidden" id="car-photo" value="${car.photoPath}">
                                 <input type='file' id="file-car" style="display: none" name="photo" form="saveCarForm" ${currentUser.role == 'ADMIN' ? 'disabled' : ''}/>
                                 <a href="javascript:{}" id="img">
-                                    <img id="car-img" src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${car.photoPath}&amp;userId=${car.userId}" alt="your image" width="270" height="270"  />
+                                    <img id="car-img" src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${car.photoPath}&amp;userId=${car.userId}" style="border: 1px solid lightgray;" width="270" height="270"  />
                                 </a>
                             </div>
                         </div>

@@ -17,7 +17,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.UUID;
 
-
 /**
  * The type Login service.
  */
@@ -54,9 +53,7 @@ public class LoginService {
         if (user != null){
             byte[] encryptedPassword = new PasswordEncryptor(email).encrypt(password);
             LOGGER.log(Level.INFO,"password {}",new String(encryptedPassword,"UTF-8"));
-            if (Arrays.equals(encryptedPassword, user.getPassword())) {
-                return user;
-            } else {
+            if (!Arrays.equals(encryptedPassword, user.getPassword())) {
                 return null;
             }
         }

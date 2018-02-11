@@ -1,7 +1,10 @@
 package com.kutash.taxibuber.service;
 
-import com.kutash.taxibuber.dao.*;
-import com.kutash.taxibuber.entity.*;
+import com.kutash.taxibuber.dao.AddressDAO;
+import com.kutash.taxibuber.dao.DAOFactory;
+import com.kutash.taxibuber.dao.TransactionManager;
+import com.kutash.taxibuber.entity.Address;
+import com.kutash.taxibuber.entity.Status;
 import com.kutash.taxibuber.exception.DAOException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -75,7 +78,7 @@ public class AddressService extends AbstractService<Address>{
             try {
                 transactionManager.rollback();
             } catch (DAOException e1) {
-                LOGGER.catching(Level.ERROR, e1);;
+                LOGGER.catching(Level.ERROR, e1);
             }
             LOGGER.catching(Level.ERROR, e);
         }

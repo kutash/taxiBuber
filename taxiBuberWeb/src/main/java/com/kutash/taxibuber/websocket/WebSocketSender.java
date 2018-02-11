@@ -1,16 +1,18 @@
 package com.kutash.taxibuber.websocket;
 
 import com.google.gson.Gson;
-import com.kutash.taxibuber.entity.Car;
 import com.kutash.taxibuber.entity.Trip;
 import com.kutash.taxibuber.entity.User;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.websocket.*;
+import javax.websocket.OnError;
+import javax.websocket.EndpointConfig;
+import javax.websocket.OnClose;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
@@ -24,7 +26,6 @@ public class WebSocketSender {
     private static final Logger LOGGER = LogManager.getLogger();
     private final static ReentrantLock lock = new ReentrantLock();
     private PushContext pushContext = PushContext.getInstance();
-
 
     /**
      * On open.

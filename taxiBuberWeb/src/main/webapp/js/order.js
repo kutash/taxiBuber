@@ -155,6 +155,7 @@ function initMap() {
             var geocoder = new google.maps.Geocoder();
             geocodeAddress(geocoder);
             calculateAndDisplayRoute(directionsService, directionsDisplay);
+            getAvailableCars();
         });
 
         var end = new google.maps.places.SearchBox(document.getElementById('end'));
@@ -289,9 +290,9 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
                     distanceSpan.innerHTML = ''+(dis.toFixed(2));
                     document.getElementById('distance-input').value = distanceVal;
                     var durationSpan = document.getElementById('duration');
-                    durationSpan.innerHTML = duration;
+                    var dur = durationVal/60;
+                    durationSpan.innerHTML = ''+(dur.toFixed());
                     document.getElementById('duration-input').value = durationVal;
-                    document.getElementById('duration-text').value = duration;
                     var costSpan = document.getElementById('cost');
                     costSpan.innerHTML = '' + result;
                     document.getElementById('cost-input').value = result;

@@ -51,7 +51,7 @@ public class DeleteCarCommand implements Command {
         String carId = request.getParameter(CAR_ID);
         Car car = carService.deleteCar(carId);
         if(car.getStatus().equals(Status.ARCHIVED)) {
-            router.setRoute(Router.RouteType.REDIRECT);;
+            router.setRoute(Router.RouteType.REDIRECT);
             request.getSession().setAttribute("deletedMessage", messageManager.getProperty("label.car") + " " + messageManager.getProperty("message.deleted"));
             router.setPage(PageManager.getProperty("path.command.edit") + driverId);
         }else {

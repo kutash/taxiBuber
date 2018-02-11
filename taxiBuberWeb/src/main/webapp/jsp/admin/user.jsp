@@ -44,7 +44,7 @@
                         <div>
                             <input type='file' id="imgInp" style="display: none" name="photo" form="saveUserForm" ${currentUser.role == 'ADMIN' ? 'disabled' : ''}/>
                             <a href="javascript:{}" id="img">
-                                <img id="blah" src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${user.photoPath}&amp;userId=${user.id}" alt="your image" width="300" height="270"  />
+                                <img id="blah" src="${pageContext.request.contextPath}/ajaxController?command=photo&amp;photo=${user.photoPath}&amp;userId=${user.id}" style="border: 1px solid lightgray;" width="300" height="270"  />
                             </a>
                         </div>
                         <div>

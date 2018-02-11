@@ -9,7 +9,11 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
-import java.sql.*;
+import java.sql.Timestamp;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +42,6 @@ public class TripDAO extends AbstractDAO<Trip> {
             "t.departure_address = a.id_address INNER JOIN user AS us ON a.id_user = us.id_user INNER JOIN address AS ad ON t.destination_address = ad.id_address WHERE u.id_user=?";
     private static final String CREATE_TRIP = "INSERT INTO trip(price,date,distance,id_car,departure_address,destination_address,status) VALUES (?,?,?,?,?,?,?)";
     private static final String UPDATE_TRIP = "UPDATE trip  SET price=?,date=?,distance=?,id_car=?,departure_address=?,destination_address=?, status=? WHERE id_trip=?";
-    private static final String FIND_ORDERED_TRIP = "SELECT t.id_trip,t.price,t.date,t.distance,t.id_car,t.departure_address,t.destination_address,t.status,a.address AS departure_string,ad.address\n" +
-            "AS destination_string FROM trip as t INNER JOIN car as c ON t.id_car = c.id_car INNER JOIN address AS a ON t.departure_address = a.id_address\n" +
-            "INNER JOIN address AS ad ON t.destination_address = ad.id_address WHERE c.id_car = ? AND t.status='ORDERED'";
     private static final String FIND_ACTIVE_TRIPS = "SELECT t.id_trip,t.price,t.date,t.distance,t.id_car,t.departure_address,t.destination_address,t.status,a.address AS departure_string,ad.address\n" +
             "AS destination_string FROM trip as t INNER JOIN car as c ON t.id_car = c.id_car INNER JOIN address AS a ON t.departure_address = a.id_address\n" +
             "INNER JOIN address AS ad ON t.destination_address = ad.id_address WHERE c.id_car = ? AND t.status = 'STARTED'";

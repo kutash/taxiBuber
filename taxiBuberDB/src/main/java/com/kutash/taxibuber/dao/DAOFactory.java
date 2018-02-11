@@ -1,7 +1,5 @@
 package com.kutash.taxibuber.dao;
 
-import com.kutash.taxibuber.entity.Trip;
-
 /**
  * The type Dao factory.
  */

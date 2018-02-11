@@ -37,16 +37,21 @@ public class SetCoordinatesCommand implements Command {
     public Router execute(HttpServletRequest request, HttpServletResponse response) {
         LOGGER.log(Level.INFO,"setting coordinates to the car");
         Router router = new Router();
+        String carId = "";
+        String latitude = "";
+        String longitude = "";
         Reader reader = null;
         try {
             reader = request.getReader();
         } catch (IOException e) {
             LOGGER.catching(Level.ERROR,e);
         }
-        JsonObject data = new Gson().fromJson(reader, JsonObject.class);
-        String carId = data.get(CAR_ID).getAsString();
-        String latitude = data.get(LATITUDE).getAsString();
-        String longitude = data.get(LONGITUDE).getAsString();
+        if (reader != null){
+            JsonObject data = new Gson().fromJson(reader, JsonObject.class);
+            carId = data.get(CAR_ID).getAsString();
+            latitude = data.get(LATITUDE).getAsString();
+            longitude = data.get(LONGITUDE).getAsString();
+        }
         String result = carService.setCoordinates(carId,latitude,longitude);
         String json = new Gson().toJson(result);
         router.setPage(json);

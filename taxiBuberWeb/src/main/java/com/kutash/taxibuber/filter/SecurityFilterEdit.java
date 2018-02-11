@@ -7,8 +7,13 @@ import com.kutash.taxibuber.resource.PageManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import javax.servlet.*;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +25,7 @@ import java.util.EnumSet;
  * The type Security filter edit.
  */
 @WebFilter(urlPatterns = { "/controller" }, servletNames = { "Controller" })
-public class SecurityFilterEdit implements Filter{
+public class SecurityFilterEdit implements Filter {
 
     private static final Logger LOGGER = LogManager.getLogger();
 

@@ -1,7 +1,6 @@
 package com.kutash.taxibuber.command;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.kutash.taxibuber.controller.Router;
 import com.kutash.taxibuber.entity.Trip;
 import com.kutash.taxibuber.entity.TripStatus;
@@ -12,8 +11,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.Reader;
 
 /**
  * The type Complete trip command.

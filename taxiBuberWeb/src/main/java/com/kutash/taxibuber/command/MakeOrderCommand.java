@@ -1,7 +1,8 @@
 package com.kutash.taxibuber.command;
 
 import com.kutash.taxibuber.controller.Router;
-import com.kutash.taxibuber.entity.*;
+import com.kutash.taxibuber.entity.Car;
+import com.kutash.taxibuber.entity.User;
 import com.kutash.taxibuber.resource.MessageManager;
 import com.kutash.taxibuber.resource.PageManager;
 import com.kutash.taxibuber.service.CarService;
@@ -30,9 +31,9 @@ public class MakeOrderCommand implements Command {
     private static final String COST = "cost";
     private static final String SOURCE = "start";
     private static final String DESTINATION = "end";
-    private static final String DURATION_TEXT = "durationText";
     private static final String CURRENT_USER = "currentUser";
     private static final int METERS_IN_KILOMETER = 1000;
+    private static final int SECONDS_IN_MINUTE = 60;
     private TripService tripService;
     private CarService carService;
 
@@ -61,18 +62,18 @@ public class MakeOrderCommand implements Command {
                 router.setRoute(Router.RouteType.REDIRECT);
             }else {
                 errors.put("emptyCar","");
-                returnErrors(data,errors,request,language);
+                returnErrors(data,errors,request);
                 request.setAttribute("orderMessage", new MessageManager(language).getProperty("message.noorder"));
             }
         }else {
-            returnErrors(data,errors,request,language);
+            returnErrors(data,errors,request);
             request.setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
         }
         router.setPage(PageManager.getProperty("path.command.main"));
         return router;
     }
 
-    private void returnErrors(HashMap<String,String> data,HashMap<String,String> errors,HttpServletRequest request,String language){
+    private void returnErrors(HashMap<String,String> data,HashMap<String,String> errors,HttpServletRequest request){
         float distanceNumber = 0.0f;
         if (!errors.containsKey("emptyCar")){
             int carId = Integer.parseInt(data.get("carId"));
@@ -102,7 +103,8 @@ public class MakeOrderCommand implements Command {
         String cost = request.getParameter(COST);
         String source = request.getParameter(SOURCE);
         String destination = request.getParameter(DESTINATION);
-        String durationText = request.getParameter(DURATION_TEXT);
+        long durationDouble = Math.round(Double.parseDouble(duration)/SECONDS_IN_MINUTE);
+        String durationText = String.valueOf(durationDouble);
         data.put("distance",distance);
         data.put("duration",duration);
         data.put("capacity",capacity);

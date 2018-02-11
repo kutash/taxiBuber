@@ -12,9 +12,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.UnsupportedEncodingException;
-import java.util.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,7 +44,7 @@ public class Validator {
      * @param language the language
      * @return the hash map
      */
-    public HashMap<String,String> validateUser(HashMap<String,String> data,String language){
+    public HashMap<String,String> validateUser(HashMap<String,String> data, String language){
         LOGGER.log(Level.DEBUG,"validating user");
         MessageManager messageManager = new MessageManager(language);
         Pattern patternName = Pattern.compile(NAME);
@@ -292,6 +295,7 @@ public class Validator {
     }
 
     private boolean checkBirthday(String birthday) {
+        boolean result = false;
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;
         try {
@@ -301,6 +305,9 @@ public class Validator {
             LOGGER.catching(Level.ERROR,e);
         }
         Date now = new Date();
-        return !date.after(now);
+        if (date != null) {
+            result = !date.after(now);
+        }
+        return result;
     }
 }

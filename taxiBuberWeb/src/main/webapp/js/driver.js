@@ -179,7 +179,6 @@ var longitude;
 var map;
 var markerArray = [];
 
-
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: -34.397, lng: 150.644},
@@ -194,7 +193,7 @@ function initMap() {
             };
             latitude = position.coords.latitude;
             longitude = position.coords.longitude;
-            setCarCoordinates(latitude,longitude);
+            //setCarCoordinates(latitude,longitude);
             var geocoder = new google.maps.Geocoder;
             var latLng = new google.maps.LatLng(latitude,longitude);
             geocodeLatLng(geocoder,map,infoWindow,latLng);
