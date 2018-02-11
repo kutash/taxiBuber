@@ -18,6 +18,9 @@ import java.text.SimpleDateFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The type Validator.
+ */
 public class Validator {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -31,6 +34,13 @@ public class Validator {
     private static final String SPACE = "\\s";
     private static final String DIGIT = "\\d+";
 
+    /**
+     * Validate user hash map.
+     *
+     * @param data     the data
+     * @param language the language
+     * @return the hash map
+     */
     public HashMap<String,String> validateUser(HashMap<String,String> data,String language){
         LOGGER.log(Level.DEBUG,"validating user");
         MessageManager messageManager = new MessageManager(language);
@@ -129,6 +139,14 @@ public class Validator {
         return map;
     }
 
+    /**
+     * Check password hash map.
+     *
+     * @param passwordByte        the password byte
+     * @param passwordConfirmByte the password confirm byte
+     * @param language            the language
+     * @return the hash map
+     */
     public HashMap<String,String> checkPassword(byte[] passwordByte,byte[] passwordConfirmByte,String language){
         LOGGER.log(Level.DEBUG,"validating password");
         MessageManager messageManager = new MessageManager(language);
@@ -158,6 +176,13 @@ public class Validator {
         return map;
     }
 
+    /**
+     * Validate car hash map.
+     *
+     * @param data     the data
+     * @param language the language
+     * @return the hash map
+     */
     public HashMap<String,String> validateCar(HashMap<String,String> data ,String language) {
         LOGGER.log(Level.DEBUG, "validating car");
         MessageManager messageManager = new MessageManager(language);
@@ -206,6 +231,13 @@ public class Validator {
         return map;
     }
 
+    /**
+     * Validate order hash map.
+     *
+     * @param data     the data
+     * @param language the language
+     * @return the hash map
+     */
     public HashMap<String,String> validateOrder(HashMap<String,String> data,String language){
         LOGGER.log(Level.DEBUG, "validating order");
         HashMap<String, String> map = new HashMap<>();

@@ -11,6 +11,9 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+/**
+ * The type Cost calculator.
+ */
 public class CostCalculator {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -20,11 +23,25 @@ public class CostCalculator {
     private static final double HALF = 0.50;
     private static final double THREE_QUARTERS = 0.75;
     private CarService carService;
-    
+
+    /**
+     * Instantiates a new Cost calculator.
+     *
+     * @param carService the car service
+     */
     public CostCalculator(CarService carService){
         this.carService = carService;
     }
 
+    /**
+     * Define cost string.
+     *
+     * @param distanceStr the distance str
+     * @param durationStr the duration str
+     * @param capacity    the capacity
+     * @param carId       the car id
+     * @return the string
+     */
     public String defineCost(String distanceStr,String durationStr,String capacity,String carId){
         Capacity carCapacity;
         if (StringUtils.isNotEmpty(carId)){

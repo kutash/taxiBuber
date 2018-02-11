@@ -8,6 +8,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * The type Push context.
+ */
 class PushContext {
 
     private static AtomicBoolean instanceCreated = new AtomicBoolean();
@@ -22,6 +25,11 @@ class PushContext {
         sessions = new ConcurrentHashMap<>();
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static PushContext getInstance() {
         if (!instanceCreated.get()){
             lock.lock();
@@ -37,14 +45,30 @@ class PushContext {
         return instance;
     }
 
+    /**
+     * Add.
+     *
+     * @param session the session
+     * @param user    the user
+     */
     void add(Session session, User user) {
         sessions.computeIfAbsent(user, v -> ConcurrentHashMap.newKeySet()).add(session);
     }
 
+    /**
+     * Remove.
+     *
+     * @param session the session
+     */
     void remove(Session session) {
         sessions.values().forEach(v -> v.removeIf(e -> e.equals(session)));
     }
 
+    /**
+     * Gets sessions.
+     *
+     * @return the sessions
+     */
     Map<User, Set<Session>> getSessions() {
         return sessions;
     }

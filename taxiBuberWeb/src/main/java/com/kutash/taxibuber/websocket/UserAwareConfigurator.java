@@ -7,6 +7,9 @@ import javax.websocket.HandshakeResponse;
 import javax.websocket.server.HandshakeRequest;
 import javax.websocket.server.ServerEndpointConfig;
 
+/**
+ * The type User aware configurator.
+ */
 public class UserAwareConfigurator extends ServerEndpointConfig.Configurator {
 
     @Override

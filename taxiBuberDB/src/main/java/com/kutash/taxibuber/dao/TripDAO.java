@@ -13,6 +13,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Trip dao.
+ */
 public class TripDAO extends AbstractDAO<Trip> {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -62,6 +65,14 @@ public class TripDAO extends AbstractDAO<Trip> {
         return trips;
     }
 
+    /**
+     * Find by user id list.
+     *
+     * @param userId the user id
+     * @param role   the role
+     * @return the list
+     * @throws DAOException the dao exception
+     */
     public List<Trip> findByUserId(int userId, UserRole role) throws DAOException {
         LOGGER.log(Level.INFO,"Finding trips by user id");
         PreparedStatement preparedStatement = null;
@@ -108,26 +119,13 @@ public class TripDAO extends AbstractDAO<Trip> {
         return trip;
     }
 
-
-    public Trip findOrdered(int carId) throws DAOException {
-        LOGGER.log(Level.INFO,"find trip where status=ORDERED by car id {}",carId);
-        Trip trip = null;
-        PreparedStatement preparedStatement = null;
-        try {
-            preparedStatement = getPreparedStatement(FIND_ORDERED_TRIP);
-            preparedStatement.setInt(1,carId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                trip = getTrip(resultSet);
-            }
-        }catch (SQLException e){
-            throw new DAOException("Exception while finding ORDERED trip by carId",e);
-        }finally {
-            close(preparedStatement);
-        }
-        return trip;
-    }
-
+    /**
+     * Find started trip.
+     *
+     * @param carId the car id
+     * @return the trip
+     * @throws DAOException the dao exception
+     */
     public Trip findStarted(int carId) throws DAOException {
         LOGGER.log(Level.INFO,"find trip where status != COMPLETED by car id {}",carId);
         Trip trip = null;
@@ -188,7 +186,7 @@ public class TripDAO extends AbstractDAO<Trip> {
     private PreparedStatement setTripValues(PreparedStatement preparedStatement, Trip entity) throws DAOException {
         try {
             preparedStatement.setBigDecimal(1, entity.getPrice());
-            preparedStatement.setDate(2, new java.sql.Date(entity.getDate().getTime()));
+            preparedStatement.setTimestamp(2, new Timestamp(entity.getDate().getTime()));
             preparedStatement.setFloat(3, entity.getDistance());
             preparedStatement.setInt(4, entity.getIdCar());
             preparedStatement.setInt(5, entity.getDepartureAddress());
@@ -205,7 +203,7 @@ public class TripDAO extends AbstractDAO<Trip> {
         try {
             int idTrip = resultSet.getInt("id_trip");
             BigDecimal price = resultSet.getBigDecimal("price");
-            java.util.Date date = resultSet.getDate("date");
+            java.util.Date date = resultSet.getTimestamp("date");
             float distance = resultSet.getFloat("distance");
             int carId = resultSet.getInt("id_car");
             int departureAddress = resultSet.getInt("departure_address");

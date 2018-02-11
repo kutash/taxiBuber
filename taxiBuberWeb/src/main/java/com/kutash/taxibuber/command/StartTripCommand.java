@@ -13,12 +13,20 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * The type Start trip command.
+ */
 public class StartTripCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String TRIP_ID = "tripId";
     private TripService service;
 
+    /**
+     * Instantiates a new Start trip command.
+     *
+     * @param service the service
+     */
     StartTripCommand(TripService service) {
         this.service = service;
     }

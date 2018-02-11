@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="suite1">
-    <test name="DaoTest">
+    <test name="daoTest">
         <classes>
             <class name="com.kutash.test.dao.CommentDAOTest"/>
             <class name="com.kutash.test.dao.CarDAOTest"/>
             <class name="com.kutash.test.dao.AddressDAOTest"/>
             <class name="com.kutash.test.dao.TripDAOTest"/>
             <class name="com.kutash.test.dao.UserDAOTest"/>
-            <!--<class name="com.kutash.test.pool.ConnectionPoolTest"/>-->
+        </classes>
+    </test>
+    <test name="connectionPoolTest">
+        <classes>
+            <class name="com.kutash.test.pool.ConnectionPoolTest"/>
         </classes>
     </test>
 </suite>

@@ -12,12 +12,20 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * The type Delete command.
+ */
 public class DeleteCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String USER_ID = "userId";
     private UserService userService;
 
+    /**
+     * Instantiates a new Delete command.
+     *
+     * @param userService the user service
+     */
     DeleteCommand(UserService userService){
         this.userService = userService;
     }

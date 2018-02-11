@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Properties;
 
+/**
+ * The type Photo command.
+ */
 public class PhotoCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();

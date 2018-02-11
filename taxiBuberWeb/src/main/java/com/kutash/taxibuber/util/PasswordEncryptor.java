@@ -13,10 +13,18 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
+/**
+ * The type Password encryptor.
+ */
 public class PasswordEncryptor {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    
+
+    /**
+     * Instantiates a new Password encryptor.
+     *
+     * @param keyString the key string
+     */
     public PasswordEncryptor(String keyString) {
         keyString = keyString.substring(0,8);
         byte[] key = keyString.getBytes();
@@ -34,6 +42,9 @@ public class PasswordEncryptor {
         dcipher.init(Cipher.DECRYPT_MODE, key);
     }
 
+    /**
+     * The type Des secret key.
+     */
     public static class DESSecretKey implements SecretKey {
 
         private final byte[] key;
@@ -60,6 +71,12 @@ public class PasswordEncryptor {
 
     private Cipher ecipher;
 
+    /**
+     * Encrypt byte [ ].
+     *
+     * @param utf8 the utf 8
+     * @return the byte [ ]
+     */
     public byte[] encrypt(byte[] utf8) {
         try {
             byte[] enc = ecipher.doFinal(utf8);

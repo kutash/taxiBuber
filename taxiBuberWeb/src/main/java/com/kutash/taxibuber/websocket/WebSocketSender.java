@@ -15,6 +15,9 @@ import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
+/**
+ * The type Web socket sender.
+ */
 @ServerEndpoint(value = "/socket", configurator=UserAwareConfigurator.class)
 public class WebSocketSender {
 
@@ -23,23 +26,46 @@ public class WebSocketSender {
     private PushContext pushContext = PushContext.getInstance();
 
 
+    /**
+     * On open.
+     *
+     * @param session the session
+     * @param config  the config
+     */
     @OnOpen
     public void onOpen(Session session, EndpointConfig config) {
         User user = (User) config.getUserProperties().get("currentUser");
         pushContext.add(session, user);
     }
 
+    /**
+     * On close.
+     *
+     * @param session the session
+     */
     @OnClose
     public void onClose(Session session) {
         pushContext.remove(session);
     }
 
+    /**
+     * On error.
+     *
+     * @param session the session
+     * @param t       the t
+     */
     @OnError
     public void onError(Session session, Throwable t){
         pushContext.remove(session);
         LOGGER.log(Level.ERROR,t);
     }
 
+    /**
+     * Send.
+     *
+     * @param user    the user
+     * @param message the message
+     */
     public void send(User user, String message) {
         Set<Session> userSessions;
         lock.lock();
@@ -59,6 +85,12 @@ public class WebSocketSender {
         }
     }
 
+    /**
+     * Send.
+     *
+     * @param user the user
+     * @param trip the trip
+     */
     public void send(User user, Trip trip) {
         Set<Session> userSessions;
         lock.lock();

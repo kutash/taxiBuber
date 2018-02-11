@@ -12,8 +12,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 
+/**
+ * The type Make order command.
+ */
 public class MakeOrderCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -27,10 +32,16 @@ public class MakeOrderCommand implements Command {
     private static final String DESTINATION = "end";
     private static final String DURATION_TEXT = "durationText";
     private static final String CURRENT_USER = "currentUser";
-    private static final int METER_IN_KILOMETER = 1000;
+    private static final int METERS_IN_KILOMETER = 1000;
     private TripService tripService;
     private CarService carService;
 
+    /**
+     * Instantiates a new Make order command.
+     *
+     * @param tripService the trip service
+     * @param carService  the car service
+     */
     MakeOrderCommand(TripService tripService,CarService carService){
         this.carService=carService;
         this.tripService=tripService;
@@ -49,8 +60,9 @@ public class MakeOrderCommand implements Command {
             if (tripId != 0) {
                 router.setRoute(Router.RouteType.REDIRECT);
             }else {
+                errors.put("emptyCar","");
                 returnErrors(data,errors,request,language);
-                request.setAttribute("orderMessage", new MessageManager(language).getProperty("message.wrongorder"));
+                request.setAttribute("orderMessage", new MessageManager(language).getProperty("message.noorder"));
             }
         }else {
             returnErrors(data,errors,request,language);
@@ -68,7 +80,8 @@ public class MakeOrderCommand implements Command {
             request.setAttribute("car", car.getBrand().getName() + " " + car.getModel());
             request.setAttribute("carId", car.getId());
         }if (!errors.containsKey("distance")){
-            distanceNumber = Float.parseFloat(data.get("distance")) / METER_IN_KILOMETER;
+            distanceNumber = Float.parseFloat(data.get("distance")) / METERS_IN_KILOMETER;
+            distanceNumber = new BigDecimal(distanceNumber).setScale(2, RoundingMode.UP).floatValue();
         }
         request.setAttribute("errors",errors);
         request.setAttribute("cost", data.get("cost"));

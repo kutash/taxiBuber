@@ -158,7 +158,6 @@ $(document).ready(function(){
             $("#content").find('tr').children('.' + parameter).filter(function () {
                 if(($(this).text().toLowerCase().indexOf(value) === -1)){
                     $(this).parent().children('.' + parameter + '2').filter(function () {
-                        console.log($(this).text());
                         $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
                     });
                 }else {

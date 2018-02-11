@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+/**
+ * The type Free cars command.
+ */
 public class FreeCarsCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -20,6 +23,11 @@ public class FreeCarsCommand implements Command {
     private static final String BODY_TYPE = "bodyType";
     private CarService service;
 
+    /**
+     * Instantiates a new Free cars command.
+     *
+     * @param carService the car service
+     */
     FreeCarsCommand(CarService carService) {
         this.service = carService;
     }

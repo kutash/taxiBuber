@@ -18,10 +18,21 @@ import java.util.Arrays;
 import java.util.UUID;
 
 
+/**
+ * The type Login service.
+ */
 public class LoginService {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    /**
+     * Log in user.
+     *
+     * @param password the password
+     * @param email    the email
+     * @return the user
+     * @throws UnsupportedEncodingException the unsupported encoding exception
+     */
     public User logIn(byte[] password, String email) throws UnsupportedEncodingException {
         LOGGER.log(Level.INFO,"log in user email {}",email);
         TransactionManager transactionManager = new TransactionManager();
@@ -52,6 +63,13 @@ public class LoginService {
         return user;
     }
 
+    /**
+     * Send password user.
+     *
+     * @param email    the email
+     * @param language the language
+     * @return the user
+     */
     public User sendPassword(String email,String language){
         LOGGER.log(Level.INFO,"sending password to emai {}",email);
         TransactionManager transactionManager = new TransactionManager();
@@ -80,6 +98,11 @@ public class LoginService {
         return user;
     }
 
+    /**
+     * Log out.
+     *
+     * @param userId the user id
+     */
     public void logOut(int userId){
         LOGGER.log(Level.INFO,"log out user id {}",userId);
         TransactionManager transactionManager = new TransactionManager();

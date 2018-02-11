@@ -16,6 +16,9 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.EnumSet;
 
+/**
+ * The type Security filter profile.
+ */
 @WebFilter(urlPatterns = { "/controller" }, servletNames = { "Controller" })
 public class SecurityFilterProfile implements Filter {
 

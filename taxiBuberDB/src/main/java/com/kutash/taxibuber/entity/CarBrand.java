@@ -1,22 +1,46 @@
 package com.kutash.taxibuber.entity;
 
+/**
+ * The type Car brand.
+ */
 public class CarBrand extends AbstractEntity {
 
     private String name;
 
+    /**
+     * Instantiates a new Car brand.
+     *
+     * @param name the name
+     */
     public CarBrand(String name) {
         this.name = name;
     }
 
+    /**
+     * Instantiates a new Car brand.
+     *
+     * @param id   the id
+     * @param name the name
+     */
     public CarBrand(int id, String name) {
         super(id);
         this.name = name;
     }
 
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets name.
+     *
+     * @param name the name
+     */
     public void setName(String name) {
         this.name = name;
     }

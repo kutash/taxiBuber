@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * The type Cancel command.
+ */
 public class CancelCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();

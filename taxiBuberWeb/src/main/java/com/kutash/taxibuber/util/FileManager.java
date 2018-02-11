@@ -8,10 +8,21 @@ import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * The type File manager.
+ */
 public class FileManager {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    /**
+     * Save photo string.
+     *
+     * @param part  the part
+     * @param id    the id
+     * @param isCar the is car
+     * @return the string
+     */
     public String savePhoto(Part part,int id, boolean isCar){
         LOGGER.log(Level.INFO,"saving photo");
         String fileName = "";
@@ -54,6 +65,12 @@ public class FileManager {
         return expansion;
     }
 
+    /**
+     * Delete file.
+     *
+     * @param path the path
+     * @param id   the id
+     */
     public void deleteFile(String path,int id) {
         String photoPath = PhotoManager.getInstance().getProperty("avatars_path") + id + File.separator + path;
         File file = new File(photoPath);
@@ -65,6 +82,11 @@ public class FileManager {
         }
     }
 
+    /**
+     * Delete folder.
+     *
+     * @param id the id
+     */
     public void deleteFolder(int id) {
         String path = PhotoManager.getInstance().getProperty("avatars_path") + id;
         File file = new File(path);

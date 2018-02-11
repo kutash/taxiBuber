@@ -20,17 +20,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Car service.
+ */
 public class CarService extends AbstractService<Car>{
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SPACE = "\\s";
 
+    /**
+     * Find by id car.
+     *
+     * @param id the id
+     * @return the car
+     */
     public Car findById(int id) {
         LOGGER.log(Level.INFO,"Finding car id={}",id);
         CarDAO carDAO = new DAOFactory().getCarDAO();
         return super.findEntityById(id,carDAO);
     }
 
+    /**
+     * Find by user id car.
+     *
+     * @param userId the user id
+     * @return the car
+     */
     public Car findByUserId(int userId) {
         LOGGER.log(Level.INFO,"Finding car user id={}",userId);
         TransactionManager transactionManager = new TransactionManager();
@@ -52,12 +67,25 @@ public class CarService extends AbstractService<Car>{
         return car;
     }
 
+    /**
+     * Find all list.
+     *
+     * @return the list
+     */
     public List<Car> findAll() {
         LOGGER.log(Level.INFO,"Finding all cars");
         CarDAO carDAO = new DAOFactory().getCarDAO();
         return super.findAll(carDAO);
     }
 
+    /**
+     * Find all available list.
+     *
+     * @param latitude  the latitude
+     * @param longitude the longitude
+     * @param bodyType  the body type
+     * @return the list
+     */
     public List<Car> findAllAvailable(String latitude,String longitude,String bodyType) {
         LOGGER.log(Level.INFO,"Finding all available cars");
         TransactionManager transactionManager = new TransactionManager();
@@ -95,6 +123,11 @@ public class CarService extends AbstractService<Car>{
         return nearestCars;
     }
 
+    /**
+     * Find all available list.
+     *
+     * @return the list
+     */
     public List<Car> findAllAvailable() {
         LOGGER.log(Level.INFO,"Finding all available cars");
         TransactionManager transactionManager = new TransactionManager();
@@ -115,6 +148,14 @@ public class CarService extends AbstractService<Car>{
         return cars;
     }
 
+    /**
+     * Update car car.
+     *
+     * @param carData the car data
+     * @param photo   the photo
+     * @param carOld  the car old
+     * @return the car
+     */
     public Car updateCar(Map<String,String> carData, Part photo, Car carOld){
         LOGGER.log(Level.INFO,"Updating car");
         String photoPath = new FileManager().savePhoto(photo,carOld.getUserId(),true);
@@ -131,6 +172,11 @@ public class CarService extends AbstractService<Car>{
         return super.update(carOld,carDAO);
     }
 
+    /**
+     * Find all brands list.
+     *
+     * @return the list
+     */
     public List<CarBrand> findAllBrands() {
         LOGGER.log(Level.INFO, "Finding all car brands");
         TransactionManager transactionManager = new TransactionManager();
@@ -161,6 +207,12 @@ public class CarService extends AbstractService<Car>{
         return Math.acos(cosD)*6371;
     }
 
+    /**
+     * Find brand by id car brand.
+     *
+     * @param id the id
+     * @return the car brand
+     */
     public CarBrand findBrandById(int id) {
         LOGGER.log(Level.INFO,"Finding car brand by id={}",id);
         TransactionManager transactionManager = new TransactionManager();
@@ -182,6 +234,14 @@ public class CarService extends AbstractService<Car>{
         return carBrand;
     }
 
+    /**
+     * Create car int.
+     *
+     * @param carData the car data
+     * @param photo   the photo
+     * @param user    the user
+     * @return the int
+     */
     public int createCar(Map<String,String> carData, Part photo,User user) {
         LOGGER.log(Level.INFO,"Creating car");
         String photoPath = new FileManager().savePhoto(photo,user.getId(),true);
@@ -192,6 +252,12 @@ public class CarService extends AbstractService<Car>{
         return super.create(car,carDAO);
     }
 
+    /**
+     * Is number exist boolean.
+     *
+     * @param number the number
+     * @return the boolean
+     */
     public boolean isNumberExist(String number) {
         LOGGER.log(Level.INFO,"Checking is number unique");
         TransactionManager transactionManager = new TransactionManager();
@@ -213,6 +279,13 @@ public class CarService extends AbstractService<Car>{
         return result;
     }
 
+    /**
+     * Is number exist for update boolean.
+     *
+     * @param number the number
+     * @param id     the id
+     * @return the boolean
+     */
     public boolean isNumberExistForUpdate(String number, int id) {
         LOGGER.log(Level.INFO,"Checking is number unique");
         TransactionManager transactionManager = new TransactionManager();
@@ -234,6 +307,14 @@ public class CarService extends AbstractService<Car>{
         return result;
     }
 
+    /**
+     * Set coordinates string.
+     *
+     * @param carId     the car id
+     * @param latitude  the latitude
+     * @param longitude the longitude
+     * @return the string
+     */
     public String setCoordinates(String carId,String latitude,String longitude){
         String result = "";
         if (StringUtils.isNotEmpty(carId)) {
@@ -264,6 +345,13 @@ public class CarService extends AbstractService<Car>{
         return result;
     }
 
+    /**
+     * Set available string.
+     *
+     * @param carId       the car id
+     * @param isAvailable the is available
+     * @return the string
+     */
     public String setAvailable(String carId,String isAvailable){
         LOGGER.log(Level.INFO,"Set is the car available");
         String result = "";
@@ -307,6 +395,12 @@ public class CarService extends AbstractService<Car>{
         return result;
     }
 
+    /**
+     * Delete car car.
+     *
+     * @param carId the car id
+     * @return the car
+     */
     public Car deleteCar(String carId){
         LOGGER.log(Level.INFO,"Deleting car");
         Car car = null;

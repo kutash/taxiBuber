@@ -59,7 +59,6 @@ $(document).ready(function () {
             url: "ajaxController?command=delete&userId="+idDel,
             contentType: 'application/json'
         }).done(function(result){
-            console.log(result);
             if(result === 'ok'){
                 var modalMessage = $('#modal-message');
                 var update = $('#message-deleted');

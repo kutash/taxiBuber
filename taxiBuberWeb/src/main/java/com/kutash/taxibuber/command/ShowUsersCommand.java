@@ -12,11 +12,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+/**
+ * The type Show users command.
+ */
 public class ShowUsersCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private UserService service;
 
+    /**
+     * Instantiates a new Show users command.
+     *
+     * @param service the service
+     */
     ShowUsersCommand(UserService service){this.service=service;}
 
     @Override

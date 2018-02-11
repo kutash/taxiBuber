@@ -44,9 +44,9 @@ public class TripDAOTest {
     public void findAllTest() throws DAOException {
         List<Trip> expected = new ArrayList<>();
         expected.add(new Trip(1,new BigDecimal("15.30"), Date.valueOf("2017-01-05"), 23.2f,1, 1, 2, TripStatus.STARTED,new Address(1,"Минск Казинца 38"),new Address(2,"Минск пр. Машерова 32"),2,5,"Борискин Борис","Васин Василий"));
-        expected.add(new Trip(2,new BigDecimal("22.25"), Date.valueOf("2017-02-04"), 28.5f,2, 3, 4, TripStatus.STARTED,new Address(3,"Минск Ленина 125"),new Address(4,"Минск Асаналиева 7"),3,4,"Моржов Анатолий","Абрамович Аркадий"));
+        expected.add(new Trip(2,new BigDecimal("22.25"), Date.valueOf("2017-02-04"), 28.5f,2, 3, 4, TripStatus.STARTED,new Address(3,"Минск Ульяновская 123"),new Address(4,"Минск Асаналиева 7"),3,4,"Моржов Анатолий","Абрамович Аркадий"));
         expected.add(new Trip(3,new BigDecimal("20.82"), Date.valueOf("2017-03-06"), 17.9f,1, 2, 1, TripStatus.ORDERED,new Address(2,"Минск пр. Машерова 32"),new Address(1,"Минск Казинца 38"),2,5,"Борискин Борис","Васин Василий"));
-        expected.add(new Trip(4,new BigDecimal("13.00"), Date.valueOf("2017-04-07"), 13.7f,2, 4, 3, TripStatus.ORDERED,new Address(4,"Минск Асаналиева 7"),new Address(3,"Минск Ленина 125"),3,4,"Моржов Анатолий","Абрамович Аркадий"));
+        expected.add(new Trip(4,new BigDecimal("13.00"), Date.valueOf("2017-04-07"), 13.7f,2, 4, 3, TripStatus.ORDERED,new Address(4,"Минск Асаналиева 7"),new Address(3,"Минск Ульяновская 123"),3,4,"Моржов Анатолий","Абрамович Аркадий"));
         List<Trip> actual = tripDAO.findAll();
         assertEquals(expected,actual);
     }
@@ -62,15 +62,8 @@ public class TripDAOTest {
 
     @Test(priority = 2)
     public void findEntityById() throws DAOException {
-        Trip expected = new Trip(2,new BigDecimal("22.25"), Date.valueOf("2017-02-04"), 28.5f,2, 3, 4, TripStatus.STARTED,new Address(3,"Минск Ленина 125"),new Address(4,"Минск Асаналиева 7"),3,4,"Моржов Анатолий","Абрамович Аркадий");
+        Trip expected = new Trip(2,new BigDecimal("22.25"), Date.valueOf("2017-02-04"), 28.5f,2, 3, 4, TripStatus.STARTED,new Address(3,"Минск Ульяновская 123"),new Address(4,"Минск Асаналиева 7"),3,4,"Моржов Анатолий","Абрамович Аркадий");
         Trip actual = tripDAO.findEntityById(2);
-        assertEquals(expected,actual);
-    }
-
-    @Test(priority = 2)
-    public void findOrderedTest() throws DAOException {
-        Trip expected = new Trip(4,new BigDecimal("13.00"), Date.valueOf("2017-04-07"), 13.7f,2, 4, 3, TripStatus.ORDERED,new Address(4,"Минск Асаналиева 7"),new Address(3,"Минск Ленина 125"));
-        Trip actual = tripDAO.findOrdered(2);
         assertEquals(expected,actual);
     }
 

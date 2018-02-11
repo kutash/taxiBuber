@@ -56,7 +56,6 @@ $(document).ready(function () {
     }));
 
     if ($('#update-password').text() !== '' || $('#update-user').text() !== ''){
-        console.log("user");
         var modalMessage = $('#modal-message');
         modalMessage.modal('show');
         setTimeout(function(){
@@ -270,6 +269,9 @@ $(document).ready(function () {
             console.log(result);
             if(result === 'deleted'){
                 $('#li'+id).remove();
+                if($('#list').find('li').length === 0){
+                    $('#addresses').remove();
+                }
             }
         })
     });

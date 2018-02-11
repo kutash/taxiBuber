@@ -17,6 +17,9 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.util.HashMap;
 
+/**
+ * The type Save user command.
+ */
 public class SaveUserCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -32,6 +35,11 @@ public class SaveUserCommand implements Command {
     private static final String LANGUAGE = "language";
     private UserService userService;
 
+    /**
+     * Instantiates a new Save user command.
+     *
+     * @param userService the user service
+     */
     SaveUserCommand(UserService userService){
         this.userService = userService;
     }

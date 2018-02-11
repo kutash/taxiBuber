@@ -8,12 +8,20 @@ import com.kutash.taxibuber.service.LoginService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * The type Forgot password command.
+ */
 public class ForgotPasswordCommand implements Command {
 
     private static final String EMAIL = "emailForgot";
     private static final String LANGUAGE = "language";
     private LoginService loginService;
 
+    /**
+     * Instantiates a new Forgot password command.
+     *
+     * @param loginService the login service
+     */
     ForgotPasswordCommand(LoginService loginService){
         this.loginService=loginService;
     }

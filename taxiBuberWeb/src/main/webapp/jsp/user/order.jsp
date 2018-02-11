@@ -46,7 +46,7 @@
                             <label class="control-label col-sm-3" for="end"><fmt:message key="label.destination"/>:</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
-                                    <input type="text" id="end" name="end" class="form-control" aria-label="..." required="required" value="<c:out value="${destination}"/>" style="height: 33px">
+                                    <input type="text" id="end" name="end" class="form-control" aria-label="..." required="required" value="<c:out value="${destination}"/>" style="height: 33.5px">
                                     <div class="input-group-btn">
                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Address <span class="caret"></span></button>
                                         <ul class="dropdown-menu dropdown-menu-right">
@@ -93,7 +93,7 @@
                         <div class="err">${errors.costError}</div>
                         <div class="err">${errors.distanceError}</div>
                     </div>
-                    <div class="form-group" id="order">
+                    <div class="form-group" id="order" style="display: none">
                         <div class="col-sm-offset-3 col-sm-6" style="margin-top: 20px">
                             <button type="button" id="order-button" class="btn btn-danger">
                                 <fmt:message key="label.order"/> <i class="fas fa-taxi"></i>
@@ -158,6 +158,7 @@
                         <div class="message" id="message-source" style="display: none"><fmt:message key="label.sourceerror"/></div>
                         <div class="message" id="message-destination" style="display: none"><fmt:message key="label.desterror"/></div>
                         <div class="message" id="message-car" style="display: none"><fmt:message key="label.carerror"/></div>
+                        <div class="message" id="message-wrongorder" style="display: none;"><fmt:message key="message.wrongorder"/></div>
                     </div>
                 </div>
             </div>

@@ -8,10 +8,19 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.List;
 
+/**
+ * The type Address service.
+ */
 public class AddressService extends AbstractService<Address>{
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    /**
+     * Find addresses list.
+     *
+     * @param userId the user id
+     * @return the list
+     */
     public List<Address> findAddresses(int userId) {
         LOGGER.log(Level.INFO,"Finding addresses by user id");
         TransactionManager transactionManager = new TransactionManager();
@@ -33,12 +42,24 @@ public class AddressService extends AbstractService<Address>{
         return addresses;
     }
 
+    /**
+     * Update address.
+     *
+     * @param newAddress the new address
+     * @return the address
+     */
     public Address update(Address newAddress){
         LOGGER.log(Level.INFO,"Updatin address id={}",newAddress.getId());
         AddressDAO addressDAO = new DAOFactory().getAddressDAO();
         return super.update(newAddress,addressDAO);
     }
 
+    /**
+     * Delete address address.
+     *
+     * @param id the id
+     * @return the address
+     */
     public Address deleteAddress(String id){
         int addressId = Integer.parseInt(id);
         Address address = null;

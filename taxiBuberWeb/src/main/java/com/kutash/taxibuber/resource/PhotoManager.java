@@ -7,6 +7,9 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * The type Photo manager.
+ */
 public class PhotoManager {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -22,6 +25,11 @@ public class PhotoManager {
         }
     }
 
+    /**
+     * Get instance photo manager.
+     *
+     * @return the photo manager
+     */
     public static PhotoManager getInstance(){
         if (instance == null) {
             instance = new PhotoManager();
@@ -29,6 +37,12 @@ public class PhotoManager {
         return instance;
     }
 
+    /**
+     * Get property string.
+     *
+     * @param key the key
+     * @return the string
+     */
     public String getProperty(String key){
         return properties.getProperty(key);
     }

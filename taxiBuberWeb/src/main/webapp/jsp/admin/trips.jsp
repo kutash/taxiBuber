@@ -22,6 +22,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
 </head>
 <body>
+    <form action="controller" method="post" id="l">
+        <input type="hidden" name="command" value="trips">
+        <input type="hidden" value="true" name="switchLanguage">
+    </form>
     <nav class="navbar navbar-inverse navbar-fixed-top" style="padding-bottom: 2px">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -281,7 +285,7 @@
             <div class="modal-content modal-message">
                 <div class="modal-body modal-message-body">
                     <input type="hidden" value="${isCreated}" id="is-created">
-                    <div id="message-deleted" style="margin: 12%"><fmt:message key="label.comment"/> <fmt:message key="message.created"/></div>
+                    <div id="message-deleted" class="message"><fmt:message key="label.comment"/> <fmt:message key="message.created"/></div>
                 </div>
             </div>
         </div>

@@ -23,7 +23,6 @@ import com.ibatis.common.jdbc.ScriptRunner;
 import org.testng.annotations.Test;
 import static org.junit.Assert.assertEquals;
 
-
 public class CommentDAOTest {
 
     private static final String DROP_DB = "DROP DATABASE `taxi_buber_test`";

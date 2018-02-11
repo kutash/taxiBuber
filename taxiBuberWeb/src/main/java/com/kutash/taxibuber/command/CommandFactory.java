@@ -4,8 +4,17 @@ import com.kutash.taxibuber.resource.MessageManager;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * The type Command factory.
+ */
 public class CommandFactory {
 
+    /**
+     * Define command command.
+     *
+     * @param request the request
+     * @return the command
+     */
     public Command defineCommand(HttpServletRequest request) {
         String language = (String) request.getSession().getAttribute("language");
         Command current = new ErrorCommand();

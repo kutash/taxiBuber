@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 
+/**
+ * The type Comment command.
+ */
 public class CommentCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -27,6 +30,11 @@ public class CommentCommand implements Command {
     private static final short MAX_LENGTH = 1000;
     private UserService userService;
 
+    /**
+     * Instantiates a new Comment command.
+     *
+     * @param userService the user service
+     */
     CommentCommand(UserService userService){
         this.userService = userService;
     }
@@ -36,6 +44,7 @@ public class CommentCommand implements Command {
         LOGGER.log(Level.INFO,"Saving comment");
         Router router = new Router();
         HttpSession session = request.getSession();
+        session.removeAttribute("isCreated");
         User reviewer = (User) session.getAttribute(CURRENT_USER);
         String language = (String) session.getAttribute(LANGUAGE);
         String text = request.getParameter(COMMENT);
@@ -49,7 +58,7 @@ public class CommentCommand implements Command {
             session.setAttribute("isCreated",true);
 
         }else {
-            session.setAttribute("wrongComment",new MessageManager(language).getProperty("message.wrongcomment"));
+            request.setAttribute("wrongComment",new MessageManager(language).getProperty("message.wrongcomment"));
         }
         router.setPage(PageManager.getProperty("path.command.trips"));
         return router;

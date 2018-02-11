@@ -7,6 +7,9 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * The type Email manager.
+ */
 public class EmailManager {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -22,6 +25,11 @@ public class EmailManager {
         }
     }
 
+    /**
+     * Get instance email manager.
+     *
+     * @return the email manager
+     */
     public static EmailManager getInstance(){
         if (instance == null) {
             instance = new EmailManager();
@@ -29,10 +37,21 @@ public class EmailManager {
         return instance;
     }
 
+    /**
+     * Get property string.
+     *
+     * @param key the key
+     * @return the string
+     */
     public String getProperty(String key){
         return properties.getProperty(key);
     }
 
+    /**
+     * Gets properties.
+     *
+     * @return the properties
+     */
     public Properties getProperties() {
         return properties;
     }

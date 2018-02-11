@@ -10,12 +10,20 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * The type Ban command.
+ */
 public class BanCommand implements Command{
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String USER_ID = "userId";
     private UserService userService;
 
+    /**
+     * Instantiates a new Ban command.
+     *
+     * @param userService the user service
+     */
     BanCommand(UserService userService){
         this.userService = userService;
     }

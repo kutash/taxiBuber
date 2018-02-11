@@ -15,14 +15,17 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type User dao.
+ */
 public class UserDAO extends AbstractDAO<User> {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String FIND_ALL_USERS = "SELECT id_user,role,email,password,rating,`name`,surname,patronymic,birthday,photo_path,phone,status FROM user WHERE status != 'ARCHIVED' AND role != 'ADMIN'";
-    private static final String FIND_USER_BY_ID = "SELECT id_user,role,email,password,rating,`name`,surname,patronymic,birthday,photo_path,phone,status FROM user WHERE id_user = ?";
+    private static final String FIND_USER_BY_ID = "SELECT id_user,role,email,password,rating,`name`,surname,patronymic,birthday,photo_path,phone,status FROM user WHERE status != 'ARCHIVED' AND id_user = ?";
     private static final String CREATE_USER = "INSERT INTO user(name,surname,patronymic,birthday,email,role,password,rating,photo_path,phone,status) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
     private static final String UPDATE_USER = "UPDATE user  SET name=?,surname=?,patronymic=?,birthday=?,email=?,role=?,password=?,rating=?,photo_path=?,phone=?,status=? WHERE id_user=?";
-    private static final String FIND_USER_BY_EMAIL = "SELECT id_user,role,email,password,rating,`name`,surname,patronymic,birthday,photo_path,phone,status FROM user WHERE email = ?";
+    private static final String FIND_USER_BY_EMAIL = "SELECT id_user,role,email,password,rating,`name`,surname,patronymic,birthday,photo_path,phone,status FROM user WHERE status != 'ARCHIVED' AND email = ?";
     private static final String IS_EMAIL_EXISTS = "SELECT email FROM user WHERE email = ?";
 
     @Override
@@ -103,6 +106,13 @@ public class UserDAO extends AbstractDAO<User> {
         return findEntityById(entity.getId());
     }
 
+    /**
+     * Find entity by email user.
+     *
+     * @param email the email
+     * @return the user
+     * @throws DAOException the dao exception
+     */
     public User findEntityByEmail(String email) throws DAOException {
         LOGGER.log(Level.INFO,"find user by email {}",email);
         PreparedStatement preparedStatement = null;
@@ -122,6 +132,13 @@ public class UserDAO extends AbstractDAO<User> {
         return user;
     }
 
+    /**
+     * Is email exists boolean.
+     *
+     * @param email the email
+     * @return the boolean
+     * @throws DAOException the dao exception
+     */
     public boolean isEmailExists(String email) throws DAOException {
         LOGGER.log(Level.INFO,"finding is email exists {}",email);
         PreparedStatement preparedStatement = null;

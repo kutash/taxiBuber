@@ -11,6 +11,9 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * The type Connection pool.
+ */
 public class ConnectionPool implements Cloneable{
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -49,6 +52,12 @@ public class ConnectionPool implements Cloneable{
         }
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     * @throws DAOException the dao exception
+     */
     public static ConnectionPool getInstance() throws DAOException {
         if (!instanceCreated.get()){
             lock.lock();
@@ -64,6 +73,11 @@ public class ConnectionPool implements Cloneable{
         return instance;
     }
 
+    /**
+     * Gets connection.
+     *
+     * @return the connection
+     */
     public ProxyConnection getConnection() {
         ProxyConnection connection = null;
         try {
@@ -74,6 +88,11 @@ public class ConnectionPool implements Cloneable{
         return connection;
     }
 
+    /**
+     * Release connection.
+     *
+     * @param connection the connection
+     */
     void releaseConnection(ProxyConnection connection){
         try {
             if (!connection.getAutoCommit()) {
@@ -85,10 +104,18 @@ public class ConnectionPool implements Cloneable{
         connectionQueue.offer(connection);
     }
 
+    /**
+     * Get pool size int.
+     *
+     * @return the int
+     */
     public int getPoolSize(){
         return connectionQueue.size();
     }
 
+    /**
+     * Destroy connections.
+     */
     public void destroyConnections(){
 
         while (connectionQueue.size() != 0){
@@ -101,6 +128,7 @@ public class ConnectionPool implements Cloneable{
         }
         ConnectionCreator.deregisterDrivers();
     }
+
 
     public Object clone() throws CloneNotSupportedException{
         throw new CloneNotSupportedException("Cannot clone instance of this class");

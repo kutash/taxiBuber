@@ -15,15 +15,26 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * The type Edit user command.
+ */
 public class EditUserCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String USER_ID = "userId";
     private static final String IS_CAR = "isCarParam";
+    private static final String SWITCH_LANGUAGE = "switchLanguage";
     private UserService service;
     private CarService carService;
     private AddressService addressService;
 
+    /**
+     * Instantiates a new Edit user command.
+     *
+     * @param service        the service
+     * @param carService     the car service
+     * @param addressService the address service
+     */
     EditUserCommand(UserService service, CarService carService,AddressService addressService){
         this.carService=carService;
         this.service=service;
@@ -35,10 +46,14 @@ public class EditUserCommand implements Command {
         LOGGER.log(Level.INFO,"edit user command");
         Router router = new Router();
         HttpSession session = request.getSession();
-        session.removeAttribute("deletedMessage");
-        session.removeAttribute("createMessage");
-        session.removeAttribute("updateMessage");
-        session.removeAttribute("updatedUser");
+        String switchLanguage = request.getParameter(SWITCH_LANGUAGE);
+        if (StringUtils.isNotEmpty(switchLanguage) && Boolean.parseBoolean(switchLanguage)){
+            session.removeAttribute("deletedMessage");
+            session.removeAttribute("createMessage");
+            session.removeAttribute("updateMessage");
+            session.removeAttribute("updatedUser");
+            session.removeAttribute("updatePassword");
+        }
         String userId = request.getParameter(USER_ID);
         User user = service.findUser(userId);
         Boolean isCar = (Boolean) request.getAttribute("isCar");

@@ -17,6 +17,9 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.util.HashMap;
 
+/**
+ * The type Update user command.
+ */
 public class UpdateUserCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -29,6 +32,11 @@ public class UpdateUserCommand implements Command {
     private static final String USER_ID = "userId";
     private UserService userService;
 
+    /**
+     * Instantiates a new Update user command.
+     *
+     * @param userService the user service
+     */
     UpdateUserCommand(UserService userService){
         this.userService = userService;
     }

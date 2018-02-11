@@ -15,12 +15,20 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Reader;
 
+/**
+ * The type Complete trip command.
+ */
 public class CompleteTripCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String TRIP_ID = "tripId";
     private TripService tripService;
 
+    /**
+     * Instantiates a new Complete trip command.
+     *
+     * @param tripService the trip service
+     */
     CompleteTripCommand(TripService tripService) {
         this.tripService = tripService;
     }

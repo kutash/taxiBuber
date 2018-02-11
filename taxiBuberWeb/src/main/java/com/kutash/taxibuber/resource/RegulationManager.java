@@ -7,6 +7,9 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * The type Regulation manager.
+ */
 public class RegulationManager {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -22,6 +25,11 @@ public class RegulationManager {
         }
     }
 
+    /**
+     * Get instance regulation manager.
+     *
+     * @return the regulation manager
+     */
     public static RegulationManager getInstance(){
         if (instance == null) {
             instance = new RegulationManager();
@@ -29,6 +37,12 @@ public class RegulationManager {
         return instance;
     }
 
+    /**
+     * Get property string.
+     *
+     * @param key the key
+     * @return the string
+     */
     public String getProperty(String key){
         return properties.getProperty(key);
     }

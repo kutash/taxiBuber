@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 
+/**
+ * The type Login command.
+ */
 public class LoginCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -20,6 +23,11 @@ public class LoginCommand implements Command {
     private static final String LANGUAGE = "language";
     private LoginService service;
 
+    /**
+     * Instantiates a new Login command.
+     *
+     * @param service the service
+     */
     LoginCommand(LoginService service){
 
         this.service=service;

@@ -1,5 +1,8 @@
 package com.kutash.taxibuber.entity;
 
+/**
+ * The type Car.
+ */
 public class Car extends AbstractEntity {
 
     private String registrationNumber;
@@ -14,11 +17,33 @@ public class Car extends AbstractEntity {
     private String driverFullName;
     private Status status;
 
+    /**
+     * Instantiates a new Car.
+     *
+     * @param registrationNumber the registration number
+     * @param model              the model
+     */
     public Car(String registrationNumber,String model) {
         this.registrationNumber = registrationNumber;
         this.model = model;
     }
 
+    /**
+     * Instantiates a new Car.
+     *
+     * @param id                 the id
+     * @param registrationNumber the registration number
+     * @param capacity           the capacity
+     * @param model              the model
+     * @param photoPath          the photo path
+     * @param isAvailable        the is available
+     * @param latitude           the latitude
+     * @param longitude          the longitude
+     * @param brand              the brand
+     * @param userId             the user id
+     * @param driverFullName     the driver full name
+     * @param status             the status
+     */
     public Car(int id, String registrationNumber, Capacity capacity, String model, String photoPath, boolean isAvailable, String latitude, String longitude, CarBrand brand, int userId, String driverFullName,Status status) {
         super(id);
         this.registrationNumber = registrationNumber;
@@ -34,6 +59,18 @@ public class Car extends AbstractEntity {
         this.status = status;
     }
 
+    /**
+     * Instantiates a new Car.
+     *
+     * @param registrationNumber the registration number
+     * @param capacity           the capacity
+     * @param model              the model
+     * @param photoPath          the photo path
+     * @param isAvailable        the is available
+     * @param brand              the brand
+     * @param userId             the user id
+     * @param status             the status
+     */
     public Car(String registrationNumber, Capacity capacity, String model, String photoPath, boolean isAvailable, CarBrand brand, int userId, Status status) {
         this.registrationNumber = registrationNumber;
         this.capacity = capacity;
@@ -45,90 +82,200 @@ public class Car extends AbstractEntity {
         this.status = status;
     }
 
+    /**
+     * Gets registration number.
+     *
+     * @return the registration number
+     */
     public String getRegistrationNumber() {
         return registrationNumber;
     }
 
+    /**
+     * Sets registration number.
+     *
+     * @param registrationNumber the registration number
+     */
     public void setRegistrationNumber(String registrationNumber) {
         this.registrationNumber = registrationNumber;
     }
 
+    /**
+     * Gets model.
+     *
+     * @return the model
+     */
     public String getModel() {
         return model;
     }
 
+    /**
+     * Sets model.
+     *
+     * @param model the model
+     */
     public void setModel(String model) {
         this.model = model;
     }
 
+    /**
+     * Gets photo path.
+     *
+     * @return the photo path
+     */
     public String getPhotoPath() {
         return photoPath;
     }
 
+    /**
+     * Sets photo path.
+     *
+     * @param photoPath the photo path
+     */
     public void setPhotoPath(String photoPath) {
         this.photoPath = photoPath;
     }
 
+    /**
+     * Is available boolean.
+     *
+     * @return the boolean
+     */
     public boolean isAvailable() {
         return available;
     }
 
+    /**
+     * Sets available.
+     *
+     * @param available the available
+     */
     public void setAvailable(boolean available) {
         this.available = available;
     }
 
+    /**
+     * Gets latitude.
+     *
+     * @return the latitude
+     */
     public String getLatitude() {
         return latitude;
     }
 
+    /**
+     * Sets latitude.
+     *
+     * @param latitude the latitude
+     */
     public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
 
+    /**
+     * Gets longitude.
+     *
+     * @return the longitude
+     */
     public String getLongitude() {
         return longitude;
     }
 
+    /**
+     * Sets longitude.
+     *
+     * @param longitude the longitude
+     */
     public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
 
+    /**
+     * Gets brand.
+     *
+     * @return the brand
+     */
     public CarBrand getBrand() {
         return brand;
     }
 
+    /**
+     * Sets brand.
+     *
+     * @param brand the brand
+     */
     public void setBrand(CarBrand brand) {
         this.brand = brand;
     }
 
+    /**
+     * Gets user id.
+     *
+     * @return the user id
+     */
     public int getUserId() {
         return userId;
     }
 
+    /**
+     * Sets user id.
+     *
+     * @param userId the user id
+     */
     public void setUserId(int userId) {
         this.userId = userId;
     }
 
+    /**
+     * Gets capacity.
+     *
+     * @return the capacity
+     */
     public Capacity getCapacity() {
         return capacity;
     }
 
+    /**
+     * Sets capacity.
+     *
+     * @param capacity the capacity
+     */
     public void setCapacity(Capacity capacity) {
         this.capacity = capacity;
     }
 
+    /**
+     * Gets driver full name.
+     *
+     * @return the driver full name
+     */
     public String getDriverFullName() {
         return driverFullName;
     }
 
+    /**
+     * Sets driver full name.
+     *
+     * @param driverFullName the driver full name
+     */
     public void setDriverFullName(String driverFullName) {
         this.driverFullName = driverFullName;
     }
 
+    /**
+     * Gets status.
+     *
+     * @return the status
+     */
     public Status getStatus() {
         return status;
     }
 
+    /**
+     * Sets status.
+     *
+     * @param status the status
+     */
     public void setStatus(Status status) {
         this.status = status;
     }

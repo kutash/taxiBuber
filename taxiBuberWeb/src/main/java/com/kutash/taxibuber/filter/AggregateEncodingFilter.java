@@ -14,6 +14,9 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebInitParam;
 import java.io.IOException;
 
+/**
+ * The type Aggregate encoding filter.
+ */
 @WebFilter(urlPatterns = { "/*" }, initParams = {@WebInitParam(name = "encoding", value = "utf-8", description = "Encoding Param")})
 public class AggregateEncodingFilter implements Filter {
 

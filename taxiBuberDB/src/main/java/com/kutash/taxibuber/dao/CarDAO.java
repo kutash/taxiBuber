@@ -15,6 +15,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Car dao.
+ */
 public class CarDAO extends AbstractDAO<Car> {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -60,6 +63,12 @@ public class CarDAO extends AbstractDAO<Car> {
         return cars;
     }
 
+    /**
+     * Find all available list.
+     *
+     * @return the list
+     * @throws DAOException the dao exception
+     */
     public List<Car> findAllAvailable() throws DAOException {
         LOGGER.log(Level.INFO,"Finding all available cars");
         Statement statement = null;
@@ -79,6 +88,13 @@ public class CarDAO extends AbstractDAO<Car> {
         return cars;
     }
 
+    /**
+     * Find all available by body type list.
+     *
+     * @param capacity the capacity
+     * @return the list
+     * @throws DAOException the dao exception
+     */
     public List<Car> findAllAvailableByBodyType(String capacity) throws DAOException {
         LOGGER.log(Level.INFO,"Finding all available cars with body type {}",capacity);
         PreparedStatement statement = null;
@@ -157,6 +173,13 @@ public class CarDAO extends AbstractDAO<Car> {
         return findEntityById(entity.getId());
     }
 
+    /**
+     * Find entity by user id car.
+     *
+     * @param userId the user id
+     * @return the car
+     * @throws DAOException the dao exception
+     */
     public Car findEntityByUserId(int userId) throws DAOException {
         LOGGER.log(Level.INFO,"finding car by user id {}",userId);
         Car car = null;
@@ -176,6 +199,13 @@ public class CarDAO extends AbstractDAO<Car> {
         return car;
     }
 
+    /**
+     * Is number exists boolean.
+     *
+     * @param number the number
+     * @return the boolean
+     * @throws DAOException the dao exception
+     */
     public boolean isNumberExists(String number) throws DAOException {
         LOGGER.log(Level.INFO,"finding is number exists {}",number);
         PreparedStatement preparedStatement = null;
@@ -193,6 +223,14 @@ public class CarDAO extends AbstractDAO<Car> {
         return result;
     }
 
+    /**
+     * Is number exists for update boolean.
+     *
+     * @param number the number
+     * @param id     the id
+     * @return the boolean
+     * @throws DAOException the dao exception
+     */
     public boolean isNumberExistsForUpdate(String number, int id) throws DAOException {
         LOGGER.log(Level.INFO,"finding is number exists for updating car {} car id {}",number,id);
         PreparedStatement preparedStatement = null;
@@ -211,6 +249,12 @@ public class CarDAO extends AbstractDAO<Car> {
         return result;
     }
 
+    /**
+     * Find all brands list.
+     *
+     * @return the list
+     * @throws DAOException the dao exception
+     */
     public List<CarBrand> findAllBrands() throws DAOException {
         LOGGER.log(Level.INFO,"Finding all car brands");
         Statement statement = null;
@@ -230,6 +274,13 @@ public class CarDAO extends AbstractDAO<Car> {
         return brands;
     }
 
+    /**
+     * Find brand by id car brand.
+     *
+     * @param id the id
+     * @return the car brand
+     * @throws DAOException the dao exception
+     */
     public CarBrand findBrandById(int id) throws DAOException {
         LOGGER.log(Level.INFO,"finding car brand by id {}",id);
         CarBrand carBrand = null;

@@ -13,11 +13,19 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * The type Trip service.
+ */
 public class TripService extends AbstractService<Trip>{
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int METER_IN_KILOMETER = 1000;
 
+    /**
+     * Find all list.
+     *
+     * @return the list
+     */
     public List<Trip> findAll() {
         LOGGER.log(Level.INFO,"Finding all trips");
         TransactionManager transactionManager = new TransactionManager();
@@ -39,6 +47,13 @@ public class TripService extends AbstractService<Trip>{
         return trips;
     }
 
+    /**
+     * Find by user id list.
+     *
+     * @param userId the user id
+     * @param role   the role
+     * @return the list
+     */
     public List<Trip> findByUserId(int userId, UserRole role) {
         LOGGER.log(Level.INFO,"Finding all trips by user id");
         TransactionManager transactionManager = new TransactionManager();
@@ -60,38 +75,36 @@ public class TripService extends AbstractService<Trip>{
         return trips;
     }
 
+    /**
+     * Create int.
+     *
+     * @param entity the entity
+     * @return the int
+     */
     public int create(Trip entity) {
         LOGGER.log(Level.INFO,"Creating trip");
         TripDAO tripDAO = new DAOFactory().getTripDAO();
         return super.create(entity, tripDAO);
     }
 
-    public Trip findOrdered(int tripId){
-        TransactionManager transactionManager = new TransactionManager();
-        TripDAO tripDAO = new DAOFactory().getTripDAO();
-        Trip trip = null;
-        try {
-            transactionManager.beginTransaction(tripDAO);
-            trip = tripDAO.findOrdered(tripId);
-            transactionManager.commit();
-        } catch (DAOException e) {
-            try {
-                transactionManager.rollback();
-            } catch (DAOException e1) {
-                LOGGER.catching(Level.ERROR,e1);
-            }
-            LOGGER.catching(Level.ERROR,e);
-        }
-        transactionManager.endTransaction();
-        return trip;
-    }
-
+    /**
+     * Find trip by id trip.
+     *
+     * @param id the id
+     * @return the trip
+     */
     public Trip findTripById(int id) {
         LOGGER.log(Level.INFO,"Finding trip id={}",id);
         TripDAO tripDAO = new DAOFactory().getTripDAO();
         return super.findEntityById(id,tripDAO);
     }
 
+    /**
+     * Start trip trip.
+     *
+     * @param tripId the trip id
+     * @return the trip
+     */
     public Trip startTrip(int tripId){
         TripDAO tripDAO = new DAOFactory().getTripDAO();
         UserDAO userDAO = new DAOFactory().getUserDAO();
@@ -117,6 +130,12 @@ public class TripService extends AbstractService<Trip>{
         return trip;
     }
 
+    /**
+     * Complete trip trip.
+     *
+     * @param tripId the trip id
+     * @return the trip
+     */
     public Trip completeTrip(String tripId){
         TripDAO tripDAO = new DAOFactory().getTripDAO();
         Trip trip = null;
@@ -139,6 +158,12 @@ public class TripService extends AbstractService<Trip>{
         return trip;
     }
 
+    /**
+     * Find started trip.
+     *
+     * @param carId the car id
+     * @return the trip
+     */
     public Trip findStarted(int carId) {
         LOGGER.log(Level.INFO,"Finding all trips");
         TripDAO tripDAO = new DAOFactory().getTripDAO();
@@ -169,6 +194,13 @@ public class TripService extends AbstractService<Trip>{
         return 0;
     }
 
+    /**
+     * Create trip int.
+     *
+     * @param data   the data
+     * @param userId the user id
+     * @return the int
+     */
     public int createTrip(HashMap<String,String> data, int userId){
         int result = 0;
         float distanceNumber = Float.parseFloat(data.get("distance")) / METER_IN_KILOMETER;

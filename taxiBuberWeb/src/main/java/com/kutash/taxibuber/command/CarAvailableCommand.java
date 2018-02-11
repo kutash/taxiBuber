@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Reader;
 
+/**
+ * The type Car available command.
+ */
 public class CarAvailableCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -22,6 +25,11 @@ public class CarAvailableCommand implements Command {
     private static final String CAR_ID = "carId";
     private CarService service;
 
+    /**
+     * Instantiates a new Car available command.
+     *
+     * @param service the service
+     */
     CarAvailableCommand(CarService service){
         this.service=service;
     }

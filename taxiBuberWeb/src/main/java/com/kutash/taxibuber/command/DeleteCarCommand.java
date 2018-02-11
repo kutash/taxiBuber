@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * The type Delete car command.
+ */
 public class DeleteCarCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -22,6 +25,11 @@ public class DeleteCarCommand implements Command {
     private static final String LANGUAGE = "language";
     private CarService carService;
 
+    /**
+     * Instantiates a new Delete car command.
+     *
+     * @param carService the car service
+     */
     DeleteCarCommand(CarService carService) {
         this.carService=carService;
 

@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Save car command.
+ */
 public class SaveCarCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -32,6 +35,11 @@ public class SaveCarCommand implements Command {
 
     private CarService carService;
 
+    /**
+     * Instantiates a new Save car command.
+     *
+     * @param carService the car service
+     */
     SaveCarCommand(CarService carService){
         this.carService = carService;
     }
@@ -104,6 +112,10 @@ public class SaveCarCommand implements Command {
         User driver = (User) request.getSession().getAttribute(CURRENT_USER);
         int id = Integer.parseInt(carData.get("carId"));
         Car carOld = carService.findById(id);
+        if(carOld.getUserId() != driver.getId()){
+            router.setPage(PageManager.getProperty("path.page.error403"));
+            return router;
+        }
         if (!errors.isEmpty()) {
             carOld.setModel(carData.get("model"));
             carOld.setRegistrationNumber(carData.get("number"));

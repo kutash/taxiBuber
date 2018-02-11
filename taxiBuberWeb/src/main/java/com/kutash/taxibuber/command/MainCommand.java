@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+/**
+ * The type Main command.
+ */
 public class MainCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -21,6 +24,13 @@ public class MainCommand implements Command {
     private CarService carService;
     private TripService tripService;
 
+    /**
+     * Instantiates a new Main command.
+     *
+     * @param addressService the address service
+     * @param carService     the car service
+     * @param tripService    the trip service
+     */
     MainCommand(AddressService addressService,CarService carService,TripService tripService) {
         this.service = addressService;
         this.carService=carService;

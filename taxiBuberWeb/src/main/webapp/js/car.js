@@ -6,49 +6,37 @@ $(document).ready(function () {
 
     var modalMessage = $('#modal-message2');
     var update = $('#message-update').text();
-    if (update !== ''){
+    /*if (update !== ''){
         console.log("update");
         modalMessage.modal('show');
-        /*update.css('margin','10%');
-        update.css('display', 'block');*/
         setTimeout(function(){
             modalMessage.modal("hide");
-            /*update.css('display', 'none');*/
         }, 3000);
-    }
+    }*/
     var create = $('#message-create').text();
-    if (create !== ''){
+    /*if (create !== ''){
         console.log("create");
         modalMessage.modal('show');
-        /*create.css('margin','10%');
-        create.css('display', 'block');*/
         setTimeout(function(){
             modalMessage.modal("hide");
-            /*create.css('display', 'none');*/
         }, 3000);
-    }
+    }*/
 
     var deleted = $('#message-deleted').text();
-    if (deleted !== ''){
+    /*if (deleted !== ''){
         console.log("delete");
         modalMessage.modal('show');
-        /*deleted.css('margin','12%');
-        deleted.css('display', 'block');*/
         setTimeout(function(){
             modalMessage.modal("hide");
-            /*deleted.css('display', 'none');*/
         }, 3000);
-    }
+    }*/
 
     var notDeleted = $('#message-notdeleted').text();
-    if (notDeleted !== ''){
+    if (notDeleted !== '' || deleted !== '' || create !== '' || update !== ''){
         console.log("not delete");
         modalMessage.modal('show');
-        /*notDeleted.css('margin','10%');
-        notDeleted.css('display', 'block');*/
         setTimeout(function(){
             modalMessage.modal("hide");
-            /*notDeleted.css('display', 'none');*/
         }, 2500);
     }
 

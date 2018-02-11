@@ -23,13 +23,6 @@ ws.onclose = function() {
     console.log("connection closed");
 };
 
-/*$(document).ready(function() {
-    $(window).on('beforeunload', function () {
-        console.log('end');
-        ws.close();
-    });
-});*/
-
 window.onload = function () {
 
     window.onbeforeunload = function () {
@@ -49,6 +42,16 @@ window.onload = function () {
         document.getElementById('no-cars').style.display = 'none';
     });
 
+    if(document.getElementById('message-wrong').innerHTML !== ''){
+        var modalMessage = $('#modal-order');
+        modalMessage.modal('show');
+        document.getElementById('message-wrong').style.display = 'block';
+        setTimeout(function () {
+            modalMessage.modal("hide");
+            document.getElementById('message-wrong').style.display = 'none';
+        }, 3000);
+    }
+
     document.getElementById('order-button').addEventListener('click', function (event) {
         event.preventDefault();
         var start = document.getElementById('start').value;
@@ -58,11 +61,9 @@ window.onload = function () {
             var modalMessage = $('#modal-message');
             if(start === ''){
                 document.getElementById('message-source').style.display = 'block';
-            }
-            if(end === ''){
+            }else if(end === ''){
                 document.getElementById('message-destination').style.display = 'block';
-            }
-            if(carId === ''){
+            }else if(carId === ''){
                 document.getElementById('message-car').style.display = 'block';
             }
             modalMessage.modal('show');
@@ -74,7 +75,39 @@ window.onload = function () {
             }, 2000);
 
         }else {
-            document.getElementById('order-form').submit();
+            var service = new google.maps.DistanceMatrixService();
+            service.getDistanceMatrix({
+                origins: [start],
+                destinations: [end],
+                travelMode: google.maps.TravelMode.DRIVING,
+                unitSystem: google.maps.UnitSystem.METRIC,
+                avoidHighways: false,
+                avoidTolls: false
+            }, function (response, status) {
+                if (response.rows[0].elements[0].status !== "ZERO_RESULTS" && response.rows[0].elements[0].status !== "NOT_FOUND") {
+                    var distanceVal = response.rows[0].elements[0].distance.value;
+                    var durationVal = response.rows[0].elements[0].duration.value;
+                    var distance = document.getElementById('distance-input').value;
+                    var duration = document.getElementById('duration-input').value;
+                    if(distanceVal == distance && durationVal == duration){
+                        document.getElementById('order-form').submit();
+                    }else {
+                        $('#modal-message').modal('show');
+                        document.getElementById('message-wrongorder').style.display = 'block';
+                        setTimeout(function () {
+                            $('#modal-message').modal("hide");
+                            document.getElementById('message-wrongorder').style.display = 'none';
+                        }, 2000);
+                    }
+                } else {
+                    $('#modal-message').modal('show');
+                    document.getElementById('message-wrongorder').style.display = 'block';
+                    setTimeout(function(){
+                        $('#modal-message').modal("hide");
+                        document.getElementById('message-wrongorder').style.display = 'none';
+                    }, 2000);
+                }
+            });
         }
     });
 
@@ -84,15 +117,16 @@ window.onload = function () {
     var costSpan = document.getElementById('cost').innerHTML;
     if(distanceSpan !== '' || durationSpan !== '' || costSpan !==''){
         dvDistance.style.display = 'block';
+        document.getElementById('order').style.display = 'block';
     }
 };
 
 var timerId = setInterval(getAvailableCars, 30000);
 
 setTimeout(function() {
-    console.log("end");
+    document.getElementById('no-cars').style.display = 'none';
     clearInterval(timerId);
-}, 60000);
+}, 60000*5);
 
 var latitude;
 var longitude;
@@ -135,6 +169,7 @@ function initMap() {
     var onChangeHandler = function() {
         calculateAndDisplayRoute(directionsService, directionsDisplay);
         document.getElementById('car').value = '';
+        document.getElementById('carId').value = '';
         getAvailableCars();
 
     };
@@ -250,8 +285,8 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
                     var dvDistance = document.getElementById("dvDistance");
                     dvDistance.style.display = 'block';
                     var distanceSpan = document.getElementById('distance');
-                    console.log(distance);
-                    distanceSpan.innerHTML = ''+(distanceVal/1000);
+                    var dis = distanceVal/1000;
+                    distanceSpan.innerHTML = ''+(dis.toFixed(2));
                     document.getElementById('distance-input').value = distanceVal;
                     var durationSpan = document.getElementById('duration');
                     durationSpan.innerHTML = duration;
@@ -260,6 +295,7 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
                     var costSpan = document.getElementById('cost');
                     costSpan.innerHTML = '' + result;
                     document.getElementById('cost-input').value = result;
+                    document.getElementById('order').style.display = 'block';
                 }).fail(function (xhr, textStatus, error) {
                     console.log(xhr);
                 });
@@ -454,7 +490,7 @@ function show(id) {
             document.getElementById('no-comment').style.display ='none';
             for (var i = 0; i < comments.length; i++) {
                 var mark = comments[i].mark * 20;
-                document.getElementById('tbody').innerHTML += '<tr style="border-bottom: 1px solid #ddd"><td class="col-md-2"><img src="ajaxController?command=photo&photo=' + comments[i].reviewerPhoto + '&amp;userId=' + comments[i].reviewerId + '" width="50" height="50" class="comment-photo"/><br/>' + comments[i].reviewerName + '</td><td class="col-md-10"><span style="font-size: 12px">' + comments[i].text + '</span><br><div style="display: inline-flex"><span class="comment-mark">Оценка:</span><div class="productRate-order" id="rating-div"><div class="productRate-div" style="width:' + mark + '%"></div></div></div><span id="date-span">' + comments[i].date + '</span></td></tr>';
+                document.getElementById('tbody').innerHTML += '<tr style="border-bottom: 1px solid #ddd"><td class="col-md-2"><img src="ajaxController?command=photo&photo=' + comments[i].reviewerPhoto + '&amp;userId=' + comments[i].reviewerId + '" width="73" height="73" class="comment-photo"/><br/><span>' + comments[i].reviewerName + '</span></td><td class="col-md-10"><span style="font-size: 17px">' + comments[i].text + '</span><br><div style="display: inline-flex"><span class="comment-mark">Оценка:</span><div class="productRate-order" id="rating-div"><div class="productRate-div" style="width:' + mark + '%"></div></div></div><span id="date-span">' + comments[i].date + '</span></td></tr>';
             }
         }
     })

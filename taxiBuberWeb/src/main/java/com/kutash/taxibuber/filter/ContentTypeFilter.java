@@ -10,6 +10,9 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebInitParam;
 import java.io.IOException;
 
+/**
+ * The type Content type filter.
+ */
 @WebFilter(urlPatterns = { "/ajaxController" }, initParams = {@WebInitParam(name = "contentType", value = "application/json")})
 public class ContentTypeFilter implements Filter {
 

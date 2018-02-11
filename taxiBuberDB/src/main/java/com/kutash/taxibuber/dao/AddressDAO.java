@@ -13,6 +13,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Address dao.
+ */
 public class AddressDAO extends AbstractDAO<Address> {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -25,6 +28,7 @@ public class AddressDAO extends AbstractDAO<Address> {
     public List<Address> findAll() {
         throw new UnsupportedOperationException();
     }
+
 
     @Override
     public Address findEntityById(int id) throws DAOException {
@@ -46,6 +50,13 @@ public class AddressDAO extends AbstractDAO<Address> {
         return address;
     }
 
+    /**
+     * Find address by user id list.
+     *
+     * @param userId the user id
+     * @return the list
+     * @throws DAOException the dao exception
+     */
     public List<Address> findAddressByUserId(int userId) throws DAOException {
         LOGGER.log(Level.INFO,"finding address by user id {}",userId);
         List<Address> addresses = new ArrayList<>();

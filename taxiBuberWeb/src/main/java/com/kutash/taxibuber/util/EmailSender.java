@@ -16,10 +16,19 @@ import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
+/**
+ * The type Email sender.
+ */
 public class EmailSender {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    /**
+     * Send new password.
+     *
+     * @param user     the user
+     * @param language the language
+     */
     public void sendNewPassword(User user,String language){
         final Properties properties = EmailManager.getInstance().getProperties();
         final String sender = properties.getProperty("mail.user.name");

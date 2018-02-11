@@ -1,11 +1,15 @@
 template1(user,password) ::= <<
     Добрый день, <user.name> <user.surname>.
-    Высылаем вам временный пароль <password>
+    Высылаем вам временный пароль
+    <password>
+    В целях безопасности рекомендуем вам поменять этот пароль.
     С уважением, Buber.
 >>
 
 template2(user,password) ::= <<
     Hello, <user.name> <user.surname>.
-         We send you the temporary password <password>
+    We send you the temporary password
+    <password>
+    For your security, we recommend that you change this password.
          Sincerely, Buber.
 >>

@@ -1,17 +1,35 @@
 package com.kutash.taxibuber.entity;
 
+/**
+ * The type Address.
+ */
 public class Address extends AbstractEntity {
 
     private String address;
     private int userId;
     private Status status;
 
+    /**
+     * Instantiates a new Address.
+     *
+     * @param address the address
+     * @param userId  the user id
+     * @param status  the status
+     */
     public Address(String address, int userId, Status status) {
         this.address = address;
         this.userId = userId;
         this.status = status;
     }
 
+    /**
+     * Instantiates a new Address.
+     *
+     * @param id      the id
+     * @param address the address
+     * @param userId  the user id
+     * @param status  the status
+     */
     public Address(int id, String address, int userId, Status status) {
         super(id);
         this.address = address;
@@ -19,31 +37,67 @@ public class Address extends AbstractEntity {
         this.status = status;
     }
 
+    /**
+     * Instantiates a new Address.
+     *
+     * @param id      the id
+     * @param address the address
+     */
     public Address(int id, String address) {
         super(id);
         this.address = address;
     }
 
+    /**
+     * Gets address.
+     *
+     * @return the address
+     */
     public String getAddress() {
         return address;
     }
 
+    /**
+     * Sets address.
+     *
+     * @param address the address
+     */
     public void setAddress(String address) {
         this.address = address;
     }
 
+    /**
+     * Gets user id.
+     *
+     * @return the user id
+     */
     public int getUserId() {
         return userId;
     }
 
+    /**
+     * Sets user id.
+     *
+     * @param userId the user id
+     */
     public void setUserId(int userId) {
         this.userId = userId;
     }
 
+    /**
+     * Gets status.
+     *
+     * @return the status
+     */
     public Status getStatus() {
         return status;
     }
 
+    /**
+     * Sets status.
+     *
+     * @param status the status
+     */
     public void setStatus(Status status) {
         this.status = status;
     }

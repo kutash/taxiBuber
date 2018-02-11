@@ -1,5 +1,17 @@
 package com.kutash.taxibuber.entity;
 
+/**
+ * The enum Status.
+ */
 public enum Status {
-    ARCHIVED,ACTIVE,BANNED
+    /**
+     * Archived status.
+     */
+    ARCHIVED, /**
+     * Active status.
+     */
+    ACTIVE, /**
+     * Banned status.
+     */
+    BANNED
 }

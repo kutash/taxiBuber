@@ -13,12 +13,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * The type Logout command.
+ */
 public class LogoutCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String CURRENT_USER = "currentUser";
     private LoginService loginService;
 
+    /**
+     * Instantiates a new Logout command.
+     *
+     * @param loginService the login service
+     */
     LogoutCommand(LoginService loginService){
         this.loginService = loginService;
     }

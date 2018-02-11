@@ -12,12 +12,20 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * The type Delete address command.
+ */
 public class DeleteAddressCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String ADDRESS_ID = "addressId";
     private AddressService addressService;
 
+    /**
+     * Instantiates a new Delete address command.
+     *
+     * @param addressService the address service
+     */
     DeleteAddressCommand(AddressService addressService){
         this.addressService = addressService;
     }

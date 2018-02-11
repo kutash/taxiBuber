@@ -8,11 +8,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.sql.SQLException;
 
+/**
+ * The type Transaction manager.
+ */
 public class TransactionManager {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private ProxyConnection connection;
 
+    /**
+     * Instantiates a new Transaction manager.
+     */
     public TransactionManager() {
         try {
             connection = ConnectionPool.getInstance().getConnection();
@@ -21,6 +27,13 @@ public class TransactionManager {
         }
     }
 
+    /**
+     * Begin transaction.
+     *
+     * @param abstractDAO the abstract dao
+     * @param daos        the daos
+     * @throws DAOException the dao exception
+     */
     public void beginTransaction(AbstractDAO abstractDAO, AbstractDAO ... daos) throws DAOException {
         LOGGER.log(Level.DEBUG,"Beginning transaction");
         try {
@@ -34,11 +47,19 @@ public class TransactionManager {
         }
     }
 
+    /**
+     * End transaction.
+     */
     public void endTransaction(){
         LOGGER.log(Level.DEBUG,"Returning connection to the pool");
         connection.close();
     }
 
+    /**
+     * Commit.
+     *
+     * @throws DAOException the dao exception
+     */
     public void commit() throws DAOException {
         LOGGER.log(Level.DEBUG,"Making commit");
         try {
@@ -48,12 +69,17 @@ public class TransactionManager {
         }
     }
 
+    /**
+     * Rollback.
+     *
+     * @throws DAOException the dao exception
+     */
     public void rollback() throws DAOException {
         LOGGER.log(Level.DEBUG,"Making rollback");
         try {
             connection.rollback();
         } catch (SQLException e) {
-            throw new DAOException("Exception while making rollback {}",e);//????????????????????????????
+            throw new DAOException("Exception while making rollback {}",e);
         }
     }
 }

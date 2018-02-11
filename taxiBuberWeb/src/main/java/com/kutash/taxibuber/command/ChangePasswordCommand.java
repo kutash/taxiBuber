@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
+/**
+ * The type Change password command.
+ */
 public class ChangePasswordCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -24,6 +27,11 @@ public class ChangePasswordCommand implements Command {
     private static final String LANGUAGE = "language";
     private UserService userService;
 
+    /**
+     * Instantiates a new Change password command.
+     *
+     * @param userService the user service
+     */
     ChangePasswordCommand(UserService userService){
         this.userService = userService;
     }

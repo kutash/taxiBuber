@@ -13,6 +13,9 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * The type Price command.
+ */
 public class PriceCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -23,6 +26,11 @@ public class PriceCommand implements Command {
     private static final String LANGUAGE = "language";
     private CarService service;
 
+    /**
+     * Instantiates a new Price command.
+     *
+     * @param service the CarService
+     */
     PriceCommand(CarService service){
         this.service=service;
     }

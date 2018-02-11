@@ -8,10 +8,19 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * The type Date parser.
+ */
 public class DateParser {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    /**
+     * Parse date date.
+     *
+     * @param date the date
+     * @return the date
+     */
     public static Date parseDate(String date){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date birthday = null;

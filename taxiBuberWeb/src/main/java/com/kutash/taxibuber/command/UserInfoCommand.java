@@ -11,12 +11,20 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * The type User info command.
+ */
 public class UserInfoCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String USER_ID = "userId";
     private UserService service;
 
+    /**
+     * Instantiates a new User info command.
+     *
+     * @param orderService the order service
+     */
     UserInfoCommand(UserService orderService) {
         this.service=orderService;
     }

@@ -22,7 +22,11 @@
     </head>
     <body>
     <jsp:include page="/jsp/user/header.jsp"/>
-    <form method="post" id="l"></form>
+    <form action="controller" method="post" id="l">
+        <input type="hidden" name="command" value="edit">
+        <input type="hidden" value="${user.id}" name="userId">
+        <input type="hidden" value="true" name="switchLanguage">
+    </form>
     <form action="controller" method="post" id="cancelCarForm">
         <input type="hidden" name="command" value="cancel">
         <input type="hidden" value="${user.id}" name="userId">
@@ -152,7 +156,12 @@
                                             <option selected="selected" value="CLIENT">CLIENT</option>
                                         </c:if>
                                     </select>
-                                    <div class="err2">${errors.role}</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="status"><fmt:message key="label.status"/>:</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="status" value="${user.status}" disabled>
                                 </div>
                             </div>
                             <c:if test="${user.role == 'DRIVER'}">
@@ -182,7 +191,7 @@
                                 </h4>
                             </div>
                             <div id="collapse1" class="panel-collapse collapse">
-                                <ul class="list-group">
+                                <ul class="list-group" id="list">
                                 <c:forEach var="address" items="${addresses}">
                                     <li class="list-group-item" id="li${address.id}">
                                         ${address.address}

@@ -11,6 +11,9 @@ import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Properties;
 
+/**
+ * The type Connection creator.
+ */
 class ConnectionCreator {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -18,6 +21,9 @@ class ConnectionCreator {
     private Properties properties;
     private String url;
 
+    /**
+     * Instantiates a new Connection creator.
+     */
     ConnectionCreator(){
         properties = DBConfigurationManager.getInstance().getProperties();
         url = DBConfigurationManager.getInstance().getProperty("url");
@@ -30,6 +36,11 @@ class ConnectionCreator {
         }
     }
 
+    /**
+     * Gets connection.
+     *
+     * @return the connection
+     */
     public Connection getConnection() {
         Connection connection ;
         try {
@@ -41,10 +52,18 @@ class ConnectionCreator {
         return connection;
     }
 
+    /**
+     * Gets pool size.
+     *
+     * @return the pool size
+     */
     int getPoolSize() {
         return poolSize;
     }
 
+    /**
+     * Deregister drivers.
+     */
     static void deregisterDrivers() {
         Enumeration<Driver> drivers = DriverManager.getDrivers();
         while (drivers.hasMoreElements()) {

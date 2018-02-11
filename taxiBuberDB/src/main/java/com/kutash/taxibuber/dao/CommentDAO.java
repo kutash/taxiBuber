@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * The type Comment dao.
+ */
 public class CommentDAO extends AbstractDAO<Comment> {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -48,6 +51,13 @@ public class CommentDAO extends AbstractDAO<Comment> {
         return comment;
     }
 
+    /**
+     * Find entity by user id list.
+     *
+     * @param userId the user id
+     * @return the list
+     * @throws DAOException the dao exception
+     */
     public List<Comment> findEntityByUserId(int userId) throws DAOException {
         LOGGER.log(Level.INFO,"finding address by user id {}",userId);
         List<Comment> comments = new ArrayList<>();

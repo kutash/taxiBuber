@@ -23,6 +23,9 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.EnumSet;
 
+/**
+ * The type Security filter admin.
+ */
 @WebFilter(urlPatterns = { "/controller","/ajaxController" }, servletNames = { "Controller","ajaxController" })
 public class SecurityFilterAdmin implements Filter {
 

@@ -25,6 +25,7 @@
                             </div>
                         </div>
                     </div>
+                    <div id="message-wrong" style="display: none">${orderMessage}</div>
                 </div>
             </div>
         </div>

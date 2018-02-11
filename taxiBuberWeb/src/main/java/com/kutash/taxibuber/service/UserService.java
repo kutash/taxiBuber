@@ -21,16 +21,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type User service.
+ */
 public class UserService extends AbstractService<User>{
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    /**
+     * Find all list.
+     *
+     * @return the list
+     */
     public List<User> findAll() {
         LOGGER.log(Level.INFO,"Finding all users");
         UserDAO userDAO = new DAOFactory().getUserDAO();
         return super.findAll(userDAO);
     }
 
+    /**
+     * Save user user.
+     *
+     * @param userData  the user data
+     * @param photoPart the photo part
+     * @return the user
+     */
     public User saveUser(Map<String,String> userData,Part photoPart){
         byte[] encryptedPassword = new PasswordEncryptor(userData.get("email")).encrypt(userData.get("password").getBytes());
         User user = new User(userData.get("name"),userData.get("surname"),userData.get("patronymic"),userData.get("email"),encryptedPassword,UserRole.valueOf(userData.get("role")), DateParser.parseDate(userData.get("birthday")),userData.get("phone"), Status.ACTIVE);
@@ -56,6 +71,14 @@ public class UserService extends AbstractService<User>{
         return user;
     }
 
+    /**
+     * Update user user.
+     *
+     * @param user     the user
+     * @param userData the user data
+     * @param photo    the photo
+     * @return the user
+     */
     public User updateUser(User user,Map<String,String> userData,Part photo){
         LOGGER.log(Level.INFO,"Updating user id={}",user.getId());
         String photoPath = new FileManager().savePhoto(photo,user.getId(),false);
@@ -71,6 +94,12 @@ public class UserService extends AbstractService<User>{
         return super.update(user,userDAO);
     }
 
+    /**
+     * Is email exist boolean.
+     *
+     * @param email the email
+     * @return the boolean
+     */
     public boolean isEmailExist(String email) {
         TransactionManager transactionManager = new TransactionManager();
         boolean result = false;
@@ -91,6 +120,16 @@ public class UserService extends AbstractService<User>{
         return result;
     }
 
+    /**
+     * Change password map.
+     *
+     * @param user            the user
+     * @param oldPassword     the old password
+     * @param password        the password
+     * @param passwordConfirm the password confirm
+     * @param language        the language
+     * @return the map
+     */
     public Map<String,String> changePassword(User user, byte[] oldPassword,byte[] password,byte[] passwordConfirm,String language){
         byte[] encryptedPassword = new PasswordEncryptor(user.getEmail()).encrypt(oldPassword);
         Map<String, String> errors = new HashMap<>();
@@ -107,6 +146,12 @@ public class UserService extends AbstractService<User>{
         return errors;
     }
 
+    /**
+     * Find user user.
+     *
+     * @param userId the user id
+     * @return the user
+     */
     public User findUser(String userId){
         User user = null;
         int id = Integer.parseInt(userId);
@@ -130,6 +175,11 @@ public class UserService extends AbstractService<User>{
         return user;
     }
 
+    /**
+     * Create comment.
+     *
+     * @param commentNew the comment new
+     */
     public void createComment(Comment commentNew){
         TransactionManager transactionManager = new TransactionManager();
         CommentDAO commentDAO = new DAOFactory().getCommentDAO();
@@ -164,6 +214,12 @@ public class UserService extends AbstractService<User>{
         transactionManager.endTransaction();
     }
 
+    /**
+     * Delete user user.
+     *
+     * @param userId the user id
+     * @return the user
+     */
     public User deleteUser(String userId){
         int id = Integer.parseInt(userId);
         TransactionManager transactionManager = new TransactionManager();
@@ -196,6 +252,12 @@ public class UserService extends AbstractService<User>{
         return user;
     }
 
+    /**
+     * Ban user string.
+     *
+     * @param userId the user id
+     * @return the string
+     */
     public String banUser(String userId){
         String result;
         int id = Integer.parseInt(userId);

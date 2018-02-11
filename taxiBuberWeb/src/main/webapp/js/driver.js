@@ -31,6 +31,7 @@ window.onload = function () {
     var begin = document.getElementById("begin");
     begin.addEventListener('click',function () {
         document.getElementById('work').setAttribute("disabled", "true");
+        document.getElementById('stop-work').style.display = 'none';
         $('#modal-order').modal("hide");
         var id = document.getElementById("tripId").value;
         $.ajax({
@@ -64,6 +65,7 @@ window.onload = function () {
     var complete = document.getElementById("complete");
     complete.addEventListener('click',function () {
         document.getElementById('trips').style.display = 'none';
+        document.getElementById('stop-work').style.display = 'block';
         var infoWindow = new google.maps.InfoWindow();
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
@@ -130,7 +132,6 @@ function setAvailable(isAvailable) {
         contentType: "application/json",
         data: JSON.stringify(data),
         success: function(response) {
-            console.log(response);
             if(response === 'no car'){
                 document.getElementById('no-car').style.display = 'block';
                 document.getElementById('start-work').style.display = 'block';
@@ -274,7 +275,8 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay, start,st
             var dvDistance = document.getElementById("divDistance-driver");
             dvDistance.style.display = 'block';
             var distanceSpan = document.getElementById('distance');
-            distanceSpan.innerHTML = ''+(distanceVal/1000);
+            var dis = distanceVal/1000;
+            distanceSpan.innerHTML = ''+(dis.toFixed(2));
             var durationSpan = document.getElementById('duration');
             durationSpan.innerHTML = duration;
         } else {
@@ -294,8 +296,6 @@ function showSteps(directionResult, markerArray, stepDisplay, map) {
     // For each step, place a marker, and add the text to the marker's infowindow.
     // Also attach the marker to an array so we can keep track of it and remove it
     // when calculating new routes.
-    console.log(directionResult);
-
     var myRoute = directionResult.routes[0].legs[0];
     for (var i = 0; i < myRoute.steps.length; i++) {
         var marker = markerArray[i] = markerArray[i] || new google.maps.Marker;

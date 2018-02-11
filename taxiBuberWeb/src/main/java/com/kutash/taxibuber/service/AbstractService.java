@@ -10,10 +10,22 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
+/**
+ * The type Abstract service.
+ *
+ * @param <T> the type parameter
+ */
 public abstract class AbstractService<T extends AbstractEntity> {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    /**
+     * Create int.
+     *
+     * @param entity the entity
+     * @param dao    the dao
+     * @return the int
+     */
     public int create(T entity, AbstractDAO<T> dao){
         int result = 0;
         TransactionManager transactionManager = new TransactionManager();
@@ -33,6 +45,13 @@ public abstract class AbstractService<T extends AbstractEntity> {
         return result;
     }
 
+    /**
+     * Update t.
+     *
+     * @param entity the entity
+     * @param dao    the dao
+     * @return the t
+     */
     T update(T entity, AbstractDAO<T> dao){
         T entityUpdated = null;
         TransactionManager transactionManager = new TransactionManager();
@@ -52,6 +71,13 @@ public abstract class AbstractService<T extends AbstractEntity> {
         return entityUpdated;
     }
 
+    /**
+     * Find entity by id t.
+     *
+     * @param id  the id
+     * @param dao the dao
+     * @return the t
+     */
     T findEntityById(int id,AbstractDAO<T> dao){
         TransactionManager transactionManager = new TransactionManager();
         T entity = null;
@@ -71,6 +97,12 @@ public abstract class AbstractService<T extends AbstractEntity> {
         return entity;
     }
 
+    /**
+     * Find all list.
+     *
+     * @param dao the dao
+     * @return the list
+     */
     List<T> findAll(AbstractDAO<T> dao){
         TransactionManager transactionManager = new TransactionManager();
         List<T> entities = null;

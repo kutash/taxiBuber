@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Reader;
 
+/**
+ * The type Set coordinates command.
+ */
 public class SetCoordinatesCommand implements Command {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -21,6 +24,11 @@ public class SetCoordinatesCommand implements Command {
 
     private CarService carService;
 
+    /**
+     * Instantiates a new Set coordinates command.
+     *
+     * @param carService the car service
+     */
     SetCoordinatesCommand(CarService carService){
         this.carService = carService;
     }
