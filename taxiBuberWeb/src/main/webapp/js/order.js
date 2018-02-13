@@ -154,8 +154,8 @@ function initMap() {
             }
             var geocoder = new google.maps.Geocoder();
             geocodeAddress(geocoder);
-            calculateAndDisplayRoute(directionsService, directionsDisplay);
             getAvailableCars();
+            calculateAndDisplayRoute(directionsService, directionsDisplay);
         });
 
         var end = new google.maps.places.SearchBox(document.getElementById('end'));

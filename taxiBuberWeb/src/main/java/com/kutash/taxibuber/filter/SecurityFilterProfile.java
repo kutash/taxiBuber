@@ -1,6 +1,7 @@
 package com.kutash.taxibuber.filter;
 
 import com.kutash.taxibuber.command.CommandEnum;
+import com.kutash.taxibuber.entity.Status;
 import com.kutash.taxibuber.entity.User;
 import com.kutash.taxibuber.entity.UserRole;
 import com.kutash.taxibuber.resource.PageManager;
@@ -50,7 +51,7 @@ public class SecurityFilterProfile implements Filter {
                 if (role.equals(UserRole.DRIVER) || role.equals(UserRole.CLIENT)) {
                     int currentUserId = user.getId();
                     int userId = Integer.parseInt(req.getParameter("userId"));
-                    if (userId != currentUserId) {
+                    if (userId != currentUserId || user.getStatus().equals(Status.ARCHIVED)) {
                         dispatcher = request.getServletContext().getRequestDispatcher(PageManager.getProperty("path.page.error403"));
                         dispatcher.forward(req, resp);
                         return;
